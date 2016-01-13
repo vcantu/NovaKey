@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--Dimensions-->
+    <dimen name="default_radius">124dp</dimen>
+    <dimen name="button_radius">28dp</dimen>
+    <dimen name="button_disp">16dp</dimen>
+    <dimen name="button_shad_drop">6dp</dimen>
+
+    <dimen name="picker_dimen">56dp</dimen>
+    <dimen name="btn_preview_rad">45dp</dimen>
+    <dimen name="btn_preview_height">206dp</dimen>
+
+    <dimen name="tut_text_size">32dp</dimen>
+    <dimen name="tut_btn_dimen">50dp</dimen>
+    <dimen name="tut_min_text_length">400dp</dimen>
+
+</resources>

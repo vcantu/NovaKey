@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory android:title="Personal">
+		<CheckBoxPreference
+	        android:title="Hide Letters"
+		    android:summary="Hide letter keys when typing"
+		    android:key="pref_hide_letters"
+		    android:defaultValue="false"
+			/>
+		<CheckBoxPreference
+	        android:title="Secret Password"
+	        android:summary="Hide keys when entering a password"
+	        android:key="pref_hide_password"
+	        android:defaultValue="false"
+	        />
+		<CheckBoxPreference
+			android:title="Touch Feedback"
+		    android:summary="Vibrate when a line is crossed or a key is entered"
+		    android:key="pref_vibrate"
+		    android:defaultValue="true"
+		    />
+        <!--<CheckBoxPreference
+            android:title="Vibration duration"
+            android:summary="Amount of milliseconds to vibrate for"
+            android:key="pref_vibrate_level"
+            android:defaultValue="true"
+            /> -->
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Mechanics">
+		<CheckBoxPreference
+		    android:title="Quick Insert"
+		    android:summary="Automatically insert the closing of ¿¡⌊⌈"
+		    android:key="pref_quick_insert"
+		    android:defaultValue="true"
+		    />
+        <CheckBoxPreference
+            android:title="Quick Close"
+            android:summary="Swipe back and forth to close &quot;([{|&gt;&lt;"
+            android:key="pref_quick_close"
+            android:defaultValue="true"
+            />
+        <CheckBoxPreference
+            android:title="Auto Correct"
+            android:summary="Automatically fix words"
+            android:key="pref_auto_correct"
+            android:defaultValue="true"
+            />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Customize">
+        <Preference android:title="Style your keyboard"
+            android:summary="Edit the color and shape of your keyboard"
+            android:key="pref_style"/>
+        <viviano.cantu.novakey.settings.ButtonPreference
+            android:title="Customize Functionality"
+            android:summary="Add buttons to add functionality" />
+    </PreferenceCategory>
+    <Preference android:title="To resize/undock"
+                android:summary="press and hold with two fingers"></Preference>
+
+    <PreferenceCategory android:title="Other">
+        <Preference android:title="Tutorial"
+            android:summary="Click to learn to use NovaKey"
+            android:key="pref_tut"></Preference>
+        <Preference android:title="All the kool kats rate NovaKey"
+            android:summary="Click to be a kool kat"
+            android:key="pref_rate"></Preference>
+        <Preference android:title="Test"
+            android:summary="REMOVE FROM FINAL VERSION"
+            android:key="pref_test"></Preference>
+    </PreferenceCategory>
+
+</PreferenceScreen>
