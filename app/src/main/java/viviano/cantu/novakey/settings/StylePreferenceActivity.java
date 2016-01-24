@@ -6,8 +6,9 @@ import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 import viviano.cantu.novakey.R;
-import viviano.cantu.novakey.settings.widgets.ColorPicker;
-import viviano.cantu.novakey.settings.widgets.ShadePicker;
+import viviano.cantu.novakey.settings.widgets.pickers.ColorPicker;
+import viviano.cantu.novakey.settings.widgets.pickers.HorizontalPicker;
+import viviano.cantu.novakey.settings.widgets.pickers.PickerItem;
 import viviano.cantu.novakey.settings.widgets.ThemePicker;
 import viviano.cantu.novakey.settings.widgets.ThemePreview;
 import viviano.cantu.novakey.settings.widgets.pickers.ReleasePicker;
@@ -34,7 +35,7 @@ public class StylePreferenceActivity extends AbstractPreferenceActivity {
         themePicker.setOnChangeListener(new ThemePicker.OnChangeListener() {
             @Override
             public void onChange(int newIndex) {
-                if (newIndex == Theme.COUNT-1 && theme > 0)
+                if (newIndex == Theme.COUNT - 1 && theme > 0)
                     theme *= -1;
                 else
                     theme = newIndex;
@@ -42,44 +43,40 @@ public class StylePreferenceActivity extends AbstractPreferenceActivity {
             }
         });
 
-        ShadePicker shadePicker = (ShadePicker)findViewById(R.id.shadePicker);
-
-        ColorPicker primaryColor = (ColorPicker)findViewById(R.id.primaryColor);
-        primaryColor.setShadePicker(shadePicker);
-        primaryColor.setColor(one);
-        primaryColor.setOnChangeListener(new ColorPicker.OnChangeListener() {
-            @Override
-            public void onChange(int newColor) {
-                one = newColor;
-                updatePreview(preview);
-            }
-        });
-        ColorPicker secondaryColor = (ColorPicker)findViewById(R.id.secondaryColor);
-        secondaryColor.setShadePicker(shadePicker);
-        secondaryColor.setColor(two);
-        secondaryColor.setOnChangeListener(new ColorPicker.OnChangeListener() {
-            @Override
-            public void onChange(int newColor) {
-                two = newColor;
-                updatePreview(preview);
-            }
-        });
-        ColorPicker ternaryColor = (ColorPicker)findViewById(R.id.ternaryColor);
-        ternaryColor.setShadePicker(shadePicker);
-        ternaryColor.setColor(three);
-        ternaryColor.setOnChangeListener(new ColorPicker.OnChangeListener() {
-            @Override
-            public void onChange(int newColor) {
-                three = newColor;
-                updatePreview(preview);
-            }
-        });
-
-        viviano.cantu.novakey.settings.widgets.pickers.ColorPicker test
-                = (viviano.cantu.novakey.settings.widgets.pickers.ColorPicker)findViewById(R.id.testPicker);
         ReleasePicker releasePicker = (ReleasePicker)findViewById(R.id.releasePick);
 
-        test.setReleasePicker(releasePicker);
+        ColorPicker primaryColor = (ColorPicker)findViewById(R.id.primaryColor);
+        primaryColor.setReleasePicker(releasePicker);
+        primaryColor.setItem(Colors.path(one)[0]);
+        primaryColor.setOnItemSelectedListener(new HorizontalPicker.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(PickerItem item, int subIndex) {
+                one = ((Colors)item).shade(subIndex);
+                updatePreview(preview);
+            }
+        });
+
+        ColorPicker secondaryColor = (ColorPicker)findViewById(R.id.secondaryColor);
+        secondaryColor.setReleasePicker(releasePicker);
+        secondaryColor.setItem(Colors.path(two)[0]);
+        secondaryColor.setOnItemSelectedListener(new HorizontalPicker.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(PickerItem item, int subIndex) {
+                two = ((Colors)item).shade(subIndex);
+                updatePreview(preview);
+            }
+        });
+
+        ColorPicker ternaryPicker = (ColorPicker)findViewById(R.id.ternaryColor);
+        ternaryPicker.setReleasePicker(releasePicker);
+        ternaryPicker.setItem(Colors.path(three)[0]);
+        ternaryPicker.setOnItemSelectedListener(new HorizontalPicker.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(PickerItem item, int subIndex) {
+                three = ((Colors)item).shade(subIndex);
+                updatePreview(preview);
+            }
+        });
     }
 
     @Override

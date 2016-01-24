@@ -10,8 +10,6 @@ import viviano.cantu.novakey.R;
 import viviano.cantu.novakey.btns.Btn;
 import viviano.cantu.novakey.settings.widgets.BtnPreview;
 import viviano.cantu.novakey.settings.widgets.ButtonAddView;
-import viviano.cantu.novakey.settings.widgets.ColorPicker;
-import viviano.cantu.novakey.settings.widgets.ShadePicker;
 
 /**
  * Created by Viviano on 6/22/2015.
@@ -81,10 +79,6 @@ public class ButtonPreference extends DialogPreference {
                 return true;
             }
         });
-
-        //linking color and shade picker
-        ColorPicker cp = (ColorPicker)view.findViewById(R.id.colorPicker);
-        cp.setShadePicker((ShadePicker)view.findViewById(R.id.shadePicker));
     }
 
     public void updateShape(int shape) {

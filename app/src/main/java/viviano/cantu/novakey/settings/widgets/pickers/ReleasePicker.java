@@ -28,8 +28,8 @@ public class ReleasePicker extends View {
     private float mCenterX, mCenterY;
     private float mFingX, mFingY;
 
-    private PickerItem[] mItems;//todo change to just one PickerItem
-    private Object[] mMetaData;
+    private PickerItem mItems;
+    private int[] mSubIndexes;
     private ItemData[] mData;
 
     private OnItemListener mListener;
@@ -68,7 +68,7 @@ public class ReleasePicker extends View {
 
     @Override
     public void onDraw(Canvas canvas) {
-        for (int i = 0; i < mItems.length; i++) {
+        for (int i = 0; i < mSubIndexes.length; i++) {
             if (i != mIndex)
                 drawItem(i, canvas);
         }
@@ -78,83 +78,32 @@ public class ReleasePicker extends View {
     }
 
     private void drawItem(int i, Canvas canvas) {
-        mItems[i].draw(
+        mItems.draw(
                 Util.xFromAngle(mCenterX, mData[i].distance, mData[i].angle),
                 Util.yFromAngle(mCenterY, mData[i].distance, mData[i].angle),
                 dimen * mData[i].scale * mData[i].scaleMultiplier,
-                mIndex == i, mMetaData[i], p, canvas);
+                mIndex == i, mSubIndexes[i], p, canvas);
     }
 
-    public void onStart(float startX, float startY, PickerItem[] items, Object[] metaData) {
+    public void onStart(float startX, float startY, PickerItem items, int[] subIndexes) {
         mCenterX = startX; mCenterY = startY;
         mFingX = startX; mFingY = startY;
         mItems = items;
-        mMetaData = metaData;
-        mData = new ItemData[mItems.length];
+        mSubIndexes = subIndexes;
+        mData = new ItemData[mSubIndexes.length];
 
-        double angleDiv = Math.PI / mItems.length;
+        double angleDiv = Math.PI / mSubIndexes.length;
         for (int i = 0; i < mData.length; i++) {
             double a = angleDiv * i;
             mData[i] = new ItemData(0, 0, a);
         }
         updateData();
         //animate
-//        for (int i = 0; i < mItems.length; i++) {
-//            animateItem(i);
-//        }
-        //animateItems();
-        animateFancyItems();
-        //animateBoringItems();
-    }
-
-    private void animateItem(final int itemIndex) {
-        final ValueAnimator anim = ValueAnimator.ofFloat(0, 1)
-                .setDuration(500);
-        anim.setInterpolator(new OvershootInterpolator());
-        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                float frac = (float) anim.getAnimatedValue();
-                mData[itemIndex].scale = frac;
-                mData[itemIndex].distance = Util.fromFrac(0, dimen * 2, frac);
-                invalidate();
-            }
-        });
-        anim.setStartDelay(itemIndex * 50);
-        anim.start();
-    }
-
-    private void animateItems() {
-        long singleDur = 500;
-        long secDelay = 100;
-        final TimeInterpolator[] tInters = new TimeInterpolator[mData.length];
-
-        long duration = singleDur + (tInters.length - 1) * secDelay;
-
-        for (int i = 0; i < tInters.length; i++) {
-            tInters[i] = new DelayableInterpolator(secDelay * i, singleDur, duration,
-                    new OvershootInterpolator());
-        }
-
-        ValueAnimator anim = ValueAnimator.ofFloat(0, 1)
-                .setDuration(duration);
-        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                float v = (float) animation.getAnimatedValue();
-                for (int i = 0; i < tInters.length; i++) {
-                    float actual = tInters[i].getInterpolation(v);
-                    mData[i].scale = actual;
-                    mData[i].distance = Util.fromFrac(0, dimen * 2, actual);
-                }
-                invalidate();
-            }
-        });
-        anim.start();
+        animateItems();
     }
 
     //optimal
-    private void animateFancyItems() {
+    private void animateItems() {
         MultiValueAnimator anim = MultiValueAnimator.create();
 
         long singleDur = 500;
@@ -232,7 +181,7 @@ public class ReleasePicker extends View {
                 if (i != mPrevIndex) {
                     mPrevIndex = i;
                     if (mListener != null)
-                        mListener.onItemUpdated(mItems[i]);
+                        mListener.onItemUpdated(mSubIndexes[i]);
                 }
                 mIndex = i;
                 size = 1.5f;
@@ -262,8 +211,8 @@ public class ReleasePicker extends View {
     }
 
     public interface OnItemListener {
-        void onItemUpdated(Object item);
-        void onItemSelected(Object item);
+        void onItemUpdated(int index);
+        void onItemSelected(int index);
         void onCancel();
     }
 }

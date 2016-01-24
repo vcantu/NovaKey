@@ -115,29 +115,10 @@ public class Draw {
             Icon.Drawable ic = Icon.get("check");
             if (rw >= 1.1f)
                 ic = Icon.get("check_outline");
-            p.setColor(Color.WHITE);
+            p.setColor(color == Color.WHITE ? Color.BLACK : Color.WHITE);
             ic.draw(x, y, radius * 1.6f, p, canvas);
         }
     }
-    //Draws blue circle if selected
-    public static void colorItem(int color, boolean selected, float x, float y, float radius,
-                                 Paint p, Canvas canvas) {
-        colorItem(color, x, y, radius, p, canvas);
-        if (selected) {//draw checkmark
-            int ouColor = 0xFF58ACFA;
-            float ratio = Util.contrastRatio(ouColor, color);
-            if (ratio < 1.2f)//this has a higher ratio standard because its just two blues
-                ouColor = 0xFF356796;
-
-            p.setStyle(Paint.Style.STROKE);
-            p.setColor(ouColor);
-            p.setStrokeWidth(15);
-            canvas.drawCircle(x, y, radius, p);
-            p.setStrokeWidth(0);
-            p.setStyle(Paint.Style.FILL);
-        }
-    }
-
 
     public static void floatingButton(float x, float y, float radius, Bitmap icon, int back, int front,
                                    float height, Paint p, Canvas canvas) {

@@ -45,8 +45,8 @@ public class Colors implements PickerItem {
     }
 
     @Override
-    public void draw(float x, float y, float dimen, boolean selected, Object metaData, Paint p, Canvas canvas) {
-        Draw.colorItem(shade((Integer)metaData), x, y, dimen / 2 * .8f, selected, p, canvas);
+    public void draw(float x, float y, float dimen, boolean selected, int index, Paint p, Canvas canvas) {
+        Draw.colorItem(shade(index), x, y, dimen / 2 * .8f, selected, p, canvas);
     }
 
 //    public static void load(Resources res) {

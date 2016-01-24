@@ -25,47 +25,37 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/themePicker"/>
             </HorizontalScrollView>
-            <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#FFFFFFFF">
-                    <viviano.cantu.novakey.settings.widgets.ColorPicker
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/primaryColor"/>
-            </HorizontalScrollView>
-            <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#FFFFFFFF">
-                    <viviano.cantu.novakey.settings.widgets.ColorPicker
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/secondaryColor"/>
-            </HorizontalScrollView>
-            <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#FFFFFFFF">
-                    <viviano.cantu.novakey.settings.widgets.ColorPicker
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/ternaryColor"/>
-            </HorizontalScrollView>
+
             <viviano.cantu.novakey.settings.widgets.ObservableHorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <viviano.cantu.novakey.settings.widgets.pickers.ColorPicker
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/testPicker"/>
+                    android:id="@+id/primaryColor"/>
             </viviano.cantu.novakey.settings.widgets.ObservableHorizontalScrollView>
+
+            <viviano.cantu.novakey.settings.widgets.ObservableHorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <viviano.cantu.novakey.settings.widgets.pickers.ColorPicker
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/secondaryColor"/>
+            </viviano.cantu.novakey.settings.widgets.ObservableHorizontalScrollView>
+
+            <viviano.cantu.novakey.settings.widgets.ObservableHorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <viviano.cantu.novakey.settings.widgets.pickers.ColorPicker
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/ternaryColor"/>
+            </viviano.cantu.novakey.settings.widgets.ObservableHorizontalScrollView>
+
         </LinearLayout>
     </LinearLayout>
-    <viviano.cantu.novakey.settings.widgets.ShadePicker
-        android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/shadePicker"/>
+
     <viviano.cantu.novakey.settings.widgets.pickers.ReleasePicker
         android:layout_width="match_parent"
         android:layout_height="match_parent"

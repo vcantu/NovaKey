@@ -2,8 +2,6 @@ package viviano.cantu.novakey.settings.widgets.pickers;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
-import android.view.View;
 
 import viviano.cantu.novakey.settings.Colors;
 
@@ -15,44 +13,27 @@ public class ColorPicker extends HorizontalPicker {
     public ColorPicker(Context context, AttributeSet attrs) {
         super(context, attrs, Colors.ALL);
 
-        metaData = new Integer[Colors.ALL.length];
-        for (int i=0; i<metaData.length; i++) {
-            metaData[i] = Colors.ALL[i].mainIndex();
+        mSubIndexes = new int[Colors.ALL.length];
+        for (int i=0; i<mSubIndexes.length; i++) {
+            mSubIndexes[i] = Colors.ALL[i].mainIndex();
         }
     }
 
     @Override
-    protected void onItemLongPress(Object item, float startX, float startY) {
-        if (releasePicker != null) {
+    protected void onItemLongPress(int index, float startX, float startY) {
+        if (mReleasePicker != null) {
             getParent().requestDisallowInterceptTouchEvent(true);
-            releasePicker.setVisibility(VISIBLE);
-            Colors color = (Colors)item;
 
-            Colors[] colors = new Colors[color.size()];
-            Integer[] metaData = new Integer[color.size()];
-            for (int i = 0; i < colors.length; i++) {
-                colors[i] = color;
-                metaData[i] = i;
+            Colors color = (Colors)mItems[index];
+
+            if (color.size() > 1) {
+                mReleasePicker.setVisibility(VISIBLE);
+                int[] subIndex = new int[color.size()];
+                for (int i = 0; i < color.size(); i++) {
+                    subIndex[i] = i;
+                }
+                mReleasePicker.onStart(startX, startY, mItems[index], subIndex);
             }
-
-            releasePicker.setOnItemListener(new ReleasePicker.OnItemListener() {
-                @Override
-                public void onItemUpdated(Object item) {
-
-                }
-
-                @Override
-                public void onItemSelected(Object item) {
-                    if (mListener != null)
-                        mListener.onItemSelected(item);
-                }
-
-                @Override
-                public void onCancel() {
-
-                }
-            });
-            releasePicker.onStart(startX, startY, colors, metaData);
         }
     }
 }
