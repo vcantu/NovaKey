@@ -10,7 +10,7 @@ import android.view.View;
 import java.util.ArrayList;
 
 import viviano.cantu.novakey.KeyLayout;
-import viviano.cantu.novakey.Util;
+import viviano.cantu.novakey.utils.Util;
 import viviano.cantu.novakey.btns.Btn;
 import viviano.cantu.novakey.btns.BtnTheme;
 import viviano.cantu.novakey.settings.Settings;

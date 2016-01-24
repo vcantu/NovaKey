@@ -25,6 +25,7 @@ import viviano.cantu.novakey.menus.InfiniteMenu;
 import viviano.cantu.novakey.settings.Colors;
 import viviano.cantu.novakey.settings.Settings;
 import viviano.cantu.novakey.themes.AppTheme;
+import viviano.cantu.novakey.utils.Util;
 
 public class NovaKey extends InputMethodService {
     //Statics

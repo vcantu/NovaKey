@@ -9,9 +9,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-import viviano.cantu.novakey.Print;
 import viviano.cantu.novakey.R;
-import viviano.cantu.novakey.Util;
+import viviano.cantu.novakey.utils.Util;
 
 /**
  * Created by Viviano on 8/18/2015.

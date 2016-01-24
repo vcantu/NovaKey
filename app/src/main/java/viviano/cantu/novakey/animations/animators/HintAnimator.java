@@ -1,10 +1,10 @@
-package viviano.cantu.novakey.animators;
+package viviano.cantu.novakey.animations.animators;
 
 import android.animation.ValueAnimator;
 import android.view.animation.AccelerateInterpolator;
 
 import viviano.cantu.novakey.Key;
-import viviano.cantu.novakey.Util;
+import viviano.cantu.novakey.utils.Util;
 
 /**
  * Created by Viviano on 11/15/2015.
@@ -41,9 +41,9 @@ public class HintAnimator extends CharAnimator {
             @Override
             public void onAnimationUpdate(ValueAnimator anim) {
                 float frac = (Float)anim.getAnimatedValue();
-                key.size = Util.valueFromFrac(begSize, size, frac);
-                key.x = Util.valueFromFrac(begX, destX, frac);
-                key.y = Util.valueFromFrac(begY, destY, frac);
+                key.size = Util.fromFrac(begSize, size, frac);
+                key.x = Util.fromFrac(begX, destX, frac);
+                key.y = Util.fromFrac(begY, destY, frac);
                 view.invalidate();
             }
         });

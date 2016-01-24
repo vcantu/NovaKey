@@ -1,16 +1,12 @@
-package viviano.cantu.novakey.animators;
+package viviano.cantu.novakey.animations.animators;
 
 import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
-import android.view.animation.OvershootInterpolator;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 import viviano.cantu.novakey.Key;
-import viviano.cantu.novakey.NovaKeyView;
-import viviano.cantu.novakey.Print;
-import viviano.cantu.novakey.Util;
+import viviano.cantu.novakey.utils.Util;
 
 /**
  * Created by Viviano on 10/27/2015.

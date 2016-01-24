@@ -9,8 +9,7 @@ import android.view.View;
 import java.util.ArrayList;
 
 import viviano.cantu.novakey.R;
-import viviano.cantu.novakey.Util;
-import viviano.cantu.novakey.menus.InfiniteMenu;
+import viviano.cantu.novakey.utils.Util;
 
 /**
  * Created by Viviano on 12/6/2015.

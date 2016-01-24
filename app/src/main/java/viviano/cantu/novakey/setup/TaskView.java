@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import viviano.cantu.novakey.drawing.Draw;
 import viviano.cantu.novakey.Font;
 import viviano.cantu.novakey.R;
-import viviano.cantu.novakey.Util;
+import viviano.cantu.novakey.utils.Util;
 
 /**
  * Created by Viviano on 7/31/2015.

@@ -50,7 +50,10 @@ public class Theme {
         //TODO: make not draw back when minimalist and not undocked
         if (Color.alpha(primaryColor()) == 255)
             drawBoardBack(x, y, r, sr, canvas);
+
+        pB.setShadowLayer(2, 0, 2, 0xFF808080);
         drawLines(x, y, r, sr, canvas);
+        pB.clearShadowLayer();
     }
 
     //Override to change drawing

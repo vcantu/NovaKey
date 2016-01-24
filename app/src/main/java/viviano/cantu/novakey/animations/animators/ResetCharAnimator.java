@@ -1,11 +1,10 @@
-package viviano.cantu.novakey.animators;
+package viviano.cantu.novakey.animations.animators;
 
 import android.animation.ValueAnimator;
 import android.view.animation.AccelerateInterpolator;
-import android.view.animation.OvershootInterpolator;
 
 import viviano.cantu.novakey.Key;
-import viviano.cantu.novakey.Util;
+import viviano.cantu.novakey.utils.Util;
 
 /**
  * Created by Viviano on 11/15/2015.
@@ -41,9 +40,9 @@ public class ResetCharAnimator extends CharAnimator {
             @Override
             public void onAnimationUpdate(ValueAnimator anim) {
                 float frac = (Float)anim.getAnimatedValue();
-                key.size = Util.valueFromFrac(size, 1, frac);
-                key.x = Util.valueFromFrac(x, endX, frac);
-                key.y = Util.valueFromFrac(y, endY, frac);
+                key.size = Util.fromFrac(size, 1, frac);
+                key.x = Util.fromFrac(x, endX, frac);
+                key.y = Util.fromFrac(y, endY, frac);
                 view.invalidate();
             }
         });

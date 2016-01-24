@@ -1,6 +1,7 @@
 package viviano.cantu.novakey.settings;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 
 import viviano.cantu.novakey.drawing.Draw;

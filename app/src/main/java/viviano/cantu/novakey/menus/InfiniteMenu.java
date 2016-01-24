@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import viviano.cantu.novakey.Controller;
 import viviano.cantu.novakey.drawing.Draw;
 import viviano.cantu.novakey.drawing.Icon;
-import viviano.cantu.novakey.Util;
+import viviano.cantu.novakey.utils.Util;
 
 /**
  * Created by Viviano on 7/14/2015.
@@ -111,7 +111,8 @@ public class InfiniteMenu {
                     for (int j=1; j<i+1; j++) {
                         addTo += 1 / Math.pow(2, j);
                     }
-                    float factor = (float)(addTo + (distanceFromMiddle < 0 ? 0 : distanceFromMiddle / Math.pow(2, i+1)));
+                    float factor = (float)(addTo + (distanceFromMiddle < 0 ? 0 :
+                            distanceFromMiddle / Math.pow(2, i+1)));
                     draw(indexInBounds(index + i),x + r * factor, y + r * (factor * factor / 2),
                             size * (1 - Math.abs(factor)), color, p, canvas);
                     //----------------------------------DRAW LEFT----------------------------------
@@ -119,7 +120,8 @@ public class InfiniteMenu {
                     for (int j=1; j<i+1; j++) {
                         addTo -= 1 / Math.pow(2, j);
                     }
-                    factor = (float)(addTo + (distanceFromMiddle >= 0 ? 0 : distanceFromMiddle / Math.pow(2, i+1)));
+                    factor = (float)(addTo + (distanceFromMiddle >= 0 ? 0 :
+                            distanceFromMiddle / Math.pow(2, i+1)));
                     draw(indexInBounds(index - i), x + r * factor, y + r * (factor * factor / 2),
                             size * (1 - Math.abs(factor)), color, p, canvas);
                 }

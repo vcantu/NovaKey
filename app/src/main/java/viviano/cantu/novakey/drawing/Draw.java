@@ -9,7 +9,7 @@ import android.graphics.RadialGradient;
 import android.graphics.RectF;
 import android.graphics.Shader;
 
-import viviano.cantu.novakey.Util;
+import viviano.cantu.novakey.utils.Util;
 
 public class Draw {
 
@@ -105,14 +105,6 @@ public class Draw {
     public static void colorItem(int color, float x, float y, float radius, Paint p, Canvas canvas) {
         p.setColor(color);
         canvas.drawCircle(x, y, radius, p);
-        if (Color.red(color) >= 250 && Color.blue(color) >= 250 && Color.green(color) >= 250) {
-            p.setFlags(Paint.ANTI_ALIAS_FLAG);
-            p.setStyle(Paint.Style.STROKE);
-            p.setStrokeWidth(2);
-            p.setColor(0xFF000000);
-            canvas.drawCircle(x, y, radius, p);
-            p.setStyle(Paint.Style.FILL);
-        }
     }
     //draws white checkmark if selected
     public static void colorItem(int color, float x, float y, float radius, boolean selected,

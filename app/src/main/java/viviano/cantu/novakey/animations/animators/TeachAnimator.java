@@ -1,8 +1,7 @@
-package viviano.cantu.novakey.animators;
+package viviano.cantu.novakey.animations.animators;
 
 import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
-import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.view.animation.DecelerateInterpolator;
@@ -11,10 +10,9 @@ import android.view.animation.OvershootInterpolator;
 
 import viviano.cantu.novakey.Controller;
 import viviano.cantu.novakey.KeyLayout;
-import viviano.cantu.novakey.NovaKey;
 import viviano.cantu.novakey.NovaKeyView;
-import viviano.cantu.novakey.Print;
-import viviano.cantu.novakey.Util;
+import viviano.cantu.novakey.utils.Print;
+import viviano.cantu.novakey.utils.Util;
 
 /**
  * Created by Viviano on 10/25/2015.
@@ -156,7 +154,7 @@ public class TeachAnimator extends Animator {
             public void onAnimationUpdate(ValueAnimator animation) {
                 float value = (Float) anim.getAnimatedValue();
                 fing.x = Util.xFromAngle(view.dimens.x, rad, value);
-                fing.y = Util.yFromAngle(view.dimens.y, rad, value);
+                fing.y = Util.yFromAngle(-view.dimens.y, rad, value);//TODO: yFromAngle has changed
                 view.invalidate();
             }
         });

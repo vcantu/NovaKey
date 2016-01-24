@@ -1,19 +1,18 @@
 package viviano.cantu.novakey;
 
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.inputmethodservice.Keyboard;
 import android.view.View;
-import android.view.animation.OvershootInterpolator;
 
 import java.util.ArrayList;
 
-import viviano.cantu.novakey.animators.Animator;
+import viviano.cantu.novakey.animations.animators.Animator;
 import viviano.cantu.novakey.btns.Btn;
 import viviano.cantu.novakey.settings.Settings;
 import viviano.cantu.novakey.themes.Theme;
+import viviano.cantu.novakey.utils.Util;
 
 public class NovaKeyView extends View {
     //Theme

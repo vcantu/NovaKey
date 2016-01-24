@@ -1,16 +1,7 @@
-package viviano.cantu.novakey.animators;
+package viviano.cantu.novakey.animations.animators;
 
 import android.animation.AnimatorSet;
-import android.animation.ValueAnimator;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Path;
-import android.view.animation.DecelerateInterpolator;
-import android.view.animation.OvershootInterpolator;
 
-import viviano.cantu.novakey.Controller;
-import viviano.cantu.novakey.Key;
-import viviano.cantu.novakey.KeyLayout;
 import viviano.cantu.novakey.NovaKeyView;
 
 /**

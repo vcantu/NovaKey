@@ -1,9 +1,6 @@
 package viviano.cantu.novakey.setup;
 
-import android.graphics.Paint;
 import android.widget.EditText;
-
-import viviano.cantu.novakey.Util;
 
 /**
  * Created by Viviano on 11/3/2015.

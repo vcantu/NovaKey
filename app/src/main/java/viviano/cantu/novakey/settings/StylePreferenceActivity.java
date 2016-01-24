@@ -16,7 +16,7 @@ import viviano.cantu.novakey.themes.Theme;
 /**
  * Created by Viviano on 1/5/2016.
  */
-public class StylePreferenceActivity extends PreferenceActivity {
+public class StylePreferenceActivity extends AbstractPreferenceActivity {
 
     private int theme, one, two, three;
 
@@ -80,7 +80,6 @@ public class StylePreferenceActivity extends PreferenceActivity {
         ReleasePicker releasePicker = (ReleasePicker)findViewById(R.id.releasePick);
 
         test.setReleasePicker(releasePicker);
-
     }
 
     @Override

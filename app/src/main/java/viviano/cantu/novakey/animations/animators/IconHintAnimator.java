@@ -1,12 +1,10 @@
-package viviano.cantu.novakey.animators;
+package viviano.cantu.novakey.animations.animators;
 
 import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
-import android.graphics.Canvas;
 import android.view.animation.AccelerateInterpolator;
 
 import viviano.cantu.novakey.drawing.Icon;
-import viviano.cantu.novakey.NovaKeyView;
 
 /**
  * Created by Viviano on 11/16/2015.

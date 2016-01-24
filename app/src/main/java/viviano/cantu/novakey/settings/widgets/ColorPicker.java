@@ -63,7 +63,7 @@ public class ColorPicker extends View {
                             else {
                                 HorizontalScrollView scrollView = (HorizontalScrollView)getParent();
                                 if (scrollView != null) {
-                                    int x = (int) ((futureIndex * dimen) - scrollView.getScrollX());// % scrollView.getWidth());
+                                    int x = (int) ((futureIndex * dimen) - scrollView.getScrollX());
                                     float y = scrollView.getY() + ((View) scrollView.getParent()).getY();
                                     if (shadePicker != null) {
                                         shadePicker.setSelectedListener(new ShadePicker.SelectedListener() {

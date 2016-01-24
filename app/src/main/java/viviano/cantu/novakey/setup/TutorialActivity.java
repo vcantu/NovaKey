@@ -18,8 +18,8 @@ import java.util.ArrayList;
 import viviano.cantu.novakey.Controller;
 import viviano.cantu.novakey.drawing.Icon;
 import viviano.cantu.novakey.R;
-import viviano.cantu.novakey.animators.FocusAnimator;
-import viviano.cantu.novakey.animators.TeachAnimator;
+import viviano.cantu.novakey.animations.animators.FocusAnimator;
+import viviano.cantu.novakey.animations.animators.TeachAnimator;
 
 public class TutorialActivity extends Activity {
 

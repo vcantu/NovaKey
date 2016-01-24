@@ -11,11 +11,9 @@ import android.widget.RelativeLayout;
 
 import viviano.cantu.novakey.R;
 
-public abstract class PreferenceActivity extends AppCompatActivity {
+public abstract class AbstractPreferenceActivity extends AppCompatActivity {
 
     private boolean done = false;
-
-    abstract int getLayoutId();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +31,8 @@ public abstract class PreferenceActivity extends AppCompatActivity {
             }
         });
     }
+
+    abstract int getLayoutId();
 
     abstract void onActivityClosed(boolean positiveResult);
 

@@ -4,7 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 
 import viviano.cantu.novakey.drawing.Draw;
-import viviano.cantu.novakey.Util;
+import viviano.cantu.novakey.utils.Util;
 
 /**
  * Created by Viviano on 6/7/2015.

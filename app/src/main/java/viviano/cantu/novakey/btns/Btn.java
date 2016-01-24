@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 import viviano.cantu.novakey.drawing.Draw;
 import viviano.cantu.novakey.drawing.Icon;
-import viviano.cantu.novakey.Util;
+import viviano.cantu.novakey.utils.Util;
 import viviano.cantu.novakey.settings.Settings;
 
 /**

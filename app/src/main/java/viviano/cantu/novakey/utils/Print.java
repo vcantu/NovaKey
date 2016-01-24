@@ -1,4 +1,4 @@
-package viviano.cantu.novakey;
+package viviano.cantu.novakey.utils;
 
 import android.content.SharedPreferences;
 import android.util.Log;

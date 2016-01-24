@@ -52,15 +52,14 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/ternaryColor"/>
             </HorizontalScrollView>
-            <HorizontalScrollView
+            <viviano.cantu.novakey.settings.widgets.ObservableHorizontalScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#FFFFFFFF">
+                android:layout_height="wrap_content">
                 <viviano.cantu.novakey.settings.widgets.pickers.ColorPicker
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/testPicker"/>
-            </HorizontalScrollView>
+            </viviano.cantu.novakey.settings.widgets.ObservableHorizontalScrollView>
         </LinearLayout>
     </LinearLayout>
     <viviano.cantu.novakey.settings.widgets.ShadePicker

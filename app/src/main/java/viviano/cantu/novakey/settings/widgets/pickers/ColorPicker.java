@@ -22,16 +22,37 @@ public class ColorPicker extends HorizontalPicker {
     }
 
     @Override
-    protected void onItemDown(Object item) {
-        //TODO: open radial picker
+    protected void onItemLongPress(Object item, float startX, float startY) {
         if (releasePicker != null) {
             getParent().requestDisallowInterceptTouchEvent(true);
             releasePicker.setVisibility(VISIBLE);
-        }
-    }
+            Colors color = (Colors)item;
 
-    @Override
-    protected void onItemSelected(Object item) {
-        //TODO: set to main
+            Colors[] colors = new Colors[color.size()];
+            Integer[] metaData = new Integer[color.size()];
+            for (int i = 0; i < colors.length; i++) {
+                colors[i] = color;
+                metaData[i] = i;
+            }
+
+            releasePicker.setOnItemListener(new ReleasePicker.OnItemListener() {
+                @Override
+                public void onItemUpdated(Object item) {
+
+                }
+
+                @Override
+                public void onItemSelected(Object item) {
+                    if (mListener != null)
+                        mListener.onItemSelected(item);
+                }
+
+                @Override
+                public void onCancel() {
+
+                }
+            });
+            releasePicker.onStart(startX, startY, colors, metaData);
+        }
     }
 }

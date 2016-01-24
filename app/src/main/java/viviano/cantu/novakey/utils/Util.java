@@ -1,4 +1,4 @@
-package viviano.cantu.novakey;
+package viviano.cantu.novakey.utils;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;
@@ -13,6 +13,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.Map;
 
+import viviano.cantu.novakey.R;
 import viviano.cantu.novakey.emoji.Emoji;
 
 /**
@@ -44,7 +45,7 @@ public class Util {
     }
 
     public static float yFromAngle(float cy, float r, double a) {
-        return cy + (float)(Math.sin(a) * r);
+        return cy - (float)(Math.sin(a) * r);
     }
 
 
@@ -219,7 +220,7 @@ public class Util {
         }
     }
 
-    //-----------------------------------------Animator Utils-------------------------------------
+    // Animator Util
 
     public static AnimatorSet sequence(Animator[] anims, long delay) {
         return sequence(anims, delay, null);
@@ -244,7 +245,7 @@ public class Util {
         return set;
     }
 
-    public static float valueFromFrac(float beg, float end, float frac) {
+    public static float fromFrac(float beg, float end, float frac) {
         return beg + (end - beg) * frac;
     }
 }

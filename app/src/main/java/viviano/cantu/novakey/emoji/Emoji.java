@@ -1,7 +1,5 @@
 package viviano.cantu.novakey.emoji;
 
-import android.content.Context;
-import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -16,7 +14,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-import viviano.cantu.novakey.Print;
 import viviano.cantu.novakey.R;
 import viviano.cantu.novakey.drawing.Draw;
 import viviano.cantu.novakey.Font;

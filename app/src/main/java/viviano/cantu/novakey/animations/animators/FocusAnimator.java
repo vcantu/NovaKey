@@ -1,4 +1,4 @@
-package viviano.cantu.novakey.animators;
+package viviano.cantu.novakey.animations.animators;
 
 import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;

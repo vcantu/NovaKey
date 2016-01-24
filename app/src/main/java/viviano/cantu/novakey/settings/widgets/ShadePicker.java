@@ -12,7 +12,7 @@ import android.view.animation.OvershootInterpolator;
 
 import viviano.cantu.novakey.drawing.Draw;
 import viviano.cantu.novakey.R;
-import viviano.cantu.novakey.Util;
+import viviano.cantu.novakey.utils.Util;
 import viviano.cantu.novakey.settings.Colors;
 
 /**

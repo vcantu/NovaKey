@@ -1,42 +1,21 @@
 package viviano.cantu.novakey;
 
-import android.annotation.TargetApi;
-import android.app.Activity;
-import android.app.ActivityManager;
-import android.app.VoiceInteractor;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
-import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.content.res.TypedArray;
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.inputmethodservice.Keyboard;
-import android.os.Build;
-import android.provider.ContactsContract;
 import android.text.InputType;
 import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.view.inputmethod.EditorInfo;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.List;
 
-import viviano.cantu.novakey.animators.Animator;
-import viviano.cantu.novakey.animators.CharAnimator;
-import viviano.cantu.novakey.animators.CharGrow;
-import viviano.cantu.novakey.animators.FocusAnimator;
-import viviano.cantu.novakey.animators.HintAnimator;
-import viviano.cantu.novakey.animators.ResetCharAnimator;
+import viviano.cantu.novakey.animations.animators.Animator;
+import viviano.cantu.novakey.animations.animators.CharAnimator;
+import viviano.cantu.novakey.animations.animators.CharGrow;
 import viviano.cantu.novakey.btns.Btn;
 import viviano.cantu.novakey.emoji.Emoji;
 import viviano.cantu.novakey.menus.InfiniteMenu;
 import viviano.cantu.novakey.menus.OnUpMenu;
 import viviano.cantu.novakey.settings.Settings;
-import viviano.cantu.novakey.themes.AppTheme;
 import viviano.cantu.novakey.themes.ThemeAuto;
 
 /**
