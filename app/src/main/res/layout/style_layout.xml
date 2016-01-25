@@ -16,15 +16,15 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <HorizontalScrollView
+
+            <viviano.cantu.novakey.settings.widgets.ObservableHorizontalScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#FFFFFFFF">
-                    <viviano.cantu.novakey.settings.widgets.ThemePicker
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/themePicker"/>
-            </HorizontalScrollView>
+                android:layout_height="wrap_content">
+                <viviano.cantu.novakey.settings.widgets.pickers.ThemePicker
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/themePicker"/>
+            </viviano.cantu.novakey.settings.widgets.ObservableHorizontalScrollView>
 
             <viviano.cantu.novakey.settings.widgets.ObservableHorizontalScrollView
                 android:layout_width="match_parent"

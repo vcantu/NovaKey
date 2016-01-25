@@ -15,11 +15,12 @@ import viviano.cantu.novakey.btns.BtnTheme;
 import viviano.cantu.novakey.menus.InfiniteMenu;
 import viviano.cantu.novakey.menus.OnUpMenu;
 import viviano.cantu.novakey.settings.Settings;
+import viviano.cantu.novakey.settings.widgets.pickers.PickerItem;
 
 /**
  * Created by Viviano on 6/9/2015.
  */
-public class Theme {
+public class Theme implements PickerItem {
 
     public Paint pBG, pB, pT;
     //must be used by calling the method
@@ -153,11 +154,33 @@ public class Theme {
     public int textColor() { return ternaryColor(); }
     public int[] textColors() { return textColors; }
 
-    //will be used to draw icon of theme in settings
-    public void drawPickerIcon(float x, float y, float r, float sr, Canvas canvas) {
-        setColor(0xFFffffff, 0xFF616161, 0xFF616161);
+    /**
+     * Draw method for the picker item
+     *
+     * @param x center x position
+     * @param y center y position
+     * @param dimen dimension equivalent to the maximum height
+     * @param selected whether it is selected
+     * @param index sub index of picker item
+     * @param p paint used
+     * @param canvas canvas to draw on
+     */
+    @Override
+    public void draw(float x, float y, float dimen, boolean selected, int index, Paint p, Canvas canvas) {
+        float r = dimen / 2 * .8f;
+        float sr = (dimen / 2 * .8f) / 3;
+        setColor(0xFF616161, 0xFFF0F0F0, 0xFFF0F0F0);
         drawBoardBack(x, y, r, sr, canvas);
         drawLines(x, y, r, sr, 1 / 30f, canvas);
+
+        if (selected) {
+            p.setStyle(Paint.Style.STROKE);
+            p.setColor(0xFF58ACFA);
+            p.setStrokeWidth(15);
+            canvas.drawCircle(x, y, r, p);
+            p.setStrokeWidth(0);
+            p.setStyle(Paint.Style.FILL);
+        }
     }
 
     //static methods
@@ -180,6 +203,23 @@ public class Theme {
                 return new ThemeAuto();
         }
     }
+
+    public static int getIndex(Theme theme) {
+        if (theme instanceof ThemeMaterial)
+            return 1;
+        if (theme instanceof ThemeSeparate)
+            return 2;
+        if (theme instanceof ThemeDonut)
+            return 3;
+        if (theme instanceof ThemeMulticolorDonut)
+            return 4;
+        if (theme instanceof ThemeMulticolor)
+            return 5;
+        if (theme instanceof ThemeAuto)
+            return 6;
+        return 0;
+    }
+
     public static int COUNT = 7;
 
     public static Theme fromString(String s) {
@@ -197,5 +237,4 @@ public class Theme {
             return new ThemeAuto(res);}
         return res;
     }
-
 }

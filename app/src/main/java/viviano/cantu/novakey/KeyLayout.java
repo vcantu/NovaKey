@@ -159,7 +159,7 @@ public class KeyLayout implements Iterator<Key>, Iterable<Key> {
     }
 
     //converts a String[] to a String[][] of single characters
-    private static Key[][] convert(int ID, Resources res) {
+    public static Key[][] convert(int ID, Resources res) {
         String[] S = res.getStringArray(ID);
         Key[][] result = new Key[S.length][];
         for (int i=0; i<S.length; i++) {

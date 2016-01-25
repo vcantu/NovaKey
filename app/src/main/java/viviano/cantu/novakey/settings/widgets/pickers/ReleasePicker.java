@@ -25,7 +25,7 @@ public class ReleasePicker extends View {
     private Paint p;
     private int mIndex = -1, mPrevIndex = -1;
 
-    private float mCenterX, mCenterY;
+    private float mCenterX, mCenterY, mRadius;
     private float mFingX, mFingY;
 
     private PickerItem mItems;
@@ -42,7 +42,6 @@ public class ReleasePicker extends View {
         dimen = context.getResources().getDimension(R.dimen.picker_dimen);
         setLayerType(View.LAYER_TYPE_SOFTWARE, null);//allows svgs
     }
-
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -90,79 +89,43 @@ public class ReleasePicker extends View {
         mFingX = startX; mFingY = startY;
         mItems = items;
         mSubIndexes = subIndexes;
+        mRadius = dimen * 2;
         mData = new ItemData[mSubIndexes.length];
 
-        double angleDiv = Math.PI / mSubIndexes.length;
+        double startAngle = getFixedAngle(startX, startY);
+        double angleDiv = Math.PI / (mSubIndexes.length + 1);
         for (int i = 0; i < mData.length; i++) {
-            double a = angleDiv * i;
-            mData[i] = new ItemData(0, 0, a);
+            double a = angleDiv * (i + 1);
+            mData[i] = new ItemData(0, 0, startAngle + a);
         }
         updateData();
         //animate
         animateItems();
     }
 
-    //optimal
-    private void animateItems() {
-        MultiValueAnimator anim = MultiValueAnimator.create();
+    private double getFixedAngle(float startX, float startY) {
+        boolean clockwise = startX < getWidth() / 2;
+        double div = Math.PI / 2 / 8;
 
-        long singleDur = 500;
-        long delay = 50;
-        for (int i = 0; i < mData.length; i++) {
-            anim.addInterpolator(new OvershootInterpolator(), delay * i, singleDur);
+        for (int i = 0; i < 8; i++) {
+            double checkA = div * i * (clockwise ? -1 : 1);
+            float checkX = Util.xFromAngle(startX, mRadius * 1.1f * (clockwise ? -1 : 1), checkA);
+            float checkY = Util.yFromAngle(startY, mRadius * 1.1f * (clockwise ? -1 : 1), checkA);
+
+            if (inside(checkX, checkY)) {
+                return checkA;
+            }
         }
-
-        anim.setMultiUpdateListener(new MultiValueAnimator.MultiUpdateListener() {
-            @Override
-            public void onValueUpdate(ValueAnimator animator, float value, int index) {
-                mData[index].scale = value;
-                mData[index].distance = Util.fromFrac(0, dimen * 2, value);
-            }
-
-            @Override
-            public void onAllUpdate(ValueAnimator animator, float value) {
-                invalidate();
-            }
-        });
-        // safe lock
-        anim.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-            }
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                for (int i = 0; i < mData.length; i++) {
-                    mData[i].scale = 1;
-                }
-            }
-            @Override
-            public void onAnimationCancel(Animator animation) {
-            }
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
-        anim.start();
+        return Math.PI / 2 * (clockwise ? -1 : 1);
     }
 
-    //all grow at the same time
-    private void animateBoringItems() {
-        ValueAnimator anim = ValueAnimator.ofFloat(0, 1)
-                .setDuration(400);
-        anim.setInterpolator(new OvershootInterpolator(2f));
-        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                float frac = (float)animation.getAnimatedValue();
-                for (int i = 0; i < mData.length; i++) {
-                    mData[i].scale = frac;
-                    mData[i].distance = Util.fromFrac(0, dimen * 2, frac);
-                }
-                invalidate();
-            }
-        });
-        anim.start();
+    /**
+     * @param x x position
+     * @param y y position
+     * @return whether the x & y coordinates are within the bounds of this view
+     */
+    private boolean inside(float x, float y) {
+        return x >= 0 && x <= getWidth() && y >= 0 && y <= getHeight();
     }
 
     /**
@@ -189,6 +152,71 @@ public class ReleasePicker extends View {
             mData[i].scaleMultiplier = size;
         }
         invalidate();
+    }
+
+    //optimal
+    private void animateItems() {
+        MultiValueAnimator anim = MultiValueAnimator.create();
+
+        long singleDur = 500;
+        long delay = 50;
+        for (int i = 0; i < mData.length; i++) {
+            anim.addInterpolator(new OvershootInterpolator(), delay * i, singleDur);
+        }
+
+        anim.setMultiUpdateListener(new MultiValueAnimator.MultiUpdateListener() {
+            @Override
+            public void onValueUpdate(ValueAnimator animator, float value, int index) {
+                mData[index].scale = value;
+                mData[index].distance = Util.fromFrac(0, mRadius, value);
+            }
+
+            @Override
+            public void onAllUpdate(ValueAnimator animator, float value) {
+                invalidate();
+            }
+        });
+        // safe lock
+        anim.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                for (int i = 0; i < mData.length; i++) {
+                    mData[i].scale = 1;
+                }
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+            }
+        });
+        anim.start();
+    }
+
+    //all grow at the same time
+    private void animateBoringItems() {
+        ValueAnimator anim = ValueAnimator.ofFloat(0, 1)
+                .setDuration(400);
+        anim.setInterpolator(new OvershootInterpolator(2f));
+        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float frac = (float) animation.getAnimatedValue();
+                for (int i = 0; i < mData.length; i++) {
+                    mData[i].scale = frac;
+                    mData[i].distance = Util.fromFrac(0, dimen * 2, frac);
+                }
+                invalidate();
+            }
+        });
+        anim.start();
     }
 
     /**

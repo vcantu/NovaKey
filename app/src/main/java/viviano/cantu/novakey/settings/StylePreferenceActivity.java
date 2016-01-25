@@ -9,9 +9,9 @@ import viviano.cantu.novakey.R;
 import viviano.cantu.novakey.settings.widgets.pickers.ColorPicker;
 import viviano.cantu.novakey.settings.widgets.pickers.HorizontalPicker;
 import viviano.cantu.novakey.settings.widgets.pickers.PickerItem;
-import viviano.cantu.novakey.settings.widgets.ThemePicker;
 import viviano.cantu.novakey.settings.widgets.ThemePreview;
 import viviano.cantu.novakey.settings.widgets.pickers.ReleasePicker;
+import viviano.cantu.novakey.settings.widgets.pickers.ThemePicker;
 import viviano.cantu.novakey.themes.Theme;
 
 /**
@@ -25,25 +25,27 @@ public class StylePreferenceActivity extends AbstractPreferenceActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         loadData();
+
+        ReleasePicker releasePicker = (ReleasePicker)findViewById(R.id.releasePick);
+
         final ThemePreview preview = (ThemePreview)findViewById(R.id.preview);
         updatePreview(preview);
         preview.invalidate();
 
         ThemePicker themePicker = (ThemePicker)findViewById(R.id.themePicker);
-        themePicker.set(theme);
+        themePicker.setItem(theme);
         themePicker.invalidate();
-        themePicker.setOnChangeListener(new ThemePicker.OnChangeListener() {
+        themePicker.setOnItemSelectedListener(new HorizontalPicker.OnItemSelectedListener() {
             @Override
-            public void onChange(int newIndex) {
-                if (newIndex == Theme.COUNT - 1 && theme > 0)
+            public void onItemSelected(PickerItem item, int subIndex) {
+                int index = Theme.getIndex((Theme)item);
+                if (index == Theme.COUNT - 1 && theme > 0)
                     theme *= -1;
                 else
-                    theme = newIndex;
+                    theme = index;
                 updatePreview(preview);
             }
         });
-
-        ReleasePicker releasePicker = (ReleasePicker)findViewById(R.id.releasePick);
 
         ColorPicker primaryColor = (ColorPicker)findViewById(R.id.primaryColor);
         primaryColor.setReleasePicker(releasePicker);

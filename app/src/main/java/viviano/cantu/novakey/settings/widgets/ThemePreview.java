@@ -7,6 +7,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import viviano.cantu.novakey.KeyLayout;
+import viviano.cantu.novakey.R;
 import viviano.cantu.novakey.themes.Theme;
 
 /**
@@ -20,6 +21,7 @@ public class ThemePreview extends View {
     //dimensions
     public float radius;
     protected float viewWidth, viewHeight, centerX, centerY, smallRadius;
+    public KeyLayout mKeyLayout;
 
     public ThemePreview(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -43,6 +45,10 @@ public class ThemePreview extends View {
         centerX = viewWidth / 2;
         centerY = getPaddingTop() + radius;
         smallRadius = radius / 3;
+
+        //Create a keyboard from a resource
+        mKeyLayout = new KeyLayout("English", KeyLayout.convert(R.array.English, getResources()));
+        mKeyLayout.updateCoords(centerX, centerY, radius, smallRadius);
     }
 
     @Override
@@ -55,7 +61,7 @@ public class ThemePreview extends View {
         theme.drawBoard(centerX, centerY, radius, smallRadius, canvas);
 
         //draw main keys
-        theme.drawKeys(centerX, centerY, radius, smallRadius, KeyLayout.get("English"),
+        theme.drawKeys(centerX, centerY, radius, smallRadius, mKeyLayout,
                 false, canvas);
 
         theme.drawButtons(centerX, centerY, radius, canvas);
