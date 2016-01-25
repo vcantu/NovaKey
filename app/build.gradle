@@ -1,0 +1,27 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion '23.0.2'
+
+    defaultConfig {
+        applicationId "viviano.cantu.novakey"
+        minSdkVersion 11
+        targetSdkVersion 23
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+}
+
+dependencies {
+    compile 'com.android.support:appcompat-v7:23.1.+'
+    compile 'com.android.support:design:23.+'
+    compile 'com.android.support:support-v4:23.1.+'
+    compile 'com.github.japgolly.android:svg-android:2.0.6'
+    compile 'com.rengwuxian.materialedittext:library:2.1.4'
+}

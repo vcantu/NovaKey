@@ -179,7 +179,9 @@ public class Btn {
 
 
             //this is space button
-                    + "|" + "2," + Math.PI/2 + "," + 1.16667f + "," + (ARC|LARGE)
+            + (Settings.hasSpaceBar ?
+                    "|" + "2," + Math.PI/2 + "," + 1.16667f + "," + (ARC|LARGE)
+                    : "")
 
             );
         }

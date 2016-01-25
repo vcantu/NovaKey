@@ -29,15 +29,15 @@ public class SettingsActivity extends PreferenceActivity {
         Font.create(getApplicationContext());
         Icon.load(getApplicationContext());
 
+        Settings.setSharedPref(PreferenceManager.getDefaultSharedPreferences(getApplicationContext()));
+        Settings.update();
+
         if (!pref.getBoolean("has_setup", false)) {
             startActivity(new Intent(this, SetupActivity.class));
             finish();
         }
 
         getFragmentManager().beginTransaction().replace(android.R.id.content, new PreferencesFragment()).commit();
-
-        Settings.setSharedPref(PreferenceManager.getDefaultSharedPreferences(getApplicationContext()));
-        Settings.update();
     }
 }
 

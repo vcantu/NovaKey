@@ -39,10 +39,10 @@ public class StylePreferenceActivity extends AbstractPreferenceActivity {
             @Override
             public void onItemSelected(PickerItem item, int subIndex) {
                 int index = Theme.getIndex((Theme)item);
-                if (index == Theme.COUNT - 1 && theme > 0)
-                    theme *= -1;
-                else
-                    theme = index;
+//                if (index == Theme.COUNT - 1 && theme > 0)
+//                    theme *= -1;
+//                else
+                theme = index;
                 updatePreview(preview);
             }
         });

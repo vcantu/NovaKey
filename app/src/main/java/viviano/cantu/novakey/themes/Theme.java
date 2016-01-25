@@ -52,9 +52,7 @@ public class Theme implements PickerItem {
         if (Color.alpha(primaryColor()) == 255)
             drawBoardBack(x, y, r, sr, canvas);
 
-        pB.setShadowLayer(2, 0, 2, 0xFF808080);
         drawLines(x, y, r, sr, canvas);
-        pB.clearShadowLayer();
     }
 
     //Override to change drawing
@@ -174,6 +172,8 @@ public class Theme implements PickerItem {
         drawLines(x, y, r, sr, 1 / 30f, canvas);
 
         if (selected) {
+            p.clearShadowLayer();
+            p.setShadowLayer(5, 0, 5, 0x80000000);
             p.setStyle(Paint.Style.STROKE);
             p.setColor(0xFF58ACFA);
             p.setStrokeWidth(15);
@@ -211,16 +211,17 @@ public class Theme implements PickerItem {
             return 2;
         if (theme instanceof ThemeDonut)
             return 3;
-        if (theme instanceof ThemeMulticolorDonut)
-            return 4;
+        //TODO: multicolor is multicolordonut
         if (theme instanceof ThemeMulticolor)
             return 5;
+        if (theme instanceof ThemeMulticolorDonut)
+            return 4;
         if (theme instanceof ThemeAuto)
             return 6;
         return 0;
     }
 
-    public static int COUNT = 7;
+    public static int COUNT = 6;
 
     public static Theme fromString(String s) {
         if (s.equals(Settings.DEFAULT)) {

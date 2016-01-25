@@ -23,16 +23,19 @@ public class Settings {
             pref_auto_correct = "pref_auto_correct",
             pref_quick_close = "pref_quick_close",
             //NovaKey 0.3
-            pref_vibrate_level = "pref_vibrate_level",
             pref_theme = "pref_theme",
             pref_btns = "pref_btns",
             pref_rate = "pref_rate",
             pref_tut = "pref_tut",
-            pref_style = "pref_style";
+            pref_style = "pref_style",
+            pref_space_bar = "pref_space_bar",
+            pref_start_version = "pref_start_version";
 
     //Settings
     public static String DEFAULT = "DEFAULT";
     public static boolean hideLetters, hidePassword, vibrate, quickInsert, autoCorrect, quickClose;
+    public static boolean hasSpaceBar;
+    public static int startVersion;
     /*
         theme will be a String that can be translated into a Theme, with colors and other data
          it will have the following format:
@@ -53,6 +56,11 @@ public class Settings {
 
         autoCorrect = sharedPref.getBoolean(pref_auto_correct, false);
         quickClose = sharedPref.getBoolean(pref_quick_close, false);
+
+        hasSpaceBar = sharedPref.getBoolean(pref_space_bar, false);
+
+        //this will only b
+        startVersion = sharedPref.getInt(pref_start_version, 9);
 
         theme = Theme.fromString(sharedPref.getString(pref_theme, Settings.DEFAULT));
 

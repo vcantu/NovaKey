@@ -4,8 +4,8 @@
 
     <string-array name="hidden_keys">
         <!-- Alphabet -->
-        <item>aàáâãåæªαä</item>
-        <item>AÀÁÂÃÅÆÄ</item>
+        <item>aàáâãąåæªαä</item>
+        <item>AÀÁÂÃĄÅÆÄ</item>
         <item>bβ</item>
         <item>Bβ</item>
         <item>cçćĉċč¢©</item>

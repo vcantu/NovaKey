@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.Window;
 
 import viviano.cantu.novakey.NovaKey;
+import viviano.cantu.novakey.settings.Settings;
 
 public class SetupActivity extends Activity {
 	

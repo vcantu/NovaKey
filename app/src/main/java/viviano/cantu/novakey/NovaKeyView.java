@@ -23,6 +23,7 @@ public class NovaKeyView extends View {
 	//animations
 	private Paint p;
 	private ArrayList<Drawer> drawers;
+	private ArrayList<Animator> mAnimators;
 	
 	//candidates
 	public boolean showCandidates = false;
@@ -41,7 +42,8 @@ public class NovaKeyView extends View {
 	public NovaKeyView(Context context) {
 		super(context);
 		p = new Paint();
-		drawers = new ArrayList<Drawer>();
+		drawers = new ArrayList<>();
+        mAnimators = new ArrayList<>();
 
         theme = Settings.theme;
         updateDimens();
@@ -135,6 +137,7 @@ public class NovaKeyView extends View {
 	}
 
 	public void animate(Animator animator) {
+        mAnimators.add(animator);
 		animator.start(this);
 	}
 
@@ -142,6 +145,14 @@ public class NovaKeyView extends View {
 		drawers.clear();
 		invalidate();
 	}
+
+    public void cancelAnimators() {
+        clearDrawers();
+        for (int i = 0; i < mAnimators.size(); i++) {
+            mAnimators.get(i).cancel();
+        }
+        mAnimators.clear();
+    }
 	
 	private void drawCandidates(float x, float y, Paint p, Canvas canvas) {
 		String[] DELETE = new String[] { "candidates", "candidate", "candid" };

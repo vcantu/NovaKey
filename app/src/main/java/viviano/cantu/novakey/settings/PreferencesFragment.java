@@ -45,13 +45,13 @@ public class PreferencesFragment extends PreferenceFragment {
              }
          });
 
-         Preference testPref = findPreference("pref_test");
-         testPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-             @Override
-             public boolean onPreferenceClick(Preference preference) {
-                 startActivity(new Intent(getActivity().getApplicationContext(), EmojiSettingActivity.class));
-                 return true;
-             }
-         });
+//         Preference testPref = findPreference("pref_test");
+//         testPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+//             @Override
+//             public boolean onPreferenceClick(Preference preference) {
+//                 startActivity(new Intent(getActivity().getApplicationContext(), EmojiSettingActivity.class));
+//                 return true;
+//             }
+//         });
 	}
 }

@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import viviano.cantu.novakey.animations.animators.Animator;
 import viviano.cantu.novakey.animations.animators.CharAnimator;
 import viviano.cantu.novakey.animations.animators.CharGrow;
+import viviano.cantu.novakey.animations.animators.HintAnimator;
+import viviano.cantu.novakey.animations.animators.ResetCharAnimator;
 import viviano.cantu.novakey.btns.Btn;
 import viviano.cantu.novakey.emoji.Emoji;
 import viviano.cantu.novakey.menus.InfiniteMenu;
@@ -106,22 +108,22 @@ public class Controller implements NovaKeyListener.EventListener {
 
         switch (info.inputType & InputType.TYPE_MASK_CLASS) {
             case InputType.TYPE_CLASS_TEXT:
-                addState(NovaKey.DEFAULT_KEYS);
+                setKeys(NovaKey.DEFAULT_KEYS);
                 if (var == InputType.TYPE_TEXT_VARIATION_PASSWORD ||
                     var == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD ||
                     var == InputType.TYPE_TEXT_VARIATION_WEB_PASSWORD)
                     onPassword = true;
                 break;
             case InputType.TYPE_CLASS_NUMBER:
-                addState(NovaKey.PUNCTUATION);
+                setKeys(NovaKey.PUNCTUATION);
                 if (var == InputType.TYPE_NUMBER_VARIATION_PASSWORD)
                     onPassword = true;
                 break;
             case InputType.TYPE_CLASS_DATETIME:
-                addState(NovaKey.PUNCTUATION);
+                setKeys(NovaKey.PUNCTUATION);
                 break;
             case InputType.TYPE_CLASS_PHONE:
-                addState(NovaKey.PUNCTUATION);
+                setKeys(NovaKey.PUNCTUATION);
                 break;
         }
         updateShift(info);
@@ -298,7 +300,14 @@ public class Controller implements NovaKeyListener.EventListener {
         if (view != null)
             view.animate(animator);
     }
-    public static void clearDrawers() { view.clearDrawers(); }
+    public static void clearDrawers() {
+        if (view != null)
+            view.clearDrawers();
+    }
+    public static void cancelAnimators() {
+        if (view != null)
+            view.cancelAnimators();
+    }
 
 
 ///--------------------------------------------------------TOUCH CONTROLLER---------------------------------------------------------------
@@ -327,7 +336,7 @@ public class Controller implements NovaKeyListener.EventListener {
 
     @Override
     public void onDownArea(int area) {
-        //Controller.animate(new HintAnimator(area)); TODO:
+        //Controller.animate(new HintAnimator(area)); //TODO:
         view.invalidate();
     }
 
@@ -341,7 +350,7 @@ public class Controller implements NovaKeyListener.EventListener {
                     addState(NovaKey.ROTATING | NovaKey.DELETING);
                     char c = main.handleDelete();
                     if (c != 0) {
-                        charsDeleted = new ArrayList<Character>();
+                        charsDeleted = new ArrayList<>();
                         charsDeleted.add(c);
                     }
                     deleteDone = true;
@@ -443,7 +452,7 @@ public class Controller implements NovaKeyListener.EventListener {
     @Override
     public void onUp(int lastArea, ArrayList<Integer> areasCrossed) {
         int keyCode = view.getKey(areasCrossed);
-        //animate(new ResetCharAnimator()); TODO:
+        animate(new ResetCharAnimator()); //Resets to original state
         if (hasState(NovaKey.ON_KEYS) && !repeatingDone && keyCode != Keyboard.KEYCODE_CANCEL){
             if (keyCode != '\n' && keyCode >=0)
                 main.handleCharacter(keyCode);

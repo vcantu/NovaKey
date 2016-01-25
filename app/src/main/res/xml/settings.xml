@@ -52,11 +52,17 @@
         <Preference android:title="Style your keyboard"
             android:summary="Edit the color and shape of your keyboard"
             android:key="pref_style"/>
-        <viviano.cantu.novakey.settings.ButtonPreference
-            android:title="Customize Functionality"
-            android:summary="Add buttons to add functionality" />
+        <!--<viviano.cantu.novakey.settings.ButtonPreference-->
+            <!--android:title="Customize Functionality"-->
+            <!--android:summary="Add buttons to add functionality" />-->
+        <CheckBoxPreference
+            android:title="Add Spacebar"
+            android:summary="More buttons coming in the future"
+            android:key="pref_space_bar"
+            android:defaultValue="false"
+            />
     </PreferenceCategory>
-    <Preference android:title="To resize/undock"
+    <Preference android:title="To resize"
                 android:summary="press and hold with two fingers"></Preference>
 
     <PreferenceCategory android:title="Other">
@@ -66,9 +72,9 @@
         <Preference android:title="All the kool kats rate NovaKey"
             android:summary="Click to be a kool kat"
             android:key="pref_rate"></Preference>
-        <Preference android:title="Test"
-            android:summary="REMOVE FROM FINAL VERSION"
-            android:key="pref_test"></Preference>
+        <!--<Preference android:title="Test"-->
+            <!--android:summary="REMOVE FROM FINAL VERSION"-->
+            <!--android:key="pref_test"></Preference>-->
     </PreferenceCategory>
 
 </PreferenceScreen>
