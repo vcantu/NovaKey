@@ -146,7 +146,6 @@ public class KeyLayout implements Iterator<Key>, Iterable<Key> {
          */
         KEYBOARDS = new ArrayList<>();
         KEYBOARDS.add(new KeyLayout("English", convert(R.array.English, res)));
-        KEYBOARDS.add(new KeyLayout("EnglishOLD", convert(R.array.English, res)));
         KEYBOARDS.add(new KeyLayout("Punctuation", convert(R.array.Punctuation, res)));
         KEYBOARDS.add(new KeyLayout("Symbols", convert(R.array.Symbols, res)));
     }

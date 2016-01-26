@@ -51,8 +51,8 @@ public class Clipboard {
             @Override
             public void onLongPress(int selected) {
                 //if paste is long pressed
-                if (selected == 3) {// == 3 made negative 1 to turn off
-                    ArrayList<String> lst = new ArrayList<String>();
+                if (selected == 3) {
+                    ArrayList<String> lst = new ArrayList<>();
                     for (int i=0; i<Clipboard.clipCount(); i++) {
                         try {
                             String text = Clipboard.get(i);

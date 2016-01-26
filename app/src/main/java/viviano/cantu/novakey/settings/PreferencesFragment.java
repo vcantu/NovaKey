@@ -40,11 +40,21 @@ public class PreferencesFragment extends PreferenceFragment {
          tutPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
              @Override
              public boolean onPreferenceClick(Preference preference) {
-                 startActivity(new Intent(getActivity().getApplicationContext(), TutorialActivity.class));
+                 startActivity(new Intent(getActivity().getApplicationContext(),
+                         TutorialActivity.class));
                  return true;
              }
          });
 
+         Preference betaTestPref = findPreference(Settings.pref_beta_test);
+         betaTestPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+             @Override
+             public boolean onPreferenceClick(Preference preference) {
+                 startActivity(new Intent(Intent.ACTION_VIEW,
+                         Uri.parse("https://plus.google.com/communities/106258064775616773864")));
+                 return true;
+             }
+         });
 //         Preference testPref = findPreference("pref_test");
 //         testPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 //             @Override

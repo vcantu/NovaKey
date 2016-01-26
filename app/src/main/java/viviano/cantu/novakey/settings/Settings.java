@@ -29,7 +29,9 @@ public class Settings {
             pref_tut = "pref_tut",
             pref_style = "pref_style",
             pref_space_bar = "pref_space_bar",
-            pref_start_version = "pref_start_version";
+            pref_start_version = "pref_start_version",
+            //NovaKey 0.3.4
+            pref_beta_test = "pref_beta_test";
 
     //Settings
     public static String DEFAULT = "DEFAULT";
@@ -60,7 +62,7 @@ public class Settings {
         hasSpaceBar = sharedPref.getBoolean(pref_space_bar, false);
 
         //this will only default to the given number if the person has never had this preference
-        startVersion = sharedPref.getInt(pref_start_version, 9);
+        startVersion = sharedPref.getInt(pref_start_version, 10);
 
         theme = Theme.fromString(sharedPref.getString(pref_theme, Settings.DEFAULT));
 
