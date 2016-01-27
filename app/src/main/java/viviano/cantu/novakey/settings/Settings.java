@@ -62,7 +62,7 @@ public class Settings {
         hasSpaceBar = sharedPref.getBoolean(pref_space_bar, false);
 
         //this will only default to the given number if the person has never had this preference
-        startVersion = sharedPref.getInt(pref_start_version, 11);
+        startVersion = sharedPref.getInt(pref_start_version, 12);
 
         theme = Theme.fromString(sharedPref.getString(pref_theme, Settings.DEFAULT));
 
