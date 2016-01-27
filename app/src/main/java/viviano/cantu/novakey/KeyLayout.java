@@ -72,6 +72,8 @@ public class KeyLayout implements Iterator<Key>, Iterable<Key> {
     }
 
     public Key getKey(int group, int loc) {
+        if (loc > keys[group].length)//for alt layouts
+            return keys[group][0];
         return keys[group][loc];
     }
 
@@ -164,8 +166,9 @@ public class KeyLayout implements Iterator<Key>, Iterable<Key> {
         Key[][] result = new Key[S.length][];
         for (int i=0; i<S.length; i++) {
             result[i] = new Key[S[i].length()];
+            boolean altLayout = i > 0 && S[i].length() > 4;
             for (int j=0; j<S[i].length(); j++) {
-                result[i][j] = new Key(S[i].charAt(j), i, j);
+                result[i][j] = new Key(S[i].charAt(j), i, j, altLayout);
             }
         }
         return result;

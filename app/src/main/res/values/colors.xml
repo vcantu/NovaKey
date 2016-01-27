@@ -4,5 +4,5 @@
     <color name="colorAccent">#009e9e</color>
     <color name="background_material_light">#f0f0f0</color>
     <color name="holo_light_primary_dark">#000000</color>
-    <color name="colorBackground">#616161</color>
+    <color name="colorBackground">#f0f0f0</color>
 </resources>

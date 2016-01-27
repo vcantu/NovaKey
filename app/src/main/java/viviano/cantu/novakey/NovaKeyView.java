@@ -81,7 +81,7 @@ public class NovaKeyView extends View {
 
 	public void updateCoords() {
 		setCoords(Settings.sharedPref.getFloat("x" + (Controller.landscape ? "_land" : ""), dimens.w / 2),
-				dimens.r);
+                dimens.r);
 	}
 
     private void setRadii(float r) {
@@ -247,6 +247,8 @@ public class NovaKeyView extends View {
 						return new Location(firstArea, 2);
 					else if (check == firstArea-1 || (firstArea == 1 && check == 5))
 						return new Location(firstArea, 3);
+                    else if (check == -1 && areasCrossed.size() == 2)
+                        return new Location(firstArea, 4);
 				}
 				check = secondArea;
 			}
@@ -264,7 +266,7 @@ public class NovaKeyView extends View {
 			return 0;
 		else if (Util.distance(dimens.x, dimens.y, x, y) <= dimens.r)
 			return getSector(x, y);
-		return Keyboard.KEYCODE_CANCEL;
+		return Keyboard.KEYCODE_CANCEL;//outside area
 	}
 
 	/*

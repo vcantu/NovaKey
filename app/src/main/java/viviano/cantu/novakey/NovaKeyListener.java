@@ -49,7 +49,7 @@ public class NovaKeyListener implements View.OnTouchListener {
                     currBtn.onDown();
                     btnPress.begin();
                 }
-                areasCrossed = new ArrayList<Integer>();
+                areasCrossed = new ArrayList<>();
                 if (currArea != Keyboard.KEYCODE_CANCEL) {
                     areasCrossed.add(currArea);
                     singlePress.begin();
