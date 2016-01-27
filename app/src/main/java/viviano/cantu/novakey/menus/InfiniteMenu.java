@@ -132,6 +132,8 @@ public class InfiniteMenu {
     private void draw(int i, float x, float y, float size, int color, Paint p, Canvas canvas) {
         Object o = list[i];
         p.setColor(color);
+        if (o == null)
+            return;
         if (o instanceof Icon.Drawable) {
             ((Icon.Drawable)o).draw(x, y, size, p, canvas);
         }

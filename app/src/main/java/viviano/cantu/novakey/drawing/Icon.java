@@ -26,7 +26,7 @@ public class Icon {
 
     public static void load(Context context) {
         Resources res = context.getResources();
-        icons = new ArrayList<Drawable>();
+        icons = new ArrayList<>();
 
         cursors = BitmapFactory.decodeResource(res, R.drawable.ic_cursors);
         cursorLeft = BitmapFactory.decodeResource(res, R.drawable.ic_cursor_left);

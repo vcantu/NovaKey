@@ -36,11 +36,11 @@ public class Clipboard {
 
     public static void createMenu() {
         Object[] list = new Object[] {
-                Icon.get("copy"),
+                Icon.get("content_copy"),
                 Icon.get("select_all"),
-                Icon.get("paste"),
+                Icon.get("content_paste"),
                 Icon.get("deselect_all"),
-                Icon.get("cut")
+                Icon.get("content_cut")
         };
         MENU = new OnUpMenu(list, new OnUpMenu.Action() {
             @Override

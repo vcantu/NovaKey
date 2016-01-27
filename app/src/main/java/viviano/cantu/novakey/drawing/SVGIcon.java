@@ -41,13 +41,15 @@ public class SVGIcon implements Icon.Drawable {
     @Override
     public void draw(float x, float y, float size, Paint p, Canvas canvas) {
         int color = p.getColor();
-        if (this.color != color)
-            recolor(color);
-        float half = size / 2;
-        canvas.drawPicture(getPicture(), new RectF(x - half, y - half, x + half, y + half));
+        try {
+//            if (this.color != color)
+//                recolor(color);
+            float half = size / 2;
+            //canvas.drawPicture(getPicture(), new RectF(x - half, y - half, x + half, y + half));
+        } catch (Exception e) {}
     }
 
-    public void recolor(int color) {
+    private void recolor(int color) {
         svg = new SVGBuilder().readFromString(this.stream)
                 .setColorFilter(new LightingColorFilter(color, 0))
                 .build();
