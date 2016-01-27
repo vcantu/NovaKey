@@ -20,7 +20,9 @@ public class Font {
         SANS_SERIF_CONDENSED = Typeface.create("sans-serif-condensed", Typeface.NORMAL);
 
         // Icon Type faces
-        EMOJI = Typeface.createFromAsset(context.getAssets(), "NotoColorEmoji.ttf");
+        try {
+            //EMOJI = Typeface.createFromAsset(context.getAssets(), "NotoColorEmoji.ttf");
+        } catch (Exception e) {}
         EMOJI_REGULAR = Typeface.createFromAsset(context.getAssets(), "NotoEmoji-Regular.ttf");
         MATERIAL_ICONS = Typeface.createFromAsset(context.getAssets(), "MaterialIcons-Regular.ttf");
         CUSTOM_ICONS = Typeface.createFromAsset(context.getAssets(), "CustomIcons.ttf");
