@@ -11,12 +11,12 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <viviano.cantu.novakey.emoji.HexDisplayView
+        <viviano.cantu.novakey.drawing.emoji.HexDisplayView
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:id="@+id/hexView"/>
 
-            <viviano.cantu.novakey.emoji.ThrowAwayView
+            <viviano.cantu.novakey.drawing.emoji.ThrowAwayView
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 android:id="@+id/throaway"/>

@@ -1,0 +1,5 @@
+deselect_all e900
+select_all_all e901
+select_all_clear e902
+select_all_copy e903
+select_all_cut e904

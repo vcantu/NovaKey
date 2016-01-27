@@ -113,10 +113,9 @@ public class Draw {
         if (selected) {//draw checkmark
             float rw = Util.contrastRatio(Color.WHITE, color);
             Icon.Drawable ic = Icon.get("check");
-            if (rw >= 1.1f)
-                ic = Icon.get("check_outline");
-            p.setColor(color == Color.WHITE ? Color.BLACK : Color.WHITE);
-            ic.draw(x, y, radius * 1.6f, p, canvas);
+            p.setColor(rw < 1.1f ? Color.BLACK : Color.WHITE);
+            p.clearShadowLayer();
+            Icon.draw(ic, x, y, radius * 1.6f, p, canvas);
         }
     }
 

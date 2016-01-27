@@ -51,7 +51,7 @@ public class OnUpMenu {
         if (o == null)
             return;
         if (o instanceof Icon.Drawable)
-            ((Icon.Drawable) o).draw(x, y, size, p, canvas);
+            Icon.draw((Icon.Drawable) o, x, y, size, p, canvas);
         else {
             String s = "";
             if (o instanceof Character)

@@ -64,6 +64,7 @@ public class StylePreferenceActivity extends AbstractPreferenceActivity {
         secondaryColor.setOnItemSelectedListener(new HorizontalPicker.OnItemSelectedListener() {
             @Override
             public void onItemSelected(PickerItem item, int subIndex) {
+                System.out.println(subIndex);
                 two = ((Colors)item).shade(subIndex);
                 updatePreview(preview);
             }

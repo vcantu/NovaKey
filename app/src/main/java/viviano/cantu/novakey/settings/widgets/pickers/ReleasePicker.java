@@ -59,7 +59,7 @@ public class ReleasePicker extends View {
                         mListener.onItemSelected(mIndex);
                 }
                 invalidate();
-                setVisibility(INVISIBLE);
+                setVisibility(GONE);
                 break;
         }
         return super.onTouchEvent(event);

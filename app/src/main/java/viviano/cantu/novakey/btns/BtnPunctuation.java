@@ -1,7 +1,6 @@
 package viviano.cantu.novakey.btns;
 
 import viviano.cantu.novakey.Controller;
-import viviano.cantu.novakey.emoji.Emoji;
 import viviano.cantu.novakey.menus.InfiniteMenu;
 
 /**

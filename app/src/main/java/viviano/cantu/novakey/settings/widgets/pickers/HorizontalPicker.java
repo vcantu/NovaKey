@@ -52,7 +52,6 @@ public abstract class HorizontalPicker extends View implements View.OnTouchListe
 
         p = new Paint();
         p.setFlags(Paint.ANTI_ALIAS_FLAG);
-        p.setShadowLayer(10, 0, 10, 0x80000000);
         dimen = context.getResources().getDimension(R.dimen.picker_dimen);
         //removes hardware acceleration to allow svgs
         setLayerType(View.LAYER_TYPE_SOFTWARE, null);
@@ -75,7 +74,7 @@ public abstract class HorizontalPicker extends View implements View.OnTouchListe
             public void onScrollChanged(View view, int x, int y, int oldx, int oldy) {
                 //Safe lock
                 if (mReleasePicker != null)
-                    mReleasePicker.setVisibility(INVISIBLE);
+                    mReleasePicker.setVisibility(GONE);
                 cancelLongPressTimer();
             }
         });

@@ -2,19 +2,14 @@ package viviano.cantu.novakey.utils;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;
-import android.animation.ValueAnimator;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
-import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 import viviano.cantu.novakey.R;
-import viviano.cantu.novakey.emoji.Emoji;
 
 /**
  * Created by Viviano on 7/4/2015.

@@ -86,7 +86,7 @@ public class Btn {
         t.p.setColor(t.frontColor);
         t.p.setStyle(Paint.Style.FILL);
         if (icon != null) {
-            icon.draw(x, y, size, t.p, canvas);
+            Icon.draw(icon, x, y, size, t.p, canvas);
         }
         else if (text != null) {
             if (text.equals(".")) {

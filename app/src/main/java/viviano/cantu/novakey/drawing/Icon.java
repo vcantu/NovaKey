@@ -1,7 +1,6 @@
 package viviano.cantu.novakey.drawing;
 
 import android.content.Context;
-import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,6 +13,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import viviano.cantu.novakey.Font;
 import viviano.cantu.novakey.R;
 
 /**
@@ -37,22 +37,8 @@ public class Icon {
         accept = BitmapFactory.decodeResource(res, R.drawable.ic_action_accept);
         refresh = BitmapFactory.decodeResource(res, R.drawable.ic_action_refresh);
 
-        setSVGs(res);
         setMaterialIcons(res);
-    }
-
-    private static void setSVGs(Resources res) {
-        AssetManager am = res.getAssets();
-        try {
-            String[] paths = am.list("svgs/icons");
-            icons = new ArrayList<>();
-            for (String s : paths) {
-                //ic_*****.svg
-                icons.add(new SVGIcon(s.substring(3, s.length() - 4), am.open("svgs/icons/" + s)));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        setCustomIcons(res);
     }
 
     private static void setMaterialIcons(Resources res) {
@@ -63,7 +49,35 @@ public class Icon {
             while ((line = reader.readLine()) != null) {
                 StringBuilder sb = new StringBuilder("");
                 String[] params = line.split(" ");
-                icons.add(new MaterialIcon(params[0], sb.appendCodePoint(Integer.parseInt(params[1], 16)).toString()));
+                icons.add(new FontIcon(params[0],
+                        sb.appendCodePoint(Integer.parseInt(params[1], 16)).toString(),
+                        Font.MATERIAL_ICONS));
+            }
+        }
+        catch (IOException ex) {
+            throw new RuntimeException("Error in reading TXT file: " + ex);
+        }
+        finally {
+            try {
+                is.close();
+            }
+            catch (IOException e) {
+                throw new RuntimeException("Error while closing input stream: " + e);
+            }
+        }
+    }
+
+    private static void setCustomIcons(Resources res) {
+        InputStream is = res.openRawResource(R.raw.codepoints_custom);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        try {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                StringBuilder sb = new StringBuilder("");
+                String[] params = line.split(" ");
+                icons.add(new FontIcon(params[0],
+                        sb.appendCodePoint(Integer.parseInt(params[1], 16)).toString(),
+                        Font.CUSTOM_ICONS));
             }
         }
         catch (IOException ex) {
@@ -87,7 +101,26 @@ public class Icon {
         return null;
     }
 
+    public static void draw(Drawable ic, float x, float y, float size, Paint p, Canvas canvas) {
+        if (ic != null && p != null && canvas != null)
+            ic.draw(x, y, size, p, canvas);
+    }
+
+    public static void draw(String name, float x, float y, float size, Paint p, Canvas canvas) {
+        draw(get(name), x, y, size, p, canvas);
+    }
+
     public interface Drawable {
+        /**
+         * DO NOT CALL THIS call Icon.draw() instead as it does null checks before
+         * drawing
+         *
+         * @param x x position
+         * @param y y position
+         * @param size size of icon
+         * @param p paint to use
+         * @param canvas canvas to draw on
+         */
         void draw(float x, float y, float size, Paint p, Canvas canvas);
     }
 }

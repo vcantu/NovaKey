@@ -4,9 +4,9 @@ import android.app.Activity;
 import android.os.Bundle;
 
 import viviano.cantu.novakey.R;
-import viviano.cantu.novakey.emoji.Emoji;
-import viviano.cantu.novakey.emoji.HexDisplayView;
-import viviano.cantu.novakey.emoji.ThrowAwayView;
+import viviano.cantu.novakey.drawing.emoji.Emoji;
+import viviano.cantu.novakey.drawing.emoji.HexDisplayView;
+import viviano.cantu.novakey.drawing.emoji.ThrowAwayView;
 
 public class EmojiSettingActivity extends Activity {
 

@@ -41,9 +41,7 @@ public class IconView extends View implements View.OnTouchListener {
     public void onDraw(Canvas canvas) {
         float w = getWidth(), h = getHeight();
         p.setColor(touched ? 0xFFF0F0F0 : 0xFFA0A0A0);
-        if (icon != null) {
-            icon.draw(w / 2, h / 2, w * size, p, canvas);
-        }
+        Icon.draw(icon, w / 2, h / 2, w * size, p, canvas);
     }
 
     @Override

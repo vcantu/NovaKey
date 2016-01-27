@@ -9,13 +9,15 @@ import viviano.cantu.novakey.Font;
 /**
  * Created by Viviano on 12/26/2015.
  */
-public class MaterialIcon implements Icon.Drawable {
+public class FontIcon implements Icon.Drawable {
 
     private String name, code;
+    private Typeface font;
 
-    MaterialIcon(String name, String code) {
+    FontIcon(String name, String code, Typeface font) {
         this.name = name;
         this.code = code;
+        this.font = font;
     }
 
     @Override
@@ -23,7 +25,7 @@ public class MaterialIcon implements Icon.Drawable {
         Typeface tempTTF = p.getTypeface();
         float tempSize = p.getTextSize();
 
-        p.setTypeface(Font.MATERIAL_ICONS);
+        p.setTypeface(font);
         p.setTextSize(size);
         Draw.text(code, x, y, p, canvas);
 

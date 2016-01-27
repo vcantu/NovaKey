@@ -135,7 +135,7 @@ public class InfiniteMenu {
         if (o == null)
             return;
         if (o instanceof Icon.Drawable) {
-            ((Icon.Drawable)o).draw(x, y, size, p, canvas);
+            Icon.draw((Icon.Drawable) o, x, y, size, p, canvas);
         }
         else {
             String s = "";
@@ -149,7 +149,7 @@ public class InfiniteMenu {
                 } catch (Exception e) {}
 
             if (s.equals(CANCEL))
-                Icon.get("clear").draw(x, y, size, p, canvas);
+                Icon.draw("clear", x, y, size, p, canvas);
             else {
                 int MAX = 12;
                 if (s.length() > 4) {

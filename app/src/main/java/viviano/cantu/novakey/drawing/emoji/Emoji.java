@@ -1,4 +1,4 @@
-package viviano.cantu.novakey.emoji;
+package viviano.cantu.novakey.drawing.emoji;
 
 import android.content.res.Resources;
 import android.graphics.Canvas;
