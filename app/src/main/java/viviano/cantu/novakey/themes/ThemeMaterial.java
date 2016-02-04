@@ -8,7 +8,7 @@ import viviano.cantu.novakey.drawing.Draw;
 /**
  * Created by Viviano on 6/6/2015.
  */
-public class ThemeMaterial extends Theme {
+public class ThemeMaterial extends BaseTheme {
     @Override
     public void drawLines(float x, float y, float r, float sr, float w, Canvas canvas) {
         //draw lines and circle

@@ -11,7 +11,7 @@ import viviano.cantu.novakey.utils.Util;
 /**
  * Created by Viviano on 6/14/2015.
  */
-public class ThemeMulticolorDonut extends Theme {
+public class ThemeMulticolorDonut extends BaseTheme {
 
     private int[] colors;
     private boolean autoColor = true;

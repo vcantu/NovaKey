@@ -13,15 +13,15 @@ public class Font {
                     SANS_SERIF_CONDENSED;
 
 
-
     public static void create(Context context) {
         //Defaul type faces
         SANS_SERIF_LIGHT = Typeface.create("sans-serif-light", Typeface.NORMAL);
+        //SANS_SERIF_LIGHT = Typeface.createFromAsset(context.getAssets(), "SF_Burlington_Script.ttf");
         SANS_SERIF_CONDENSED = Typeface.create("sans-serif-condensed", Typeface.NORMAL);
 
         // Icon Type faces
         try {
-            //EMOJI = Typeface.createFromAsset(context.getAssets(), "NotoColorEmoji.ttf");
+            EMOJI = Typeface.createFromAsset(context.getAssets(), "NotoColorEmoji.ttf");
         } catch (Exception e) {}
         EMOJI_REGULAR = Typeface.createFromAsset(context.getAssets(), "NotoEmoji-Regular.ttf");
         MATERIAL_ICONS = Typeface.createFromAsset(context.getAssets(), "MaterialIcons-Regular.ttf");

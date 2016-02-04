@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">>
 
     <PreferenceCategory android:title="Personal">
 		<CheckBoxPreference
@@ -46,6 +48,7 @@
             android:key="pref_auto_correct"
             android:defaultValue="true"
             />
+
     </PreferenceCategory>
 
     <PreferenceCategory android:title="Customize">
@@ -69,11 +72,11 @@
         <Preference android:title="Tutorial"
             android:summary="Click to learn to use NovaKey"
             android:key="pref_tut"></Preference>
-        <Preference android:title="All the kool kats rate NovaKey"
-            android:summary="Click to be a kool kat"
+        <Preference android:title="Like NovaKey?"
+            android:summary="Click to give us a rate"
             android:key="pref_rate"></Preference>
-        <Preference android:title="Joing Our Beta Test"
-            android:summary="Get the new features before anyone else"
+        <Preference android:title="Join Our Beta Test!"
+            android:summary="Get the new features before anyone else."
             android:key="pref_beta_test"></Preference>
         <!--<Preference android:title="Test"-->
             <!--android:summary="REMOVE FROM FINAL VERSION"-->

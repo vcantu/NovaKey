@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="viviano.cantu.novakey"
-    android:versionCode="17"
-    android:versionName="0.3.4.6">
+    android:versionCode="18"
+    android:versionName="0.3.5beta">
     <!-- WARNING!!!!!!!! THIS VERSION CODE MUST EQUAL VERSION CODE IN SETTINGS -->
 
     <uses-sdk

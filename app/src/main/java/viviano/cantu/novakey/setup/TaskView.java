@@ -32,9 +32,17 @@ public class TaskView extends View {
     private float currX = 0;
 
     private OnIndexChangeListener listener;
+    private OnFinishListener mOnFinishList;
 
     private ArrayList<Task> tasks;
 
+
+    /**
+     * Constructor also sets touch listener
+     *
+     * @param context application context
+     * @param attrs XML attributes
+     */
     public TaskView(Context context, AttributeSet attrs) {
         super(context, attrs);
         dimen = getResources().getDimension(R.dimen.tut_text_size);
@@ -54,8 +62,14 @@ public class TaskView extends View {
                                     back();
                             }
                             else {
-                                if (forward.state != DISABLED && forward.state != INVISIBLE)//forward pressed
-                                    forward();
+                                if (forward.state != DISABLED && forward.state != INVISIBLE) {//forward pressed
+                                    if (index < tasks.size() - 1)
+                                        forward();
+                                    else {
+                                        if (mOnFinishList != null)
+                                            mOnFinishList.onFinish();
+                                    }
+                                }
                             }
                         }
                         invalidate();
@@ -65,14 +79,59 @@ public class TaskView extends View {
         });
     }
 
+    /**
+     * Sets the forward button to DISABLED
+     */
+    public void disableNext() {
+        if (forward != null) {
+            forward.state = DISABLED;
+            invalidate();
+        }
+    }
+
+    /**
+     * Sets the forward button to ENABLED
+     */
+    public void enableNext() {
+        if (forward != null) {
+            forward.state = ENABLED;
+            invalidate();
+        }
+    }
+
+    /**
+     * Calls the isComplete() on the current task
+     * @param test String to test
+     * @return returns the result of the isComplete() method
+     */
+    public boolean isComplete(String test) {
+        if (tasks != null) {
+            return tasks.get(index).isComplete(test);
+        }
+        return false;
+    }
+
+    /**
+     * Sets the list of tasks
+     * @param tasks
+     */
     public void setTasks(ArrayList<Task> tasks) {
         this.tasks = tasks;
     }
 
+    /**
+     * @return returns current index
+     */
     public int getIndex() {
         return index;
     }
 
+    /**
+     * Sets the size of the view & creates the buttons
+     *
+     * @param widthMeasureSpec
+     * @param heightMeasureSpec
+     */
     @Override
     public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         setMeasuredDimension(widthMeasureSpec, (int) dimen * 7);
@@ -85,6 +144,10 @@ public class TaskView extends View {
         updateButtonStates();
     }
 
+    /**
+     * Draws view on given canvas
+     * @param canvas canvas given
+     */
     @Override
     public void onDraw(Canvas canvas) {
         p.setFlags(Paint.ANTI_ALIAS_FLAG);
@@ -98,6 +161,13 @@ public class TaskView extends View {
         forward.draw(canvas);
     }
 
+    /**
+     * Draws task at the given index, at the given x, on the vigen canvas
+     *
+     * @param index index of task to draw
+     * @param x Left position of task
+     * @param canvas canvas to draw on
+     */
     private void drawTask(int index, float x, Canvas canvas) {
         float maxLength = Math.min(getWidth() - getPaddingRight() - getPaddingRight(),
                 getResources().getDimension(R.dimen.tut_min_text_length));
@@ -106,6 +176,11 @@ public class TaskView extends View {
         Draw.text(str, x + getWidth() / 2, getHeight() - dimen * 2.5f, p, canvas);
     }
 
+    /**
+     * Draws progress map on the top
+     *
+     * @param canvas canvas to draw on
+     */
     private void drawMap(Canvas canvas) {
         int count = tasks.size();
         float mapHeight = dimen / 2,
@@ -123,11 +198,14 @@ public class TaskView extends View {
                 dimen / 2, mapHeight / 4, p);
     }
 
-    private static int DEFAULT = 0, DISABLED = 1, INVISIBLE = 2;
+    /**
+     * Private Text button class for the BACK & NEXT buttons
+     */
+    private final static int ENABLED = 0, DISABLED = 1, INVISIBLE = 2;
     private class TextButton {
         public String text;
         private float x, y;
-        public int state = DEFAULT;
+        public int state = ENABLED;
 
         TextButton(String text, float x, float y) {
             this.x = x;
@@ -145,6 +223,11 @@ public class TaskView extends View {
         }
     }
 
+    /**
+     * Animates task to the given index
+     * @param i index to animate to
+     * @param complete whether the animation is being completed or starting from 0
+     */
     private void beginAnimation(final int i, boolean complete) {
         final ValueAnimator anim = ValueAnimator.ofFloat(currX, -i*getWidth())
                 .setDuration(400);
@@ -183,6 +266,9 @@ public class TaskView extends View {
         anim.start();
     }
 
+    /**
+     * Animates backward according to the current index
+     */
     private void back() {
         if (index > 0)
             beginAnimation(index - 1, true);
@@ -190,32 +276,76 @@ public class TaskView extends View {
             reset();
     }
 
+    /**
+     * Animates forward according to the current index
+     */
     private void forward() {
         if (index < tasks.size() - 1)
             beginAnimation(index + 1, false);
     }
 
+    /**
+     * Animates to the first task
+     */
     private void reset() {
         beginAnimation(0, false);
     }
 
+    /**
+     * update button states to work correctly.
+     * Back button will be invisible at the first task
+     * Forward button will be "Done" at the last task
+     */
     private void updateButtonStates() {
         if (index == 0)
             back.state = INVISIBLE;
         else
-            back.state = DEFAULT;
+            back.state = ENABLED;
 
-        if (tasks != null && index == tasks.size()-1)
+        if (tasks != null && index == tasks.size()-1) {
             forward.text = "Done";
-        else
+            forward.state = ENABLED;
+        } else
             forward.text = "Next";
     }
 
-    public void setListener(OnIndexChangeListener listener) {
+
+    /**
+     * Sets the on index change listener
+     * @param listener
+     */
+    public void setOnIndexChangeListener(OnIndexChangeListener listener) {
         this.listener = listener;
     }
 
+    /**
+     * Interface listener that will call onNewIndex(int, int)
+     */
     public interface OnIndexChangeListener {
+        /**
+         * Callback method that is called when the used changes to new task
+         *
+         * @param index index it was changed to
+         * @param prev index it was changed from
+         */
         void onNewIndex(int index, int prev);
+    }
+
+    /**
+     * Sets the onFinishListener
+     * @param listener
+     */
+    public void setOnFinishListener(OnFinishListener listener) {
+        this.mOnFinishList = listener;
+    }
+
+    /**
+     * Interface listener that will call onFinish()
+     */
+    public interface OnFinishListener {
+        /**
+         * called when the user presses Done
+         */
+        void onFinish();
     }
 }

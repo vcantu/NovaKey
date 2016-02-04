@@ -8,14 +8,14 @@ import android.view.View;
 
 import viviano.cantu.novakey.KeyLayout;
 import viviano.cantu.novakey.R;
-import viviano.cantu.novakey.themes.Theme;
+import viviano.cantu.novakey.themes.BaseTheme;
 
 /**
  * Created by Viviano on 6/6/2015.
  */
 public class ThemePreview extends View {
 
-    protected Theme theme;
+    protected BaseTheme theme;
     protected Paint p;
 
     //dimensions
@@ -26,7 +26,7 @@ public class ThemePreview extends View {
     public ThemePreview(Context context, AttributeSet attrs) {
         super(context, attrs);
         p = new Paint();
-        theme = new Theme();
+        theme = new BaseTheme();
         theme.setColor(0xFF616161, 0xFFF5F5F5, 0xFFF5F5F5);//TODO:
         setViewDimen();
     }
@@ -76,7 +76,7 @@ public class ThemePreview extends View {
 //        Draw.text(ratio + "", centerX + radius + 70, centerY, p, canvas);
     }
 
-    public void set(Theme t) {
+    public void set(BaseTheme t) {
         theme = t;
     }
 }

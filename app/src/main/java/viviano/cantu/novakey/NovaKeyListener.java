@@ -156,7 +156,7 @@ public class NovaKeyListener implements View.OnTouchListener {
         void onFinish();
     }
     private CustomTimer
-    singlePress = new CustomTimer(500, new TimerEvent() {
+    singlePress = new CustomTimer(Settings.longPressTime, new TimerEvent() {
         @Override
         public void onFinish() {
             sendEvent.onLongPress(currArea, areasCrossed, currX, currY);

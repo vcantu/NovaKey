@@ -11,12 +11,12 @@ import java.util.ArrayList;
 import viviano.cantu.novakey.animations.animators.Animator;
 import viviano.cantu.novakey.btns.Btn;
 import viviano.cantu.novakey.settings.Settings;
-import viviano.cantu.novakey.themes.Theme;
+import viviano.cantu.novakey.themes.BaseTheme;
 import viviano.cantu.novakey.utils.Util;
 
 public class NovaKeyView extends View {
-    //Theme
-    public Theme theme;
+    //BaseTheme
+    public BaseTheme theme;
 	//Dimensions
 	public NovaKeyDimen dimens;
 
@@ -121,12 +121,14 @@ public class NovaKeyView extends View {
                         theme.drawCursorIcons(Controller.state, dimens.x, dimens.y, canvas);
                         break;
                     case NovaKey.INFINITE_MENU:
-						theme.drawInfiniteMenu(Controller.infiniteMenu, dimens.x, dimens.y, dimens.r, dimens.sr, canvas);
+						theme.drawInfiniteMenu(Controller.infiniteMenu, dimens.x, dimens.y,
+								dimens.r, dimens.sr, canvas);
                         break;
                 }
                 break;
             case NovaKey.ON_MENU:
-                theme.drawOnUpMenu(Controller.onUpMenu, dimens.x, dimens.y, dimens.r, dimens.sr, canvas);
+                theme.drawOnUpMenu(Controller.onUpMenu, dimens.x, dimens.y, dimens.r, dimens.sr,
+						canvas);
                 break;
         }
 

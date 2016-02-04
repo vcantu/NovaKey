@@ -12,7 +12,7 @@ import viviano.cantu.novakey.settings.widgets.pickers.PickerItem;
 import viviano.cantu.novakey.settings.widgets.ThemePreview;
 import viviano.cantu.novakey.settings.widgets.pickers.ReleasePicker;
 import viviano.cantu.novakey.settings.widgets.pickers.ThemePicker;
-import viviano.cantu.novakey.themes.Theme;
+import viviano.cantu.novakey.themes.BaseTheme;
 
 /**
  * Created by Viviano on 1/5/2016.
@@ -38,8 +38,8 @@ public class StylePreferenceActivity extends AbstractPreferenceActivity {
         themePicker.setOnItemSelectedListener(new HorizontalPicker.OnItemSelectedListener() {
             @Override
             public void onItemSelected(PickerItem item, int subIndex) {
-                int index = Theme.getIndex((Theme)item);
-//                if (index == Theme.COUNT - 1 && theme > 0)
+                int index = BaseTheme.getIndex((BaseTheme) item);
+//                if (index == BaseTheme.COUNT - 1 && theme > 0)
 //                    theme *= -1;
 //                else
                 theme = index;
@@ -94,7 +94,7 @@ public class StylePreferenceActivity extends AbstractPreferenceActivity {
             tNum *= -1;
             isAuto = true;
         }
-        Theme t = Theme.getTheme(tNum);
+        BaseTheme t = BaseTheme.getTheme(tNum);
         t.setColor(one, two, three);
         preview.set(t);
         if (isAuto) {

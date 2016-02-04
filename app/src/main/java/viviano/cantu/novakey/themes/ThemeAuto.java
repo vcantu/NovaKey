@@ -3,21 +3,20 @@ package viviano.cantu.novakey.themes;
 import android.graphics.Canvas;
 
 import viviano.cantu.novakey.KeyLayout;
-import viviano.cantu.novakey.Location;
 import viviano.cantu.novakey.settings.Settings;
 
 /**
  * Created by Viviano on 6/8/2015.
  */
-public class ThemeAuto extends Theme {
+public class ThemeAuto extends BaseTheme {
 
     public String currPack;
-    private Theme theme;
+    private BaseTheme theme;
 
     public ThemeAuto() {
-        theme = Theme.fromString(Settings.DEFAULT);
+        theme = BaseTheme.fromString(Settings.DEFAULT);
     }
-    public ThemeAuto(Theme defaultTheme) {
+    public ThemeAuto(BaseTheme defaultTheme) {
         theme = defaultTheme;
     }
 
@@ -25,7 +24,7 @@ public class ThemeAuto extends Theme {
     public void setCurrent(String pk) {
         currPack = pk;
         //set theme from here
-        Theme t = AppTheme.fromPk(pk);
+        BaseTheme t = AppTheme.fromPk(pk);
         if (t != null)
             theme = t;
 

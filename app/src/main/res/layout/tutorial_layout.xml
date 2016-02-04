@@ -31,6 +31,7 @@
             android:layout_centerVertical="true"
             android:id="@+id/hintView"/>
 
+
         <android.support.design.widget.TextInputLayout
             android:id="@+id/editTextLayout"
             android:layout_width="fill_parent"
@@ -55,7 +56,6 @@
             android:layout_centerVertical="true"
             android:id="@+id/clearView"
             android:visibility="invisible"/>
-
 
     </RelativeLayout>
 

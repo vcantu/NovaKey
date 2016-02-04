@@ -6,7 +6,7 @@ import android.graphics.Paint;
 import viviano.cantu.novakey.drawing.Draw;
 import viviano.cantu.novakey.drawing.Icon;
 import viviano.cantu.novakey.utils.Util;
-import viviano.cantu.novakey.themes.Theme;
+import viviano.cantu.novakey.themes.BaseTheme;
 
 /**
  * Created by Viviano on 7/15/2015.
@@ -32,7 +32,7 @@ public class OnUpMenu {
 
 
 
-    public void draw(float x, float y, float r, float sr, Theme theme, Canvas canvas) {
+    public void draw(float x, float y, float r, float sr, BaseTheme theme, Canvas canvas) {
         float dist = (r - sr) / 2 + sr;
         double a = Math.PI / 2 - Math.PI * 2 / 5 / 2;
         for (int j=0; j<list.length; j++) {

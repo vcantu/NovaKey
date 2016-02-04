@@ -1,5 +1,6 @@
 package viviano.cantu.novakey.settings;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.app.Activity;
 import android.support.design.widget.CoordinatorLayout;
@@ -21,7 +22,9 @@ public abstract class AbstractPreferenceActivity extends AppCompatActivity {
         setContentView(getLayoutId());
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setColorFilter(0xFF006200);
+        fab.setBackgroundTintList(ColorStateList.valueOf(
+                getResources().getColor(R.color.colorAccent)));
+        fab.setColorFilter(0xFFffffff);//icon color
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

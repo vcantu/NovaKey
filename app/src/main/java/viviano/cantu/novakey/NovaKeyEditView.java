@@ -13,12 +13,12 @@ import android.view.View;
 import viviano.cantu.novakey.drawing.Draw;
 import viviano.cantu.novakey.drawing.Icon;
 import viviano.cantu.novakey.settings.Settings;
-import viviano.cantu.novakey.themes.Theme;
+import viviano.cantu.novakey.themes.BaseTheme;
 
 
 public class NovaKeyEditView extends View implements View.OnTouchListener {
 
-    public Theme theme;
+    public BaseTheme theme;
 
     //Main Context
     private NovaKey context;

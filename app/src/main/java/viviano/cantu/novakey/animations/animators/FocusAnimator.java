@@ -10,6 +10,7 @@ import android.view.animation.OvershootInterpolator;
 import java.util.ArrayList;
 
 import viviano.cantu.novakey.Key;
+import viviano.cantu.novakey.Location;
 import viviano.cantu.novakey.NovaKeyView;
 
 /**
@@ -19,26 +20,25 @@ public class FocusAnimator extends Animator {
 
     //TODO: add delay
 
-    private String chars;
+    private Location[] mLocs;
     private ArrayList<Focus> focusPoints;
     private boolean removing = false;
 
-    public FocusAnimator(String chars) {
-        this.chars = chars;
+    public FocusAnimator(Location[] locs) {
+        this.mLocs = locs;
         focusPoints = new ArrayList<>();
     }
 
-    public FocusAnimator(String chars, boolean remove) {
-        this(chars);
+    public FocusAnimator(Location[] locs, boolean remove) {
+        this(locs);
         removing = remove;
     }
 
     @Override
     public AnimatorSet createSet() {
         AnimatorSet set = new AnimatorSet();
-        for (int i = 0; i < chars.length(); i++) {
-            char c = chars.charAt(i);
-            Key k = view.dimens.kl.getKey(c);
+        for (int i = 0; i < mLocs.length; i++) {
+            Key k = view.dimens.kl.getKey(mLocs[i].x, mLocs[i].y);
             ValueAnimator a = focusAnim(k.x, k.y);
             a.setStartDelay((int) (Math.random() * 400) + delay);
             set.play(a);

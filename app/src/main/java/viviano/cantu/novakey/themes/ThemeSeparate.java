@@ -9,7 +9,7 @@ import viviano.cantu.novakey.utils.Util;
 /**
  * Created by Viviano on 6/7/2015.
  */
-public class ThemeSeparate extends Theme {
+public class ThemeSeparate extends BaseTheme {
 
     @Override
     public void drawBoardBack(float x, float y, float r, float sr, Canvas canvas) {

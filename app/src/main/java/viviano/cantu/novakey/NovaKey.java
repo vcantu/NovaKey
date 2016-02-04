@@ -2,10 +2,12 @@ package viviano.cantu.novakey;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.inputmethodservice.InputMethodService;
+import android.os.Handler;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.text.InputType;
@@ -17,6 +19,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.ExtractedText;
 import android.view.inputmethod.ExtractedTextRequest;
 import android.view.inputmethod.InputConnection;
+import android.widget.Toast;
 
 import java.util.Locale;
 
@@ -408,20 +411,21 @@ public class NovaKey extends InputMethodService {
         getCurrentInputConnection().setSelection(selectionStart, selectionEnd);
     }
     public void moveSelection(int dSelectionStart, int dSelectionEnd) {
-        try {
-            ExtractedText et = getCurrentInputConnection()
-                    .getExtractedText(new ExtractedTextRequest(), 0);
-            int s = et.selectionStart + dSelectionStart, e = et.selectionEnd + dSelectionEnd;
-            s = s<0? 0 : s;
-            e = e<0? 0 : e;
-            if (s <= e)
-                setSelection(s, e);
-            else {
-                Controller.addState(ROTATING|MOVING_CURSOR|CURSOR_LEFT);
-                setSelection(e, s);
-        }
-        } catch (Exception e) {}
-    }
+		try {
+			ExtractedText et = getCurrentInputConnection()
+					.getExtractedText(new ExtractedTextRequest(), 0);
+			int s = et.selectionStart + dSelectionStart, e = et.selectionEnd + dSelectionEnd;
+			s = s < 0 ? 0 : s;
+			e = e < 0 ? 0 : e;
+			if (s <= e)
+				setSelection(s, e);
+			else {
+				Controller.addState(ROTATING | MOVING_CURSOR | CURSOR_LEFT);
+				setSelection(e, s);
+			}
+		} catch (Exception e) {
+		}
+	}
 
     public void handleClipboardAction(int action) {
         try {//try statement because clip could be empty or selection could be empty
@@ -438,7 +442,8 @@ public class NovaKey extends InputMethodService {
                         ic.commitText("", 0);
                     }
                 }
-            }
+				showToast("Text Copied", Toast.LENGTH_SHORT);
+			}
 			// paste
 			else if (action == CB_PASTE) {
                 String text = clipboard.getPrimaryClip()
@@ -470,6 +475,17 @@ public class NovaKey extends InputMethodService {
         }
         return false;
     }
+
+	public void showToast(final String message, final int length) {
+		final Context context = this;
+		Handler h = new Handler(this.getMainLooper());
+		h.post(new Runnable() {
+			@Override
+			public void run() {
+				Toast.makeText(context, message, length).show();
+			}
+		});
+	}
 
     //vibrates if settings allow it
     public void vibrate(long milliseconds) {

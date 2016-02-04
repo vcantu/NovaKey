@@ -19,7 +19,7 @@ public class AppTheme {
 
     public final String name, pk;
     public final int[] colors;
-    public final Theme theme;
+    public final BaseTheme theme;
 
     public AppTheme(String[] params) {
         name = params[0];
@@ -27,7 +27,7 @@ public class AppTheme {
         colors = new int[] { Util.webToColor(params[2]), Util.webToColor(params[3]), Util.webToColor(params[4]) };
         int id = 1;
         //TODO: get theme ID if not there then it's 1
-        theme = Theme.getTheme(id);
+        theme = BaseTheme.getTheme(id);
         theme.setColor(colors[0], colors[1], colors[2]);
         //TODO: set other stuff it theme ID is something else
     }
@@ -38,9 +38,9 @@ public class AppTheme {
     /**
      * Function that creates a theme from the given package name
      * @param pk package name
-     * @return A Theme colored according to the app
+     * @return A BaseTheme colored according to the app
      */
-    public static Theme fromPk(String pk) {
+    public static BaseTheme fromPk(String pk) {
         for (AppTheme t : themes) {
             if (t.pk.equals(pk))
                 return t.theme;

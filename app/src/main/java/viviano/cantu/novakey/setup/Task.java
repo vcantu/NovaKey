@@ -22,6 +22,12 @@ public abstract class Task {
         return hintText;
     }
 
+    /**
+     * Used to display hint button if true
+     * @return true by default, override to change
+     */
+    boolean hasHint() {  return true; }
+
     abstract void onTeach();
 
     abstract void onStart(EditText text);

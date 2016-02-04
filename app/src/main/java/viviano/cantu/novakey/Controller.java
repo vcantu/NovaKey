@@ -143,7 +143,7 @@ public class Controller implements NovaKeyListener.EventListener {
 //            //ComponentName cn = am.getAppTasks().get(0).getTaskInfo().topActivity;
 //
 //            final Resources res = pm.getResourcesForApplication(pk);
-//            final Resources.Theme theme = res.newTheme();
+//            final Resources.BaseTheme theme = res.newTheme();
 //            theme.applyStyle(pm.getActivityInfo(cn, 0).theme, false);
 //
 //            final TypedArray a = theme.obtainStyledAttributes(new int[]{
