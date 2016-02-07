@@ -11,7 +11,36 @@ import viviano.cantu.novakey.utils.Util;
 /**
  * Created by Viviano on 6/14/2015.
  */
-public class ThemeMulticolorDonut extends BaseTheme {
+public class MulticolorDonutTheme extends BaseTheme {
+
+
+    /**
+     * @return Its name identifier, if it inherits from another theme
+     * it must include its parents name in the format ParentName.ThisName
+     */
+    @Override
+    public String themeName() {
+        return super.themeName() + ".MulticolorDonut";
+    }
+
+    /**
+     * @return an integer ID unique to this theme
+     */
+    @Override
+    public int themeID() {
+        return 4;
+    }
+
+    /**
+     * Override to customize how the auto colors are distributed
+     *
+     * @param primary primary color
+     * @param accent accent color
+     * @param contrast contrast color
+     */
+    protected void setAutoColors(int primary, int accent, int contrast) {
+        setColors(primary, primary, contrast);
+    }
 
     private int[] colors;
     private boolean autoColor = true;
@@ -22,10 +51,10 @@ public class ThemeMulticolorDonut extends BaseTheme {
             colors = new int[5];
             int addTo = 1;
             for (int i = 0; i < colors.length; i++) {
-                int test = lighter(secondaryColor(), addTo + i);
+                int test = lighter(accentColor(), addTo + i);
                 if (test == Color.WHITE) {
                     addTo = colors.length * -1;
-                    test = lighter(secondaryColor(), addTo + i);
+                    test = lighter(accentColor(), addTo + i);
                 }
                 colors[i] = test;
             }
@@ -41,10 +70,24 @@ public class ThemeMulticolorDonut extends BaseTheme {
     @Override
     public void drawBoardBack(float x, float y, float r, float sr, Canvas canvas) {
         setColors();
+
+        if (is3D()) {
+            pB.setShadowLayer(r * .025f, 0, r * .025f, 0x80000000);
+            pB.setStrokeWidth(r - sr);
+            pB.setStyle(Paint.Style.STROKE);
+            pB.setColor(0);
+            canvas.drawCircle(x, y, r - sr, pB);
+            //reset
+            pB.setStrokeWidth(0);
+            pB.clearShadowLayer();
+        }
+
         pB.setStyle(Paint.Style.FILL);
 
         Path path = new Path();
         for (int i=0; i<5; i++) {
+//            if (is3D())
+//                y -= (r * .005f);
             pB.setColor(colors[i]);
             double angle =  Math.PI / 2 + (i * 2 * Math.PI) / 5;
             angle = (angle > Math.PI * 2 ? angle - Math.PI * 2 : angle);
@@ -73,14 +116,14 @@ public class ThemeMulticolorDonut extends BaseTheme {
     }
     @Override
     public int textColor() {
-        return Util.bestColor(primaryColor(), ternaryColor(), secondaryColor());
+        return Util.bestColor(primaryColor(), contrastColor(), accentColor());
     }
     protected int middleColor() {
         return buttonColor();
     }
     @Override
     public int buttonColor() {
-        return Util.bestColor(ternaryColor(), secondaryColor(), primaryColor());
+        return Util.bestColor(contrastColor(), accentColor(), primaryColor());
     }
 
     private int lighter(int c, int f) {

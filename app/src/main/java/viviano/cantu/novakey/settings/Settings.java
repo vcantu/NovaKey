@@ -6,6 +6,8 @@ import java.util.ArrayList;
 
 import viviano.cantu.novakey.btns.Btn;
 import viviano.cantu.novakey.themes.BaseTheme;
+import viviano.cantu.novakey.themes.Theme;
+import viviano.cantu.novakey.themes.ThemeBuilder;
 
 /**
  * Created by Viviano on 6/22/2015.
@@ -45,13 +47,21 @@ public class Settings {
     /*
         theme will be a String that can be translated into a BaseTheme, with colors and other data
          it will have the following format:
+
          t = a number representing a theme id
-         numbers represent the color so that 1 = primary color, 2 = secondary color and so on
+
+         numbers represent the color so that:
+         1 = primaryColor, 2 = accentColor, 3 = contrastColor
+
+         'A' or 'X' if theme has auto color enabled
+
+         '3d' or 'X' if the theme has 3d enabled
 
          format:
-         t,1,2,3
+         t,1,2,3,A,3d
      */
-    public static BaseTheme theme;
+    public static Theme theme;
+    public static boolean autoColor;
     public static ArrayList<Btn> btns;
 
     public static void update() {
@@ -71,10 +81,31 @@ public class Settings {
         startVersion = sharedPref.getInt(pref_start_version, CURR_VERSION);
         longPressTime = sharedPref.getInt(pref_long_press_time, 500);
 
-        theme = BaseTheme.fromString(sharedPref.getString(pref_theme, Settings.DEFAULT));
+        theme = themeFromString(sharedPref.getString(pref_theme, Settings.DEFAULT));
         btns = Btn.btnsFromString(sharedPref.getString(pref_btns, Settings.DEFAULT));
     }
 
+    private static Theme themeFromString(String s) {
+        if (s.equals(DEFAULT)) {
+            BaseTheme res = new BaseTheme();
+            res.setColors(0xFF616161, 0xFFF5F5F5, 0xFFF5F5F5);
+            return res;
+        }
+        String[] params = s.split(",");
+        Theme res = ThemeBuilder.getTheme(Integer.valueOf(params[0]));
+        res.setColors(Integer.valueOf(params[1]),
+                Integer.valueOf(params[2]),
+                Integer.valueOf(params[3]));
+        if (params.length >= 5)
+            autoColor = params[4].equalsIgnoreCase("A");
+        if (params.length >= 6)
+            res.set3D(params[5].equalsIgnoreCase("3d"));
+
+        return res;
+    }
+
+
+    //SHARED PREF STUFF
     public static SharedPreferences sharedPref;
     public static void setSharedPref(SharedPreferences pref) {
         sharedPref = pref;
@@ -85,5 +116,4 @@ public class Settings {
             }
         });
     }
-
 }

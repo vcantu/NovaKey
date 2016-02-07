@@ -17,7 +17,6 @@ import viviano.cantu.novakey.drawing.emoji.Emoji;
 import viviano.cantu.novakey.menus.InfiniteMenu;
 import viviano.cantu.novakey.menus.OnUpMenu;
 import viviano.cantu.novakey.settings.Settings;
-import viviano.cantu.novakey.themes.ThemeAuto;
 
 /**
  * Created by Viviano on 7/10/2015.
@@ -87,15 +86,14 @@ public class Controller implements NovaKeyListener.EventListener {
 
     //--------------------Main Lifecycle---------------------------------------------
     public static void onInputStart(EditorInfo info, boolean restarting) {
-        //Update settings for theme and buttons
+        //update settings
+        //rebuild theme
+        //rebuild buttons
         Settings.update();
-        view.theme = Settings.theme;
-        if (view.theme instanceof ThemeAuto) {
-            setAutoTheme(info.packageName);
-        }
-
-        //TODO: When not copying packages
-        //main.copy(info.packageName);
+        //set theme to newly built theme
+        view.setTheme(Settings.theme);
+        if (Settings.autoColor)
+            view.getTheme().setPackage(info.packageName);
 
         inputType = info.inputType;
         state = NovaKey.ON_KEYS|NovaKey.LOWERCASE;//will change depending
@@ -133,56 +131,6 @@ public class Controller implements NovaKeyListener.EventListener {
         if (!restarting) {
             view.animate(new CharGrow(CharAnimator.UP).addDelay(100));
         }
-    }
-
-    public static void setAutoTheme(String pk) {
-//        try {
-//            PackageManager pm = main.getPackageManager();
-//            ActivityManager am = (ActivityManager) main.getSystemService(Context.ACTIVITY_SERVICE);
-//            ComponentName cn = am.getRunningTasks(1).get(0).topActivity;
-//            //ComponentName cn = am.getAppTasks().get(0).getTaskInfo().topActivity;
-//
-//            final Resources res = pm.getResourcesForApplication(pk);
-//            final Resources.BaseTheme theme = res.newTheme();
-//            theme.applyStyle(pm.getActivityInfo(cn, 0).theme, false);
-//
-//            final TypedArray a = theme.obtainStyledAttributes(new int[]{
-//                    res.getIdentifier("colorPrimary", "attr", pk),
-//                    res.getIdentifier("color", "attr", pk),
-//                    res.getIdentifier("colorAccent", "attr", pk),
-//                    res.getIdentifier("colorControlHighLight", "attr", pk),
-//                    res.getIdentifier("navigationColor", "attr", pk),
-//                    res.getIdentifier("colorPrimaryDark", "attr", pk),
-//
-//                    R.attr.colorPrimary,
-//                    R.attr.color,
-//                    R.attr.colorAccent,
-//                    R.attr.colorButtonNormal,
-//                    R.attr.colorControlActivated,
-//                    R.attr.colorControlHighlight,
-//                    R.attr.colorControlNormal,
-//                    R.attr.colorPrimaryDark,
-//                    R.attr.colorSwitchThumbNormal,
-//                    0x01010452//navigationbarColor
-//            });
-//
-//            try {
-//                Print.ln(pk);
-//                for (int i = 0; i < a.length(); i++) {
-//                    try {
-//                        int c = a.getColor(i, Color.WHITE);
-//                        Print.hex(c);
-//                    } catch (Resources.NotFoundException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            } finally {
-//                a.recycle();
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-        ((ThemeAuto) view.theme).setCurrent(pk);
     }
 
     public static void setKeys(int keys) {
@@ -272,7 +220,7 @@ public class Controller implements NovaKeyListener.EventListener {
     public static void setEditing(boolean editing) {
         if (editing) {
             NovaKeyEditView editView = new NovaKeyEditView(main);
-            editView.theme = Controller.view().theme;
+            editView.setTheme(Controller.view().getTheme());
             main.setInputView(editView);
         }
         else {

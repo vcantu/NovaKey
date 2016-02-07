@@ -42,13 +42,13 @@ public class Draw {
      Helper method - draws all shaded lines with given information
      */
     public static void shadedLines(float x, float y, float r, float sr,
-                                       int lineColor, int backColor, Paint p, Canvas canvas) {
+                                   int color, Paint p, Canvas canvas) {
         float gap = (r - sr) / 10;// gap that will separate the line from the center circle
         for (int i = 0; i < 5; i++)
         {
             double angle = (i * 2 * Math.PI) / 5 + Math.PI / 2;
             angle = (angle > Math.PI * 2 ? angle - Math.PI * 2 : angle);
-            shadedLine(x, y, sr + gap, r - gap, angle, lineColor, backColor, p, canvas);
+            shadedLine(x, y, sr + gap, r - gap, angle, color, p, canvas);
         }
     }
 
@@ -56,11 +56,11 @@ public class Draw {
      Draws shaded line with origin x, y at an angle from start to end
      */
     public static void shadedLine(float x, float y, float start, float end, double angle,
-                                      int lineColor, int backgroundColor, Paint p, Canvas canvas) {
+                                  int color, Paint p, Canvas canvas) {
         p.setShader(new RadialGradient(x + (float) Math.cos(angle) * ((end - start) / 2 + start),
                 y - (float) Math.sin(angle) * ((end - start) / 2 + start),
                 (end - start) / 2,
-                lineColor, backgroundColor, Shader.TileMode.CLAMP));
+                color, color & 0x00FFFFFF, Shader.TileMode.CLAMP));
         canvas.drawLine(x + (float) Math.cos(angle) * start,
                 y - (float) Math.sin(angle) * start,
                 x + (float) Math.cos(angle) * end,

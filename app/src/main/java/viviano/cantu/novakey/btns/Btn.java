@@ -53,32 +53,32 @@ public class Btn {
         float bx = (float)Math.cos(angle) * dist * r + cx,
               by = (float)Math.sin(angle) * dist * r + cy;
         float size = 0;
-        //if (!t.hasAttrbute(BtnTheme.NO_BACK)) {
-            t.p.setColor(t.backColor);
-            t.p.setStyle(t.hasAttrbute(BtnTheme.BACK_OUTLINE) ? Paint.Style.STROKE : Paint.Style.FILL);
-            switch (shape & SHAPE) {
-                case CIRCLE:
-                    float bRad = getRadius(shape & SIZE, r);
+        t.p.setColor(t.backColor);
+        t.p.setStyle(t.hasAttrbute(BtnTheme.BACK_OUTLINE) ? Paint.Style.STROKE : Paint.Style.FILL);
+        switch (shape & SHAPE) {
+            case CIRCLE:
+                float bRad = getRadius(shape & SIZE, r);
+                if (!t.hasAttrbute(BtnTheme.NO_BACK))
                     canvas.drawCircle(bx, by, bRad, t.p);
-                    size = bRad * .8f * 2;
-                    break;
-                case ARC:
-                    float w = arcWidth(r);
-                    Path path = new Path();
-                    double theta = getArcTheta(shape & SIZE);
-                    path.arcTo(Util.square(cx, cy, dist * r - w / 2),
-                            (float) Math.toDegrees(angle - theta / 2),
-                            (float) Math.toDegrees(theta));
-                    path.arcTo(Util.square(cx, cy, dist * r + w / 2),
-                            (float) Math.toDegrees(angle + theta / 2),
-                            (float) Math.toDegrees(-theta));
-                    path.close();
+                size = bRad * .8f * 2;
+                break;
+            case ARC:
+                float w = arcWidth(r);
+                Path path = new Path();
+                double theta = getArcTheta(shape & SIZE);
+                path.arcTo(Util.square(cx, cy, dist * r - w / 2),
+                        (float) Math.toDegrees(angle - theta / 2),
+                        (float) Math.toDegrees(theta));
+                path.arcTo(Util.square(cx, cy, dist * r + w / 2),
+                        (float) Math.toDegrees(angle + theta / 2),
+                        (float) Math.toDegrees(-theta));
+                path.close();
+                if (!t.hasAttrbute(BtnTheme.NO_BACK))
                     canvas.drawPath(path, t.p);
 
-                    size = w * .8f;
-                    break;
-            }
-        //}
+                size = w * .8f;
+                break;
+        }
         drawIcon(bx, by, size, t, canvas);
     }
 

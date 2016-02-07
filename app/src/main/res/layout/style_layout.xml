@@ -3,18 +3,21 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <LinearLayout  android:orientation="vertical"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <viviano.cantu.novakey.settings.widgets.ThemePreview
             android:layout_width="match_parent"
             android:layout_height="150dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:id="@+id/preview"/>
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="fill_parent">
+            android:layout_height="match_parent"
+            android:layout_below="@id/preview">
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
@@ -42,7 +45,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Auto Color"
-                        android:id="@+id/mAutoColor" />
+                        android:id="@+id/autoColor" />
                     <CheckBox
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -78,9 +81,23 @@
                         android:id="@+id/ternaryColor"/>
                 </viviano.cantu.novakey.settings.widgets.ObservableHorizontalScrollView>
 
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"></RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"></RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"></RelativeLayout>
             </LinearLayout>
         </ScrollView>
-    </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:background="@drawable/drop_shadow"
+            android:layout_below="@id/preview"/>
+    </RelativeLayout>
 
     <viviano.cantu.novakey.settings.widgets.pickers.ReleasePicker
         android:layout_width="match_parent"

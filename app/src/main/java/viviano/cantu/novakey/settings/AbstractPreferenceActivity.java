@@ -2,19 +2,15 @@ package viviano.cantu.novakey.settings;
 
 import android.content.res.ColorStateList;
 import android.os.Bundle;
-import android.app.Activity;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.RelativeLayout;
 
 import viviano.cantu.novakey.R;
 
 public abstract class AbstractPreferenceActivity extends AppCompatActivity {
 
-    private boolean done = false;
+    private boolean mDone = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,20 +25,29 @@ public abstract class AbstractPreferenceActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 onActivityClosed(true);
-                done = true;
+                mDone = true;
                 finish();
             }
         });
     }
 
+    /**
+     * @return must return the layout ID any activity inheriting from this will want
+     * to display
+     */
     abstract int getLayoutId();
 
+    /**
+     * Will be called when the activity is closed
+     * @param positiveResult true if the FAB is clicked to exit, false if activity was
+     *                       exited another way
+     */
     abstract void onActivityClosed(boolean positiveResult);
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (!done)
+        if (!mDone)
             onActivityClosed(false);
     }
 

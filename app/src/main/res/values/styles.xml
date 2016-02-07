@@ -22,8 +22,8 @@
         <item name="android:windowBackground">@color/colorBackground</item>
     </style>
 
-    <style name="SettingsTheme" parent="AppBaseTheme">
-
+    <style name="TutorialTheme" parent="AppTheme">
+        <item name="colorAccent">#F0F0F0</item>
     </style>
 
 

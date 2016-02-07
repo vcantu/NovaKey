@@ -13,18 +13,18 @@ import android.view.View;
 import viviano.cantu.novakey.drawing.Draw;
 import viviano.cantu.novakey.drawing.Icon;
 import viviano.cantu.novakey.settings.Settings;
-import viviano.cantu.novakey.themes.BaseTheme;
+import viviano.cantu.novakey.themes.Theme;
 
 
 public class NovaKeyEditView extends View implements View.OnTouchListener {
 
-    public BaseTheme theme;
+    private Theme mTheme;
 
     //Main Context
     private NovaKey context;
 
     //Dimensions
-    private int screenWidth, screenHeight;//in pixels
+    private final int screenWidth, screenHeight;//in pixels
     private int viewWidth, viewHeight;
     private float centerX, centerY;
     //Landscape
@@ -53,7 +53,18 @@ public class NovaKeyEditView extends View implements View.OnTouchListener {
         screenWidth = metrics.widthPixels;
         screenHeight = metrics.heightPixels;
         landscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+    }
 
+    /**
+     * Will set this view's theme with the given one
+     *
+     * @param theme theme to set to
+     * @throws IllegalArgumentException if the theme passed is null
+     */
+    public void setTheme(Theme theme) {
+        if (theme == null)
+            throw new IllegalArgumentException("Theme cannot be null");
+        mTheme = theme;
     }
 
     //Checks if phone orientation has been changed
@@ -100,11 +111,11 @@ public class NovaKeyEditView extends View implements View.OnTouchListener {
 
         drawEditButtons(p, canvas);
 
-        theme.drawBackground(0, (centerY - radius), viewWidth, viewHeight, centerX, centerY,
+        mTheme.drawBackground(0, (centerY - radius), viewWidth, viewHeight, centerX, centerY,
                 radius, smallRadius, canvas);
-        canvas.drawRect(0, (centerY - radius), viewWidth, viewHeight, p);
+        //canvas.drawRect(0, (centerY - radius), viewWidth, viewHeight, p);
 
-        theme.drawBoard(centerX, centerY, radius, smallRadius, canvas);
+        mTheme.drawBoard(centerX, centerY, radius, smallRadius, canvas);//FOR NOW
     }
 
     private void drawEditButtons(Paint p, Canvas canvas) {
@@ -112,8 +123,10 @@ public class NovaKeyEditView extends View implements View.OnTouchListener {
         float disp = getResources().getDimension(R.dimen.button_disp);
         float height = getResources().getDimension(R.dimen.button_shad_drop);
 
-        int back = theme.primaryColor(),
-            front = theme.secondaryColor();
+        int back = mTheme.primaryColor(),
+            front = mTheme.accentColor() == back ? mTheme.contrastColor() : mTheme.accentColor();
+        //TODO: better contrast choosing
+        //TODO: better floating buttons
         Draw.floatingButton(rad + disp, rad + disp, rad, Icon.cancel, back, front,
                 currBtn == 1 ? 2 : height, p, canvas);
         Draw.floatingButton(viewWidth - (rad + disp), rad + disp, rad, Icon.accept, back, front,

@@ -8,6 +8,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.HorizontalScrollView;
+import android.widget.ScrollView;
 
 import viviano.cantu.novakey.R;
 import viviano.cantu.novakey.settings.widgets.ObservableHorizontalScrollView;
@@ -86,10 +87,10 @@ public abstract class HorizontalPicker extends View implements View.OnTouchListe
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
+        ScrollView sView = ((ScrollView)getParent().getParent().getParent());
         pickerX = event.getX() - mScrollView.getScrollX();
-        pickerY = event.getY() +
-                ((View)getParent()).getY() +
-                ((View)getParent().getParent()).getY();
+        pickerY = event.getY() + mScrollView.getY()
+                + sView.getY() - sView.getScrollY();
         switch (event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
                 startClickTimer();

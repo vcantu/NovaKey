@@ -39,6 +39,7 @@ public class BtnPreview extends View implements View.OnTouchListener {
         p = new Paint();
         setViewDimen();
 
+        //TODO: use button color
         btnTheme = new BtnTheme(BtnTheme.BACK_OUTLINE, Settings.theme.buttonColor(),
                 Settings.theme.buttonColor());
         for (Btn b : Settings.btns) {

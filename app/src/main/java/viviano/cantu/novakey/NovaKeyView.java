@@ -11,12 +11,12 @@ import java.util.ArrayList;
 import viviano.cantu.novakey.animations.animators.Animator;
 import viviano.cantu.novakey.btns.Btn;
 import viviano.cantu.novakey.settings.Settings;
-import viviano.cantu.novakey.themes.BaseTheme;
+import viviano.cantu.novakey.themes.Theme;
 import viviano.cantu.novakey.utils.Util;
 
 public class NovaKeyView extends View {
     //BaseTheme
-    public BaseTheme theme;
+    private Theme mTheme;
 	//Dimensions
 	public NovaKeyDimen dimens;
 
@@ -45,9 +45,28 @@ public class NovaKeyView extends View {
 		drawers = new ArrayList<>();
         mAnimators = new ArrayList<>();
 
-        theme = Settings.theme;
+        mTheme = Settings.theme;
         updateDimens();
 	}
+
+    /**
+     * Will set this view's theme with the given one
+     *
+     * @param theme theme to set to
+     * @throws IllegalArgumentException if the theme passed is null
+     */
+	public void setTheme(Theme theme) {
+        if (theme == null)
+            throw new IllegalArgumentException("Theme cannot be null");
+        mTheme = theme;
+    }
+
+    /**
+     * @return this view's current theme
+     */
+    public Theme getTheme() {
+        return mTheme;
+    }
 	
 	@Override
 	public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -100,34 +119,35 @@ public class NovaKeyView extends View {
 		if (canvas != null)
             super.onDraw(canvas);
 
-		theme.drawBackground(0, 0, dimens.w, dimens.h, dimens.x, dimens.y,
+		mTheme.drawBackground(0, 0, dimens.w, dimens.h, dimens.x, dimens.y,
 				dimens.r, dimens.sr, canvas);
 
-        theme.drawBoard(dimens.x, dimens.y, dimens.r, dimens.sr, canvas);
-		theme.drawButtons(dimens.x, dimens.y, dimens.r, canvas);
+                                                //TODO: undocked---vvv
+        mTheme.drawBoard(dimens.x, dimens.y, dimens.r, dimens.sr, canvas);
+		mTheme.drawButtons(dimens.x, dimens.y, dimens.r, canvas);
 
         switch (Controller.state & NovaKey.STATE_MASK) {
             case NovaKey.ON_KEYS:
             default:
                 if (!((Controller.state & NovaKey.KEYS_MASK) == NovaKey.DEFAULT_KEYS &&
                         Settings.hideLetters || (Settings.hidePassword && Controller.onPassword)))
-                    theme.drawKeys(dimens.x, dimens.y, dimens.r, dimens.sr, Controller.currKeyboard,
+                    mTheme.drawKeys(dimens.x, dimens.y, dimens.r, dimens.sr, Controller.currKeyboard,
                             Controller.hasState(NovaKey.DEFAULT_KEYS)
                                     && Controller.hasState(NovaKey.CAPSED_LOCKED), canvas);
                 break;
             case NovaKey.ROTATING:
                 switch (Controller.state & NovaKey.ROTATING_MASK) {
                     case NovaKey.MOVING_CURSOR:
-                        theme.drawCursorIcons(Controller.state, dimens.x, dimens.y, canvas);
+                        mTheme.drawCursorIcon(Controller.state, dimens.x, dimens.y, dimens.sr, canvas);
                         break;
                     case NovaKey.INFINITE_MENU:
-						theme.drawInfiniteMenu(Controller.infiniteMenu, dimens.x, dimens.y,
+						mTheme.drawInfiniteMenu(Controller.infiniteMenu, dimens.x, dimens.y,
 								dimens.r, dimens.sr, canvas);
                         break;
                 }
                 break;
             case NovaKey.ON_MENU:
-                theme.drawOnUpMenu(Controller.onUpMenu, dimens.x, dimens.y, dimens.r, dimens.sr,
+                mTheme.drawOnUpMenu(Controller.onUpMenu, dimens.x, dimens.y, dimens.r, dimens.sr,
 						canvas);
                 break;
         }

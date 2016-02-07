@@ -84,6 +84,33 @@ public class ReleasePicker extends View {
                 mIndex == i, mSubIndexes[i], p, canvas);
     }
 
+    /**
+     * Updates the size of all of the PickerItems according to the current Finger position
+     * It also checks if currently animating
+     */
+    private void updateData() {
+        mIndex = -1;
+        for (int i = 0; i < mData.length; i++) {
+            float x = Util.xFromAngle(mCenterX, mData[i].distance, mData[i].angle),
+                    y = Util.yFromAngle(mCenterY, mData[i].distance, mData[i].angle);
+
+            float dist = Util.distance(x, y, mCenterX, mCenterY);
+
+            float size = (float) Math.pow(dist / Util.distance(x, y, mFingX, mFingY), 1.0/3);
+            if (size >= 1.5f) {
+                if (i != mPrevIndex) {
+                    mPrevIndex = i;
+                    if (mListener != null)
+                        mListener.onItemUpdated(mSubIndexes[i]);
+                }
+                mIndex = i;
+                size = 1.5f;
+            }
+            mData[i].scaleMultiplier = size;
+        }
+        invalidate();
+    }
+
     public void onStart(float startX, float startY, PickerItem items, int[] subIndexes) {
         mCenterX = startX; mCenterY = startY;
         mFingX = startX; mFingY = startY;
@@ -126,32 +153,6 @@ public class ReleasePicker extends View {
      */
     private boolean inside(float x, float y) {
         return x >= 0 && x <= getWidth() && y >= 0 && y <= getHeight();
-    }
-
-    /**
-     * Updates the size of all of the PickerItems according to the current Finger position
-     * It also checks if currently animating
-     */
-    public void updateData() {
-        mIndex = -1;
-        for (int i = 0; i < mData.length; i++) {
-            float x = Util.xFromAngle(mCenterX, mData[i].distance, mData[i].angle),
-                    y = Util.yFromAngle(mCenterY, mData[i].distance, mData[i].angle);
-
-            float dist = Util.distance(x, y, mCenterX, mCenterY);
-            float size = (float) Math.pow(dist / Util.distance(x, y, mFingX, mFingY), 1.0/3);
-            if (size >= 1.5f) {
-                if (i != mPrevIndex) {
-                    mPrevIndex = i;
-                    if (mListener != null)
-                        mListener.onItemUpdated(mSubIndexes[i]);
-                }
-                mIndex = i;
-                size = 1.5f;
-            }
-            mData[i].scaleMultiplier = size;
-        }
-        invalidate();
     }
 
     //optimal
