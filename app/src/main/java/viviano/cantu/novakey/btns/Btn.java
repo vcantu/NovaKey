@@ -6,6 +6,7 @@ import android.graphics.Path;
 
 import java.util.ArrayList;
 
+import viviano.cantu.novakey.NovaKeyDimen;
 import viviano.cantu.novakey.drawing.Draw;
 import viviano.cantu.novakey.drawing.Icon;
 import viviano.cantu.novakey.utils.Util;
@@ -49,56 +50,13 @@ public class Btn {
         return false;
     }
 
-    public void draw(float cx, float cy, float r, BtnTheme t, Canvas canvas) {
-        float bx = (float)Math.cos(angle) * dist * r + cx,
-              by = (float)Math.sin(angle) * dist * r + cy;
-        float size = 0;
-        t.p.setColor(t.backColor);
-        t.p.setStyle(t.hasAttrbute(BtnTheme.BACK_OUTLINE) ? Paint.Style.STROKE : Paint.Style.FILL);
-        switch (shape & SHAPE) {
-            case CIRCLE:
-                float bRad = getRadius(shape & SIZE, r);
-                if (!t.hasAttrbute(BtnTheme.NO_BACK))
-                    canvas.drawCircle(bx, by, bRad, t.p);
-                size = bRad * .8f * 2;
-                break;
-            case ARC:
-                float w = arcWidth(r);
-                Path path = new Path();
-                double theta = getArcTheta(shape & SIZE);
-                path.arcTo(Util.square(cx, cy, dist * r - w / 2),
-                        (float) Math.toDegrees(angle - theta / 2),
-                        (float) Math.toDegrees(theta));
-                path.arcTo(Util.square(cx, cy, dist * r + w / 2),
-                        (float) Math.toDegrees(angle + theta / 2),
-                        (float) Math.toDegrees(-theta));
-                path.close();
-                if (!t.hasAttrbute(BtnTheme.NO_BACK))
-                    canvas.drawPath(path, t.p);
-
-                size = w * .8f;
-                break;
-        }
-        drawIcon(bx, by, size, t, canvas);
+    public void draw(NovaKeyDimen dimens, BtnTheme theme, Canvas canvas) {
+        float bx = (float)Math.cos(angle) * dist * dimens.r + dimens.x,
+              by = (float)Math.sin(angle) * dist * dimens.r + dimens.y;
+        theme.draw(icon == null ? text : icon, bx, by, shape, dimens, canvas);
     }
 
-    private void drawIcon(float x, float y, float size, BtnTheme t, Canvas canvas) {
-        t.p.setColor(t.frontColor);
-        t.p.setStyle(Paint.Style.FILL);
-        if (icon != null) {
-            Icon.draw(icon, x, y, size, t.p, canvas);
-        }
-        else if (text != null) {
-            if (text.equals(".")) {
-                Draw.textFlat(text, x, y - (t.p.ascent() + t.p.descent()) / 2, size * 1.5f, t.p, canvas);
-            }
-            else {
-                Draw.text(text, x, y, size, t.p, canvas);
-            }
-        }
-    }
-
-    private static float getRadius(int size, float r) {
+    public static float getRadius(int size, float r) {
         switch (size) {
             default:
             case SMALL:
@@ -121,7 +79,7 @@ public class Btn {
                 return getArcTheta(ARC|SMALL) * 3;
         }
     }
-    private static float arcWidth(float r) {
+    public static float arcWidth(float r) {
         return r / 3;
     }
 

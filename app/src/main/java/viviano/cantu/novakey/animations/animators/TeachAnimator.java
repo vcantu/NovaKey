@@ -39,7 +39,7 @@ public class TeachAnimator extends Animator {
                 }
             }
         }
-        //set.setStartDelay(delay);
+        set.setStartDelay(delay);
         return set;
     }
 
@@ -73,7 +73,7 @@ public class TeachAnimator extends Animator {
 
         if (firstArea == lastArea) {
             ValueAnimator a = tapAnimator(x1, y1);
-            a.setDuration(betweenDelay);
+            a.setStartDelay(betweenDelay);
             return a;
         }
         ValueAnimator a = swipeAnimator(x1, y1, x2, y2);

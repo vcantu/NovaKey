@@ -42,7 +42,10 @@ public abstract class CharAnimator extends Animator {
         AnimatorSet set = new AnimatorSet();
         for (Key k : view.dimens.kl) {
             setBeginingState(k, reverse);
-            set.play(animKey(k, getDelay(k, duration / 2)));
+
+            ValueAnimator a = animKey(k, getDelay(k, duration / 2));
+            if (a != null)
+                set.play(a);
         }
         if (extraAnimators != null) {
             for (ValueAnimator a : extraAnimators) {

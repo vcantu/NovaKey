@@ -83,13 +83,7 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"></RelativeLayout>
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"></RelativeLayout>
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"></RelativeLayout>
+                    android:layout_height="110dp"></RelativeLayout>
             </LinearLayout>
         </ScrollView>
         <View

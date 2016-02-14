@@ -43,6 +43,7 @@ public class TutorialActivity extends Activity {
         mTaskView.setOnIndexChangeListener(new TaskView.OnIndexChangeListener() {
             @Override
             public void onNewIndex(int index, int prev) {
+                Controller.cancelAnimators();
                 if (mTasks != null) {
                     //update task
                     mTaskText.setHint(mTasks.get(index).hintText());
@@ -56,10 +57,7 @@ public class TutorialActivity extends Activity {
                     mEditText.setText("");
                     mTasks.get(index).onStart(mEditText);
                 }
-
-                //cancel all animators
-                Controller.cancelAnimators();
-                if (index > prev)
+                if (index > prev)//moved forward
                     mTaskView.disableNext();
             }
         });
@@ -155,7 +153,7 @@ public class TutorialActivity extends Activity {
                 return false;
             }
         });
-        final Location[] temp = new Location[] {
+        final Location[] tappers = new Location[] {
                 new Location(0, 0), new Location(1, 0), new Location(2, 0),
                 new Location(3, 0), new Location(4, 0), new Location(5, 0) };
         mTasks.add(new Task("For the main letters just tap the area.", "Type \"call\"") {
@@ -166,20 +164,25 @@ public class TutorialActivity extends Activity {
 
             @Override
             void onStart(EditText text) {
-                Controller.animate(new FocusAnimator(temp).addDelay(400));
+                text.setText("");
+                Controller.animate(new FocusAnimator(tappers).addDelay(400));
             }
 
             @Override
             boolean isComplete(String currText) {
                 return currText.equals("call");
             }
-
-            @Override
-            void onEnd() {
-                Controller.animate(new FocusAnimator(temp, true));
-            }
         });
 
+        final Location[] swipers = new Location[] {
+                new Location(0, 1), new Location(0, 2), new Location(0, 3), new Location(0, 4),
+                new Location(0, 5),
+                new Location(1, 1), new Location(1, 2), new Location(1, 3), new Location(1, 4),
+                new Location(2, 1), new Location(2, 2), new Location(2, 3), new Location(2, 4),
+                new Location(3, 1), new Location(3, 2), new Location(3, 3), new Location(3, 4),
+                new Location(4, 1), new Location(4, 2), new Location(4, 3), new Location(4, 4),
+                new Location(5, 1), new Location(5, 2), new Location(5, 3), new Location(5, 4),
+        };
         mTasks.add(new Task("Nice Job!\nFor the remaining keys swipe over the line closest to it.",
                 "Type \"novakey\"") {
             @Override
@@ -190,12 +193,15 @@ public class TutorialActivity extends Activity {
             @Override
             void onStart(EditText text) {
                 text.setText("");
+                Controller.animate(new FocusAnimator(swipers).addDelay(400));
             }
 
             @Override
             boolean isComplete(String currText) {
                 return currText.equals("novakey");
             }
+
+
         });
 
         mTasks.add(new Task("You're doing great! Now to space, swipe from left to right over the small circle.",

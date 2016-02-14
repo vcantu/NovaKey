@@ -7,6 +7,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import viviano.cantu.novakey.KeyLayout;
+import viviano.cantu.novakey.NovaKeyDimen;
 import viviano.cantu.novakey.R;
 import viviano.cantu.novakey.themes.BaseTheme;
 import viviano.cantu.novakey.themes.Theme;
@@ -19,10 +20,7 @@ public class ThemePreview extends View {
     protected Theme theme;
     protected Paint p;
 
-    //dimensions
-    public float radius;
-    protected float viewWidth, viewHeight, centerX, centerY, smallRadius;
-    public KeyLayout mKeyLayout;
+    private NovaKeyDimen mDimens;
 
     public ThemePreview(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -38,35 +36,39 @@ public class ThemePreview extends View {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         setViewDimen();
     }
+    
+    
     private void setViewDimen() {
-        viewWidth = getWidth();
-        viewHeight = getHeight();
-        radius = Math.min(viewHeight - getPaddingTop() - getPaddingBottom(),
-                          viewWidth - getPaddingRight() - getPaddingLeft());
-        radius /= 2;
-        centerX = viewWidth / 2;
-        centerY = getPaddingTop() + radius;
-        smallRadius = radius / 3;
+        float w = getWidth();
+        float h = getHeight();
+        float r = Math.min(h - getPaddingTop() - getPaddingBottom(),
+                w - getPaddingRight() - getPaddingLeft());
+        r /= 2;
+        float x = w / 2;
+        float y = getPaddingTop() + r;
+        float sr = r / 3;
 
         //Create a keyboard from a resource
-        mKeyLayout = new KeyLayout("English", KeyLayout.convert(R.array.English, getResources()));
-        mKeyLayout.updateCoords(centerX, centerY, radius, smallRadius);
+        KeyLayout kl = new KeyLayout("English", KeyLayout.convert(R.array.English, getResources()));
+        kl.updateCoords(x, y, r, sr);
+        
+        mDimens = new NovaKeyDimen(x, y, w, h, r, sr, kl);
     }
 
     @Override
     public void onDraw(Canvas canvas) {
         setViewDimen();
 
-        theme.drawBackground(0, 0, viewWidth, viewHeight, centerX, centerY,
-                radius, smallRadius, canvas);
+        theme.drawBackground(0, 0, mDimens.w, mDimens.h, mDimens.x, mDimens.y,
+                mDimens.r, mDimens.sr, canvas);
 
-        theme.drawBoard(centerX, centerY, radius, smallRadius, canvas);
+        theme.drawBoard(mDimens.x, mDimens.y, mDimens.r, mDimens.sr, canvas);
 
         //draw main keys
-        theme.drawKeys(centerX, centerY, radius, smallRadius, mKeyLayout,
+        theme.drawKeys(mDimens.x, mDimens.y, mDimens.r, mDimens.sr, mDimens.kl,
                 false, canvas);
 
-        theme.drawButtons(centerX, centerY, radius, canvas);
+        theme.drawButtons(mDimens, canvas);
 
 
         //Uncomment this to test contrast formula

@@ -13,7 +13,7 @@ import viviano.cantu.novakey.themes.ThemeBuilder;
  * Created by Viviano on 6/22/2015.
  */
 public class Settings {
-    private static final int CURR_VERSION = 18;
+    private static final int CURR_VERSION = 20;
 
     //KEYS
     public static String
@@ -36,7 +36,7 @@ public class Settings {
             pref_start_version = "pref_start_version",
             //NovaKey 0.3.4
             pref_beta_test = "pref_beta_test",
-            //NovaKey 0.3.5
+//            //NovaKey 0.3.5
             pref_long_press_time = "pref_long_press_time";
 
     //Settings
@@ -83,6 +83,15 @@ public class Settings {
 
         theme = themeFromString(sharedPref.getString(pref_theme, Settings.DEFAULT));
         btns = Btn.btnsFromString(sharedPref.getString(pref_btns, Settings.DEFAULT));
+        commit();
+    }
+
+    //TODO: Note if anyone's version is > 20 show them the message about the new auto feature
+    public static void commit() {
+        SharedPreferences.Editor edit = sharedPref.edit();
+        if (startVersion == CURR_VERSION)
+            edit.putInt(pref_start_version, startVersion);
+        edit.commit();
     }
 
     private static Theme themeFromString(String s) {

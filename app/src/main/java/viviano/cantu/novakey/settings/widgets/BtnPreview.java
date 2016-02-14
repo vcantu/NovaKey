@@ -10,6 +10,7 @@ import android.view.View;
 import java.util.ArrayList;
 
 import viviano.cantu.novakey.KeyLayout;
+import viviano.cantu.novakey.NovaKeyDimen;
 import viviano.cantu.novakey.utils.Util;
 import viviano.cantu.novakey.btns.Btn;
 import viviano.cantu.novakey.btns.BtnTheme;
@@ -22,8 +23,7 @@ public class BtnPreview extends View implements View.OnTouchListener {
 
     private Paint p;
     //dimensions
-    public float radius;
-    protected float viewWidth, viewHeight, centerX, centerY, smallRadius;
+    private NovaKeyDimen mDimens;
 
     private ArrayList<Btn> btns = new ArrayList<Btn>();
     private int movingBtn = -1;
@@ -40,8 +40,8 @@ public class BtnPreview extends View implements View.OnTouchListener {
         setViewDimen();
 
         //TODO: use button color
-        btnTheme = new BtnTheme(BtnTheme.BACK_OUTLINE, Settings.theme.buttonColor(),
-                Settings.theme.buttonColor());
+        btnTheme = new BtnTheme();
+        btnTheme.setColors(Settings.theme.buttonColor(), Settings.theme.buttonColor());
         for (Btn b : Settings.btns) {
             btns.add(b);
         }
@@ -51,26 +51,29 @@ public class BtnPreview extends View implements View.OnTouchListener {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         setViewDimen();
     }
+
     private void setViewDimen() {
-        viewWidth = getWidth();
-        viewHeight = getHeight();
-        radius = Math.min(viewHeight - getPaddingTop() - getPaddingBottom(),
-                viewWidth - getPaddingRight() - getPaddingLeft());
-        radius /= 2;
-        centerX = viewWidth / 2;
-        centerY = getPaddingTop() + radius;
-        smallRadius = radius / 3;
+        float w = getWidth();
+        float h = getHeight();
+        float r = Math.min(h - getPaddingTop() - getPaddingBottom(),
+                w - getPaddingRight() - getPaddingLeft());
+        r /= 2;
+        float x = w / 2;
+        float y = getPaddingTop() + r;
+        float sr = r / 3;
+        
+        mDimens = new NovaKeyDimen(x, y, w, h, r, sr, null);
     }
 
 
     @Override
     public void onDraw(Canvas canvas) {
         setViewDimen();
-        Settings.theme.drawBackground(0, 0, viewWidth, viewHeight, centerX, centerY,
-                radius, smallRadius, canvas);
-        Settings.theme.drawBoard(centerX, centerY, radius, smallRadius, canvas);
+        Settings.theme.drawBackground(0, 0, mDimens.w, mDimens.h, mDimens.x, mDimens.y,
+                mDimens.r, mDimens.sr, canvas);
+        Settings.theme.drawBoard(mDimens.x, mDimens.y, mDimens.r, mDimens.sr, canvas);
         //draw main keys
-        Settings.theme.drawKeys(centerX, centerY, radius, smallRadius, KeyLayout.get("English"),
+        Settings.theme.drawKeys(mDimens.x, mDimens.y, mDimens.r, mDimens.sr, KeyLayout.get("English"),
                 false, canvas);
 
         p.setColor(Settings.theme.buttonColor());
@@ -78,7 +81,7 @@ public class BtnPreview extends View implements View.OnTouchListener {
             float sw = p.getStrokeWidth();
             if (i==movingBtn)
                 p.setStrokeWidth(4);
-            btns.get(i).draw(centerX, centerY, radius, btnTheme, canvas);
+            btns.get(i).draw(mDimens, btnTheme, canvas);
             p.setStrokeWidth(sw);
         }
     }
@@ -93,8 +96,8 @@ public class BtnPreview extends View implements View.OnTouchListener {
                 break;
             case MotionEvent.ACTION_MOVE:
                 if (movingBtn != -1) {
-                    setBtn(movingBtn, Util.angle(centerX, centerY, e.getX(), e.getY()),
-                            getDistance(centerX, centerY, e.getX(), e.getY()));
+                    setBtn(movingBtn, Util.angle(mDimens.x, mDimens.y, e.getX(), e.getY()),
+                            getDistance(mDimens.x, mDimens.y, e.getX(), e.getY()));
                     invalidate();
                 }
                 break;
@@ -109,15 +112,15 @@ public class BtnPreview extends View implements View.OnTouchListener {
 
     public void addBtn(int shape) {
         btnAdded = true;
-        btns.add(new Btn(Util.angle(centerX, centerY, viewWidth / 2, viewHeight),
-                getDistance(centerX, centerY, viewWidth / 2, viewHeight) / radius, shape));
+        btns.add(new Btn(Util.angle(mDimens.x, mDimens.y, mDimens.w / 2, mDimens.h),
+                getDistance(mDimens.x, mDimens.y, mDimens.w / 2, mDimens.h) / mDimens.r, shape));
         movingBtn = btns.size()-1;
         invalidate();
     }
 
     public int onBtn(float x, float y) {
         for (int i=0; i<btns.size(); i++) {
-            if (btns.get(i).onBtn(x, y, centerX, centerY, radius))
+            if (btns.get(i).onBtn(x, y, mDimens.x, mDimens.y, mDimens.r))
                 return i;
         }
         return -1;
@@ -127,15 +130,15 @@ public class BtnPreview extends View implements View.OnTouchListener {
     private void setBtn(int index, double angle, float dist) {
         Btn b = btns.get(index);
         if ((b.shape&Btn.SHAPE)!=Btn.ARC)
-            b.dist = dist / radius;
+            b.dist = dist / mDimens.r;
         else
             b.dist = 1.16667f;
         b.angle = angle;
     }
 
     private boolean checkCollision(double a1, float d1, float r1, double a2, float d2, float r2) {
-        return getDistance(centerX + (float)Math.cos(a1) * d1, centerY + (float)Math.sin(a1) * d1,
-                centerX + (float)Math.cos(a2) * d2, centerY + (float)Math.sin(a2) * d2)
+        return getDistance(mDimens.x + (float)Math.cos(a1) * d1, mDimens.y + (float)Math.sin(a1) * d1,
+                mDimens.x + (float)Math.cos(a2) * d2, mDimens.y + (float)Math.sin(a2) * d2)
                 < r1 + r2;
     }
 

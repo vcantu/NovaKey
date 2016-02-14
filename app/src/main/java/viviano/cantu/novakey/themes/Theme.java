@@ -3,6 +3,8 @@ package viviano.cantu.novakey.themes;
 import android.graphics.Canvas;
 
 import viviano.cantu.novakey.KeyLayout;
+import viviano.cantu.novakey.NovaKeyDimen;
+import viviano.cantu.novakey.NovaKeyEditView;
 import viviano.cantu.novakey.menus.InfiniteMenu;
 import viviano.cantu.novakey.menus.OnUpMenu;
 import viviano.cantu.novakey.settings.widgets.pickers.PickerItem;
@@ -92,12 +94,10 @@ public interface Theme extends PickerItem {
     /**
      * Make the buttons draw themselves with the given parameters
      *
-     * @param x center X position
-     * @param y center Y position
-     * @param r radius of keyboard
+     * @param dimens dimensions of the keyboard
      * @param canvas canvas to draw on
      */
-    void drawButtons(float x, float y, float r, Canvas canvas);
+    void drawButtons(NovaKeyDimen dimens, Canvas canvas);
 
     /**
      * Make the given keyLayout draw itself with the given parameters

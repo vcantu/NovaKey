@@ -124,7 +124,7 @@ public class NovaKeyView extends View {
 
                                                 //TODO: undocked---vvv
         mTheme.drawBoard(dimens.x, dimens.y, dimens.r, dimens.sr, canvas);
-		mTheme.drawButtons(dimens.x, dimens.y, dimens.r, canvas);
+		mTheme.drawButtons(dimens, canvas);
 
         switch (Controller.state & NovaKey.STATE_MASK) {
             case NovaKey.ON_KEYS:

@@ -5,6 +5,7 @@ import android.graphics.LightingColorFilter;
 import android.graphics.Paint;
 import android.graphics.Path;
 
+import viviano.cantu.novakey.NovaKeyDimen;
 import viviano.cantu.novakey.drawing.Draw;
 import viviano.cantu.novakey.Font;
 import viviano.cantu.novakey.drawing.Icon;
@@ -96,9 +97,15 @@ public class BaseTheme implements Theme {
         drawLines(x, y, r, sr, 1 / 72f, canvas);
     }
 
-    public void drawButtons(float x, float y, float r, Canvas canvas) {
+    /**
+     * Make the buttons draw themselves with the given parameters
+     *
+     * @param dimens dimensions of the keyboard
+     * @param canvas canvas to draw on
+     */
+    public void drawButtons(NovaKeyDimen dimens, Canvas canvas) {
         for (int i = 0; i < Settings.btns.size(); i++) {
-            Settings.btns.get(i).draw(x, y, r, btnTheme, canvas);
+            Settings.btns.get(i).draw(dimens, btnTheme, canvas);
         }
     }
 
@@ -197,7 +204,9 @@ public class BaseTheme implements Theme {
         mContrastColor = contrast;
         //sets text colors depending on each area
         setTextColors();
-        btnTheme = new BtnTheme(BtnTheme.NO_BACK, primaryColor(), contrastColor());
+        btnTheme = new BtnTheme();
+        btnTheme.setColors(primaryColor(), contrastColor());
+        btnTheme.setIs3D(is3D());
     }
 
     /**

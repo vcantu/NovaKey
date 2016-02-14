@@ -1,6 +1,9 @@
 <resources>
 
     <string name="app_name">NovaKey</string>
+    <string name="title_style_preference">Style Your Keyboard</string>
+    <string name="title_button_preference">Style Your Keyboard</string>
+    <string name="app_color_url">https://script.googleusercontent.com/macros/echo?user_content_key=3y7LCsEtb7HpIOiu4alW0JObJSMBw_0yQDRNtKCYnayTM10W8hFzwsO4ULNtL2mci6L-yl_JzbCMGWyE_5C-e5R2MdDMAAzlm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnOkky6jtS3H7UzZjnKsOaMmO0RhKroeECJsb99CipGoNFKzpIJuFXqPTqksWI2DolNpytj_A4aoE&amp;lib=MWTQZz-K7T4utQOtJSjDJWn2oMPLQyW0d</string>
 
     <string-array name="hidden_keys">
         <!-- Alphabet -->
@@ -189,8 +192,5 @@
         <item>shall</item>
         <item>shan\'t</item>
     </string-array>
-
-    <string name="title_style_preference">Style Your Keyboard</string>
-    <string name="title_button_preference">Style Your Keyboard</string>
 
 </resources>

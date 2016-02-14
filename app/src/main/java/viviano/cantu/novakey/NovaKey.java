@@ -135,6 +135,9 @@ public class NovaKey extends InputMethodService {
 
 	@Override
 	public View onCreateInputView() {
+		//TODO: remove this if it lags
+		AppTheme.load(getResources());
+
         initializeController();
         //stops it from crashing when the orientation changes
         if (Controller.view() != null) {
