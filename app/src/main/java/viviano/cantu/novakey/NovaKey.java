@@ -72,7 +72,7 @@ public class NovaKey extends InputMethodService {
     //Closing Characters
     private int[] openers = new int[] { '¿', '¡', '⌊', '⌈' },
                   closers = new int[] { '?', '!', '⌋', '⌉' };
-    private int getIndex( int c) {
+    private int getIndex(int c) {
         for (int i=0; i<openers.length; i++) {
             if (openers[i] == c)
                 return i;
