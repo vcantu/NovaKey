@@ -36,7 +36,7 @@ public class Settings {
             pref_start_version = "pref_start_version",
             //NovaKey 0.3.4
             pref_beta_test = "pref_beta_test",
-//            //NovaKey 0.3.5
+            //NovaKey 0.3.5
             pref_long_press_time = "pref_long_press_time";
 
     //Settings
@@ -44,26 +44,15 @@ public class Settings {
     public static boolean hideLetters, hidePassword, vibrate, quickInsert, autoCorrect, quickClose;
     public static boolean hasSpaceBar;
     public static int startVersion = CURR_VERSION, longPressTime = 500;
-    /*
-        theme will be a String that can be translated into a BaseTheme, with colors and other data
-         it will have the following format:
 
-         t = a number representing a theme id
-
-         numbers represent the color so that:
-         1 = primaryColor, 2 = accentColor, 3 = contrastColor
-
-         'A' or 'X' if theme has auto color enabled
-
-         '3d' or 'X' if the theme has 3d enabled
-
-         format:
-         t,1,2,3,A,3d
-     */
+    //Theme settings
     public static Theme theme;
     public static boolean autoColor;
     public static ArrayList<Btn> btns;
 
+    /**
+     * Pulls all values from the shared preferences & updates teh static fields
+     */
     public static void update() {
         //Boolean settings
         hideLetters = sharedPref.getBoolean(pref_hide_letters, false);
@@ -87,6 +76,9 @@ public class Settings {
     }
 
     //TODO: Note if anyone's version is > 20 show them the message about the new auto feature
+    /**
+     * Will save the settings that aren't saved in other classes
+     */
     public static void commit() {
         SharedPreferences.Editor edit = sharedPref.edit();
         if (startVersion == CURR_VERSION)
@@ -94,6 +86,27 @@ public class Settings {
         edit.commit();
     }
 
+    /**
+     * Builds a theme from the sharedPref string
+     *
+     * theme will be a String that can be translated into a Theme, with colors and other data
+     * it will have the following format:
+     *
+     * t = a number representing a theme id
+     *
+     * numbers represent the color so that:
+     * c1 = primaryColor, c2 = accentColor, c3 = contrastColor
+     *
+     * 'A' or 'X' if theme has auto color enabled
+     *
+     * '3d' or 'X' if the theme has 3d enabled
+     *
+     * format:
+     *     t,1,2,3,A,3d
+     *
+     * @param s string to build theme from
+     * @return theme built from a string using the above format
+     */
     private static Theme themeFromString(String s) {
         if (s.equals(DEFAULT)) {
             BaseTheme res = new BaseTheme();
@@ -114,7 +127,9 @@ public class Settings {
     }
 
 
-    //SHARED PREF STUFF
+    /**
+     * Shared preferences
+     */
     public static SharedPreferences sharedPref;
     public static void setSharedPref(SharedPreferences pref) {
         sharedPref = pref;

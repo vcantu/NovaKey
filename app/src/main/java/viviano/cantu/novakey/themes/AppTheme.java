@@ -1,6 +1,7 @@
 package viviano.cantu.novakey.themes;
 
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -10,9 +11,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -37,6 +44,8 @@ public class AppTheme {
     }
 
     private static ArrayList<AppTheme> themes;
+    private static final String filename = "app_colors.json";
+
     /**
      * Function that creates a theme from the given package name
      * @param pk package name
@@ -53,83 +62,90 @@ public class AppTheme {
     /**
      * Will load from csv file in raw
      *
+     * @param context context
      * @param res resources to load from
      */
-    public static void load(Resources res) {
+    public static void load(Context context, Resources res) {
         themes = new ArrayList<>();
 
-        InputStream is = res.openRawResource(R.raw.app_colors);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         try {
+            Log.d("App Colors", "Loading saved colors...");
+            FileInputStream fis = context.openFileInput(filename);
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader bufferedReader = new BufferedReader(isr);
+            StringBuilder sb = new StringBuilder();
             String line;
-            while ((line = reader.readLine()) != null) {
-                String[] params = line.split(",");
-                themes.add(new AppTheme(params));
+            while ((line = bufferedReader.readLine()) != null) {
+                sb.append(line);
             }
-        }
-        catch (IOException ex) {
-            throw new RuntimeException("Error in reading CSV file: " + ex);
-        }
-        finally {
-            try {
-                is.close();
-            }
-            catch (IOException e) {
-                throw new RuntimeException("Error while closing input stream: " + e);
-            }
+            loadFromJSON(sb.toString());
+        } catch (FileNotFoundException e) {
+            Log.e("FileNotFoundExceptio ", "app_colors.json does not exist");
+        } catch (IOException e) {
+            Log.e("IOException", "app_colors.json is empty");
         }
 
-        AppColorTask at = new AppColorTask();
+        //if file not found download from web
+        AppColorTask at = new AppColorTask(context);
+        Log.d("App Colors", "Fetching colors from Network...");
         at.execute(res.getString(R.string.app_color_url));
     }
 
     private static class AppColorTask extends AsyncTask<String, Integer, String> {
 
-        String data = null;
+        private String data = null;
+        private final Context context;
 
-        /**
-         * Override this method to perform a computation on a background thread. The
-         * specified parameters are the parameters passed to {@link #execute}
-         * by the caller of this task.
-         * <p>
-         * This method can call {@link #publishProgress} to publish updates
-         * on the UI thread.
-         *
-         * @param params The parameters of the task.
-         * @return A result, defined by the subclass of this task.
-         * @see #onPreExecute()
-         * @see #onPostExecute
-         * @see #publishProgress
-         */
+        AppColorTask(Context context) {
+            this.context = context;
+        }
+
         @Override
         protected String doInBackground(String... params) {
             try {
                 data = downloadUrl(params[0]);
-                System.out.println(data);
+                Log.d("App Colors", "Data received from network: " + data);
             } catch (Exception e) {
                 Log.d("Background Task", e.toString());
             }
             return data;
         }
 
-        /**
-         * <p>Runs on the UI thread after {@link #doInBackground}. The
-         * specified result is the value returned by {@link #doInBackground}.</p>
-         * <p>
-         * <p>This method won't be invoked if the task was cancelled.</p>
-         *
-         * @param s The result of the operation computed by {@link #doInBackground}.
-         * @see #onPreExecute
-         * @see #doInBackground
-         * @see #onCancelled(Object)
-         */
         @Override
-        protected void onPostExecute(String s) {
+        protected void onPostExecute(String str) {
             try {
-                loadFromJSON(new JSONArray(s));
-            } catch (Exception e) {
+                loadFromJSON(str);
+                SaveColorsTask st = new SaveColorsTask(
+                        context.openFileOutput(filename, Context.MODE_PRIVATE));
+                st.execute(str);
+            } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    private static class SaveColorsTask extends AsyncTask<String, Integer, String> {
+
+        private String data = null;
+        private final FileOutputStream outputStream;
+
+
+        SaveColorsTask(FileOutputStream outputStream) {
+            this.outputStream = outputStream;
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            data = params[0];
+            try {
+                OutputStreamWriter osw = new OutputStreamWriter(outputStream);
+                osw.write(data);
+                osw.flush();
+                osw.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return data;
         }
     }
 
@@ -157,16 +173,19 @@ public class AppTheme {
             br.close();
 
         }catch(Exception e){
-            Log.d("Exception: ", e.toString());
+            Log.e("Exception ", e.toString());
         }finally{
+            if (iStream == null)
+                Log.d("App Colors", "iStream is null");
             iStream.close();
             urlConnection.disconnect();
         }
         return data;
     }
 
-    private static void loadFromJSON(JSONArray arr) {
-       try {
+    private static void loadFromJSON(String str) {
+        try {
+           JSONArray arr = new JSONArray(str);
            ArrayList<AppTheme> temp = new ArrayList<>();
            for (int i = 0; i < arr.length(); i++) {
                JSONObject curr = arr.getJSONObject(i);
@@ -181,8 +200,10 @@ public class AppTheme {
            }
            themes = temp;
        } catch (JSONException e) {
-           Log.e("Exception", e.toString());
-       }
+           Log.e("JSONException", e.toString());
+       } catch (NullPointerException e) {
+            Log.e("NullPointerException", e.toString());
+        }
     }
 
 }

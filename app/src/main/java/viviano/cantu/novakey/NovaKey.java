@@ -37,10 +37,10 @@ public class NovaKey extends InputMethodService {
 	public static int CB_COPY = 1, CB_SELECT_ALL = 2, CB_PASTE = 3, CB_DESELECT_ALL = 4, CB_CUT = 5;
     //flags are allocated like so:
     /*
-        F -> Current state (on keys, rotating, on menu)
-        F0 -> Current keyboard
-        F00 -> current shift state
-        F000 and greater, MetaData
+        000F -> Current state (on keys, rotating, on menu)
+        00F0 -> Current keyboard
+        0F00 -> current shift state
+        F000 >= MetaData
      */
     public final static int
     STATE_MASK = 0xF,
@@ -91,7 +91,9 @@ public class NovaKey extends InputMethodService {
 	public boolean undocked = false;
 	private WindowManager wm;
 
-	//When keyboard is created in settings
+	/**
+	 * Called when the keyboard is enabled
+	 */
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -111,7 +113,7 @@ public class NovaKey extends InputMethodService {
         //create colors
         Colors.initialize();
 		//load app themes
-		AppTheme.load(getResources());
+		AppTheme.load(this, getResources());
         //create fonts
         Font.create(this);
         //load icons
@@ -135,8 +137,7 @@ public class NovaKey extends InputMethodService {
 
 	@Override
 	public View onCreateInputView() {
-		//TODO: remove this if it lags
-		AppTheme.load(getResources());
+		AppTheme.load(this, getResources());
 
         initializeController();
         //stops it from crashing when the orientation changes
@@ -245,6 +246,11 @@ public class NovaKey extends InputMethodService {
 		catch (Exception e) {}
 	}
 
+	/**
+	 * Sets landscape flag
+	 *
+	 * @param config device confiuration
+	 */
 	@Override
 	public void onConfigurationChanged(Configuration config) {
 		Controller.landscape =
@@ -252,23 +258,37 @@ public class NovaKey extends InputMethodService {
 		super.onConfigurationChanged(config);
 	}
 
+	/**
+	 * Makes it never go on Fullscreen Mode
+	 *
+	 * @return false always
+	 */
 	@Override
 	public boolean onEvaluateFullscreenMode() {
 		return false;
 	}
 
+	/**
+	 * Commits the composing text
+	 */
 	@Override
 	public void onFinishInput() {
 		commitComposing();
         super.onFinishInput();
 	}
 
+	/**
+	 * Make sure to destroy the Controller to avoid leaks
+	 */
     @Override
     public void onDestroy() {
         super.onDestroy();
         Controller.destroy();
     }
 
+	/**
+	 * helper method
+	 */
     private void initializeController() {
 		Controller.initialize(this, new NovaKeyView(this));
     }

@@ -57,6 +57,17 @@ public class Util {
         }
     }
 
+    public static String uppercaseFirst(String text) {
+        String res = "";
+        for (int i = 0; i < text.length(); i++) {
+            if (i == 0 || text.charAt(i - 1) == ' ')
+                res += Character.toUpperCase(text.charAt(i));
+            else
+                res += text.charAt(i);
+        }
+        return res;
+    }
+
     public static int nthIndexOf(String s, int n, char c) {
         if (n <= 1)
             return s.indexOf(c);

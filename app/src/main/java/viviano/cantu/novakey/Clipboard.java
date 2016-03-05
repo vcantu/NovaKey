@@ -1,6 +1,7 @@
 package viviano.cantu.novakey;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import viviano.cantu.novakey.drawing.Icon;
 import viviano.cantu.novakey.menus.InfiniteMenu;
@@ -12,7 +13,7 @@ import viviano.cantu.novakey.menus.OnUpMenu;
 public class Clipboard {
 
     private static final int MAX_CLIP_SIZE = 20;
-    private static ArrayList<String> clips = new ArrayList<String>();
+    private static List<String> clips = new ArrayList<String>();
 
     public static void add(String text) {
         clips.add(0, text);

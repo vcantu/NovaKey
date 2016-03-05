@@ -25,7 +25,7 @@ public class SettingsActivity extends PreferenceActivity {
         //LoadStuff
         KeyLayout.CreateKeyboards(getResources());
         Colors.initialize();
-        AppTheme.load(getResources());
+        AppTheme.load(this, getResources());
         Font.create(getApplicationContext());
         Icon.load(getApplicationContext());
 

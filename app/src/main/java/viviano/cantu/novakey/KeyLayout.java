@@ -20,7 +20,6 @@ import java.util.NoSuchElementException;
  * Compare KeyLayouts using
  *      .equals(layout);
  */
-
 public class KeyLayout implements Iterator<Key>, Iterable<Key> {
     private Key[][] keys;
     public String name;

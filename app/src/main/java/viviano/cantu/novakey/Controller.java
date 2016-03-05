@@ -5,6 +5,8 @@ import android.text.InputType;
 import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.ExtractedText;
+import android.view.inputmethod.ExtractedTextRequest;
 
 import java.util.ArrayList;
 
@@ -17,6 +19,8 @@ import viviano.cantu.novakey.drawing.emoji.Emoji;
 import viviano.cantu.novakey.menus.InfiniteMenu;
 import viviano.cantu.novakey.menus.OnUpMenu;
 import viviano.cantu.novakey.settings.Settings;
+import viviano.cantu.novakey.utils.Print;
+import viviano.cantu.novakey.utils.Util;
 
 /**
  * Created by Viviano on 7/10/2015.
@@ -41,7 +45,13 @@ public class Controller implements NovaKeyListener.EventListener {
     public static InfiniteMenu infiniteMenu;
     public static OnUpMenu onUpMenu;
 
-     public static void initialize(NovaKey main,  NovaKeyView view) {
+    /**
+     * Initializes static data
+     *
+     * @param main NovaKey service
+     * @param view NovaKey view
+     */
+    public static void initialize(NovaKey main,  NovaKeyView view) {
          if (Controller.main == null)
             Controller.main = main;
          if (Controller.view == null) {
@@ -50,9 +60,14 @@ public class Controller implements NovaKeyListener.EventListener {
              Controller.view.setOnTouchListener(new NovaKeyListener(eventListener));
          }
     }
+
+    /**
+     * @return the main view
+     */
     public static NovaKeyView view() {
         return view;
     }
+
     public static void destroy() {
         main = null; view = null;
     }
@@ -88,7 +103,7 @@ public class Controller implements NovaKeyListener.EventListener {
     public static void onInputStart(EditorInfo info, boolean restarting) {
         //update settings
         //rebuild theme
-        //rebuild buttons
+        //rebuild buttons`
         Settings.update();
         //set theme to newly built theme
         view.setTheme(Settings.theme);
@@ -151,25 +166,33 @@ public class Controller implements NovaKeyListener.EventListener {
         view.updateKeyLayout();
     }
 
-//    public static int INPUT_UPDATE_SHIFT = 1, INPUT_FIX_WORD = 2, INPUT_AUTO_CORRECT = 4,
-//            INPUT_FULL_CORRECT = 6, INPUT_IGNORE_SETTINGS = 8;
     public static void input(Object o, int flags) {//TODO: flags
         if (o instanceof Character) {
-            main.handleCharacter((int)(Character)o);
+            main.handleCharacter((int)(Character) o);
         }
         else if (o instanceof String) {
-            main.handleText((String)o);
+            main.handleText((String) o);
         }
         else if (o instanceof Emoji) {
             String res = ((Emoji) o).getValue();
             main.handleText(((Emoji) o).getValue());
         }
-        //TODO: see if other types of objects like images can be inputed
+        //TODO: see if other types of objects like images can be imputed
         //if ((flags & INPUT_UPDATE_SHIFT) == INPUT_UPDATE_SHIFT)
         updateShift(main.getCurrentInputEditorInfo());
     }
 
     public static void toggleShift() {
+        String selectedText = main.getSelectedText();
+        boolean shiftText = selectedText.length() > 0;
+        int s = 0, e = 0;
+        if (shiftText) {
+            ExtractedText et = main.getCurrentInputConnection()
+                    .getExtractedText(new ExtractedTextRequest(), 0);
+            s = et.selectionStart;
+            e = et.selectionEnd;
+        }
+
         switch (state & NovaKey.KEYS_MASK) {
             default:
             case NovaKey.DEFAULT_KEYS:
@@ -177,13 +200,25 @@ public class Controller implements NovaKeyListener.EventListener {
                     case NovaKey.LOWERCASE:
                         addState(NovaKey.UPPERCASE);
                         currKeyboard.setShifted(true);
+                        if (shiftText) {//uppercase each word
+                            main.handleText(Util.uppercaseFirst(selectedText));
+                            main.setSelection(s, e);
+                        }
                         break;
                     case NovaKey.UPPERCASE:
                         addState(NovaKey.CAPSED_LOCKED);
+                        if (shiftText) {//caps each word
+                            main.handleText(selectedText.toUpperCase());//TODO: locale
+                            main.setSelection(s, e);
+                        }
                         break;
                     case NovaKey.CAPSED_LOCKED:
                         addState(NovaKey.LOWERCASE);
                         currKeyboard.setShifted(false);
+                        if (shiftText) {//lowercase each word
+                            main.handleText(selectedText.toLowerCase());//TODO: locale
+                            main.setSelection(s, e);
+                        }
                         break;
                 }
                 break;
@@ -258,7 +293,6 @@ public class Controller implements NovaKeyListener.EventListener {
 
 
 ///--------------------------------------------------------TOUCH CONTROLLER---------------------------------------------------------------
-    public Controller() {}
     //deleting
     private ArrayList<Character> charsDeleted;
     private boolean deleteDone = false;
@@ -266,6 +300,8 @@ public class Controller implements NovaKeyListener.EventListener {
     private char repeatingChar;
     private int area1, area2;
     private boolean repeating, shouldFix, repeatingDone;
+
+    public Controller() {}
 
     @Override
     public void onRawAction(int action, float x, float y) {

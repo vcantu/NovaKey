@@ -45,4 +45,12 @@ public class Print {
             ln(s);
         }
     }
+
+    public static void tryln(Object o) {
+        try {
+            ln(o);
+        } catch (Exception e) {
+            ln("try print failed!");
+        }
+    }
 }

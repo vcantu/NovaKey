@@ -32,7 +32,7 @@ public class NovaKeyView extends View {
 	private final Character[] returnAfterSpace = new Character[]
 			{ '.', ',', ';', '&', '!', '?' };
 	public boolean shouldReturnAfterSpace(Character c) {
-		for (Character C  : returnAfterSpace) {
+		for (Character C : returnAfterSpace) {
 			if (C == c)
 			    return true;
 		}
@@ -83,7 +83,8 @@ public class NovaKeyView extends View {
 		dimens.w = getResources().getDisplayMetrics().widthPixels;
 		updateRadius();
 		updateCoords();
-		dimens.h = (int)(Settings.sharedPref.getFloat("y" + (Controller.landscape ? "_land" : ""), dimens.r) + dimens.r);
+		dimens.h = (int)(Settings.sharedPref.getFloat("y" + (Controller.landscape ? "_land" : ""),
+				dimens.r) + dimens.r);
 		updateKeyLayout();
 	}
 
@@ -95,12 +96,13 @@ public class NovaKeyView extends View {
 	}
 
 	public void updateRadius() {
-		setRadii(Settings.sharedPref.getFloat("size" + (Controller.landscape ? "_land" : ""), getResources().getDimension(R.dimen.default_radius)));
+		setRadii(Settings.sharedPref.getFloat("size" + (Controller.landscape ? "_land" : ""),
+                getResources().getDimension(R.dimen.default_radius)));
     }
 
 	public void updateCoords() {
-		setCoords(Settings.sharedPref.getFloat("x" + (Controller.landscape ? "_land" : ""), dimens.w / 2),
-                dimens.r);
+		setCoords(Settings.sharedPref.getFloat("x" + (Controller.landscape ? "_land" : ""),
+                        dimens.w / 2), dimens.r);
 	}
 
     private void setRadii(float r) {
@@ -129,7 +131,7 @@ public class NovaKeyView extends View {
         switch (Controller.state & NovaKey.STATE_MASK) {
             case NovaKey.ON_KEYS:
             default:
-                if (!((Controller.state & NovaKey.KEYS_MASK) == NovaKey.DEFAULT_KEYS &&
+                if (!(Controller.hasState(NovaKey.DEFAULT_KEYS)  &&
                         Settings.hideLetters || (Settings.hidePassword && Controller.onPassword)))
                     mTheme.drawKeys(dimens.x, dimens.y, dimens.r, dimens.sr, Controller.currKeyboard,
                             Controller.hasState(NovaKey.DEFAULT_KEYS)
