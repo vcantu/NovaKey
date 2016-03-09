@@ -17,12 +17,12 @@ import java.util.ArrayList;
 import viviano.cantu.novakey.R;
 import viviano.cantu.novakey.drawing.Draw;
 import viviano.cantu.novakey.Font;
-import viviano.cantu.novakey.drawing.Icon;
+import viviano.cantu.novakey.drawing.Icons;
 
 /**
  * Created by Viviano on 11/16/2015.
  */
-public class Emoji implements Icon.Drawable {
+public class Emoji implements Icons.Drawable {
 
     public static ArrayList<Emoji> emojis;
 

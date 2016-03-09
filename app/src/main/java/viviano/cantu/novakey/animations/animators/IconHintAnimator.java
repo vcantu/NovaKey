@@ -4,7 +4,7 @@ import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
 import android.view.animation.AccelerateInterpolator;
 
-import viviano.cantu.novakey.drawing.Icon;
+import viviano.cantu.novakey.drawing.Icons;
 
 /**
  * Created by Viviano on 11/16/2015.
@@ -14,21 +14,21 @@ import viviano.cantu.novakey.drawing.Icon;
     // when the user does the space motion
 public class IconHintAnimator extends Animator {
 
-    private Icon icon;
+    private Icons.Drawable icon;
     private long duration;
 
     //TODO: not done
-    public IconHintAnimator(Icon icon) {
+    public IconHintAnimator(Icons.Drawable icon) {
         this(icon, 100);
     }
 
-    public IconHintAnimator(Icon icon, long duration) {
+    public IconHintAnimator(Icons.Drawable icon, long duration) {
         this.icon = icon;
         this.duration = duration;
     }
 
 
-    private ValueAnimator animIcon(Icon ic, int first, int last) {
+    private ValueAnimator animIcon(Icons ic, int first, int last) {
         final float begX = view.getAreaX(first);
         final float begY = view.getAreaY(first);
         final float endX = view.getAreaX(last);

@@ -6,7 +6,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import viviano.cantu.novakey.NovaKeyDimen;
-import viviano.cantu.novakey.drawing.Icon;
+import viviano.cantu.novakey.drawing.Icons;
 import viviano.cantu.novakey.btns.Btn;
 import viviano.cantu.novakey.btns.BtnTheme;
 
@@ -60,6 +60,6 @@ public class ButtonAddView extends View {
     }
 
     public void enableAddIcon() {
-        btn.icon = Icon.get("add");
+        btn.icon = Icons.get("add");
     }
 }

@@ -8,7 +8,7 @@ import android.graphics.Path;
 import viviano.cantu.novakey.NovaKeyDimen;
 import viviano.cantu.novakey.drawing.Draw;
 import viviano.cantu.novakey.Font;
-import viviano.cantu.novakey.drawing.Icon;
+import viviano.cantu.novakey.drawing.Icons;
 import viviano.cantu.novakey.KeyLayout;
 import viviano.cantu.novakey.NovaKey;
 import viviano.cantu.novakey.btns.BtnTheme;
@@ -141,11 +141,11 @@ public class BaseTheme implements Theme {
     public void drawCursorIcon(int state, float x, float y, float sr, Canvas canvas) {
         pB.setColorFilter(new LightingColorFilter(textColors()[0], 0));
 
-        Draw.bitmap(Icon.cursors, x, y, 1, pB, canvas);
+        Draw.bitmap(Icons.cursors, x, y, 1, pB, canvas);
         if ((state & NovaKey.CURSOR_RIGHT) == NovaKey.CURSOR_RIGHT)
-            Draw.bitmap(Icon.cursorLeft, x, y, 1, pB, canvas);
+            Draw.bitmap(Icons.cursorLeft, x, y, 1, pB, canvas);
         if ((state & NovaKey.CURSOR_LEFT) == NovaKey.CURSOR_LEFT)
-            Draw.bitmap(Icon.cursorRight, x, y, 1, pB, canvas);
+            Draw.bitmap(Icons.cursorRight, x, y, 1, pB, canvas);
 
         pB.setColorFilter(null);
     }

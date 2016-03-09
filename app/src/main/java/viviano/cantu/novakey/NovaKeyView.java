@@ -72,8 +72,6 @@ public class NovaKeyView extends View {
 	public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		updateDimens();
         setMeasuredDimension((int)dimens.w, (int)dimens.h);
-//		if (!context.undocked)
-//			context.setInputView(this);
     }
 
 	//update all
@@ -107,7 +105,7 @@ public class NovaKeyView extends View {
 
     private void setRadii(float r) {
 		dimens.r = r;
-		dimens.sr = r / 3;
+		dimens.sr = r / Settings.sharedPref.getFloat("smallRadius", 3);
     }
 
 	private void setCoords(float x, float y) {

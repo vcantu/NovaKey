@@ -19,9 +19,9 @@ import viviano.cantu.novakey.R;
 /**
  * Created by Viviano on 6/8/2015.
  */
-public class Icon {
+public class Icons {
 
-    public static Bitmap cursors, cursorLeft, cursorRight, cancel, accept, refresh;
+    public static Bitmap cursors, cursorLeft, cursorRight, cancel, accept, refresh, border_center;
     private static ArrayList<Drawable> icons;
 
     public static void load(Context context) {
@@ -36,6 +36,8 @@ public class Icon {
         cancel = BitmapFactory.decodeResource(res, R.drawable.ic_action_cancel);
         accept = BitmapFactory.decodeResource(res, R.drawable.ic_action_accept);
         refresh = BitmapFactory.decodeResource(res, R.drawable.ic_action_refresh);
+
+        border_center = BitmapFactory.decodeResource(res, R.drawable.ic_border_vertical_white_36dp);
 
         setMaterialIcons(res);
         setCustomIcons(res);
@@ -101,6 +103,9 @@ public class Icon {
         return null;
     }
 
+    /**
+     * wrapper for Icon.Drawable.draw that null checks
+     */
     public static void draw(Drawable ic, float x, float y, float size, Paint p, Canvas canvas) {
         if (ic != null && p != null && canvas != null)
             ic.draw(x, y, size, p, canvas);
@@ -112,7 +117,7 @@ public class Icon {
 
     public interface Drawable {
         /**
-         * DO NOT CALL THIS call Icon.draw() instead as it does null checks before
+         * DO NOT CALL THIS call Icons.draw() instead as it does null checks before
          * drawing
          *
          * @param x x position

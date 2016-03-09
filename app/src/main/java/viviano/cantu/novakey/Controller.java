@@ -4,6 +4,7 @@ import android.inputmethodservice.Keyboard;
 import android.text.InputType;
 import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.ExtractedText;
 import android.view.inputmethod.ExtractedTextRequest;
@@ -254,11 +255,13 @@ public class Controller implements NovaKeyListener.EventListener {
 
     public static void setEditing(boolean editing) {
         if (editing) {
-            NovaKeyEditView editView = new NovaKeyEditView(main);
-            editView.setTheme(Controller.view().getTheme());
-            main.setInputView(editView);
+            EditView editView = new EditView(main);
+            editView.setTheme(Controller.view.getTheme());
+            main.setInputView(new ControlView(main));
+            main.addWindow(editView, true);
         }
         else {
+            main.clearWindows();
             main.setInputView(view);
         }
     }

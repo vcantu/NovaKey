@@ -1,14 +1,11 @@
 package viviano.cantu.novakey.btns;
 
 import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Path;
 
 import java.util.ArrayList;
 
 import viviano.cantu.novakey.NovaKeyDimen;
-import viviano.cantu.novakey.drawing.Draw;
-import viviano.cantu.novakey.drawing.Icon;
+import viviano.cantu.novakey.drawing.Icons;
 import viviano.cantu.novakey.utils.Util;
 import viviano.cantu.novakey.settings.Settings;
 
@@ -23,7 +20,7 @@ public class Btn {
     public int shape;
 
     //looks and functionality
-    public Icon.Drawable icon = null;
+    public Icons.Drawable icon = null;
     public String text = null;
 
     public Btn(double angle, float dist, int shape) {

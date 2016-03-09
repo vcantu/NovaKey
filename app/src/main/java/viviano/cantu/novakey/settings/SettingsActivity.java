@@ -7,7 +7,7 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 
 import viviano.cantu.novakey.Font;
-import viviano.cantu.novakey.drawing.Icon;
+import viviano.cantu.novakey.drawing.Icons;
 import viviano.cantu.novakey.KeyLayout;
 import viviano.cantu.novakey.NovaKey;
 import viviano.cantu.novakey.setup.SetupActivity;
@@ -27,7 +27,7 @@ public class SettingsActivity extends PreferenceActivity {
         Colors.initialize();
         AppTheme.load(this, getResources());
         Font.create(getApplicationContext());
-        Icon.load(getApplicationContext());
+        Icons.load(getApplicationContext());
 
         Settings.setSharedPref(PreferenceManager.getDefaultSharedPreferences(getApplicationContext()));
         Settings.update();

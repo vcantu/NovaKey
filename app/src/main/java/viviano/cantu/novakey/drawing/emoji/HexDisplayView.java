@@ -9,7 +9,7 @@ import android.view.View;
 import java.util.ArrayList;
 
 import viviano.cantu.novakey.R;
-import viviano.cantu.novakey.drawing.Icon;
+import viviano.cantu.novakey.drawing.Icons;
 import viviano.cantu.novakey.utils.Util;
 
 /**
@@ -48,7 +48,7 @@ public class HexDisplayView extends View {
     private void drawEmoji(Emoji e, float x, float y, Canvas canvas) {
         if (!alreadyDrawn.contains(e.id())) {
             //first draw itself
-            Icon.draw(e, x, y, emojiSize * .8f, p, canvas);
+            Icons.draw(e, x, y, emojiSize * .8f, p, canvas);
             alreadyDrawn.add(e.id());
             //draw neightbors
             for (int i = 0; i < 6; i++) {

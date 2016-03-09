@@ -6,7 +6,7 @@ import android.graphics.Typeface;
 
 public class Font {
 
-    //Icon typefaces
+    //Icons typefaces
     public static Typeface EMOJI, EMOJI_REGULAR, MATERIAL_ICONS, CUSTOM_ICONS;
     public static Typeface
                     SANS_SERIF_LIGHT,
@@ -19,7 +19,7 @@ public class Font {
         //SANS_SERIF_LIGHT = Typeface.createFromAsset(context.getAssets(), "SF_Burlington_Script.ttf");
         SANS_SERIF_CONDENSED = Typeface.create("sans-serif-condensed", Typeface.NORMAL);
 
-        // Icon Type faces
+        // Icons Type faces
         try {
             EMOJI = Typeface.createFromAsset(context.getAssets(), "NotoColorEmoji.ttf");
         } catch (Exception e) {}

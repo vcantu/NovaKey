@@ -1,4 +1,4 @@
-package viviano.cantu.novakey.setup;
+package viviano.cantu.novakey;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -7,7 +7,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import viviano.cantu.novakey.drawing.Icon;
+import viviano.cantu.novakey.drawing.Icons;
 
 /**
  * Created by Viviano on 10/22/2015.
@@ -15,9 +15,10 @@ import viviano.cantu.novakey.drawing.Icon;
 public class IconView extends View implements View.OnTouchListener {
 
     private boolean touched = false;
-    private Icon.Drawable icon;
+    private Icons.Drawable icon;
     private float size = 1.0f;
     private Paint p;
+    private int mColor = 0xFFA0A0A0;
 
     private OnClickListener listener;
 
@@ -29,7 +30,7 @@ public class IconView extends View implements View.OnTouchListener {
         p.setAntiAlias(true);
     }
 
-    public void setIcon(Icon.Drawable icon) {
+    public void setIcon(Icons.Drawable icon) {
         this.icon = icon;
     }
 
@@ -37,11 +38,15 @@ public class IconView extends View implements View.OnTouchListener {
         this.size = size;
     }
 
+    public void setColor(int color) {
+        mColor = color;
+    }
+
     @Override
     public void onDraw(Canvas canvas) {
         float w = getWidth(), h = getHeight();
-        p.setColor(touched ? 0xFFF0F0F0 : 0xFFA0A0A0);
-        Icon.draw(icon, w / 2, h / 2, w * size, p, canvas);
+        p.setColor(touched ? mColor : mColor);//TODO: make color lighter
+        Icons.draw(icon, w / 2, h / 2, w * size, p, canvas);
     }
 
     @Override

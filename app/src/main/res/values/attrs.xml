@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="FloatingButton">
+        <attr name="button_height" format="dimension" />
+        <attr name="back_color" format="color" />
+        <attr name="front_color" format="color" />
+        <attr name="button_icon" format="string" />
+    </declare-styleable>
+</resources>

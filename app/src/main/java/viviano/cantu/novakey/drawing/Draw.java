@@ -112,26 +112,22 @@ public class Draw {
         colorItem(color, x, y, radius, p, canvas);
         if (selected) {//draw checkmark
             float rw = Util.contrastRatio(Color.WHITE, color);
-            Icon.Drawable ic = Icon.get("check");
+            Icons.Drawable ic = Icons.get("check");
             p.setColor(rw < 1.1f ? Color.BLACK : Color.WHITE);
             p.clearShadowLayer();
-            Icon.draw(ic, x, y, radius * 1.6f, p, canvas);
+            Icons.draw(ic, x, y, radius * 1.6f, p, canvas);
         }
     }
 
     public static void floatingButton(float x, float y, float radius, Bitmap icon, int back, int front,
                                    float height, Paint p, Canvas canvas) {
-        //Shadow
-        p.setShader(new RadialGradient(x, y - height / 3, radius + height + 3,
-                0xA0000000, 0x00000000, Shader.TileMode.CLAMP));
-        canvas.drawPaint(p);
-        p.setShader(null);
-
         //Circle
+        p.setShadowLayer(height + 2, 0, height, 0x60000000);
         p.setColor(back);
         canvas.drawCircle(x, y - height, radius, p);
+        p.clearShadowLayer();
 
-        //Icon
+        //Icons
         p.setColorFilter(new LightingColorFilter(front, 0));
         bitmap(icon, x, y - height, 1, p, canvas);
         p.setColorFilter(null);

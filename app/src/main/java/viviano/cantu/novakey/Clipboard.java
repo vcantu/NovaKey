@@ -3,7 +3,7 @@ package viviano.cantu.novakey;
 import java.util.ArrayList;
 import java.util.List;
 
-import viviano.cantu.novakey.drawing.Icon;
+import viviano.cantu.novakey.drawing.Icons;
 import viviano.cantu.novakey.menus.InfiniteMenu;
 import viviano.cantu.novakey.menus.OnUpMenu;
 
@@ -37,11 +37,11 @@ public class Clipboard {
 
     public static void createMenu() {
         Object[] list = new Object[] {
-                Icon.get("content_copy"),
-                Icon.get("select_all"),
-                Icon.get("content_paste"),
-                Icon.get("deselect_all"),
-                Icon.get("content_cut")
+                Icons.get("content_copy"),
+                Icons.get("select_all"),
+                Icons.get("content_paste"),
+                Icons.get("deselect_all"),
+                Icons.get("content_cut")
         };
         MENU = new OnUpMenu(list, new OnUpMenu.Action() {
             @Override
@@ -78,10 +78,10 @@ public class Clipboard {
                 //If select_all is longPressed
                 else if (selected == 2) {
                     Object[] arr = new Object[] {
-                            Icon.get("select_all"),
-                            Icon.get("select_all_copy"),
-                            Icon.get("select_all_cut"),
-                            Icon.get("select_all_clear"),
+                            Icons.get("select_all"),
+                            Icons.get("select_all_copy"),
+                            Icons.get("select_all_cut"),
+                            Icons.get("select_all_clear"),
                             InfiniteMenu.CANCEL//char is not an object so double cast is required
                     };
                     Controller.startInfiniteMenu(new InfiniteMenu(arr, new InfiniteMenu.Action() {
@@ -89,11 +89,11 @@ public class Clipboard {
                         public void onSelected(Object selected) {
                             if (!InfiniteMenu.isCancel(selected)) {
                                 Controller.performClipboardAction(NovaKey.CB_SELECT_ALL);
-                                if (selected == Icon.get("select_all_copy"))
+                                if (selected == Icons.get("select_all_copy"))
                                     Controller.performClipboardAction(NovaKey.CB_COPY);
-                                else if (selected == Icon.get("select_all_cut"))
+                                else if (selected == Icons.get("select_all_cut"))
                                     Controller.performClipboardAction(NovaKey.CB_CUT);
-                                else if (selected == Icon.get("select_all_clear"))
+                                else if (selected == Icons.get("select_all_clear"))
                                     Controller.input("", 0);
                             }
                         }

@@ -4,7 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 
 import viviano.cantu.novakey.drawing.Draw;
-import viviano.cantu.novakey.drawing.Icon;
+import viviano.cantu.novakey.drawing.Icons;
 import viviano.cantu.novakey.utils.Util;
 import viviano.cantu.novakey.themes.BaseTheme;
 
@@ -50,8 +50,8 @@ public class OnUpMenu {
         p.setColor(color);
         if (o == null)
             return;
-        if (o instanceof Icon.Drawable)
-            Icon.draw((Icon.Drawable) o, x, y, size, p, canvas);
+        if (o instanceof Icons.Drawable)
+            Icons.draw((Icons.Drawable) o, x, y, size, p, canvas);
         else {
             String s = "";
             if (o instanceof Character)

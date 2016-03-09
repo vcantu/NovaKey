@@ -2,13 +2,11 @@ package viviano.cantu.novakey.btns;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Path;
 
 import viviano.cantu.novakey.Font;
 import viviano.cantu.novakey.NovaKeyDimen;
 import viviano.cantu.novakey.drawing.Draw;
-import viviano.cantu.novakey.drawing.Icon;
-import viviano.cantu.novakey.utils.Util;
+import viviano.cantu.novakey.drawing.Icons;
 
 /**
  * Created by Viviano on 7/9/2015.
@@ -183,8 +181,8 @@ public class BtnTheme {
     private final void drawIcon(Object o, float x, float y, float size, Canvas canvas) {
         if (o == null)
             return;
-        if (o instanceof Icon.Drawable) {
-            Icon.draw((Icon.Drawable)o, x, y, size, p, canvas);
+        if (o instanceof Icons.Drawable) {
+            Icons.draw((Icons.Drawable) o, x, y, size, p, canvas);
         }
         else if (o instanceof String) {
             String text = (String)o;

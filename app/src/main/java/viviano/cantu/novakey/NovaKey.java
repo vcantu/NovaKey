@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.text.InputType;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,11 +20,14 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.ExtractedText;
 import android.view.inputmethod.ExtractedTextRequest;
 import android.view.inputmethod.InputConnection;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
-import viviano.cantu.novakey.drawing.Icon;
+import viviano.cantu.novakey.drawing.Icons;
 import viviano.cantu.novakey.menus.InfiniteMenu;
 import viviano.cantu.novakey.settings.Colors;
 import viviano.cantu.novakey.settings.Settings;
@@ -89,13 +93,17 @@ public class NovaKey extends InputMethodService {
 
 	// floating window
 	public boolean undocked = false;
-	private WindowManager wm;
+
+	private WindowManager windowManager;
+    private List<View> mWindows;
+
 
 	/**
 	 * Called when the keyboard is enabled
 	 */
 	@Override
 	public void onCreate() {
+		getApplicationContext().setTheme(R.style.AppTheme);
 		super.onCreate();
         //Services
 		clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
@@ -106,7 +114,9 @@ public class NovaKey extends InputMethodService {
             }
         });
 		vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-		wm = (WindowManager) getSystemService(WINDOW_SERVICE);
+		windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+
+        mWindows = new ArrayList<>();
 
         //create keyboards
         KeyLayout.CreateKeyboards(getResources());
@@ -117,7 +127,7 @@ public class NovaKey extends InputMethodService {
         //create fonts
         Font.create(this);
         //load icons
-        Icon.load(this);
+        Icons.load(this);
 		//load emojis
 		//Emoji.load(this);
         //Create Hidden Keys
@@ -150,6 +160,31 @@ public class NovaKey extends InputMethodService {
 
 		return Controller.view();
 	}
+
+    public void addWindow(View view, boolean fullscreen) {
+        WindowManager.LayoutParams params= new WindowManager.LayoutParams(
+                fullscreen ? WindowManager.LayoutParams.MATCH_PARENT :
+                        WindowManager.LayoutParams.WRAP_CONTENT,
+                fullscreen ? WindowManager.LayoutParams.MATCH_PARENT :
+                        WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.TYPE_PHONE,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                PixelFormat.TRANSLUCENT);
+
+        params.gravity = Gravity.TOP | Gravity.LEFT;
+        params.x = 0;
+        params.y = 0;
+
+        mWindows.add(view);
+        windowManager.addView(view, params);
+    }
+
+    public void clearWindows() {
+        for (int i=0; i<mWindows.size(); i++) {
+            windowManager.removeView(mWindows.remove(i));
+        }
+    }
+
 
 	@Override
 	public void onBindInput() {
@@ -238,11 +273,11 @@ public class NovaKey extends InputMethodService {
                 WindowManager.LayoutParams.TYPE_PHONE,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT);
-        wm.addView(Controller.view(), params);
+        windowManager.addView(Controller.view(), params);
     }
 
 	private void close() {
-		try { wm.removeView(Controller.view()); }
+		try { windowManager.removeView(Controller.view()); }
 		catch (Exception e) {}
 	}
 

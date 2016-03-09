@@ -9,7 +9,7 @@ import android.graphics.Paint;
 /**
  * Created by Viviano on 12/26/2015.
  */
-public class BMPIcon implements Icon.Drawable {
+public class BMPIcon implements Icons.Drawable {
 
     Bitmap bmp;
 

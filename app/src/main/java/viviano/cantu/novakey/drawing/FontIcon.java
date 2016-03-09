@@ -4,12 +4,10 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 
-import viviano.cantu.novakey.Font;
-
 /**
  * Created by Viviano on 12/26/2015.
  */
-public class FontIcon implements Icon.Drawable {
+public class FontIcon implements Icons.Drawable {
 
     private String name, code;
     private Typeface font;

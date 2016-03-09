@@ -13,7 +13,7 @@ import viviano.cantu.novakey.themes.ThemeBuilder;
  * Created by Viviano on 6/22/2015.
  */
 public class Settings {
-    private static final int CURR_VERSION = 20;
+    private static final int CURR_VERSION = 21;
 
     //KEYS
     public static String
@@ -43,7 +43,9 @@ public class Settings {
     public static String DEFAULT = "DEFAULT";
     public static boolean hideLetters, hidePassword, vibrate, quickInsert, autoCorrect, quickClose;
     public static boolean hasSpaceBar;
+
     public static int startVersion = CURR_VERSION, longPressTime = 500;
+    public static float smallRadius;
 
     //Theme settings
     public static Theme theme;

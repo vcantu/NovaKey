@@ -16,8 +16,9 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import viviano.cantu.novakey.Controller;
+import viviano.cantu.novakey.IconView;
 import viviano.cantu.novakey.Location;
-import viviano.cantu.novakey.drawing.Icon;
+import viviano.cantu.novakey.drawing.Icons;
 import viviano.cantu.novakey.R;
 import viviano.cantu.novakey.animations.animators.FocusAnimator;
 import viviano.cantu.novakey.animations.animators.TeachAnimator;
@@ -74,11 +75,11 @@ public class TutorialActivity extends Activity {
         mTaskText = (TextInputLayout)findViewById(R.id.editTextLayout);
 
         mHintIC = (IconView)findViewById(R.id.hintView);
-        mHintIC.setIcon(Icon.get("help"));
+        mHintIC.setIcon(Icons.get("help"));
         mHintIC.setSize(.6f);
 
         mClearIC = (IconView)findViewById(R.id.clearView);
-        mClearIC.setIcon(Icon.get("clear"));
+        mClearIC.setIcon(Icons.get("clear"));
         mClearIC.setSize(.4f);
         mClearIC.setClickListener(new IconView.OnClickListener() {
             @Override

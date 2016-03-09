@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 import viviano.cantu.novakey.Controller;
 import viviano.cantu.novakey.drawing.Draw;
-import viviano.cantu.novakey.drawing.Icon;
+import viviano.cantu.novakey.drawing.Icons;
 import viviano.cantu.novakey.utils.Util;
 
 /**
@@ -134,8 +134,8 @@ public class InfiniteMenu {
         p.setColor(color);
         if (o == null)
             return;
-        if (o instanceof Icon.Drawable) {
-            Icon.draw((Icon.Drawable) o, x, y, size, p, canvas);
+        if (o instanceof Icons.Drawable) {
+            Icons.draw((Icons.Drawable) o, x, y, size, p, canvas);
         }
         else {
             String s = "";
@@ -149,7 +149,7 @@ public class InfiniteMenu {
                 } catch (Exception e) {}
 
             if (s.equals(CANCEL))
-                Icon.draw("clear", x, y, size, p, canvas);
+                Icons.draw("clear", x, y, size, p, canvas);
             else {
                 int MAX = 12;
                 if (s.length() > 4) {
