@@ -13,7 +13,7 @@ import viviano.cantu.novakey.themes.ThemeBuilder;
  * Created by Viviano on 6/22/2015.
  */
 public class Settings {
-    private static final int CURR_VERSION = 21;
+    private static final int CURR_VERSION = 22;
 
     //KEYS
     public static String
@@ -45,7 +45,6 @@ public class Settings {
     public static boolean hasSpaceBar;
 
     public static int startVersion = CURR_VERSION, longPressTime = 500;
-    public static float smallRadius;
 
     //Theme settings
     public static Theme theme;

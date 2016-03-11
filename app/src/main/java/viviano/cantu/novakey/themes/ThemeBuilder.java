@@ -25,8 +25,13 @@ public class ThemeBuilder implements Iterable<Theme>, Iterator<Theme> {
                 return new MulticolorDonutTheme();
             case 5:
                 return new MulticolorTheme();
+            case 6:
+                return new IconTheme();
         }
     }
+
+    /// Total amount of themes available
+    public static int THEME_COUNT = 7;
 
     /**
      * @return a new instance of ThemeBuilder which implements Iterable
@@ -45,9 +50,6 @@ public class ThemeBuilder implements Iterable<Theme>, Iterator<Theme> {
     public Iterator<Theme> iterator() {
         return this;
     }
-
-    /// Total amount of themes available
-    public static int THEME_COUNT = 6;
 
     private int mCurr = 0;
 

@@ -195,27 +195,70 @@ public class Util {
 
     //--------------------------------------Color Utils-------------------------------------------
 
-    public static boolean whiteDoesContrast(int color) {
-        int r = Color.red(color);
-        int g = Color.green(color);
-        int b = Color.blue(color);
+    public static int colorShade(int c, int f) {
+        if (c == Color.BLACK)
+            c = 0xFF202020;
+        float mult = 1 + f * .075f;
+        return redestributeRGB((int) (Color.red(c) * mult), (int) (Color.green(c) * mult),
+                (int) (Color.blue(c) * mult));
+    }
 
-        int yiq = ((r*299)+(g*587)+(b*114))/1000;
+    private static int clampRGB(int r, int g, int b) {
+        return Color.argb(255, Math.min(r, 255), Math.min(g, 255), Math.min(b, 255));
+    }
+
+    private static int redestributeRGB(int r, int g, int b) {
+        int m = Math.max(r, Math.max(g, b));
+        if (m <= 255)
+            return Color.argb(255, r, g, b);
+        int total = r + g + b;
+        if (total >= 3 * 255)
+            return Color.argb(255, 255, 255, 255);//white
+        int x = (3 * 255 - total) / (3 * m - total);
+        int gray = 255 - x * m;
+        return Color.argb(255, gray + x * r, gray + x * g, gray + x * b);
+    }
+
+    private static boolean whiteDoesContrast(int color) {
+        float yiq = relativeLuminance(color);
         return yiq < 128;
     }
 
+    /**
+     * @param color background color
+     * @return best contrast color either Black or White
+     */
     public static int contrastColor(int color) {
         return whiteDoesContrast(color) ? Color.WHITE : Color.BLACK;
     }
 
+    /**
+     * @param color color to check
+     * @return the relative luminance of the given color
+     */
     public static float relativeLuminance(int color) {
         return (299*Color.red(color) + 587*Color.green(color) + 114*Color.blue(color)) / 1000;
     }
+
+    /**
+     * @param color1 first color
+     * @param color2 second color
+     * @return the contrast ratio between both of them
+     */
     public static float contrastRatio(int color1, int color2) {
         float l1 = relativeLuminance(color1),
               l2 = relativeLuminance(color2);
         return Math.max(l1/l2, l2/l1);
     }
+
+    /**
+     * Get the best color to fit against a given background
+     *
+     * @param preferred first choice of color
+     * @param secondary second choice of color
+     * @param background background to check
+     * @return first choice it it has a good contrast otherwise it returns the one with the best contrast
+     */
     public static int bestColor(int preferred, int secondary, int background) {
         float r1 = contrastRatio(preferred, background);
         if (r1 >= 1.1f)
@@ -226,8 +269,7 @@ public class Util {
         }
     }
 
-    // Animator Util
-
+    // -----------------------------------Animator Util----------------------------------------
     public static AnimatorSet sequence(Animator[] anims, long delay) {
         return sequence(anims, delay, null);
     }

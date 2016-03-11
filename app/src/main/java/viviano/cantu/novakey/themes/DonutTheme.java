@@ -37,7 +37,7 @@ public class DonutTheme extends BaseTheme {
         pB.setStyle(Paint.Style.STROKE);
         float mem = pB.getStrokeWidth();
         pB.setStrokeWidth(r-sr);
-        canvas.drawCircle(x, y, r-sr, pB);//main circle
+        canvas.drawCircle(x, y, sr + (r-sr) / 2, pB);//main circle
         pB.setStrokeWidth(mem);
         pB.clearShadowLayer();
     }

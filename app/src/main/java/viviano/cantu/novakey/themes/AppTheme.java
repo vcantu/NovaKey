@@ -144,6 +144,8 @@ public class AppTheme {
                 osw.close();
             } catch (IOException e) {
                 e.printStackTrace();
+            } catch (NullPointerException e) {
+                e.printStackTrace();
             }
             return data;
         }

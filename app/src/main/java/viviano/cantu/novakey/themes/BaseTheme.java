@@ -77,8 +77,10 @@ public class BaseTheme implements Theme {
 
     //override to change drawing
     public void drawLines(float x, float y, float r, float sr, float w, Canvas canvas) {
-        if (is3D())
+        if (is3D()) {
+            Draw.shadedLines(x, y + r / 72f, r, sr, 0x80000000, pB, canvas);
             pB.setShadowLayer(r / 72f / 2, 0, r / 72f, 0x80000000);
+        }
         //draw lines and circle
         pB.setColor(accentColor());
         pB.setStyle(Paint.Style.STROKE);
@@ -88,9 +90,6 @@ public class BaseTheme implements Theme {
         pB.clearShadowLayer();
 
         Draw.shadedLines(x, y, r, sr, accentColor(), pB, canvas);
-
-        if (is3D())
-            Draw.shadedLines(x, y + r / 72f, r, sr, 0x80000000, pB, canvas);
     }
 
     private void drawLines(float x, float y, float r, float sr, Canvas canvas) {

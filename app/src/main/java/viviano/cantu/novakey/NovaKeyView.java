@@ -19,6 +19,7 @@ public class NovaKeyView extends View {
     private Theme mTheme;
 	//Dimensions
 	public NovaKeyDimen dimens;
+	public float padding;
 
 	//animations
 	private Paint p;
@@ -41,6 +42,7 @@ public class NovaKeyView extends View {
 
 	public NovaKeyView(Context context) {
 		super(context);
+		setLayerType(LAYER_TYPE_SOFTWARE, null);
 		p = new Paint();
 		drawers = new ArrayList<>();
         mAnimators = new ArrayList<>();
@@ -71,7 +73,7 @@ public class NovaKeyView extends View {
 	@Override
 	public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		updateDimens();
-        setMeasuredDimension((int)dimens.w, (int)dimens.h);
+        setMeasuredDimension((int)dimens.w, (int)(dimens.h));
     }
 
 	//update all
@@ -83,6 +85,10 @@ public class NovaKeyView extends View {
 		updateCoords();
 		dimens.h = (int)(Settings.sharedPref.getFloat("y" + (Controller.landscape ? "_land" : ""),
 				dimens.r) + dimens.r);
+		padding = Settings.sharedPref.getFloat("padd" + (Controller.landscape ? "_land" : ""),
+				getResources().getDimension(R.dimen.default_padding));
+		dimens.h += padding;
+		dimens.y += padding;
 		updateKeyLayout();
 	}
 
