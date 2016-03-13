@@ -13,7 +13,7 @@ import viviano.cantu.novakey.themes.ThemeBuilder;
  * Created by Viviano on 6/22/2015.
  */
 public class Settings {
-    private static final int CURR_VERSION = 22;
+    private static final int CURR_VERSION = 23;
 
     //KEYS
     public static String
@@ -37,14 +37,16 @@ public class Settings {
             //NovaKey 0.3.4
             pref_beta_test = "pref_beta_test",
             //NovaKey 0.3.5
-            pref_long_press_time = "pref_long_press_time";
+            pref_long_press_time = "pref_long_press_time",
+            //Novakey 0.3.7
+            pref_vibrate_level = "pref_vibrate_level";
 
     //Settings
     public static String DEFAULT = "DEFAULT";
     public static boolean hideLetters, hidePassword, vibrate, quickInsert, autoCorrect, quickClose;
     public static boolean hasSpaceBar;
 
-    public static int startVersion = CURR_VERSION, longPressTime = 500;
+    public static int startVersion = CURR_VERSION, longPressTime = 500, vibrateLevel = 50;
 
     //Theme settings
     public static Theme theme;
@@ -69,14 +71,16 @@ public class Settings {
         //Ints
         //this will only default to the given number if the person has never had this preference
         startVersion = sharedPref.getInt(pref_start_version, CURR_VERSION);
+
         longPressTime = sharedPref.getInt(pref_long_press_time, 500);
+        vibrateLevel = sharedPref.getInt(pref_vibrate_level, 50);
 
         theme = themeFromString(sharedPref.getString(pref_theme, Settings.DEFAULT));
         btns = Btn.btnsFromString(sharedPref.getString(pref_btns, Settings.DEFAULT));
         commit();
     }
 
-    //TODO: Note if anyone's version is > 20 show them the message about the new auto feature
+    //TODO: Nif anyone's version is > 20 show them the message about the new auto feature
     /**
      * Will save the settings that aren't saved in other classes
      */

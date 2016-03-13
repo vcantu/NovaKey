@@ -22,12 +22,16 @@
 		    android:key="pref_vibrate"
 		    android:defaultValue="true"
 		    />
-        <!--<CheckBoxPreference
-            android:title="Vibration duration"
-            android:summary="Amount of milliseconds to vibrate for"
+        <com.pavelsikun.seekbarpreference.SeekBarPreference
             android:key="pref_vibrate_level"
-            android:defaultValue="true"
-            /> -->
+            android:title="Vibrate Level"
+            android:summary="Set the level of haptic feedback"
+            android:defaultValue="50"
+            app:msbp_minValue="10"
+            app:msbp_maxValue="200"
+            app:msbp_interval="10"
+            app:msbp_measurementUnit="milliseconds"/>
+
     </PreferenceCategory>
     <PreferenceCategory android:title="Mechanics">
 		<CheckBoxPreference
@@ -48,6 +52,15 @@
             android:key="pref_auto_correct"
             android:defaultValue="true"
             />
+        <com.pavelsikun.seekbarpreference.SeekBarPreference
+            android:key="pref_long_press_time"
+            android:title="Long Press Time"
+            android:summary="Set the time it takes to long press"
+            android:defaultValue="500"
+            app:msbp_minValue="200"
+            app:msbp_maxValue="2000"
+            app:msbp_interval="50"
+            app:msbp_measurementUnit="milliseconds"/>
 
     </PreferenceCategory>
 

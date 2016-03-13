@@ -133,7 +133,6 @@ public class StylePreferenceActivity extends AbstractPreferenceActivity {
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
             SharedPreferences.Editor editor = sharedPref.edit();
 
-            System.out.println(mIs3d);
             editor.putString(Settings.pref_theme, mTheme +
                     "," + mColor1 + "," + mColor2 + "," + mColor3 +
                     "," + (mIsAuto ? "A" : "X") + "," + (mIs3d ? "3d" : "X"));

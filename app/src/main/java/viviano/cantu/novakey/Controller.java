@@ -10,6 +10,7 @@ import android.view.inputmethod.ExtractedText;
 import android.view.inputmethod.ExtractedTextRequest;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 import viviano.cantu.novakey.animations.animators.Animator;
 import viviano.cantu.novakey.animations.animators.CharAnimator;
@@ -33,6 +34,7 @@ public class Controller implements NovaKeyListener.EventListener {
 
     private static NovaKey main;
     private static NovaKeyView view;
+    private static NovaKeyListener listener;
     private static Controller eventListener;
 
     //State
@@ -58,7 +60,8 @@ public class Controller implements NovaKeyListener.EventListener {
          if (Controller.view == null) {
              Controller.view = view;
              Controller.eventListener = new Controller();
-             Controller.view.setOnTouchListener(new NovaKeyListener(eventListener));
+             listener = new NovaKeyListener(eventListener);
+             Controller.view.setOnTouchListener(listener);
          }
     }
 
@@ -70,7 +73,7 @@ public class Controller implements NovaKeyListener.EventListener {
     }
 
     public static void destroy() {
-        main = null; view = null;
+        main = null; view = null; listener = null;
     }
     public static void addState(int flag) {
         int replace_mask = 0;
@@ -106,6 +109,7 @@ public class Controller implements NovaKeyListener.EventListener {
         //rebuild theme
         //rebuild buttons`
         Settings.update();
+        listener.createTimers();//depend on the settings
         //set theme to newly built theme
         view.setTheme(Settings.theme);
         if (Settings.autoColor)
@@ -330,7 +334,7 @@ public class Controller implements NovaKeyListener.EventListener {
     public void onNewArea(int currArea, ArrayList<Integer> areasCrossed) {
         switch(state & NovaKey.STATE_MASK) {
             case NovaKey.ON_KEYS:
-                main.vibrate(50);//TODO: use settings.vibrateLevel
+                main.vibrate(Settings.vibrateLevel);//TODO: use settings.vibrateLevel
                 //Set Deleting
                 if (view.getKey(areasCrossed) == Keyboard.KEYCODE_DELETE) {
                     addState(NovaKey.ROTATING | NovaKey.DELETING);

@@ -29,6 +29,7 @@ public class NovaKeyListener implements View.OnTouchListener {
 
     public NovaKeyListener(EventListener eventListener) {
         sendEvent = eventListener;
+        createTimers();
     }
 
     @Override
@@ -155,32 +156,35 @@ public class NovaKeyListener implements View.OnTouchListener {
     private interface TimerEvent {
         void onFinish();
     }
-    private CustomTimer
-    singlePress = new CustomTimer(Settings.longPressTime, new TimerEvent() {
-        @Override
-        public void onFinish() {
-            sendEvent.onLongPress(currArea, areasCrossed, currX, currY);
-        }
-    }),
-    doublePress = new CustomTimer(1000, new TimerEvent() {
-        @Override
-        public void onFinish() {
-            sendEvent.onTwoFingerLongPress();
-        }
-    }),
-    btnPress = new CustomTimer(500, new TimerEvent() {
-        @Override
-        public void onFinish() {
-            if (currBtn != null)
-                sendEvent.onBtnLongPress(currBtn, currX, currY);
-        }
-    }),
-    clickTimer = new CustomTimer(400, new TimerEvent() {
-        @Override
-        public void onFinish() {
-            isClick = false;
-        }
-    });
+    private CustomTimer singlePress, doublePress, btnPress, clickTimer;
+
+    public void createTimers() {
+        singlePress = new CustomTimer(Settings.longPressTime, new TimerEvent() {
+            @Override
+            public void onFinish() {
+                sendEvent.onLongPress(currArea, areasCrossed, currX, currY);
+            }
+        });
+        doublePress = new CustomTimer(1000, new TimerEvent() {
+            @Override
+            public void onFinish() {
+                sendEvent.onTwoFingerLongPress();
+            }
+        });
+        btnPress = new CustomTimer(Settings.longPressTime, new TimerEvent() {
+            @Override
+            public void onFinish() {
+                if (currBtn != null)
+                    sendEvent.onBtnLongPress(currBtn, currX, currY);
+            }
+        });
+        clickTimer = new CustomTimer(400, new TimerEvent() {
+            @Override
+            public void onFinish() {
+                isClick = false;
+            }
+        });
+    }
     private void startClickTimer() {
         isClick = true;
         clickTimer.begin();

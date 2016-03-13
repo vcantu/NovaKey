@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="material-seekbar-preference-0.12.1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.pavelsikun/material-seekbar-preference/0.12.1/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.pavelsikun/material-seekbar-preference/0.12.1/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.pavelsikun/material-seekbar-preference/0.12.1/2acde2c64f46014b7faedc0811fcd3c48a32e67a/material-seekbar-preference-0.12.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

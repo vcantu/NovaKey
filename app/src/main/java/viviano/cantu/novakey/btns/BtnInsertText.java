@@ -2,6 +2,7 @@ package viviano.cantu.novakey.btns;
 
 import viviano.cantu.novakey.Controller;
 import viviano.cantu.novakey.drawing.Icons;
+import viviano.cantu.novakey.settings.Settings;
 
 /**
  * Created by Viviano on 8/16/2015.
@@ -20,7 +21,7 @@ public class BtnInsertText extends Btn {
     @Override
     public void onClick() {
         //Controller.input(insertText, 0);
-        Controller.vibrate(50);
+        Controller.vibrate(Settings.vibrateLevel);
         Controller.input(" ", 0);
     }
 

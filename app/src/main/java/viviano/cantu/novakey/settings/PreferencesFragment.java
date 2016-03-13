@@ -8,7 +8,6 @@ import android.preference.PreferenceFragment;
 
 import viviano.cantu.novakey.R;
 import viviano.cantu.novakey.setup.TutorialActivity;
-import viviano.cantu.novakey.tests.EmojiSettingActivity;
 
 public class PreferencesFragment extends PreferenceFragment {
 	 @Override
