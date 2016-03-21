@@ -26,7 +26,7 @@ public class BtnToggleModeChange extends Btn implements Btn.LongPressable {
     @Override
     public void onClick() {
         if (!ignoreUpEvent) {
-            switch (Controller.state & NovaKey.KEYS_MASK) {
+            switch (Controller.stateMasked(NovaKey.KEYS_MASK)) {
                 case NovaKey.DEFAULT_KEYS:
                     Controller.setKeys(NovaKey.PUNCTUATION);
                     break;

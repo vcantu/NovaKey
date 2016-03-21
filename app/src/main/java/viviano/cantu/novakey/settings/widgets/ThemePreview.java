@@ -74,9 +74,9 @@ public class ThemePreview extends View {
         //Uncomment this to test contrast formula
 //        float ratio = Util.contrastRatio(theme.secondaryColor(), theme.primaryColor());
 //        p.setTextSize(40);
-//        p.setColor(theme.secondaryColor());
+//        p.setmColor(theme.secondaryColor());
 //        if (theme.primaryColor() == theme.secondaryColor())
-//            p.setColor(Util.contrastColor(theme.primaryColor()));
+//            p.setmColor(Util.contrastColor(theme.primaryColor()));
 //        Draw.text(ratio + "", centerX + radius + 70, centerY, p, canvas);
     }
 

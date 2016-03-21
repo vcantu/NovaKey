@@ -517,8 +517,7 @@ public class NovaKey extends InputMethodService {
             }
 			// deselect all
 			else if (action == CB_DESELECT_ALL) {
-                int i = (Controller.state & CURSOR_LEFT) == CURSOR_LEFT ?
-                        eText.selectionEnd : eText.selectionStart;
+                int i = Controller.hasState(CURSOR_LEFT) ? eText.selectionEnd : eText.selectionStart;
                     ic.setSelection(i, i);
             }
         } catch (Exception e) {}

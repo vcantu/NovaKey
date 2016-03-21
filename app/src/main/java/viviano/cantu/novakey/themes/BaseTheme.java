@@ -45,7 +45,7 @@ public class BaseTheme implements Theme {
     private BtnTheme btnTheme;
     protected int[] textColors = new int[6];
 
-    private boolean mIsAuto = false, mIs3D = false;
+    private boolean mIs3D = false;
 
     public BaseTheme() {
         pBG = new Paint();

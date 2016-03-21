@@ -14,7 +14,7 @@ import viviano.cantu.novakey.settings.widgets.pickers.PickerItem;
  */
 public interface Theme extends PickerItem {
 
-    //TODO: make everything take in a NovaKeyDimens object
+    //TODO: make everything take in a NovaKeyDimens object maybe
 
     /**
      * @return Its name identifier, if it inherits from another theme
@@ -50,6 +50,7 @@ public interface Theme extends PickerItem {
      * @return the contrast color of the theme, usually for keys & icons
      */
     int contrastColor();
+
 
     int buttonColor();//TODO: may remove
 

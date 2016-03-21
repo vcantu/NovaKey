@@ -96,6 +96,7 @@ public class NovaKeyView extends View {
 		if (Controller.currKeyboard != null) {
 			dimens.kl = Controller.currKeyboard;
 			dimens.kl.updateCoords(dimens.x, dimens.y, dimens.r, dimens.sr);
+			invalidate();
 		}
 	}
 
@@ -132,7 +133,7 @@ public class NovaKeyView extends View {
         mTheme.drawBoard(dimens.x, dimens.y, dimens.r, dimens.sr, canvas);
 		mTheme.drawButtons(dimens, canvas);
 
-        switch (Controller.state & NovaKey.STATE_MASK) {
+        switch (Controller.stateMasked(NovaKey.STATE_MASK)) {
             case NovaKey.ON_KEYS:
             default:
                 if (!(Controller.hasState(NovaKey.DEFAULT_KEYS)  &&
@@ -142,9 +143,9 @@ public class NovaKeyView extends View {
                                     && Controller.hasState(NovaKey.CAPSED_LOCKED), canvas);
                 break;
             case NovaKey.ROTATING:
-                switch (Controller.state & NovaKey.ROTATING_MASK) {
+                switch (Controller.stateMasked(NovaKey.ROTATING_MASK)) {
                     case NovaKey.MOVING_CURSOR:
-                        mTheme.drawCursorIcon(Controller.state, dimens.x, dimens.y, dimens.sr, canvas);
+                        mTheme.drawCursorIcon(Controller.getState(), dimens.x, dimens.y, dimens.sr, canvas);
                         break;
                     case NovaKey.INFINITE_MENU:
 						mTheme.drawInfiniteMenu(Controller.infiniteMenu, dimens.x, dimens.y,

@@ -119,7 +119,6 @@ public class KeyLayout implements Iterator<Key>, Iterable<Key> {
         }
     }
 
-    //TODO: curr key
     public void drawKeys(int[] textColors, Paint p, Canvas canvas) {
         for (int g=0; g<keys.length; g++) {
             p.setColor(textColors[g]);

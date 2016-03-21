@@ -10,7 +10,6 @@ import android.view.inputmethod.ExtractedText;
 import android.view.inputmethod.ExtractedTextRequest;
 
 import java.util.ArrayList;
-import java.util.Set;
 
 import viviano.cantu.novakey.animations.animators.Animator;
 import viviano.cantu.novakey.animations.animators.CharAnimator;
@@ -21,7 +20,6 @@ import viviano.cantu.novakey.drawing.emoji.Emoji;
 import viviano.cantu.novakey.menus.InfiniteMenu;
 import viviano.cantu.novakey.menus.OnUpMenu;
 import viviano.cantu.novakey.settings.Settings;
-import viviano.cantu.novakey.utils.Print;
 import viviano.cantu.novakey.utils.Util;
 
 /**
@@ -38,7 +36,8 @@ public class Controller implements NovaKeyListener.EventListener {
     private static Controller eventListener;
 
     //State
-    public static int state, inputType;
+    private static int state;
+    public static int inputType;
     public static boolean onPassword = false;
     public static boolean landscape = false;
 
@@ -75,6 +74,10 @@ public class Controller implements NovaKeyListener.EventListener {
     public static void destroy() {
         main = null; view = null; listener = null;
     }
+
+    /**
+     * @param flag add a state
+     */
     public static void addState(int flag) {
         int replace_mask = 0;
         for (int i=0; i<8; i++) {
@@ -84,6 +87,10 @@ public class Controller implements NovaKeyListener.EventListener {
         }
         state = (state & replace_mask)|flag;
     }
+
+    /**
+     * @param mask remove state at a mask
+     */
     public static void removeState(int mask) {
         int inverse = 0;
         for (int i=0; i<8; i++) {
@@ -93,6 +100,11 @@ public class Controller implements NovaKeyListener.EventListener {
         }
         state &= inverse;
     }
+
+    /**
+     * @param state check if it has this state
+     * @return true if it is
+     */
     public static boolean hasState(int state) {
         int mask = 0;
         for (int i=0; i<8; i++) {
@@ -101,6 +113,22 @@ public class Controller implements NovaKeyListener.EventListener {
                 mask |= testMask;
         }
         return (Controller.state & mask) == state;
+    }
+
+    /**
+     * @param mask mask to check state
+     * @return int to use on a switch
+     */
+    public static int stateMasked(int mask) {
+        return state & mask;
+    }
+
+    /**
+     * @return return a copy of the state
+     */
+    public static int getState() {
+        int s = state;
+        return s;
     }
 
     //--------------------Main Lifecycle---------------------------------------------

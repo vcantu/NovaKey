@@ -4,16 +4,17 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 
 import viviano.cantu.novakey.drawing.Draw;
-import viviano.cantu.novakey.utils.Print;
 
 /**
  * Created by Viviano on 10/12/2015.
  */
 public class Key {
+
     public Character c;
     public int group, loc;
     public float x, y, size = 1;
     public final boolean mAltLayout;
+    private int mColor = 0;
 
     public Key(Character c, int group, int loc) {
         this(c, group, loc, false);
@@ -27,7 +28,18 @@ public class Key {
     }
 
     public void draw(Paint p, Canvas canvas) {
+        if (mColor != 0)
+            p.setColor(mColor);
         Draw.text(c.toString(), x, y, p.getTextSize() * size, p, canvas);
+    }
+
+    /**
+     * Set this key's color. Set to 0 to use default color
+     *
+     * @param color color
+     */
+    public void setColor(int color) {
+        this.mColor = color;
     }
 
     /**
@@ -62,6 +74,7 @@ public class Key {
             return angleAt(group) + 2 * areaWidth / 3;
         return angleAt(group);
     }
+
     public float getDistance(float r, float sr) {
         if (group == 0) {
             if (loc == 0)
