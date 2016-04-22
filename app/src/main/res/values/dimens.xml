@@ -4,6 +4,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 
     <dimen name="emojiSize">28dp</dimen>
+    <dimen name="hex_grid_dimen">48dp</dimen>
 
     <!--Dimensions-->
     <dimen name="default_radius">124dp</dimen>

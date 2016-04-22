@@ -157,17 +157,17 @@ public class ReleasePicker extends View {
 
     //optimal
     private void animateItems() {
-        MultiValueAnimator anim = MultiValueAnimator.create();
+        MultiValueAnimator<Integer> anim = MultiValueAnimator.create();
 
         long singleDur = 500;
         long delay = 50;
         for (int i = 0; i < mData.length; i++) {
-            anim.addInterpolator(new OvershootInterpolator(), delay * i, singleDur);
+            anim.addInterpolator(i, new OvershootInterpolator(), delay * i, singleDur);
         }
 
-        anim.setMultiUpdateListener(new MultiValueAnimator.MultiUpdateListener() {
+        anim.setMultiUpdateListener(new MultiValueAnimator.MultiUpdateListener<Integer>() {
             @Override
-            public void onValueUpdate(ValueAnimator animator, float value, int index) {
+            public void onValueUpdate(ValueAnimator animator, float value, Integer index) {
                 mData[index].scale = value;
                 mData[index].distance = Util.fromFrac(0, mRadius, value);
             }

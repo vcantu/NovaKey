@@ -25,7 +25,6 @@ public class TeachAnimator extends Animator {
         this.command = command;
     }
 
-    @Override
     public AnimatorSet createSet() {
         AnimatorSet set = new AnimatorSet();
         if (command.length() > 0) {
@@ -39,7 +38,7 @@ public class TeachAnimator extends Animator {
                 }
             }
         }
-        set.setStartDelay(delay);
+        set.setStartDelay(mDelay);
         return set;
     }
 
@@ -183,6 +182,11 @@ public class TeachAnimator extends Animator {
             public void onAnimationRepeat(android.animation.Animator animation) {
             }
         };
+    }
+
+    @Override
+    protected ValueAnimator animator() {
+        return null;
     }
 
     private class Fing implements NovaKeyView.Drawer {

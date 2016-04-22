@@ -1,5 +1,6 @@
 package viviano.cantu.novakey.animations.animators;
 
+import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.view.animation.OvershootInterpolator;
 
@@ -18,29 +19,45 @@ public class CharGrow extends CharAnimator {
         super(style);
     }
 
-    public CharGrow(int style, long duration, boolean reverse) {
-        super(style, duration, reverse);
+    /**
+     * Will be called when building the animation to set this particular key's
+     * interpolator
+     *
+     * @param k key whose interpolator you wish to set
+     * @return an interpolator to set
+     */
+    @Override
+    protected TimeInterpolator getInterpolatorFor(Key k) {
+        return new OvershootInterpolator();
     }
 
+    /**
+     * Use this to set the keys of the value maps you want
+     */
     @Override
-    protected void setBeginingState(Key k, boolean removing) {
-        if (!removing)
-            k.size = 0;
+    protected String[] initializeValues() {
+        return new String[0];
     }
 
+    /**
+     * Override this method if you want to set the initial state of a key
+     *
+     * @param k
+     */
     @Override
-    public ValueAnimator animKey(final Key key, long delay) {
-        ValueAnimator anim = ValueAnimator.ofFloat(reverse ? 1 : 0, reverse ? 0 : 1);
-        anim.setDuration(duration / 2);
-        anim.setStartDelay(delay);
-        anim.setInterpolator(new OvershootInterpolator());
-        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator anim) {
-                key.size = (Float)anim.getAnimatedValue();
-                view.invalidate();
-            }
-        });
-        return anim;
+    protected void setInitialState(Key k) {
+        k.size = 0;
+    }
+
+    /**
+     * Override this method and update the key accordingly
+     *
+     * @param k     key to update
+     * @param value percent of animation used tu update key
+     * @return the updated key
+     */
+    @Override
+    protected void updateKey(Key k, float value) {
+        k.size = value;
     }
 }

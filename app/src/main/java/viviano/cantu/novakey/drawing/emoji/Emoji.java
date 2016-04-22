@@ -1,8 +1,13 @@
 package viviano.cantu.novakey.drawing.emoji;
 
+import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.util.Log;
 
@@ -13,6 +18,9 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import viviano.cantu.novakey.R;
 import viviano.cantu.novakey.drawing.Draw;
@@ -24,9 +32,10 @@ import viviano.cantu.novakey.drawing.Icons;
  */
 public class Emoji implements Icons.Drawable {
 
-    public static ArrayList<Emoji> emojis;
+    public static List<Emoji> emojis;
 
-    public static void load(Resources res) {
+    public static void load(Context context) {
+        Resources res = context.getResources();
         emojis = new ArrayList<>();
         try {
             InputStream is = res.openRawResource(R.raw.emoji);
@@ -36,22 +45,27 @@ public class Emoji implements Icons.Drawable {
             JSONArray arr = jObject.getJSONArray("emojis");
 
             for (int i=0; i<arr.length(); i++) {
-                //Get code
                 JSONObject curr = arr.getJSONObject(i);
-                StringBuilder sb = new StringBuilder("");
-                String code = curr.getString("code");
-                String[] S = code.split("-");
-                for (String s : S) {
-                    sb.appendCodePoint(Integer.parseInt(s, 16));
-                }
-                //Get name
-                String name = "";
-                try {
+
+                if (curr.getBoolean("has_img_google")) {
+                    //Get code
+                    StringBuilder sb = new StringBuilder("");
+                    String code = curr.getString("unified");
+                    String[] S = code.split("-");
+                    for (String s : S) {
+                        sb.appendCodePoint(Integer.parseInt(s, 16));
+                    }
+                    //Get name
+                    String name = "";
                     name = curr.getString("name");
-                } catch (Exception e) {
-                    Log.e("Exception", e.toString());
+                    //Get bmp
+                    String image = curr.getString("image");
+                    Bitmap bmp = BitmapFactory.decodeResource(res, res.getIdentifier(
+                            "e_" + image.replace('-', '_').substring(0, image.length() - 4),
+                                    "drawable", context.getPackageName()));
+
+                    emojis.add( new Emoji(name, sb.toString(), bmp));
                 }
-                emojis.add(new Emoji(name, sb.toString(), i));
             }
         } catch (JSONException e) {
             Log.e("Exception", e.toString());
@@ -60,63 +74,46 @@ public class Emoji implements Icons.Drawable {
         }
     }
 
-    public static Emoji find(String value) {
-        for (Emoji e : emojis) {
-            if (e.getValue().equals(value)) {
-                return e;
-            }
-        }
-        return null;
-    }
+//    public static Emoji find(String value) {
+//        if (emojis.containsKey(value))
+//            return emojis.get(value);
+//        return null;
+//    }
+//
+//    public static Emoji findByName(String name) {
+//        for (Map.Entry<String, Emoji> e : emojis.entrySet()) {
+//            if (e.getValue().getName().equals(name)) {
+//                return e.getValue();
+//            }
+//        }
+//        return null;
+//    }
 
     //---------------------------------------------------------------------------------------------
-    private String name, value;
-    private Emoji[] neighbors = new Emoji[6];//All null to start with
-    private int id;//index in array
+    private final String name, value;
+    private final Bitmap bmp;
 
-    public Emoji(String name, String value, int id) {
+    public Emoji(String name, String value, Bitmap bmp) {
         this.name = name;
         this.value = value;
-        this.id = id;
-    }
-
-    public int id() {
-        return id;
+        this.bmp = bmp;
     }
 
     public String getValue() {
         return value;
     }
 
-    public void setNeighbors(Emoji[] neighbors) {
-        this.neighbors = neighbors;
-    }
-
-    //   0  5
-    // 1      4
-    //   2  3
-    public void setNeighbor(int index, Emoji neighbor) {
-        this.neighbors[index] = neighbor;
-        this.neighbors[(index + 3) % 6] = this;
-    }
-
-    public void addNeighbor(Emoji neighbor) {
-        for (int i=0; i<6; i++) {
-            if (this.neighbors[i] == null) {
-                this.neighbors[i] = neighbor;
-                return;
-            }
-        }
-        this.neighbors = new Emoji[6];
-        this.neighbors[0] = neighbor;
-    }
-
-    public Emoji getNeighbor(int index) {
-        return neighbors[index];
+    public String getName() {
+        return name;
     }
 
     @Override
     public void draw(float x, float y, float size, Paint p, Canvas canvas) {
+        canvas.drawBitmap(bmp, //Bitmap.createScaledBitmap(bmp, (int)size, (int)size, false),
+                x - size/2, y - size/2, p);
+    }
+
+    private void drawFromTTF(float x, float y, float size, Paint p, Canvas canvas) {
         Typeface tempTTF = p.getTypeface();
         float tempSize = p.getTextSize();
 
@@ -127,4 +124,7 @@ public class Emoji implements Icons.Drawable {
         p.setTypeface(tempTTF);
         p.setTextSize(tempSize);
     }
+
+
+
 }

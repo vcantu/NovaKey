@@ -6,15 +6,16 @@
     tools:context="viviano.cantu.novakey.tests.EmojiSettingActivity">
 
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <viviano.cantu.novakey.drawing.emoji.HexDisplayView
+        <viviano.cantu.novakey.menus.HexGridView
+            android:id="@+id/hex"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:id="@+id/hexView"/>
+            android:layout_height="200dp" />
 
             <viviano.cantu.novakey.drawing.emoji.ThrowAwayView
                 android:layout_width="match_parent"

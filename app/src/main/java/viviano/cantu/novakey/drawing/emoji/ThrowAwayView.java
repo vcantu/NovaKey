@@ -44,6 +44,8 @@ public class ThrowAwayView extends View implements View.OnTouchListener {
 
         int x = 0;
         int y = 0;
+
+
         for (int i=0; i<5*maxLine; i++) {
             if (index + i >= Emoji.emojis.size())
                 break;
@@ -55,6 +57,9 @@ public class ThrowAwayView extends View implements View.OnTouchListener {
                 y++;
             }
         }
+
+
+
     }
 
 

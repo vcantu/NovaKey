@@ -13,7 +13,7 @@ import viviano.cantu.novakey.themes.ThemeBuilder;
  * Created by Viviano on 6/22/2015.
  */
 public class Settings {
-    private static final int CURR_VERSION = 23;
+    private static final int CURR_VERSION = 24;
 
     //KEYS
     public static String

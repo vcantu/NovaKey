@@ -8,6 +8,7 @@ import android.preference.PreferenceFragment;
 
 import viviano.cantu.novakey.R;
 import viviano.cantu.novakey.setup.TutorialActivity;
+import viviano.cantu.novakey.tests.EmojiSettingActivity;
 
 public class PreferencesFragment extends PreferenceFragment {
 	 @Override
@@ -54,13 +55,16 @@ public class PreferencesFragment extends PreferenceFragment {
                  return true;
              }
          });
-//         Preference testPref = findPreference("pref_test");
-//         testPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-//             @Override
-//             public boolean onPreferenceClick(Preference preference) {
-//                 startActivity(new Intent(getActivity().getApplicationContext(), EmojiSettingActivity.class));
-//                 return true;
-//             }
-//         });
+
+         try {
+             Preference testPref = findPreference("pref_test");
+             testPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                 @Override
+                 public boolean onPreferenceClick(Preference preference) {
+                     startActivity(new Intent(getActivity().getApplicationContext(), EmojiSettingActivity.class));
+                     return true;
+                 }
+             });
+         } catch (Exception e) {}
 	}
 }

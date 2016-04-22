@@ -1,15 +1,17 @@
 package viviano.cantu.novakey;
 
 import android.inputmethodservice.Keyboard;
+import android.os.CountDownTimer;
 import android.text.InputType;
 import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.ExtractedText;
 import android.view.inputmethod.ExtractedTextRequest;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import viviano.cantu.novakey.animations.animators.Animator;
 import viviano.cantu.novakey.animations.animators.CharAnimator;
@@ -20,6 +22,7 @@ import viviano.cantu.novakey.drawing.emoji.Emoji;
 import viviano.cantu.novakey.menus.InfiniteMenu;
 import viviano.cantu.novakey.menus.OnUpMenu;
 import viviano.cantu.novakey.settings.Settings;
+import viviano.cantu.novakey.utils.Pred;
 import viviano.cantu.novakey.utils.Util;
 
 /**
@@ -289,8 +292,10 @@ public class Controller implements NovaKeyListener.EventListener {
         if (editing) {
             EditView editView = new EditView(main);
             editView.setTheme(Controller.view.getTheme());
-            main.setInputView(new ControlView(main));
-            main.addWindow(editView, true);
+            main.setInputView(editView);
+            //main.setInputView(new ControlView(main));
+            //main.addWindow(editView, true);
+            //TODO: floating view support with settings
         }
         else {
             main.clearWindows();
@@ -329,8 +334,8 @@ public class Controller implements NovaKeyListener.EventListener {
 
 ///--------------------------------------------------------TOUCH CONTROLLER---------------------------------------------------------------
     //deleting
-    private ArrayList<Character> charsDeleted;
-    private boolean deleteDone = false;
+    private List<Character> charsDeleted;
+    private boolean deleteStarted = false;//used to prevent double deleting
     //repeating
     private char repeatingChar;
     private int area1, area2;
@@ -362,16 +367,15 @@ public class Controller implements NovaKeyListener.EventListener {
     public void onNewArea(int currArea, ArrayList<Integer> areasCrossed) {
         switch(state & NovaKey.STATE_MASK) {
             case NovaKey.ON_KEYS:
-                main.vibrate(Settings.vibrateLevel);//TODO: use settings.vibrateLevel
+                main.vibrate(Settings.vibrateLevel);
                 //Set Deleting
                 if (view.getKey(areasCrossed) == Keyboard.KEYCODE_DELETE) {
                     addState(NovaKey.ROTATING | NovaKey.DELETING);
+                    charsDeleted = new LinkedList<>();
                     char c = main.handleDelete();
-                    if (c != 0) {
-                        charsDeleted = new ArrayList<>();
-                        charsDeleted.add(c);
-                    }
-                    deleteDone = true;
+                    if (c != 0)
+                        charsDeleted.add(0, c);
+                    deleteStarted = true;
                 }
                 else if (areasCrossed.size() == 3) {
                     //Set Repeating
@@ -416,6 +420,7 @@ public class Controller implements NovaKeyListener.EventListener {
                 }
                 break;
             case NovaKey.ROTATING:
+                //if in center and rotating
                 if (hasState(NovaKey.MOVING_CURSOR) && currArea == 0) {
                     //TODO: make this a timer to reduce human error
                     if (hasState(NovaKey.CURSOR_LEFT) || hasState(NovaKey.CURSOR_BOTH))
@@ -433,16 +438,10 @@ public class Controller implements NovaKeyListener.EventListener {
         if ((state & NovaKey.STATE_MASK) == NovaKey.ROTATING) {
             switch (state & NovaKey.ROTATING_MASK) {
                 case NovaKey.DELETING:
-                    if (!deleteDone) {
-                        if (!clockwise) {
-                            char c = main.handleDelete();
-                            if (c != 0)
-                                charsDeleted.add(c);
-                        } else if (charsDeleted.size() > 0)
-                            main.handleCharacter(charsDeleted.remove(charsDeleted.size() - 1));
-                    }
+                    if (!deleteStarted)
+                        handleDeleteRotate(clockwise);
                     else
-                        deleteDone = false;
+                        deleteStarted = false;
                     break;
                 case NovaKey.MOVING_CURSOR:
                     if (!inCenter) {
@@ -589,4 +588,67 @@ public class Controller implements NovaKeyListener.EventListener {
         }
         return false;
     }
+
+    //called when a the user rotates while on
+    private void handleDeleteRotate(boolean clockwise) {
+        if (!clockwise) {
+            if (goingFast) {
+                String str = main.handleDelete(true, new Pred<Character>() {
+                    @Override
+                    public boolean apply(Character character) {
+                        return character == ' ';
+                    }
+                }, true);
+                for (int i=str.length()-1; i>=0; i--) {
+                    charsDeleted.add(0, str.charAt(i));
+                }
+            }
+            else {
+                char c = main.handleDelete();
+                if (c != 0)
+                    charsDeleted.add(0, c);
+            }
+        } else if (charsDeleted.size() > 0) {
+            if (goingFast) {
+                char c = charsDeleted.get(0);
+                StringBuilder sb = new StringBuilder();
+                while (charsDeleted.size() > 0 && c != ' ') {
+                    c = charsDeleted.remove(0);
+                    sb.append(c);
+                }
+                main.handleText(sb.toString());
+            }
+            else {
+                main.handleCharacter(charsDeleted.remove(0));
+            }
+        }
+        startDeleteTimer();
+    }
+
+
+    private CountDownTimer deleteTimer;
+    private boolean goingFast = false;
+
+    private void startDeleteTimer() {
+        cancelDeleteTimer();
+        long time = goingFast ? 50 : 50;
+        deleteTimer = new CountDownTimer(time, time) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+            }
+
+            @Override
+            public void onFinish() {
+                goingFast = false;
+            }
+        }.start();
+    }
+
+    private void cancelDeleteTimer() {
+        goingFast = true;
+        if (deleteTimer != null)
+            deleteTimer.cancel();
+    }
+
+
 }

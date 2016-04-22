@@ -1,7 +1,12 @@
 package viviano.cantu.novakey.animations.animators;
 
+import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.view.animation.AccelerateInterpolator;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import viviano.cantu.novakey.Key;
 import viviano.cantu.novakey.utils.Util;
@@ -11,41 +16,65 @@ import viviano.cantu.novakey.utils.Util;
  */
 public class ResetCharAnimator extends CharAnimator {
 
-    public ResetCharAnimator(long duration) {
-        super(-1, duration);
-    }
-
     public ResetCharAnimator() {
         this(80);
     }
 
-    @Override
-    public void setBeginingState(Key key, boolean removing) {
-
+    public ResetCharAnimator(long duration) {
+        super(-1, duration);
     }
 
+    /**
+     * Will be called when building the animation to set this particular key's
+     * interpolator
+     *
+     * @param k key whose interpolator you wish to set
+     * @return an interpolator to set
+     */
     @Override
-    public ValueAnimator animKey(final Key key, long delay) {
-        final float size = key.size;
-        final float x = key.x;
-        final float y = key.y;
-        final float endX = key.getDesiredX(view.dimens.x, view.dimens.r, view.dimens.sr);
-        final float endY = key.getDesiredY(view.dimens.y, view.dimens.r, view.dimens.sr);
+    protected TimeInterpolator getInterpolatorFor(Key k) {
+        return new AccelerateInterpolator();
+    }
 
-        ValueAnimator anim = ValueAnimator.ofFloat(0, 1);
-        anim.setDuration(this.duration);
-        anim.setStartDelay(delay);
-        anim.setInterpolator(new AccelerateInterpolator());
-        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator anim) {
-                float frac = (Float)anim.getAnimatedValue();
-                key.size = Util.fromFrac(size, 1, frac);
-                key.x = Util.fromFrac(x, endX, frac);
-                key.y = Util.fromFrac(y, endY, frac);
-                view.invalidate();
-            }
-        });
-        return anim;
+    /**
+     * Initialize the Maps in this.values before adding to them
+     */
+    @Override
+    protected String[] initializeValues() {
+        return new String[] { "size", "x", "y", "endx", "endy" };
+    }
+
+    /**
+     * Override this method if you want to set the initial state of a key
+     *
+     * @param k
+     */
+    @Override
+    protected void setInitialState(Key k) {
+        this.values.get("size").put(k, k.size);
+        this.values.get("x").put(k, k.x);
+        this.values.get("y").put(k, k.y);
+        this.values.get("endx").put(k,
+                k.getDesiredX(view.dimens.x, view.dimens.r, view.dimens.sr));
+        this.values.get("endy").put(k,
+                k.getDesiredY(view.dimens.y, view.dimens.r, view.dimens.sr));
+    }
+
+    /**
+     * Override this method and update the key accordingly
+     *
+     * @param k     key to update
+     * @param value percent of animation used tu update key
+     * @return the updated key
+     */
+    @Override
+    protected void updateKey(Key k, float value) {
+        k.size = Util.fromFrac((Float)values.get("size").get(k), 1, value);
+        k.x = Util.fromFrac(
+                (Float)values.get("x").get(k),
+                (Float)values.get("endx").get(k), value);
+        k.y = Util.fromFrac(
+                (Float)values.get("y").get(k),
+                (Float)values.get("endy").get(k), value);
     }
 }

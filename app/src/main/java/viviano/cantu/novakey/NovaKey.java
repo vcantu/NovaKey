@@ -1,15 +1,22 @@
 package viviano.cantu.novakey;
 
+import android.Manifest;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences.Editor;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.inputmethodservice.InputMethodService;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.InputType;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -32,11 +39,14 @@ import viviano.cantu.novakey.menus.InfiniteMenu;
 import viviano.cantu.novakey.settings.Colors;
 import viviano.cantu.novakey.settings.Settings;
 import viviano.cantu.novakey.themes.AppTheme;
+import viviano.cantu.novakey.utils.Pred;
 import viviano.cantu.novakey.utils.Util;
 
 public class NovaKey extends InputMethodService {
+
     //Statics
 	public static String MY_PREFERENCES = "MyPreferences";
+	public static int OVERLAY_PERMISSION_REQ_CODE = 1234;
 
 	public static int CB_COPY = 1, CB_SELECT_ALL = 2, CB_PASTE = 3, CB_DESELECT_ALL = 4, CB_CUT = 5;
     //flags are allocated like so:
@@ -162,7 +172,7 @@ public class NovaKey extends InputMethodService {
 	}
 
     public void addWindow(View view, boolean fullscreen) {
-        WindowManager.LayoutParams params= new WindowManager.LayoutParams(
+		WindowManager.LayoutParams params= new WindowManager.LayoutParams(
                 fullscreen ? WindowManager.LayoutParams.MATCH_PARENT :
                         WindowManager.LayoutParams.WRAP_CONTENT,
                 fullscreen ? WindowManager.LayoutParams.MATCH_PARENT :
@@ -350,10 +360,10 @@ public class NovaKey extends InputMethodService {
             return getCurrentInputConnection().getCursorCapsMode(editorInfo.inputType);
     }
 
-	/*
-    Deletes the character right before, and returns the character it just deleted,
-    If there is nothing to delete it will return 0;
- */
+	/**
+	 * Deletes the character right before, and returns the character it just deleted,
+	 * If there is nothing to delete it will return 0;
+ 	*/
 	public char handleDelete() {
 		// add deleted character to temporary memory so it can be added
 		InputConnection ic = getCurrentInputConnection();
@@ -366,7 +376,8 @@ public class NovaKey extends InputMethodService {
 			result = c.charAt(0);
 		}
 
-		if (composing.length() > 0 && composingIndex >= composing.length()) {
+        //if composing isnt blank &
+		if (composing.length() > 0 && composingIndex >= composing.length() && false) {
 			if (composing.length() > 1) {
 				composing.deleteCharAt(composing.length() - 1);
 				ic.setComposingText(composing, 1);
@@ -385,12 +396,93 @@ public class NovaKey extends InputMethodService {
 		return result;
 	}
 
+    /**
+     * Call this to delete one character
+     *
+     * @param backspace tue if deleting to left, false if deleting to right
+     * @return the deleted character
+     */
+    public String handleDelete(boolean backspace) {
+        return handleDelete(backspace, new Pred<Character>() {
+            @Override
+            public boolean apply(Character character) {
+                return true;
+            }
+        }, true);
+    }
+
+    /**
+     * Call this to delete until a predicate is reached
+     *
+     * @param backspace true if deleting to left, false if deleting to right
+     * @param until will delete until this predicate is reached
+     * @param included true if it should delete the character which made it stop
+     * @return the deleted string
+     */
+    public String handleDelete(boolean backspace, Pred<Character> until, boolean included) {
+        // add deleted character to temporary memory so it can be added
+        InputConnection ic = getCurrentInputConnection();
+        if (ic == null)
+            return "";
+
+        StringBuilder sb = new StringBuilder();
+
+        ExtractedText et = ic.getExtractedText(new ExtractedTextRequest(), 0);
+        String text = (String) et.text;
+        String back = text.substring(0, et.selectionStart);
+        String front = text.substring(et.selectionEnd);
+
+        char curr = 0;
+        if (backspace) {
+            if (back.length() > 0)
+                curr = back.charAt(back.length() - 1);
+        } else {
+            if (front.length() > 0)
+                curr = front.charAt(0);
+        }
+
+        int soFar = 1;
+
+        while (!until.apply(curr) && curr != 0) {
+            if (backspace)
+                sb.insert(0, curr);
+            else
+                sb.append(curr);
+
+            curr = 0;
+            if (backspace) {
+                if (back.length() - soFar > 0)
+                    curr = back.charAt(back.length() - 1 - soFar);
+            } else {
+                if (front.length() - soFar > 0)
+                    curr = front.charAt(soFar);
+            }
+            soFar++;
+        }
+        if (included && curr != 0) {
+            if (backspace)
+                sb.insert(0, curr);
+            else
+                sb.append(curr);
+        }
+
+        commitComposing();
+        if (sb.length() >= 1) {
+            if (backspace)
+                ic.deleteSurroundingText(sb.length(), 0);
+            else
+                ic.deleteSurroundingText(0, sb.length());
+        }
+        Controller.updateShift(getCurrentInputEditorInfo());
+        return sb.toString();
+    }
+
 	public void handleEnter() {
 		InputConnection ic = getCurrentInputConnection();
 		if (ic == null)
 			return;
 		//TODO: not everything should enter
-		EditorInfo ei = getCurrentInputEditorInfo();		
+		EditorInfo ei = getCurrentInputEditorInfo();
 		if ((ei.inputType & EditorInfo.TYPE_TEXT_FLAG_MULTI_LINE) != 0)
 			handleCharacter('\n');
 		else
