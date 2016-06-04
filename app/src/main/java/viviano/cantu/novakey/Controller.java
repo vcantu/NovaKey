@@ -24,6 +24,7 @@ import viviano.cantu.novakey.menus.OnUpMenu;
 import viviano.cantu.novakey.settings.Settings;
 import viviano.cantu.novakey.utils.Pred;
 import viviano.cantu.novakey.utils.Util;
+import viviano.cantu.novakey.view.NovaKeyView;
 
 /**
  * Created by Viviano on 7/10/2015.
@@ -336,6 +337,8 @@ public class Controller implements NovaKeyListener.EventListener {
     //deleting
     private List<Character> charsDeleted;
     private boolean deleteStarted = false;//used to prevent double deleting
+    private CountDownTimer deleteTimer;
+    private boolean goingFast = false;
     //repeating
     private char repeatingChar;
     private int area1, area2;
@@ -625,13 +628,9 @@ public class Controller implements NovaKeyListener.EventListener {
         startDeleteTimer();
     }
 
-
-    private CountDownTimer deleteTimer;
-    private boolean goingFast = false;
-
-    private void startDeleteTimer() {
+    private void startDeleteTimer() {;
+        long time = goingFast ? 30 : 30;
         cancelDeleteTimer();
-        long time = goingFast ? 50 : 50;
         deleteTimer = new CountDownTimer(time, time) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -649,6 +648,4 @@ public class Controller implements NovaKeyListener.EventListener {
         if (deleteTimer != null)
             deleteTimer.cancel();
     }
-
-
 }

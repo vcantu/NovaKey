@@ -1,22 +1,15 @@
 package viviano.cantu.novakey;
 
-import android.Manifest;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences.Editor;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.inputmethodservice.InputMethodService;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.text.InputType;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -27,7 +20,6 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.ExtractedText;
 import android.view.inputmethod.ExtractedTextRequest;
 import android.view.inputmethod.InputConnection;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -41,6 +33,7 @@ import viviano.cantu.novakey.settings.Settings;
 import viviano.cantu.novakey.themes.AppTheme;
 import viviano.cantu.novakey.utils.Pred;
 import viviano.cantu.novakey.utils.Util;
+import viviano.cantu.novakey.view.NovaKeyView;
 
 public class NovaKey extends InputMethodService {
 
@@ -120,7 +113,9 @@ public class NovaKey extends InputMethodService {
         clipboard.addPrimaryClipChangedListener(new ClipboardManager.OnPrimaryClipChangedListener() {
             @Override
             public void onPrimaryClipChanged() {
-                Clipboard.add(clipboard.getPrimaryClip().getItemAt(0).getText().toString());
+                try {
+                    Clipboard.add(clipboard.getPrimaryClip().getItemAt(0).getText().toString());
+                } catch (NullPointerException e) {};
             }
         });
 		vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);

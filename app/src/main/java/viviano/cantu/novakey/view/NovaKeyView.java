@@ -1,13 +1,19 @@
-package viviano.cantu.novakey;
+package viviano.cantu.novakey.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.inputmethodservice.Keyboard;
 import android.view.View;
+import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
+import viviano.cantu.novakey.Controller;
+import viviano.cantu.novakey.Location;
+import viviano.cantu.novakey.NovaKey;
+import viviano.cantu.novakey.NovaKeyDimen;
+import viviano.cantu.novakey.R;
 import viviano.cantu.novakey.animations.animators.Animator;
 import viviano.cantu.novakey.btns.Btn;
 import viviano.cantu.novakey.settings.Settings;
@@ -25,7 +31,7 @@ public class NovaKeyView extends View {
 	private Paint p;
 	private ArrayList<Drawer> drawers;
 	private ArrayList<Animator> mAnimators;
-	
+
 	//candidates
 	public boolean showCandidates = false;
 	private float candidateHeight;
@@ -51,7 +57,7 @@ public class NovaKeyView extends View {
         updateDimens();
 	}
 
-    /**
+	/**
      * Will set this view's theme with the given one
      *
      * @param theme theme to set to
@@ -69,7 +75,7 @@ public class NovaKeyView extends View {
     public Theme getTheme() {
         return mTheme;
     }
-	
+
 	@Override
 	public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		updateDimens();
@@ -120,7 +126,7 @@ public class NovaKeyView extends View {
 		dimens.y = y;
 	}
 
-	
+
 	@Override
 	public void onDraw(Canvas canvas) {
 		if (canvas != null)
@@ -182,32 +188,32 @@ public class NovaKeyView extends View {
         }
         mAnimators.clear();
     }
-	
+
 	private void drawCandidates(float x, float y, Paint p, Canvas canvas) {
 		String[] DELETE = new String[] { "candidates", "candidate", "candid" };
-		
+
 		float startAngle = (float)(-Math.PI * 2 / 5 * 2);
 		for (int j=0; j<3; j++) {
 			startAngle += Math.PI * 2 / 5;
 			String s = DELETE[j];
 			float textStartAngle = startAngle - p.measureText(s) / dimens.r / 2;
-			
+
 			int length = 0;
 			for (int i=0; i<s.length(); i++) {
 				length += p.measureText(s, i, i+1) / 2;
-				
+
 				float angle = textStartAngle + length / dimens.r;
 				canvas.rotate((float) Math.toDegrees(angle), x, y);
 				//p.setTextSize(textSize * (float)Math.cos(angle));
 				canvas.drawText(s.substring(i, i + 1), x - p.measureText(s.substring(i, i + 1)) / 2, y - dimens.r, p);
 				canvas.rotate((float) Math.toDegrees(-angle), x, y);
-				
+
 				length += p.measureText(s, i, i+1) / 2;
 			}
 		}
 		p.setTextSize(/* textSize*/ 100);
 	}
-	
+
 	/*
 	 * will return the keyCode for the actions done
 	 * or Keyboard.KEYCODE_CANCEL if invalid
@@ -227,16 +233,16 @@ public class NovaKeyView extends View {
 			Location l = getLoc(areasCrossed);
 			try { //makes sure is l checks out
 				return Controller.currKeyboard.getCharKey(l.x, l.y);
-			} catch (Exception e) {}		
+			} catch (Exception e) {}
 		}
 		return Keyboard.KEYCODE_CANCEL;
 	}
-	
+
 	public int getGesture(ArrayList<Integer> areasCrossed) {
 		int size = areasCrossed.size();
 		if (size < 3 || size > 5)
 			return Keyboard.KEYCODE_CANCEL;
-		
+
 		int first = areasCrossed.get(0), last = areasCrossed.get(size-1);
 		boolean hasZero = areasCrossed.contains(0),
                 hasThree = areasCrossed.contains(3);
@@ -250,7 +256,7 @@ public class NovaKeyView extends View {
 			return Keyboard.KEYCODE_SHIFT;
 		return Keyboard.KEYCODE_CANCEL;
 	}
-	
+
 	public Location getLoc(ArrayList<Integer> areasCrossed) {
 		if (areasCrossed.size() <= 0)
 			return null;
@@ -259,7 +265,7 @@ public class NovaKeyView extends View {
 		int firstArea = areasCrossed.get(0);
 		int lastArea = areasCrossed.get(areasCrossed.size() > 1 ? areasCrossed.size() - 1 : 0);//sets to last or first if there is only one value
 		int secondArea = areasCrossed.get(areasCrossed.size() > 1 ? 1 : 0);//sets to second value or first if there is only one value
-		
+
 		//Inside circle
 		if (firstArea >= 0) {
 			//loops twice checks first and last area first, then checks first and second area
@@ -284,7 +290,7 @@ public class NovaKeyView extends View {
 		}
 		return null;
 	}
-	
+
 	/*
 	 * will return 0 if inside inner circle
 	 * will return [1,5] depending on which area
@@ -316,7 +322,7 @@ public class NovaKeyView extends View {
 		}
 		return Keyboard.KEYCODE_CANCEL;
 	}
-	
+
 	/*
 	 * Will return a number [1, 5]
 	 * representing which sector, the x and y is in

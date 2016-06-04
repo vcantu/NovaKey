@@ -26,9 +26,6 @@ public class HexGridView extends View implements GestureDetector.OnGestureListen
     private float offX = 0, offY = 0;
     private Paint p;
 
-    private boolean mHasChanged = true;
-    private Bitmap mCache = null;
-
     public HexGridView(Context context) {
         this(context, null);
     }

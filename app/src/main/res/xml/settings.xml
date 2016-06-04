@@ -91,9 +91,9 @@
         <Preference android:title="Join Our Beta Test!"
             android:summary="Get the new features before anyone else."
             android:key="pref_beta_test"></Preference>
-        <!--<Preference android:title="Test"-->
-            <!--android:summary="REMOVE FROM FINAL VERSION"-->
-            <!--android:key="pref_test"></Preference>-->
+        <Preference android:title="Test"
+            android:summary="REMOVE FROM FINAL VERSION"
+            android:key="pref_test"></Preference>
     </PreferenceCategory>
 
 </PreferenceScreen>

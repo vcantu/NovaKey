@@ -1,20 +1,10 @@
 package viviano.cantu.novakey.animations.animators;
 
-import android.animation.AnimatorSet;
 import android.animation.TimeInterpolator;
-import android.animation.ValueAnimator;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Path;
-import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AnticipateInterpolator;
-import android.view.animation.OvershootInterpolator;
-
-import java.util.ArrayList;
 
 import viviano.cantu.novakey.Key;
 import viviano.cantu.novakey.Location;
-import viviano.cantu.novakey.NovaKeyView;
 import viviano.cantu.novakey.utils.Util;
 
 /**

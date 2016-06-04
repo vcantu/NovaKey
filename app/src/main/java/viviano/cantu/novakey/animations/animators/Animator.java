@@ -2,7 +2,7 @@ package viviano.cantu.novakey.animations.animators;
 
 import android.animation.ValueAnimator;
 
-import viviano.cantu.novakey.NovaKeyView;
+import viviano.cantu.novakey.view.NovaKeyView;
 
 /**
  * Created by Viviano on 9/28/2015.

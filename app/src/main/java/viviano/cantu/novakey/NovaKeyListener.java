@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import viviano.cantu.novakey.btns.Btn;
 import viviano.cantu.novakey.settings.Settings;
+import viviano.cantu.novakey.view.NovaKeyView;
 
 /**
  * Created by Viviano on 7/10/2015.
