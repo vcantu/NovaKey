@@ -8,7 +8,7 @@ import android.preference.PreferenceManager;
 
 import viviano.cantu.novakey.Font;
 import viviano.cantu.novakey.drawing.Icons;
-import viviano.cantu.novakey.KeyLayout;
+import viviano.cantu.novakey.model.keyboards.KeyLayout;
 import viviano.cantu.novakey.NovaKey;
 import viviano.cantu.novakey.setup.SetupActivity;
 import viviano.cantu.novakey.themes.AppTheme;

@@ -47,10 +47,10 @@ public class Btn {
         return false;
     }
 
-    public void draw(NovaKeyDimen dimens, BtnTheme theme, Canvas canvas) {
-        float bx = (float)Math.cos(angle) * dist * dimens.r + dimens.x,
-              by = (float)Math.sin(angle) * dist * dimens.r + dimens.y;
-        theme.draw(icon == null ? text : icon, bx, by, shape, dimens, canvas);
+    public void draw(float x, float y, float r, BtnTheme theme, Canvas canvas) {
+        float bx = (float)Math.cos(angle) * dist * r + x,
+              by = (float)Math.sin(angle) * dist * r + y;
+        theme.draw(icon == null ? text : icon, bx, by, shape, null, canvas);
     }
 
     public static float getRadius(int size, float r) {

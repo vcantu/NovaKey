@@ -5,12 +5,10 @@ import android.graphics.LightingColorFilter;
 import android.graphics.Paint;
 import android.graphics.Path;
 
-import viviano.cantu.novakey.NovaKeyDimen;
 import viviano.cantu.novakey.drawing.Draw;
 import viviano.cantu.novakey.Font;
 import viviano.cantu.novakey.drawing.Icons;
-import viviano.cantu.novakey.KeyLayout;
-import viviano.cantu.novakey.NovaKey;
+import viviano.cantu.novakey.model.keyboards.KeyLayout;
 import viviano.cantu.novakey.btns.BtnTheme;
 import viviano.cantu.novakey.menus.InfiniteMenu;
 import viviano.cantu.novakey.menus.OnUpMenu;
@@ -99,12 +97,15 @@ public class BaseTheme implements Theme {
     /**
      * Make the buttons draw themselves with the given parameters
      *
-     * @param dimens dimensions of the keyboard
+     * @param x center X position
+     * @param y center Y position
+     * @param r radius of keyboard
      * @param canvas canvas to draw on
      */
-    public void drawButtons(NovaKeyDimen dimens, Canvas canvas) {
+    @Override
+    public void drawButtons(float x, float y, float r, Canvas canvas) {
         for (int i = 0; i < Settings.btns.size(); i++) {
-            Settings.btns.get(i).draw(dimens, btnTheme, canvas);
+            Settings.btns.get(i).draw(x, y, r, btnTheme, canvas);
         }
     }
 
@@ -130,20 +131,20 @@ public class BaseTheme implements Theme {
     /**
      * Draw cursor icons depending on the state of the cursor
      *
-     * @param state  state of the cursor
+     * @param cursorCode  state of the cursor
      * @param x      center X position
      * @param y      center Y position
      * @param sr     small radius of keyboard
      * @param canvas canvas to draw on
      */
     @Override
-    public void drawCursorIcon(int state, float x, float y, float sr, Canvas canvas) {
+    public void drawCursorIcon(int cursorCode, float x, float y, float sr, Canvas canvas) {
         pB.setColorFilter(new LightingColorFilter(textColors()[0], 0));
 
         Draw.bitmap(Icons.cursors, x, y, 1, pB, canvas);
-        if ((state & NovaKey.CURSOR_RIGHT) == NovaKey.CURSOR_RIGHT)
+        if (cursorCode >= 0)
             Draw.bitmap(Icons.cursorLeft, x, y, 1, pB, canvas);
-        if ((state & NovaKey.CURSOR_LEFT) == NovaKey.CURSOR_LEFT)
+        if (cursorCode <= 0)
             Draw.bitmap(Icons.cursorRight, x, y, 1, pB, canvas);
 
         pB.setColorFilter(null);

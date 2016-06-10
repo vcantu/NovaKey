@@ -2,165 +2,83 @@ package viviano.cantu.novakey.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.inputmethodservice.Keyboard;
 import android.view.View;
-import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
 import viviano.cantu.novakey.Controller;
 import viviano.cantu.novakey.Location;
-import viviano.cantu.novakey.NovaKey;
-import viviano.cantu.novakey.NovaKeyDimen;
-import viviano.cantu.novakey.R;
 import viviano.cantu.novakey.animations.animators.Animator;
 import viviano.cantu.novakey.btns.Btn;
+import viviano.cantu.novakey.model.DrawModel;
+import viviano.cantu.novakey.model.NovaKeyModel;
+import viviano.cantu.novakey.model.ShiftState;
+import viviano.cantu.novakey.model.StateModel;
+import viviano.cantu.novakey.model.ViewModel;
 import viviano.cantu.novakey.settings.Settings;
 import viviano.cantu.novakey.themes.Theme;
 import viviano.cantu.novakey.utils.Util;
 
 public class NovaKeyView extends View {
-    //BaseTheme
-    private Theme mTheme;
-	//Dimensions
-	public NovaKeyDimen dimens;
-	public float padding;
 
+	private StateModel mModel;
+	private ViewModel mViewModel;
 	//animations
-	private Paint p;
 	private ArrayList<Drawer> drawers;
 	private ArrayList<Animator> mAnimators;
-
-	//candidates
-	public boolean showCandidates = false;
-	private float candidateHeight;
-
-	private final Character[] returnAfterSpace = new Character[]
-			{ '.', ',', ';', '&', '!', '?' };
-	public boolean shouldReturnAfterSpace(Character c) {
-		for (Character C : returnAfterSpace) {
-			if (C == c)
-			    return true;
-		}
-		return false;
-	}
 
 	public NovaKeyView(Context context) {
 		super(context);
 		setLayerType(LAYER_TYPE_SOFTWARE, null);
-		p = new Paint();
 		drawers = new ArrayList<>();
         mAnimators = new ArrayList<>();
-
-        mTheme = Settings.theme;
-        updateDimens();
 	}
 
-	/**
-     * Will set this view's theme with the given one
-     *
-     * @param theme theme to set to
-     * @throws IllegalArgumentException if the theme passed is null
-     */
-	public void setTheme(Theme theme) {
-        if (theme == null)
-            throw new IllegalArgumentException("Theme cannot be null");
-        mTheme = theme;
-    }
+	public void setModel(NovaKeyModel model) {
+		mModel = model;
+		mViewModel = new ViewModel((DrawModel) mModel);//ONLY CAST HERE
+	}
 
-    /**
-     * @return this view's current theme
-     */
-    public Theme getTheme() {
-        return mTheme;
-    }
 
 	@Override
 	public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-		updateDimens();
-        setMeasuredDimension((int)dimens.w, (int)(dimens.h));
+        setMeasuredDimension(mViewModel.getWidth(), mViewModel.getHeight());
     }
-
-	//update all
-	public void updateDimens() {
-		if (dimens == null)
-			dimens = new NovaKeyDimen();
-		dimens.w = getResources().getDisplayMetrics().widthPixels;
-		updateRadius();
-		updateCoords();
-		dimens.h = (int)(Settings.sharedPref.getFloat("y" + (Controller.landscape ? "_land" : ""),
-				dimens.r) + dimens.r);
-		padding = Settings.sharedPref.getFloat("padd" + (Controller.landscape ? "_land" : ""),
-				getResources().getDimension(R.dimen.default_padding));
-		dimens.h += padding;
-		dimens.y += padding;
-		updateKeyLayout();
-	}
-
-	public void updateKeyLayout() {
-		if (Controller.currKeyboard != null) {
-			dimens.kl = Controller.currKeyboard;
-			dimens.kl.updateCoords(dimens.x, dimens.y, dimens.r, dimens.sr);
-			invalidate();
-		}
-	}
-
-	public void updateRadius() {
-		setRadii(Settings.sharedPref.getFloat("size" + (Controller.landscape ? "_land" : ""),
-                getResources().getDimension(R.dimen.default_radius)));
-    }
-
-	public void updateCoords() {
-		setCoords(Settings.sharedPref.getFloat("x" + (Controller.landscape ? "_land" : ""),
-                        dimens.w / 2), dimens.r);
-	}
-
-    private void setRadii(float r) {
-		dimens.r = r;
-		dimens.sr = r / Settings.sharedPref.getFloat("smallRadius", 3);
-    }
-
-	private void setCoords(float x, float y) {
-		dimens.x = x;
-		dimens.y = y;
-	}
-
 
 	@Override
 	public void onDraw(Canvas canvas) {
 		if (canvas != null)
             super.onDraw(canvas);
 
-		mTheme.drawBackground(0, 0, dimens.w, dimens.h, dimens.x, dimens.y,
-				dimens.r, dimens.sr, canvas);
+		Theme mTheme = mViewModel.getTheme();
+		float w = mViewModel.getWidth(), h = mViewModel.getHeight();
+		float x = mViewModel.getX(), y = mViewModel.getY();
+		float r = mViewModel.getRadius(), sr = mViewModel.getSmallRadius();
 
-                                                //TODO: undocked---vvv
-        mTheme.drawBoard(dimens.x, dimens.y, dimens.r, dimens.sr, canvas);
-		mTheme.drawButtons(dimens, canvas);
+		mTheme.drawBackground(0, 0, w, h, x, y,
+				r, sr, canvas);
 
-        switch (Controller.stateMasked(NovaKey.STATE_MASK)) {
-            case NovaKey.ON_KEYS:
+        mTheme.drawBoard(x, y, r, sr, canvas);
+		//TODO: mTheme.drawButtons(dimens, canvas);
+
+        switch (mModel.getUserState()) {
+			case TYPING:
             default:
-                if (!(Controller.hasState(NovaKey.DEFAULT_KEYS)  &&
+                if (!(mModel.getKeyboardCode() > 0  && //on an alphabet
                         Settings.hideLetters || (Settings.hidePassword && Controller.onPassword)))
-                    mTheme.drawKeys(dimens.x, dimens.y, dimens.r, dimens.sr, Controller.currKeyboard,
-                            Controller.hasState(NovaKey.DEFAULT_KEYS)
-                                    && Controller.hasState(NovaKey.CAPSED_LOCKED), canvas);
+                    mTheme.drawKeys(x, y, r, sr, mModel.getKeyboard(),
+                            mModel.getShiftState() == ShiftState.CAPS_LOCKED, canvas);
                 break;
-            case NovaKey.ROTATING:
-                switch (Controller.stateMasked(NovaKey.ROTATING_MASK)) {
-                    case NovaKey.MOVING_CURSOR:
-                        mTheme.drawCursorIcon(Controller.getState(), dimens.x, dimens.y, dimens.sr, canvas);
-                        break;
-                    case NovaKey.INFINITE_MENU:
-						mTheme.drawInfiniteMenu(Controller.infiniteMenu, dimens.x, dimens.y,
-								dimens.r, dimens.sr, canvas);
-                        break;
-                }
-                break;
-            case NovaKey.ON_MENU:
-                mTheme.drawOnUpMenu(Controller.onUpMenu, dimens.x, dimens.y, dimens.r, dimens.sr,
+			case SELECTING:
+				mTheme.drawCursorIcon(mModel.getCursorMode(), x, y, sr, canvas);
+				break;
+			case ON_INFINITE_MENU:
+				mTheme.drawInfiniteMenu(mModel.getInfiniteMenu(), x, y,
+						r, sr, canvas);
+				break;
+			case ON_UP_MENU:
+                mTheme.drawOnUpMenu(mModel.getOnUpMenu(), x, y, r, sr,
 						canvas);
                 break;
         }
@@ -172,7 +90,6 @@ public class NovaKeyView extends View {
 	}
 
 	public void animate(Animator animator) {
-        mAnimators.add(animator);
 		animator.start(this);
 	}
 
@@ -189,37 +106,12 @@ public class NovaKeyView extends View {
         mAnimators.clear();
     }
 
-	private void drawCandidates(float x, float y, Paint p, Canvas canvas) {
-		String[] DELETE = new String[] { "candidates", "candidate", "candid" };
-
-		float startAngle = (float)(-Math.PI * 2 / 5 * 2);
-		for (int j=0; j<3; j++) {
-			startAngle += Math.PI * 2 / 5;
-			String s = DELETE[j];
-			float textStartAngle = startAngle - p.measureText(s) / dimens.r / 2;
-
-			int length = 0;
-			for (int i=0; i<s.length(); i++) {
-				length += p.measureText(s, i, i+1) / 2;
-
-				float angle = textStartAngle + length / dimens.r;
-				canvas.rotate((float) Math.toDegrees(angle), x, y);
-				//p.setTextSize(textSize * (float)Math.cos(angle));
-				canvas.drawText(s.substring(i, i + 1), x - p.measureText(s.substring(i, i + 1)) / 2, y - dimens.r, p);
-				canvas.rotate((float) Math.toDegrees(-angle), x, y);
-
-				length += p.measureText(s, i, i+1) / 2;
-			}
-		}
-		p.setTextSize(/* textSize*/ 100);
-	}
-
 	/*
 	 * will return the keyCode for the actions done
 	 * or Keyboard.KEYCODE_CANCEL if invalid
 	 */
 	public int getKey(ArrayList<Integer> areasCrossed) {
-		if (Controller.currKeyboard == null || areasCrossed.size() <= 0)
+		if (areasCrossed.size() <= 0)
 			return Keyboard.KEYCODE_CANCEL;
 		//regular areas
 		//gets first and last of list
@@ -232,7 +124,7 @@ public class NovaKeyView extends View {
 			}
 			Location l = getLoc(areasCrossed);
 			try { //makes sure is l checks out
-				return Controller.currKeyboard.getCharKey(l.x, l.y);
+				return mModel.getKeyboard().getLowercase(l.x, l.y);
 			} catch (Exception e) {}
 		}
 		return Keyboard.KEYCODE_CANCEL;
@@ -297,9 +189,9 @@ public class NovaKeyView extends View {
 	 * will return Keyboard.KEYCODE_CANCEL if not valid
 	 */
 	public int getArea(float x, float y) {
-		if (Util.distance(dimens.x, dimens.y, x, y) <= dimens.sr) //inner circle
+		if (Util.distance(mViewModel.getX(), mViewModel.getY(), x, y) <= mViewModel.getSmallRadius()) //inner circle
 			return 0;
-		else if (Util.distance(dimens.x, dimens.y, x, y) <= dimens.r)
+		else if (Util.distance(mViewModel.getX(), mViewModel.getY(), x, y) <= mViewModel.getRadius())
 			return getSector(x, y);
 		return Keyboard.KEYCODE_CANCEL;//outside area
 	}
@@ -330,31 +222,37 @@ public class NovaKeyView extends View {
 	 * use this with raw coords
 	 */
 	public int getSector(float x, float y) {
-		return getSectorFromCenter(x, y, dimens.x, dimens.y);
+		return getSectorFromCenter(x, y, mViewModel.getX(), mViewModel.getY());
 	}
 
     public boolean onBtn(float x, float y, Btn btn) {
-        return btn != null && btn.onBtn(x, y, dimens.x, dimens.y, dimens.r);
+        return btn != null && btn.onBtn(x, y,
+				mViewModel.getX(), mViewModel.getY(), mViewModel.getRadius());
     }
 
     //if area is -1 returns between 5 & 1
     public float getAreaX(int area) {
         if (area > 0) {
             double a = (area-1) * (Math.PI * 2 / 5) + Math.PI / 2 + (Math.PI / 5);
-            return (float)(dimens.x + Math.cos(a) * (dimens.sr + (dimens.r - dimens.sr) / 2));
+            return (float)(mViewModel.getX() + Math.cos(a) *
+					(mViewModel.getSmallRadius() +
+							(mViewModel.getRadius() - mViewModel.getSmallRadius()) / 2));
         }
-        return dimens.x;
+        return mViewModel.getX();
     }
 
     //if area is -1 returns between 5 & 1
     public float getAreaY(int area) {
         if (area > 0) {
             double a = (area-1) * (Math.PI * 2 / 5) + Math.PI / 2 + (Math.PI / 5);
-            return (float)(dimens.y - Math.sin(a) * (dimens.sr + (dimens.r - dimens.sr) / 2));
+            return (float)(mViewModel.getY() - Math.sin(a) *
+					(mViewModel.getSmallRadius() +
+							(mViewModel.getRadius() - mViewModel.getSmallRadius()) / 2));
         }
         if (area == 0)
-            return dimens.y;
-        return dimens.y - (dimens.sr + (dimens.r - dimens.sr) / 2);
+            return mViewModel.getY();
+        return mViewModel.getY() - (mViewModel.getSmallRadius() +
+				(mViewModel.getRadius() - mViewModel.getSmallRadius()) / 2);
     }
 
 	public void addDrawer(Drawer drawer) {

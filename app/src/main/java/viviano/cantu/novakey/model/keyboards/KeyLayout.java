@@ -1,34 +1,42 @@
-package viviano.cantu.novakey;
+package viviano.cantu.novakey.model.keyboards;
 
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
+
+import viviano.cantu.novakey.R;
 
 /**
  * Holds information about all keyboards
  * Holds all keyboards
  * To get a keyboard use
  *      KeyLayout.get("NAME_HERE");
- * To get a specific key in char format use
- *      .getCharKey(group, loc);
- * To get a specific key in string format use
- *      .getStringKey(group, loc);
  * Compare KeyLayouts using
  *      .equals(layout);
  */
 public class KeyLayout implements Iterator<Key>, Iterable<Key> {
-    private Key[][] keys;
-    public String name;
+
+    private final Key[][] keys;
+    private final String name;
+
+    public final List<KeyProperties> properties;
 
     private int currG = 0, currL = 0;
 
     public KeyLayout(String name, Key[][] keys) {
         this.keys = keys;
         this.name = name;
+        List<KeyProperties> temp = new ArrayList<>();
+        for (Key k : this) {
+            temp.add(k.properties);
+        }
+        properties = Collections.unmodifiableList(temp);
     }
 
     //Iterator implementation iterates through each key in order by group first then location
@@ -62,81 +70,41 @@ public class KeyLayout implements Iterator<Key>, Iterable<Key> {
         throw new UnsupportedOperationException();
     }
 
-    public String getStringKey(int group, int loc) {
-        return getCharKey(group, loc).toString();
+    /**
+     * @param group key group
+     * @param loc key location
+     * @return the key's char in uppercase at the given group and location
+     */
+    public Character getUppercase(int group, int loc) {
+        return getKey(group, loc).getUppercase();
     }
 
-    public Character getCharKey(int group, int loc) {
-        return getKey(group, loc).c;
+    /**
+     * @param group key group
+     * @param loc key location
+     * @return the key's char in lowercase at the given group and location
+     */
+    public Character getLowercase(int group, int loc) {
+        return getKey(group, loc).getLowercase();
     }
 
-    public Key getKey(int group, int loc) {
+    private Key getKey(int group, int loc) {
         if (loc > keys[group].length)//for alt layouts
             return keys[group][0];
         return keys[group][loc];
     }
 
-    public Key getKey(char c) {
-        for (int g=0; g<keys.length; g++) {
-            for (int l=0; l<keys[g].length; l++) {
-                if (("" + keys[g][l].c).equalsIgnoreCase("" + c))
-                    return keys[g][l];
-            }
-        }
-        return null;
+    @Override
+    public boolean equals(Object that) {
+        if (that instanceof KeyLayout)
+            return this.name.equalsIgnoreCase(((KeyLayout)that).name);
+        if (that instanceof String)
+            return this.name.equalsIgnoreCase((String)that);
+        return false;
     }
 
-    public boolean equals(KeyLayout layout) {
-        return name.equalsIgnoreCase(layout.name);
-    }
-    public boolean equals(String name) {
-        return this.name.equalsIgnoreCase(name);
-    }
-
-
-    public int getGroup(char c) {
-        Key k = getKey(c);
-        if (k != null)
-            return k.group;
-        return -1;
-    }
-
-    public int getLoc(char c) {
-        Key k = getKey(c);
-        if (k != null)
-            return k.loc;
-        return -1;
-    }
-
-    public void setShifted(boolean status) {
-        for (int i=0; i<keys.length; i++) {
-            for (int j=0; j<keys[i].length; j++) {
-                if (status)
-                    keys[i][j].toUpperCase();
-                else
-                    keys[i][j].toLowerCase();
-            }
-        }
-    }
-
-    public void drawKeys(int[] textColors, Paint p, Canvas canvas) {
-        for (int g=0; g<keys.length; g++) {
-            p.setColor(textColors[g]);
-            for (int l=0; l<keys[g].length; l++) {
-                keys[g][l].draw(p, canvas);
-            }
-        }
-    }
-
-    public void updateCoords(float centerX, float centerY, float radius, float smallRadius) {
-        for (int g=0; g<keys.length; g++) {
-            for (int l=0; l<keys[g].length; l++) {
-                keys[g][l].updateCoords(centerX, centerY, radius, smallRadius);
-            }
-        }
-    }
-
-    //Statics
+    //--------------------------------Statics------------------------------------
+    public static final int SYMBOLS = -2, PUNCTUATION = -1, DEFAULT = 0;
     private static ArrayList<KeyLayout> KEYBOARDS;
     //Creates keyboards
     public static void CreateKeyboards(Resources res) {

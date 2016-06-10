@@ -1,6 +1,6 @@
 package viviano.cantu.novakey;
 
-import android.content.SharedPreferences;
+import viviano.cantu.novakey.model.keyboards.KeyLayout;
 
 /**
  * Created by Viviano on 10/7/2015.

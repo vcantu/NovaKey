@@ -17,11 +17,8 @@ public class OnUpMenu {
     public Action action;
     public float fingerX, fingerY;
 
-    private OnUpMenu(Object[] list) {
-        this.list = list;
-    }
     public OnUpMenu(Object[] list, Action action) {
-        this(list);
+        this.list = list;
         this.action = action;
     }
 

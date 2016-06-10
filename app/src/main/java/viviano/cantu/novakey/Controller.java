@@ -19,8 +19,12 @@ import viviano.cantu.novakey.animations.animators.CharGrow;
 import viviano.cantu.novakey.animations.animators.ResetCharAnimator;
 import viviano.cantu.novakey.btns.Btn;
 import viviano.cantu.novakey.drawing.emoji.Emoji;
+import viviano.cantu.novakey.model.keyboards.KeyLayout;
 import viviano.cantu.novakey.menus.InfiniteMenu;
-import viviano.cantu.novakey.menus.OnUpMenu;
+import viviano.cantu.novakey.model.NovaKeyModel;
+import viviano.cantu.novakey.model.TrueModel;
+import viviano.cantu.novakey.model.ShiftState;
+import viviano.cantu.novakey.model.UserState;
 import viviano.cantu.novakey.settings.Settings;
 import viviano.cantu.novakey.utils.Pred;
 import viviano.cantu.novakey.utils.Util;
@@ -36,20 +40,14 @@ public class Controller implements NovaKeyListener.EventListener {
 
     private static NovaKey main;
     private static NovaKeyView view;
+    private static NovaKeyModel model;
     private static NovaKeyListener listener;
     private static Controller eventListener;
 
     //State
-    private static int state;
     public static int inputType;
     public static boolean onPassword = false;
     public static boolean landscape = false;
-
-    public static KeyLayout currKeyboard;
-
-    //menus
-    public static InfiniteMenu infiniteMenu;
-    public static OnUpMenu onUpMenu;
 
     /**
      * Initializes static data
@@ -65,6 +63,9 @@ public class Controller implements NovaKeyListener.EventListener {
              Controller.eventListener = new Controller();
              listener = new NovaKeyListener(eventListener);
              Controller.view.setOnTouchListener(listener);
+
+             model = new TrueModel(main);
+             view.setModel(model);
          }
     }
 
@@ -79,61 +80,6 @@ public class Controller implements NovaKeyListener.EventListener {
         main = null; view = null; listener = null;
     }
 
-    /**
-     * @param flag add a state
-     */
-    public static void addState(int flag) {
-        int replace_mask = 0;
-        for (int i=0; i<8; i++) {
-            int testMask = 0xF * (int)Math.pow(0x10, i);
-            if ((flag & testMask) == 0)
-                replace_mask |= testMask;
-        }
-        state = (state & replace_mask)|flag;
-    }
-
-    /**
-     * @param mask remove state at a mask
-     */
-    public static void removeState(int mask) {
-        int inverse = 0;
-        for (int i=0; i<8; i++) {
-            int curr = 0xF * (int)Math.pow(0x10, i);
-            if ((mask & curr) == 0)
-                inverse |= curr;
-        }
-        state &= inverse;
-    }
-
-    /**
-     * @param state check if it has this state
-     * @return true if it is
-     */
-    public static boolean hasState(int state) {
-        int mask = 0;
-        for (int i=0; i<8; i++) {
-            int testMask = 0xF * (int)Math.pow(0x10, i);
-            if ((state & testMask) != 0)
-                mask |= testMask;
-        }
-        return (Controller.state & mask) == state;
-    }
-
-    /**
-     * @param mask mask to check state
-     * @return int to use on a switch
-     */
-    public static int stateMasked(int mask) {
-        return state & mask;
-    }
-
-    /**
-     * @return return a copy of the state
-     */
-    public static int getState() {
-        int s = state;
-        return s;
-    }
 
     //--------------------Main Lifecycle---------------------------------------------
     public static void onInputStart(EditorInfo info, boolean restarting) {
@@ -143,13 +89,14 @@ public class Controller implements NovaKeyListener.EventListener {
         Settings.update();
         listener.createTimers();//depend on the settings
         //set theme to newly built theme
-        view.setTheme(Settings.theme);
-        if (Settings.autoColor)
-            view.getTheme().setPackage(info.packageName);
+        model.updateTheme(info.packageName);
 
         inputType = info.inputType;
-        state = NovaKey.ON_KEYS|NovaKey.LOWERCASE;//will change depending
-        setKeys(NovaKey.DEFAULT_KEYS);//set keys is used so that currKeyboard is not null
+
+        model.setUserState(UserState.TYPING);
+        model.setShiftState(ShiftState.LOWERCASE);
+        int keyboardCode = 0;//TODO: add curr keyboard sharedPref
+        model.setKeyboard(keyboardCode);
         onPassword = false;
 
         int var = inputType & InputType.TYPE_MASK_VARIATION,
@@ -157,26 +104,27 @@ public class Controller implements NovaKeyListener.EventListener {
 
         switch (info.inputType & InputType.TYPE_MASK_CLASS) {
             case InputType.TYPE_CLASS_TEXT:
-                setKeys(NovaKey.DEFAULT_KEYS);
+                model.setKeyboard(keyboardCode);
                 if (var == InputType.TYPE_TEXT_VARIATION_PASSWORD ||
                     var == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD ||
                     var == InputType.TYPE_TEXT_VARIATION_WEB_PASSWORD)
                     onPassword = true;
                 break;
             case InputType.TYPE_CLASS_NUMBER:
-                setKeys(NovaKey.PUNCTUATION);
+                model.setKeyboard(KeyLayout.PUNCTUATION);
                 if (var == InputType.TYPE_NUMBER_VARIATION_PASSWORD)
                     onPassword = true;
                 break;
             case InputType.TYPE_CLASS_DATETIME:
-                setKeys(NovaKey.PUNCTUATION);
+                model.setKeyboard(KeyLayout.PUNCTUATION);
                 break;
             case InputType.TYPE_CLASS_PHONE:
-                setKeys(NovaKey.PUNCTUATION);
+                model.setKeyboard(KeyLayout.PUNCTUATION);
                 break;
         }
         updateShift(info);
-        view.updateDimens();
+
+
         view.clearDrawers();//drawers are never permanent
         view.invalidate();
         //start animation
@@ -185,25 +133,12 @@ public class Controller implements NovaKeyListener.EventListener {
         }
     }
 
-    public static void setKeys(int keys) {
-        addState(keys);
-        switch (keys) {
-            case NovaKey.DEFAULT_KEYS:
-            default:
-                //TODO: for now default keys are english
-                currKeyboard = KeyLayout.get("English");
-                break;
-            case NovaKey.PUNCTUATION:
-                currKeyboard = KeyLayout.get("Punctuation");
-                break;
-            case NovaKey.SYMBOLS:
-                currKeyboard = KeyLayout.get("Symbols");
-        }
-        Settings.update();//recreates buttons
-        view.updateKeyLayout();
-    }
+//    public static void setKeys(int code) {
+//        model.setKeyboard(code);
+//        Settings.update();//recreates buttons TODO: make better
+//    }
 
-    public static void input(Object o, int flags) {//TODO: flags
+    public static void input(Object o, int flags) {
         if (o instanceof Character) {
             main.handleCharacter((int)(Character) o);
         }
@@ -230,60 +165,52 @@ public class Controller implements NovaKeyListener.EventListener {
             e = et.selectionEnd;
         }
 
-        switch (state & NovaKey.KEYS_MASK) {
+        switch (model.getKeyboardCode()) {
+            case KeyLayout.PUNCTUATION:
+                model.setKeyboard(KeyLayout.SYMBOLS);
+                break;
+            case KeyLayout.SYMBOLS:
+                model.setKeyboard(KeyLayout.PUNCTUATION);
+                break;
             default:
-            case NovaKey.DEFAULT_KEYS:
-                switch (state & NovaKey.SHIFT_MASK) {
-                    case NovaKey.LOWERCASE:
-                        addState(NovaKey.UPPERCASE);
-                        currKeyboard.setShifted(true);
-                        if (shiftText) {//uppercase each word
-                            main.handleText(Util.uppercaseFirst(selectedText));
-                            main.setSelection(s, e);
-                        }
-                        break;
-                    case NovaKey.UPPERCASE:
-                        addState(NovaKey.CAPSED_LOCKED);
+                switch (model.getShiftState()) {
+                    case LOWERCASE:
+                    model.setShiftState(ShiftState.UPPERCASE);
+                    if (shiftText) {//uppercase each word
+                        main.handleText(Util.uppercaseFirst(selectedText));
+                        main.setSelection(s, e);
+                    }
+                    break;
+                    case UPPERCASE:
+                        model.setShiftState(ShiftState.CAPS_LOCKED);
                         if (shiftText) {//caps each word
-                            main.handleText(selectedText.toUpperCase());//TODO: locale
+                            main.handleText(selectedText.toUpperCase());
                             main.setSelection(s, e);
                         }
                         break;
-                    case NovaKey.CAPSED_LOCKED:
-                        addState(NovaKey.LOWERCASE);
-                        currKeyboard.setShifted(false);
+                    case CAPS_LOCKED:
+                        model.setShiftState(ShiftState.LOWERCASE);
                         if (shiftText) {//lowercase each word
-                            main.handleText(selectedText.toLowerCase());//TODO: locale
+                            main.handleText(selectedText.toLowerCase());
                             main.setSelection(s, e);
                         }
                         break;
                 }
-                break;
-            case NovaKey.PUNCTUATION:
-                setKeys(NovaKey.SYMBOLS);
-                break;
-            case NovaKey.SYMBOLS:
-                setKeys(NovaKey.PUNCTUATION);
-                break;
         }
     }
 
     public static void updateShift(EditorInfo editorInfo) {
-        if (hasState(NovaKey.DEFAULT_KEYS)) {
-            switch (state & NovaKey.SHIFT_MASK) {
-                case NovaKey.LOWERCASE:
-                case NovaKey.UPPERCASE:
-                    if (main.getCurrentCapsMode(editorInfo) != 0) {
-                        currKeyboard.setShifted(true);
-                        addState(NovaKey.UPPERCASE);
-                    } else {
-                        currKeyboard.setShifted(false);
+        if (model.getKeyboardCode() > 0) {
+            switch (model.getShiftState()) {
+                case LOWERCASE:
+                case UPPERCASE:
+                    if (main.getCurrentCapsMode(editorInfo) != 0)
+                        model.setShiftState(ShiftState.UPPERCASE);
+                    else
+                        model.setShiftState(ShiftState.LOWERCASE);
                         eventListener.repeatingChar = Character.toLowerCase(eventListener.repeatingChar);
-                        addState(NovaKey.LOWERCASE);
-                    }
                     break;
-                case NovaKey.CAPSED_LOCKED:
-                    currKeyboard.setShifted(true);
+                case CAPS_LOCKED:
                     break;
             }
         }
@@ -292,7 +219,7 @@ public class Controller implements NovaKeyListener.EventListener {
     public static void setEditing(boolean editing) {
         if (editing) {
             EditView editView = new EditView(main);
-            editView.setTheme(Controller.view.getTheme());
+            editView.setTheme(model.getTheme());
             main.setInputView(editView);
             //main.setInputView(new ControlView(main));
             //main.addWindow(editView, true);
@@ -308,9 +235,9 @@ public class Controller implements NovaKeyListener.EventListener {
         if (im == null)
             return;
         view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
-        infiniteMenu = im;
-        infiniteMenu.updateCoords(x, y);
-        addState(NovaKey.ROTATING | NovaKey.INFINITE_MENU);
+        model.setInfiniteMenu(im);
+        model.setUserState(UserState.ON_INFINITE_MENU);
+        model.getInfiniteMenu().updateCoords(x, y);
         view.invalidate();
     }
 
@@ -349,12 +276,12 @@ public class Controller implements NovaKeyListener.EventListener {
     @Override
     public void onRawAction(int action, float x, float y) {
         if (action == MotionEvent.ACTION_MOVE) {
-            if (hasState(NovaKey.ROTATING|NovaKey.INFINITE_MENU) && infiniteMenu != null) {
-                infiniteMenu.updateCoords(x, y);
+            if (model.getUserState() == UserState.ON_INFINITE_MENU) {
+                model.getInfiniteMenu().updateCoords(x, y);
                 view.invalidate();
             }
-            else if (hasState(NovaKey.ON_MENU) && onUpMenu != null) {
-                onUpMenu.updateCoords(x, y);
+            else if (model.getUserState() == UserState.ON_UP_MENU) {
+                model.getOnUpMenu().updateCoords(x, y);
                 view.invalidate();
             }
         }
@@ -368,12 +295,12 @@ public class Controller implements NovaKeyListener.EventListener {
 
     @Override
     public void onNewArea(int currArea, ArrayList<Integer> areasCrossed) {
-        switch(state & NovaKey.STATE_MASK) {
-            case NovaKey.ON_KEYS:
+        switch(model.getUserState()) {
+            case TYPING:
                 main.vibrate(Settings.vibrateLevel);
                 //Set Deleting
                 if (view.getKey(areasCrossed) == Keyboard.KEYCODE_DELETE) {
-                    addState(NovaKey.ROTATING | NovaKey.DELETING);
+                    model.setUserState(UserState.DELETING);
                     charsDeleted = new LinkedList<>();
                     char c = main.handleDelete();
                     if (c != 0)
@@ -402,8 +329,10 @@ public class Controller implements NovaKeyListener.EventListener {
                         area2 = areasCrossed.get(1);
                     }
                     //Set Moving Cursor
-                    else if (isRotating(areasCrossed))
-                        addState(NovaKey.ROTATING | NovaKey.MOVING_CURSOR | NovaKey.CURSOR_BOTH);
+                    else if (isRotating(areasCrossed)) {
+                        model.setUserState(UserState.SELECTING);
+                        model.setCursorMode(0);
+                    }
                 }
                 //If Repeating
                 else if (repeating) {
@@ -422,14 +351,13 @@ public class Controller implements NovaKeyListener.EventListener {
                     shouldFix = false;
                 }
                 break;
-            case NovaKey.ROTATING:
-                //if in center and rotating
-                if (hasState(NovaKey.MOVING_CURSOR) && currArea == 0) {
+            case SELECTING:
+                if (currArea == 0) {
                     //TODO: make this a timer to reduce human error
-                    if (hasState(NovaKey.CURSOR_LEFT) || hasState(NovaKey.CURSOR_BOTH))
-                        addState(NovaKey.ROTATING | NovaKey.MOVING_CURSOR | NovaKey.CURSOR_RIGHT);
-                    else if (hasState(NovaKey.CURSOR_RIGHT))
-                        addState(NovaKey.ROTATING | NovaKey.MOVING_CURSOR | NovaKey.CURSOR_LEFT);
+                    if (model.getCursorMode() <= 0)
+                        model.setCursorMode(1);
+                    else if (model.getCursorMode() > 0)
+                        model.setCursorMode(-1);
                 }
                 break;
         }
@@ -438,34 +366,30 @@ public class Controller implements NovaKeyListener.EventListener {
 
     @Override
     public void onRotate(boolean clockwise, int currSector, boolean inCenter) {
-        if ((state & NovaKey.STATE_MASK) == NovaKey.ROTATING) {
-            switch (state & NovaKey.ROTATING_MASK) {
-                case NovaKey.DELETING:
-                    if (!deleteStarted)
-                        handleDeleteRotate(clockwise);
-                    else
-                        deleteStarted = false;
-                    break;
-                case NovaKey.MOVING_CURSOR:
-                    if (!inCenter) {
-                        //These two checks should not use hasState!!!
-                        int ds = 0, de = 0;
-                        if ((state & NovaKey.CURSOR_LEFT) == NovaKey.CURSOR_LEFT)
-                            ds = clockwise ? 1 : -1;
-                        if ((state & NovaKey.CURSOR_RIGHT) == NovaKey.CURSOR_RIGHT)
-                            de = clockwise ? 1 : -1;
-                        main.moveSelection(ds, de);
-                    }
-                    break;
-                case NovaKey.INFINITE_MENU:
-                    if (infiniteMenu != null) {
-                        if (clockwise)
-                            infiniteMenu.down();
-                        else
-                            infiniteMenu.up();
-                    }
-                    break;
-            }
+        switch (model.getUserState()) {
+            case DELETING:
+                if (!deleteStarted)
+                    handleDeleteRotate(clockwise);
+                else
+                    deleteStarted = false;
+                break;
+            case SELECTING:
+                if (!inCenter) {
+                    //These two checks should not use hasState!!!
+                    int ds = 0, de = 0;
+                    if (model.getCursorMode() < 0)
+                        ds = clockwise ? 1 : -1;
+                    if (model.getCursorMode() > 0)
+                        de = clockwise ? 1 : -1;
+                    main.moveSelection(ds, de);
+                }
+                break;
+            case ON_INFINITE_MENU:
+                if (clockwise)
+                    model.getInfiniteMenu().down();
+                else
+                    model.getInfiniteMenu().up();
+                break;
         }
     }
 
@@ -473,7 +397,8 @@ public class Controller implements NovaKeyListener.EventListener {
     public void onUp(int lastArea, ArrayList<Integer> areasCrossed) {
         int keyCode = view.getKey(areasCrossed);
         animate(new ResetCharAnimator()); //Resets to original state
-        if (hasState(NovaKey.ON_KEYS) && !repeatingDone && keyCode != Keyboard.KEYCODE_CANCEL){
+        if (model.getUserState() == UserState.TYPING
+                && !repeatingDone && keyCode != Keyboard.KEYCODE_CANCEL){
             if (keyCode != '\n' && keyCode >=0)
                 main.handleCharacter(keyCode);
             else {
@@ -483,27 +408,26 @@ public class Controller implements NovaKeyListener.EventListener {
                     toggleShift();
             }
         }
-        else if (hasState(NovaKey.ROTATING|NovaKey.INFINITE_MENU) && infiniteMenu != null) {
-            infiniteMenu.performSelection();
-            infiniteMenu.reset();
-            infiniteMenu = null;
+        else if (model.getUserState() == UserState.ON_INFINITE_MENU) {
+            model.getInfiniteMenu().performSelection();
+            model.getInfiniteMenu().reset();
+            //TODO: null menu
         }
-        else if (hasState(NovaKey.ON_MENU) && onUpMenu != null) {
-            onUpMenu.action.onUp(lastArea);
-            onUpMenu = null;
+        else if (model.getUserState() == UserState.ON_UP_MENU) {
+            model.getOnUpMenu().action.onUp(lastArea);
+            //TODO: null menu
         }
         //reset state
         repeating = false;
         repeatingDone = false;//This method is used to stop inserting characters when it shouldn't
-        addState(NovaKey.ON_KEYS);
-        removeState(NovaKey.ROTATING_MASK | NovaKey.CURSOR_MASK);//TODO: may remove on case by case basis
+        model.setUserState(UserState.TYPING);
         view.invalidate();
     }
 
     @Override
     public void onLongPress(int currArea, ArrayList<Integer> areasCrossed, float x, float y) {
-        switch (state & NovaKey.STATE_MASK) {
-            case NovaKey.ON_KEYS:
+        switch (model.getUserState()) {
+            case TYPING:
                 if (areasCrossed.size() <= 2) {
                     //TODO: perform double vibrate or no vibrate when there is no infinite menu
                     char c = (char)view.getKey(areasCrossed);
@@ -514,18 +438,17 @@ public class Controller implements NovaKeyListener.EventListener {
                     }
                 }
                 break;
-            case NovaKey.ROTATING:
-                if (currArea == 0 && (state & NovaKey.ROTATING_MASK)==NovaKey.MOVING_CURSOR) {
+            case SELECTING:
+                if (currArea == 0) {
                     view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
-                    onUpMenu = Clipboard.MENU;
-                    onUpMenu.updateCoords(x, y);
-                    addState(NovaKey.ON_MENU);
+                    model.setOnUpMenu(Clipboard.MENU);
+                    model.setUserState(UserState.ON_UP_MENU);
+                    model.getOnUpMenu().updateCoords(x, y);
                     view.invalidate();
                 }
                 break;
-            case NovaKey.ON_MENU:
-                if (onUpMenu != null)
-                    onUpMenu.action.onLongPress(currArea);
+            case ON_UP_MENU:
+                model.getOnUpMenu().action.onLongPress(currArea);
                 break;
         }
     }

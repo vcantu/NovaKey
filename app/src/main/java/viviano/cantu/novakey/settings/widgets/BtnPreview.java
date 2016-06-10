@@ -9,7 +9,7 @@ import android.view.View;
 
 import java.util.ArrayList;
 
-import viviano.cantu.novakey.KeyLayout;
+import viviano.cantu.novakey.model.keyboards.KeyLayout;
 import viviano.cantu.novakey.NovaKeyDimen;
 import viviano.cantu.novakey.utils.Util;
 import viviano.cantu.novakey.btns.Btn;
@@ -61,7 +61,7 @@ public class BtnPreview extends View implements View.OnTouchListener {
         float x = w / 2;
         float y = getPaddingTop() + r;
         float sr = r / 3;
-        
+
         mDimens = new NovaKeyDimen(x, y, w, h, r, sr, null);
     }
 

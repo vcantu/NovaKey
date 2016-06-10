@@ -1,14 +1,9 @@
 package viviano.cantu.novakey.animations.animators;
 
 import android.animation.TimeInterpolator;
-import android.animation.ValueAnimator;
 import android.view.animation.AccelerateInterpolator;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
-import viviano.cantu.novakey.Key;
+import viviano.cantu.novakey.model.keyboards.Key;
 import viviano.cantu.novakey.utils.Util;
 
 /**

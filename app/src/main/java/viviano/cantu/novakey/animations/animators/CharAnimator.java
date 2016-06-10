@@ -2,13 +2,12 @@ package viviano.cantu.novakey.animations.animators;
 
 import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
-import android.view.animation.LinearInterpolator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import viviano.cantu.novakey.Key;
+import viviano.cantu.novakey.model.keyboards.Key;
 import viviano.cantu.novakey.animations.DelayableInterpolator;
 import viviano.cantu.novakey.animations.MultiValueAnimator;
 import viviano.cantu.novakey.utils.Util;
@@ -38,8 +37,6 @@ public abstract class CharAnimator extends Animator {
             values.put(s, new HashMap<Key, Object>());
         }
     }
-
-
 
     /**
      * @return a MultiValueAnimator

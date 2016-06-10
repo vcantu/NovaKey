@@ -6,7 +6,7 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
 
-import viviano.cantu.novakey.KeyLayout;
+import viviano.cantu.novakey.model.keyboards.KeyLayout;
 import viviano.cantu.novakey.NovaKeyDimen;
 import viviano.cantu.novakey.R;
 import viviano.cantu.novakey.themes.BaseTheme;
@@ -36,8 +36,8 @@ public class ThemePreview extends View {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         setViewDimen();
     }
-    
-    
+
+
     private void setViewDimen() {
         float w = getWidth();
         float h = getHeight();
@@ -51,7 +51,7 @@ public class ThemePreview extends View {
         //Create a keyboard from a resource
         KeyLayout kl = new KeyLayout("English", KeyLayout.convert(R.array.English, getResources()));
         kl.updateCoords(x, y, r, sr);
-        
+
         mDimens = new NovaKeyDimen(x, y, w, h, r, sr, kl);
     }
 

@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Locale;
 
 import viviano.cantu.novakey.drawing.Icons;
+import viviano.cantu.novakey.model.keyboards.KeyLayout;
 import viviano.cantu.novakey.menus.InfiniteMenu;
 import viviano.cantu.novakey.settings.Colors;
 import viviano.cantu.novakey.settings.Settings;
@@ -42,24 +43,6 @@ public class NovaKey extends InputMethodService {
 	public static int OVERLAY_PERMISSION_REQ_CODE = 1234;
 
 	public static int CB_COPY = 1, CB_SELECT_ALL = 2, CB_PASTE = 3, CB_DESELECT_ALL = 4, CB_CUT = 5;
-    //flags are allocated like so:
-    /*
-        000F -> Current state (on keys, rotating, on menu)
-        00F0 -> Current keyboard
-        0F00 -> current shift state
-        F000 >= MetaData
-     */
-    public final static int
-    STATE_MASK = 0xF,
-    ON_KEYS = 0x1, KEYS_MASK = 0xF0,
-        DEFAULT_KEYS = 0x10, PUNCTUATION = 0x20, SYMBOLS = 0x30, //TODO: add other languages
-        SHIFT_MASK = 0xF00,
-            LOWERCASE = 0x100, UPPERCASE = 0x200, CAPSED_LOCKED = 0x300,
-    ROTATING = 0x2, ROTATING_MASK = 0xF000,
-        DELETING = 0x1000, MOVING_CURSOR = 0x2000, INFINITE_MENU = 0x3000,
-        CURSOR_MASK = 0xF0000,
-                CURSOR_LEFT = 0x10000, CURSOR_RIGHT = 0x20000, CURSOR_BOTH = 0x30000,
-    ON_MENU = 0x3;
 
 	// Predictions
 	private boolean predicting;
@@ -93,6 +76,17 @@ public class NovaKey extends InputMethodService {
         }
         return false;
     }
+
+	//return after space
+	private final Character[] returnAfterSpace = new Character[]
+			{ '.', ',', ';', '&', '!', '?' };
+	public boolean shouldReturnAfterSpace(Character c) {
+		for (Character C : returnAfterSpace) {
+			if (C == c)
+				return true;
+		}
+		return false;
+	}
 
 	// floating window
 	public boolean undocked = false;
@@ -202,7 +196,8 @@ public class NovaKey extends InputMethodService {
         super.onStartInputView(info, restarting);
         initializeController();
 		Controller.landscape =
-				getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+				getResources().getConfiguration().orientation
+						== Configuration.ORIENTATION_LANDSCAPE;
         Controller.onInputStart(info, restarting);
 		// Reset State
 		composing.setLength(0);
@@ -330,7 +325,7 @@ public class NovaKey extends InputMethodService {
 	 * helper method
 	 */
     private void initializeController() {
-		Controller.initialize(this, new NovaKeyView(this));
+		Controller.initialize(this,new NovaKeyView(this));
     }
 
 	//-----------------------------------------helper methods---------------------------------------//
@@ -532,7 +527,7 @@ public class NovaKey extends InputMethodService {
 			}
 			// handle returning to letters with special characters
             //TODO: this is dumb should be in controller
-			shouldReturn = Controller.view().shouldReturnAfterSpace((char) keyCode); //set should return after space
+			shouldReturn = shouldReturnAfterSpace((char) keyCode); //set should return after space
 			//these characters return right away
 			if (keyCode == '\'' || keyCode == '"' || keyCode == '¿' || keyCode == '¡')
                 Controller.setKeys(DEFAULT_KEYS);

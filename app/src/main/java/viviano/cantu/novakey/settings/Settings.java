@@ -97,7 +97,7 @@ public class Settings {
      * theme will be a String that can be translated into a Theme, with colors and other data
      * it will have the following format:
      *
-     * t = a number representing a theme id
+     * t = the number theme id
      *
      * numbers represent the color so that:
      * c1 = primaryColor, c2 = accentColor, c3 = contrastColor
@@ -107,7 +107,7 @@ public class Settings {
      * '3d' or 'X' if the theme has 3d enabled
      *
      * format:
-     *     t,1,2,3,A,3d
+     *     t,c1,c2,c3,A,3d
      *
      * @param s string to build theme from
      * @return theme built from a string using the above format

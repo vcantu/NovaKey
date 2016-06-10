@@ -2,9 +2,7 @@ package viviano.cantu.novakey.themes;
 
 import android.graphics.Canvas;
 
-import viviano.cantu.novakey.KeyLayout;
-import viviano.cantu.novakey.NovaKeyDimen;
-import viviano.cantu.novakey.NovaKeyEditView;
+import viviano.cantu.novakey.model.keyboards.KeyLayout;
 import viviano.cantu.novakey.menus.InfiniteMenu;
 import viviano.cantu.novakey.menus.OnUpMenu;
 import viviano.cantu.novakey.settings.widgets.pickers.PickerItem;
@@ -95,10 +93,12 @@ public interface Theme extends PickerItem {
     /**
      * Make the buttons draw themselves with the given parameters
      *
-     * @param dimens dimensions of the keyboard
+     * @param x center X position
+     * @param y center Y position
+     * @param r radius of keyboard
      * @param canvas canvas to draw on
      */
-    void drawButtons(NovaKeyDimen dimens, Canvas canvas);
+    void drawButtons(float x, float y, float r, Canvas canvas);
 
     /**
      * Make the given keyLayout draw itself with the given parameters
@@ -117,13 +117,13 @@ public interface Theme extends PickerItem {
     /**
      * Draw cursor icons depending on the state of the cursor
      *
-     * @param state state of the cursor
+     * @param cursorCode state of the cursor
      * @param x center X position
      * @param y center Y position
      * @param sr small radius of keyboard
      * @param canvas canvas to draw on
      */
-    void drawCursorIcon(int state, float x, float y, float sr, Canvas canvas);
+    void drawCursorIcon(int cursorCode, float x, float y, float sr, Canvas canvas);
 
     /**
      * Makes the infinite menu draw itself

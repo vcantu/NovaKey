@@ -9,7 +9,7 @@ import android.view.animation.LinearInterpolator;
 import android.view.animation.OvershootInterpolator;
 
 import viviano.cantu.novakey.Controller;
-import viviano.cantu.novakey.KeyLayout;
+import viviano.cantu.novakey.model.keyboards.KeyLayout;
 import viviano.cantu.novakey.view.NovaKeyView;
 import viviano.cantu.novakey.utils.Print;
 import viviano.cantu.novakey.utils.Util;

@@ -3,7 +3,7 @@ package viviano.cantu.novakey.animations.animators;
 import android.animation.TimeInterpolator;
 import android.view.animation.AnticipateInterpolator;
 
-import viviano.cantu.novakey.Key;
+import viviano.cantu.novakey.model.keyboards.Key;
 import viviano.cantu.novakey.Location;
 import viviano.cantu.novakey.utils.Util;
 
