@@ -12,12 +12,12 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <viviano.cantu.novakey.menus.HexGridView
+        <viviano.cantu.novakey.elements.menus.HexGridView
             android:id="@+id/hex"
             android:layout_width="match_parent"
             android:layout_height="200dp" />
 
-            <viviano.cantu.novakey.drawing.emoji.ThrowAwayView
+            <viviano.cantu.novakey.view.drawing.emoji.ThrowAwayView
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 android:id="@+id/throaway"/>

@@ -6,12 +6,13 @@ import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 
-import viviano.cantu.novakey.Font;
-import viviano.cantu.novakey.drawing.Icons;
+import viviano.cantu.novakey.model.Settings;
+import viviano.cantu.novakey.view.drawing.Font;
+import viviano.cantu.novakey.view.drawing.Icons;
 import viviano.cantu.novakey.model.keyboards.KeyLayout;
 import viviano.cantu.novakey.NovaKey;
 import viviano.cantu.novakey.setup.SetupActivity;
-import viviano.cantu.novakey.themes.AppTheme;
+import viviano.cantu.novakey.view.themes.AppTheme;
 
 public class SettingsActivity extends PreferenceActivity {
 

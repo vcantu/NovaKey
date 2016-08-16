@@ -1,24 +1,21 @@
 package viviano.cantu.novakey;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.graphics.LightingColorFilter;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.ClipDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.Icon;
-import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
-import android.support.design.widget.FloatingActionButton;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 
-import viviano.cantu.novakey.drawing.Icons;
-import viviano.cantu.novakey.settings.Settings;
-import viviano.cantu.novakey.themes.Theme;
+import viviano.cantu.novakey.controller.actions.SetEditingAction;
+import viviano.cantu.novakey.settings.widgets.FloatingButton;
+import viviano.cantu.novakey.setup.IconView;
+import viviano.cantu.novakey.view.drawing.Icons;
+import viviano.cantu.novakey.model.Settings;
+import viviano.cantu.novakey.view.themes.board.BoardTheme;
 
 /**
  * Created by Viviano on 3/5/2016.
@@ -115,7 +112,7 @@ public class EditView extends RelativeLayout {
      * @param theme theme to set to
      * @throws IllegalArgumentException if the theme passed is null
      */
-    public void setTheme(Theme theme) {
+    public void setTheme(BoardTheme theme) {
         mResizeView.setTheme(theme);
 
         mCancel.setTheme(theme);
@@ -137,7 +134,7 @@ public class EditView extends RelativeLayout {
     }
 
     private void onCancel() {
-        Controller.setEditing(false);
+        new SetEditingAction(false).trigger(, , );
     }
 
     private void onRefresh() {
@@ -147,7 +144,7 @@ public class EditView extends RelativeLayout {
 
     private void onSave() {
         mResizeView.saveDimens();
-        Controller.setEditing(false);
+        new SetEditingAction(false).trigger(, , );
     }
 
     private int srToProgress(float sr) {

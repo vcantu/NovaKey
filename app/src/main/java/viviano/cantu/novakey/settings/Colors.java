@@ -1,10 +1,9 @@
 package viviano.cantu.novakey.settings;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 
-import viviano.cantu.novakey.drawing.Draw;
+import viviano.cantu.novakey.view.drawing.Draw;
 import viviano.cantu.novakey.settings.widgets.pickers.PickerItem;
 
 /**
@@ -79,7 +78,7 @@ public class Colors implements PickerItem {
 //    public static Colors REDS, PINKS, PURPLES, DEEP_PURPLES, INDIGOS, BLUES, LIGHT_BLUES,
 //                         CYANS, TEALS, GREENS, LIGHT_GREENS, LIMES, YELLOWS, AMBERS,
 //                         ORANGES, DEEP_ORANGES, BROWNS, GREYS, BLUE_GREYS, BLACK, WHITE,
-    
+
     //TODO: maybe read off file
     public static void initialize() {
         REDS = new Colors(new int[] { 0xffFFCDD2, 0xffEF9A9A, 0xffE57373, 0xffEF5350, 0xffF44336, 0xffE53935, 0xffD32F2F, 0xffC62828, 0xffB71C1C });

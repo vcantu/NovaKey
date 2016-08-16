@@ -9,12 +9,10 @@ import android.view.View;
 
 import java.util.ArrayList;
 
+import viviano.cantu.novakey.elements.buttons.Button;
 import viviano.cantu.novakey.model.keyboards.KeyLayout;
-import viviano.cantu.novakey.NovaKeyDimen;
 import viviano.cantu.novakey.utils.Util;
-import viviano.cantu.novakey.btns.Btn;
-import viviano.cantu.novakey.btns.BtnTheme;
-import viviano.cantu.novakey.settings.Settings;
+import viviano.cantu.novakey.model.Settings;
 
 /**
  * Created by Viviano on 6/25/2015.
@@ -25,7 +23,7 @@ public class BtnPreview extends View implements View.OnTouchListener {
     //dimensions
     private NovaKeyDimen mDimens;
 
-    private ArrayList<Btn> btns = new ArrayList<Btn>();
+    private ArrayList<Button> buttons = new ArrayList<Button>();
     private int movingBtn = -1;
     private boolean btnAdded = false;
 
@@ -42,8 +40,8 @@ public class BtnPreview extends View implements View.OnTouchListener {
         //TODO: use button color
         btnTheme = new BtnTheme();
         btnTheme.setColors(Settings.theme.buttonColor(), Settings.theme.buttonColor());
-        for (Btn b : Settings.btns) {
-            btns.add(b);
+        for (Button b : Settings.buttons) {
+            buttons.add(b);
         }
     }
     @Override
@@ -77,11 +75,11 @@ public class BtnPreview extends View implements View.OnTouchListener {
                 false, canvas);
 
         p.setColor(Settings.theme.buttonColor());
-        for (int i=0; i<btns.size(); i++) {
+        for (int i = 0; i< buttons.size(); i++) {
             float sw = p.getStrokeWidth();
             if (i==movingBtn)
                 p.setStrokeWidth(4);
-            btns.get(i).draw(mDimens, btnTheme, canvas);
+            buttons.get(i).draw(mDimens, btnTheme, canvas);
             p.setStrokeWidth(sw);
         }
     }
@@ -112,24 +110,24 @@ public class BtnPreview extends View implements View.OnTouchListener {
 
     public void addBtn(int shape) {
         btnAdded = true;
-        btns.add(new Btn(Util.angle(mDimens.x, mDimens.y, mDimens.w / 2, mDimens.h),
+        buttons.add(new Button(Util.angle(mDimens.x, mDimens.y, mDimens.w / 2, mDimens.h),
                 getDistance(mDimens.x, mDimens.y, mDimens.w / 2, mDimens.h) / mDimens.r, shape));
-        movingBtn = btns.size()-1;
+        movingBtn = buttons.size()-1;
         invalidate();
     }
 
     public int onBtn(float x, float y) {
-        for (int i=0; i<btns.size(); i++) {
-            if (btns.get(i).onBtn(x, y, mDimens.x, mDimens.y, mDimens.r))
+        for (int i = 0; i< buttons.size(); i++) {
+            if (buttons.get(i).onBtn(x, y, mDimens.x, mDimens.y, mDimens.r))
                 return i;
         }
         return -1;
     }
 
-    //basic controller for all btns
+    //basic controller for all buttons
     private void setBtn(int index, double angle, float dist) {
-        Btn b = btns.get(index);
-        if ((b.shape&Btn.SHAPE)!=Btn.ARC)
+        Button b = buttons.get(index);
+        if ((b.shape& Button.SHAPE)!= Button.ARC)
             b.dist = dist / mDimens.r;
         else
             b.dist = 1.16667f;

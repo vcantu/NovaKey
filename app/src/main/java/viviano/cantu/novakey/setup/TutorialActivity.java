@@ -15,13 +15,11 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import viviano.cantu.novakey.Controller;
-import viviano.cantu.novakey.IconView;
-import viviano.cantu.novakey.Location;
-import viviano.cantu.novakey.drawing.Icons;
+import viviano.cantu.novakey.controller.Controller;
+import viviano.cantu.novakey.view.animations.animators.FocusBadAnimator;
+import viviano.cantu.novakey.view.animations.animators.TeachBadAnimator;
+import viviano.cantu.novakey.view.drawing.Icons;
 import viviano.cantu.novakey.R;
-import viviano.cantu.novakey.animations.animators.FocusAnimator;
-import viviano.cantu.novakey.animations.animators.TeachAnimator;
 
 public class TutorialActivity extends Activity {
 
@@ -160,13 +158,13 @@ public class TutorialActivity extends Activity {
         mTasks.add(new Task("For the main letters just tap the area.", "Type \"call\"") {
             @Override
             void onTeach() {
-                Controller.animate(new TeachAnimator("call"));
+                Controller.animate(new TeachBadAnimator("call"));
             }
 
             @Override
             void onStart(EditText text) {
                 text.setText("");
-                Controller.animate(new FocusAnimator(tappers).addDelay(400));
+                Controller.animate(new FocusBadAnimator(tappers).addDelay(400));
             }
 
             @Override
@@ -188,13 +186,13 @@ public class TutorialActivity extends Activity {
                 "Type \"novakey\"") {
             @Override
             void onTeach() {
-                Controller.animate(new TeachAnimator("novakey"));
+                Controller.animate(new TeachBadAnimator("novakey"));
             }
 
             @Override
             void onStart(EditText text) {
                 text.setText("");
-                Controller.animate(new FocusAnimator(swipers).addDelay(400));
+                Controller.animate(new FocusBadAnimator(swipers).addDelay(400));
             }
 
             @Override
@@ -209,12 +207,12 @@ public class TutorialActivity extends Activity {
                 "Type \"hi there\"") {
             @Override
             void onTeach() {
-                Controller.animate(new TeachAnimator("hi there"));
+                Controller.animate(new TeachBadAnimator("hi there"));
             }
 
             @Override
             void onStart(EditText text) {
-                Controller.animate(new TeachAnimator(" ").addDelay(400));
+                Controller.animate(new TeachBadAnimator(" ").addDelay(400));
             }
 
             @Override
@@ -226,14 +224,14 @@ public class TutorialActivity extends Activity {
                 "Delete the text") {
             @Override
             void onTeach() {
-                Controller.animate(new TeachAnimator("⌫⌫⌫"));
+                Controller.animate(new TeachBadAnimator("⌫⌫⌫"));
             }
 
             @Override
             void onStart(EditText text) {
                 text.setText(">:)");
                 text.setSelection(3);
-                Controller.animate(new TeachAnimator("⌫").addDelay(400));
+                Controller.animate(new TeachBadAnimator("⌫").addDelay(400));
             }
 
             @Override
@@ -245,12 +243,12 @@ public class TutorialActivity extends Activity {
                 "Type \"CAPS ARE FUN\"") {
             @Override
             void onTeach() {
-                Controller.animate(new TeachAnimator("▲▲CAPS ARE FUN"));
+                Controller.animate(new TeachBadAnimator("▲▲CAPS ARE FUN"));
             }
 
             @Override
             void onStart(EditText text) {
-                Controller.animate(new TeachAnimator("▲▲▲").addDelay(400));
+                Controller.animate(new TeachBadAnimator("▲▲▲").addDelay(400));
             }
 
             @Override
@@ -261,12 +259,12 @@ public class TutorialActivity extends Activity {
         mTasks.add(new Task("You're a pro! Swipe down to enter over the circle.", "Type on multiple lines") {
             @Override
             void onTeach() {
-                Controller.animate(new TeachAnimator("\n"));
+                Controller.animate(new TeachBadAnimator("\n"));
             }
 
             @Override
             void onStart(EditText text) {
-                Controller.animate(new TeachAnimator("\n").addDelay(400));
+                Controller.animate(new TeachBadAnimator("\n").addDelay(400));
             }
 
             @Override
@@ -278,13 +276,13 @@ public class TutorialActivity extends Activity {
 //                "Fix the text to say: \"Apples\"") {
 //            @Override
 //            void onTeach() {
-//                Controller.animate(new TeachAnimator("⑷⑸⑴⑵p").addDelay(400));
+//                Controller.animate(new TeachBadAnimator("⑷⑸⑴⑵p").addDelay(400));
 //            }
 //            @Override
 //            void onStart(EditText mEditText) {
 //                mEditText.setText("Aples");
 //                mEditText.setSelection(5);
-//                Controller.animate(new TeachAnimator("⑷⑸⑴⑵").addDelay(400));
+//                Controller.animate(new TeachBadAnimator("⑷⑸⑴⑵").addDelay(400));
 //            }
 //            @Override
 //            boolean isComplete(String currText) {
@@ -295,13 +293,13 @@ public class TutorialActivity extends Activity {
 //                "Fix the text to say: \"Apples\"") {
 //            @Override
 //            void onTeach() {
-//                Controller.animate(new TeachAnimator("⑷⑸⑴⑵p").addDelay(400));
+//                Controller.animate(new TeachBadAnimator("⑷⑸⑴⑵p").addDelay(400));
 //            }
 //            @Override
 //            void onStart(EditText mEditText) {
 //                mEditText.setText("Aples");
 //                mEditText.setSelection(5);
-//                Controller.animate(new TeachAnimator("⑷⑸⑴⑵").addDelay(400));
+//                Controller.animate(new TeachBadAnimator("⑷⑸⑴⑵").addDelay(400));
 //            }
 //            @Override
 //             boolean isComplete(String currText) {

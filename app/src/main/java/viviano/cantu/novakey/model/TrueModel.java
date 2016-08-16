@@ -4,18 +4,25 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.preference.PreferenceManager;
+import android.view.inputmethod.EditorInfo;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import viviano.cantu.novakey.model.keyboards.Key;
+import viviano.cantu.novakey.elements.Element;
+import viviano.cantu.novakey.elements.menus.Menu;
 import viviano.cantu.novakey.model.keyboards.KeyLayout;
 import viviano.cantu.novakey.R;
-import viviano.cantu.novakey.menus.InfiniteMenu;
-import viviano.cantu.novakey.menus.OnUpMenu;
-import viviano.cantu.novakey.model.keyboards.KeyProperties;
-import viviano.cantu.novakey.settings.Settings;
-import viviano.cantu.novakey.themes.Theme;
+import viviano.cantu.novakey.model.loaders.Loader;
+import viviano.cantu.novakey.model.loaders.ThemeSharedPrefLoader;
+import viviano.cantu.novakey.model.properties.ButtonProperties;
+import viviano.cantu.novakey.model.properties.KeyProperties;
+import viviano.cantu.novakey.model.states.InputState;
+import viviano.cantu.novakey.model.states.ShiftState;
+import viviano.cantu.novakey.model.states.UserState;
+import viviano.cantu.novakey.view.themes.MasterTheme;
+import viviano.cantu.novakey.view.themes.board.BoardTheme;
+import viviano.cantu.novakey.view.themes.ThemeFactory;
 
 /**
  * Model that pulls data from settings and defaults
@@ -26,18 +33,26 @@ import viviano.cantu.novakey.themes.Theme;
  */
 public class TrueModel implements NovaKeyModel {
 
+    //Shared preferences
     private final SharedPreferences mSharedPref;
     private final Context mContext;
 
+    //Loaders
+    private final Loader<List<Element>> mElementLoader;
+    private final Loader<MasterTheme> mThemeLoader;
+
+    //States
     private ShiftState mShiftState;
     private UserState mUserState;
-    private int mCursor = 0;
+    private int mCursorMode = 0;
+    private InputState mInputState;
 
+    //Keyboard
     private int mKeyboardCode = 0;
     private List<KeyLayout> mKeyLayouts;
 
-    private InfiniteMenu mInfiniteMenu;
-    private OnUpMenu mOnUpMenu;
+    //Menu TODO: set menu
+    private Menu mMenu;
 
     public TrueModel(Context context) {
         this.mContext = context;
@@ -49,6 +64,10 @@ public class TrueModel implements NovaKeyModel {
         mKeyLayouts = new ArrayList<>();
         //TODO: read this from sharedPref
         mKeyLayouts.add(KeyLayout.get("English"));
+
+        //loaders
+        mThemeLoader = new ThemeSharedPrefLoader(mSharedPref);
+        mElementLoader = null;//TODO: dis shite
     }
 
     /**
@@ -56,7 +75,7 @@ public class TrueModel implements NovaKeyModel {
      */
     @Override
     public void sync(DrawModel model) {
-
+        throw new IllegalAccessError("True model cannot be synced");
     }
 
     /**
@@ -90,7 +109,7 @@ public class TrueModel implements NovaKeyModel {
      */
     @Override
     public void setHeight(int height) {
-        //TODO: for now it's based on the radius
+        //TODO: for now it's based on the radius and padding
     }
 
     /**
@@ -187,6 +206,24 @@ public class TrueModel implements NovaKeyModel {
     }
 
     /**
+     * @return the current input state
+     */
+    @Override
+    public InputState getInputState() {
+        return mInputState;
+    }
+
+    /**
+     * Uses the given editor info to update the input state
+     *
+     * @param editorInfo info used to generate input state
+     */
+    @Override
+    public void updateInputState(EditorInfo editorInfo) {
+        mInputState = new InputState(editorInfo);
+    }
+
+    /**
      * @return the current orientation state of the phone
      */
     @Override
@@ -236,29 +273,27 @@ public class TrueModel implements NovaKeyModel {
     }
 
     /**
-     * WARNING: calling this method will alter the default KeyLayout
-     * properties, Only change for user preferences like
-     * for keys to be twice as big and such
-     *
-     * This method will use the given changer to alter
-     * the keyProperties within it
-     *
-     * @param changer interface which changes the keyProperties
-     *                with it's change() method
-     */
-    @Override
-    public void changeKeyProperties(KeyChanger changer) {
-        for (KeyProperties kp : getKeyProperties()) {
-            changer.change(kp);
-        }
-    }
-
-    /**
      * @param properties sets the KeyProperties of this model to this
      */
     @Override
     public void setKeyProperties(List<KeyProperties> properties) {
-        //NOT SUPPORTED BY THE TRUE MODEL
+        //TODO: save to shared pref
+    }
+
+    /**
+     * @return the button properties of this model
+     */
+    @Override
+    public List<ButtonProperties> getButtonProperties() {
+        return null;
+    }
+
+    /**
+     * @param properties sets the ButtonProperties of this model
+     */
+    @Override
+    public void setButtonProperties(List<ButtonProperties> properties) {
+
     }
 
     /**
@@ -302,7 +337,7 @@ public class TrueModel implements NovaKeyModel {
      */
     @Override
     public int getCursorMode() {
-        return mCursor;
+        return mCursorMode;
     }
 
     /**
@@ -317,68 +352,40 @@ public class TrueModel implements NovaKeyModel {
     public void setCursorMode(int cursorMode) {
         if (cursorMode < -1 || cursorMode > 1)
             throw new IllegalArgumentException(cursorMode + " is outside the range [-1, 1]");
-        mCursor = cursorMode;
-    }
-
-    /**
-     * Updates the theme's color based on the package
-     *
-     * @param pkg current package the input method is on which
-     *            determines the color of the theme
-     */
-    @Override
-    public void updateTheme(String pkg) {
-        Theme t = Settings.theme;
-        if (Settings.autoColor)
-            t.setPackage(pkg);
+        mCursorMode = cursorMode;
     }
 
     /**
      * @return this model's theme
      */
     @Override
-    public Theme getTheme() {
-        return Settings.theme;
+    public MasterTheme getTheme() {
+        return mThemeLoader.load();
     }
 
     /**
      * @param theme theme to set
      */
     @Override
-    public void setTheme(Theme theme) {
-        //TODO: save theme to shared pref
+    public void setTheme(MasterTheme theme) {
+        mThemeLoader.save(theme);
     }
 
     /**
-     * @return the current infinite menu or null if there is none
+     * @return the current menu or null if there is none
      */
     @Override
-    public InfiniteMenu getInfiniteMenu() {
-        return mInfiniteMenu;
+    public Menu getMenu() {
+        return mMenu;
     }
 
-    /**
-     * @param infiniteMenu menu to set
-     */
-    @Override
-    public void setInfiniteMenu(InfiniteMenu infiniteMenu) {
-        mInfiniteMenu = infiniteMenu;
-    }
 
     /**
-     * @return the current on up menu or null if there is none
+     * @param menu menu to set
      */
     @Override
-    public OnUpMenu getOnUpMenu() {
-        return mOnUpMenu;
-    }
-
-    /**
-     * @param onUpMenu menu to set
-     */
-    @Override
-    public void setOnUpMenu(OnUpMenu onUpMenu) {
-        mOnUpMenu = onUpMenu;
+    public void setMenu(Menu menu) {
+        mMenu = menu;
     }
 
 

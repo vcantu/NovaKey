@@ -2,9 +2,10 @@ package viviano.cantu.novakey.model;
 
 import java.util.List;
 
-import viviano.cantu.novakey.drawing.Draw;
-import viviano.cantu.novakey.model.keyboards.KeyProperties;
-import viviano.cantu.novakey.themes.Theme;
+import viviano.cantu.novakey.model.properties.ButtonProperties;
+import viviano.cantu.novakey.model.properties.KeyProperties;
+import viviano.cantu.novakey.view.themes.MasterTheme;
+import viviano.cantu.novakey.view.themes.board.BoardTheme;
 
 /**
  * Created by Viviano on 6/10/2016.
@@ -92,45 +93,27 @@ public interface DrawModel {
     List<KeyProperties> getKeyProperties();
 
     /**
-     * This method will use the given changer to alter
-     * the keyProperties within it
-     *
-     * @param changer interface which changes the keyProperties
-     *                with it's change() method
-     */
-    void changeKeyProperties(KeyChanger changer);
-
-    /**
      * @param properties sets the KeyProperties of this model to this
      */
     void setKeyProperties(List<KeyProperties> properties);
 
     /**
-     * Updates the theme's color based on the package
-     *
-     * @param pkg package which determines the color of the theme
+     * @return the button properties of this model
      */
-    void updateTheme(String pkg);
+    List<ButtonProperties> getButtonProperties();
+
+    /**
+     * @param properties sets the ButtonProperties of this model
+     */
+    void setButtonProperties(List<ButtonProperties> properties);
 
     /**
      * @return this model's theme
      */
-    Theme getTheme();
+    MasterTheme getTheme();
 
     /**
      * @param theme theme to set
      */
-    void setTheme(Theme theme);
-
-    /**
-     * Changes the keys depending on the change method
-     */
-    public interface KeyChanger {
-        /**
-         * Will be iterated through all keys
-         *
-         * @param keyProps current properties in the iteration
-         */
-        void change(KeyProperties keyProps);
-    }
+    void setTheme(MasterTheme theme);
 }

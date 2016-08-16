@@ -7,7 +7,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import viviano.cantu.novakey.R;
-import viviano.cantu.novakey.btns.Btn;
+import viviano.cantu.novakey.elements.buttons.Button;
 import viviano.cantu.novakey.settings.widgets.BtnPreview;
 import viviano.cantu.novakey.settings.widgets.ButtonAddView;
 
@@ -51,17 +51,17 @@ public class ButtonPreference extends DialogPreference {
                 }
             });
         }
-        updateShape(Btn.CIRCLE);//at the start
+        updateShape(Button.CIRCLE);//at the start
 
         //shape picker
         ButtonAddView circle = (ButtonAddView)view.findViewById(R.id.circle);
         circle.setRadius(view.getResources().getDimension(R.dimen.btn_preview_rad));
-        circle.setShape(Btn.CIRCLE | Btn.MEDIUM);
+        circle.setShape(Button.CIRCLE | Button.MEDIUM);
         circle.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
-                    updateShape(Btn.CIRCLE);
+                    updateShape(Button.CIRCLE);
                 }
                 return true;
             }
@@ -69,12 +69,12 @@ public class ButtonPreference extends DialogPreference {
 
         ButtonAddView arc = (ButtonAddView)view.findViewById(R.id.arc);
         arc.setRadius(view.getResources().getDimension(R.dimen.btn_preview_rad));
-        arc.setShape(Btn.ARC | Btn.MEDIUM);
+        arc.setShape(Button.ARC | Button.MEDIUM);
         arc.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
-                    updateShape(Btn.ARC);
+                    updateShape(Button.ARC);
                 }
                 return true;
             }
@@ -83,7 +83,7 @@ public class ButtonPreference extends DialogPreference {
 
     public void updateShape(int shape) {
         for (int i=0; i<3; i++) {
-            int sh = (shape&Btn.SHAPE)+((i+1)*16);
+            int sh = (shape& Button.SHAPE)+((i+1)*16);
             addBtns[i].setShape(sh);
         }
     }

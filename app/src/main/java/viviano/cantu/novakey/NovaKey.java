@@ -4,7 +4,6 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.SharedPreferences.Editor;
-import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.inputmethodservice.InputMethodService;
 import android.os.Handler;
@@ -14,7 +13,6 @@ import android.text.InputType;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.ExtractedText;
@@ -26,14 +24,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import viviano.cantu.novakey.drawing.Icons;
+import viviano.cantu.novakey.controller.Controller;
+import viviano.cantu.novakey.controller.actions.SelectionActions;
+import viviano.cantu.novakey.controller.actions.typing.InputAction;
+import viviano.cantu.novakey.controller.actions.typing.UpdateShiftAction;
+import viviano.cantu.novakey.view.drawing.Font;
+import viviano.cantu.novakey.view.drawing.Icons;
+import viviano.cantu.novakey.elements.menus.InfiniteMenu;
+import viviano.cantu.novakey.model.states.ShiftState;
 import viviano.cantu.novakey.model.keyboards.KeyLayout;
-import viviano.cantu.novakey.menus.InfiniteMenu;
 import viviano.cantu.novakey.settings.Colors;
-import viviano.cantu.novakey.settings.Settings;
-import viviano.cantu.novakey.themes.AppTheme;
-import viviano.cantu.novakey.utils.Pred;
+import viviano.cantu.novakey.model.Settings;
+import viviano.cantu.novakey.view.themes.AppTheme;
 import viviano.cantu.novakey.utils.Util;
+import viviano.cantu.novakey.view.INovaKeyView;
 import viviano.cantu.novakey.view.NovaKeyView;
 
 public class NovaKey extends InputMethodService {
@@ -44,56 +48,25 @@ public class NovaKey extends InputMethodService {
 
 	public static int CB_COPY = 1, CB_SELECT_ALL = 2, CB_PASTE = 3, CB_DESELECT_ALL = 4, CB_CUT = 5;
 
-	// Predictions
-	private boolean predicting;
-	private StringBuilder composing = new StringBuilder();
+	public StringBuilder composing = new StringBuilder();//TODO: move fields to controller
+    public int composingIndex = 0;
 
     //Services
-	// haptic feedback
-	private Vibrator vibrator;// Not Used Yet
-	// copypaste
+	private Vibrator vibrator;
 	private ClipboardManager clipboard;
 
-	// Shift
+
 	private boolean shouldReturn = false; // if the keyboard should return after a space
-    //composing
-    private int composingIndex = 0;
 
-    //Closing Characters
-    private int[] openers = new int[] { '¿', '¡', '⌊', '⌈' },
-                  closers = new int[] { '?', '!', '⌋', '⌉' };
-    private int getIndex(int c) {
-        for (int i=0; i<openers.length; i++) {
-            if (openers[i] == c)
-                return i;
-        }
-        return -1;
-    }
-    private boolean isOpener(int c) {
-        for (int i : openers) {
-            if (i == c)
-                return true;
-        }
-        return false;
-    }
-
-	//return after space
-	private final Character[] returnAfterSpace = new Character[]
-			{ '.', ',', ';', '&', '!', '?' };
-	public boolean shouldReturnAfterSpace(Character c) {
-		for (Character C : returnAfterSpace) {
-			if (C == c)
-				return true;
-		}
-		return false;
-	}
-
-	// floating window
-	public boolean undocked = false;
 
 	private WindowManager windowManager;
     private List<View> mWindows;
 
+    private Controller mController;
+
+    public void createController() {
+        mController = new Controller(this);
+    }
 
 	/**
 	 * Called when the keyboard is enabled
@@ -104,13 +77,10 @@ public class NovaKey extends InputMethodService {
 		super.onCreate();
         //Services
 		clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-        clipboard.addPrimaryClipChangedListener(new ClipboardManager.OnPrimaryClipChangedListener() {
-            @Override
-            public void onPrimaryClipChanged() {
-                try {
-                    Clipboard.add(clipboard.getPrimaryClip().getItemAt(0).getText().toString());
-                } catch (NullPointerException e) {};
-            }
+        clipboard.addPrimaryClipChangedListener(() -> {
+            try {
+                Clipboard.add(clipboard.getPrimaryClip().getItemAt(0).getText().toString());
+            } catch (NullPointerException e) {}
         });
 		vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 		windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
@@ -141,23 +111,21 @@ public class NovaKey extends InputMethodService {
 		temp.putBoolean("has_setup", true);
 		temp.commit();
 
-        initializeController();
 	}
 
 	@Override
 	public View onCreateInputView() {
 		AppTheme.load(this, getResources());
+        createController();//creates view if it has not been created
+//        //stops it from crashing when the orientation changes
+//        if (Controller.view() != null) {
+//            ViewGroup parent = (ViewGroup) Controller.view().getParent();
+//            if (parent != null) {
+//                parent.removeView(Controller.view());
+//            }
+//        }
 
-        initializeController();
-        //stops it from crashing when the orientation changes
-        if (Controller.view() != null) {
-            ViewGroup parent = (ViewGroup) Controller.view().getParent();
-            if (parent != null) {
-                parent.removeView(Controller.view());
-            }
-        }
-
-		return Controller.view();
+		return mController.getView();
 	}
 
     public void addWindow(View view, boolean fullscreen) {
@@ -194,15 +162,10 @@ public class NovaKey extends InputMethodService {
 	@Override
 	public void onStartInputView(EditorInfo info, boolean restarting) {
         super.onStartInputView(info, restarting);
-        initializeController();
-		Controller.landscape =
-				getResources().getConfiguration().orientation
-						== Configuration.ORIENTATION_LANDSCAPE;
-        Controller.onInputStart(info, restarting);
+        createController();
+        mController.getTrueModel().updateInputState(info);//updates editor info
 		// Reset State
 		composing.setLength(0);
-
-		predicting = true;
 	}
 
 	@Override
@@ -220,7 +183,8 @@ public class NovaKey extends InputMethodService {
 			int newSelStart, int newSelEnd, int candidatesStart,
 			int candidatesEnd) {
 		InputConnection ic = getCurrentInputConnection();
-		if (ic == null || Controller.onPassword)// or keyInserted?
+		if (ic == null || mController.getTrueModel()
+                .getInputState().onPassword())// or keyInserted?
 			return;
 		//set composing region
 		if (newSelStart == newSelEnd && oldSelEnd != newSelStart) {
@@ -256,42 +220,31 @@ public class NovaKey extends InputMethodService {
 		}
 	}
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (undocked) {
-            if (keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_HOME || keyCode == KeyEvent.KEYCODE_APP_SWITCH)
-                close();
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
-    //TODO: SHOULD UNDOCKED BE VIEW
-    private void open() {
-        final WindowManager.LayoutParams params = new WindowManager.LayoutParams(
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.TYPE_PHONE,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-                PixelFormat.TRANSLUCENT);
-        windowManager.addView(Controller.view(), params);
-    }
-
-	private void close() {
-		try { windowManager.removeView(Controller.view()); }
-		catch (Exception e) {}
-	}
-
-	/**
-	 * Sets landscape flag
-	 *
-	 * @param config device confiuration
-	 */
-	@Override
-	public void onConfigurationChanged(Configuration config) {
-		Controller.landscape =
-				getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
-		super.onConfigurationChanged(config);
-	}
+//TODO: this code is for undocking
+//    @Override
+//    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//        if (undocked) {
+//            if (keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_HOME || keyCode == KeyEvent.KEYCODE_APP_SWITCH)
+//                close();
+//        }
+//        return super.onKeyDown(keyCode, event);
+//    }
+//
+//    //TODO: SHOULD UNDOCKED BE VIEW
+//    private void open() {
+//        final WindowManager.LayoutParams params = new WindowManager.LayoutParams(
+//                WindowManager.LayoutParams.WRAP_CONTENT,
+//                WindowManager.LayoutParams.WRAP_CONTENT,
+//                WindowManager.LayoutParams.TYPE_PHONE,
+//                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+//                PixelFormat.TRANSLUCENT);
+//        windowManager.addView(Controller.view(), params);
+//    }
+//
+//	private void close() {
+//		try { windowManager.removeView(Controller.view()); }
+//		catch (Exception e) {}
+//	}
 
 	/**
 	 * Makes it never go on Fullscreen Mode
@@ -312,24 +265,11 @@ public class NovaKey extends InputMethodService {
         super.onFinishInput();
 	}
 
-	/**
-	 * Make sure to destroy the Controller to avoid leaks
-	 */
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Controller.destroy();
-    }
-
-	/**
-	 * helper method
-	 */
-    private void initializeController() {
-		Controller.initialize(this,new NovaKeyView(this));
-    }
-
 	//-----------------------------------------helper methods---------------------------------------//
 
+    /**
+     * @return the text inside the current selection or an empty string if none
+     */
     public String getSelectedText() {
         try {
             return getCurrentInputConnection().getSelectedText(0).toString();
@@ -382,189 +322,8 @@ public class NovaKey extends InputMethodService {
 			ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL));
 			ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DEL));
 		}
-		Controller.updateShift(getCurrentInputEditorInfo());
+		mController.fire(new UpdateShiftAction());
 		return result;
-	}
-
-    /**
-     * Call this to delete one character
-     *
-     * @param backspace tue if deleting to left, false if deleting to right
-     * @return the deleted character
-     */
-    public String handleDelete(boolean backspace) {
-        return handleDelete(backspace, new Pred<Character>() {
-            @Override
-            public boolean apply(Character character) {
-                return true;
-            }
-        }, true);
-    }
-
-    /**
-     * Call this to delete until a predicate is reached
-     *
-     * @param backspace true if deleting to left, false if deleting to right
-     * @param until will delete until this predicate is reached
-     * @param included true if it should delete the character which made it stop
-     * @return the deleted string
-     */
-    public String handleDelete(boolean backspace, Pred<Character> until, boolean included) {
-        // add deleted character to temporary memory so it can be added
-        InputConnection ic = getCurrentInputConnection();
-        if (ic == null)
-            return "";
-
-        StringBuilder sb = new StringBuilder();
-
-        ExtractedText et = ic.getExtractedText(new ExtractedTextRequest(), 0);
-        String text = (String) et.text;
-        String back = text.substring(0, et.selectionStart);
-        String front = text.substring(et.selectionEnd);
-
-        char curr = 0;
-        if (backspace) {
-            if (back.length() > 0)
-                curr = back.charAt(back.length() - 1);
-        } else {
-            if (front.length() > 0)
-                curr = front.charAt(0);
-        }
-
-        int soFar = 1;
-
-        while (!until.apply(curr) && curr != 0) {
-            if (backspace)
-                sb.insert(0, curr);
-            else
-                sb.append(curr);
-
-            curr = 0;
-            if (backspace) {
-                if (back.length() - soFar > 0)
-                    curr = back.charAt(back.length() - 1 - soFar);
-            } else {
-                if (front.length() - soFar > 0)
-                    curr = front.charAt(soFar);
-            }
-            soFar++;
-        }
-        if (included && curr != 0) {
-            if (backspace)
-                sb.insert(0, curr);
-            else
-                sb.append(curr);
-        }
-
-        commitComposing();
-        if (sb.length() >= 1) {
-            if (backspace)
-                ic.deleteSurroundingText(sb.length(), 0);
-            else
-                ic.deleteSurroundingText(0, sb.length());
-        }
-        Controller.updateShift(getCurrentInputEditorInfo());
-        return sb.toString();
-    }
-
-	public void handleEnter() {
-		InputConnection ic = getCurrentInputConnection();
-		if (ic == null)
-			return;
-		//TODO: not everything should enter
-		EditorInfo ei = getCurrentInputEditorInfo();
-		if ((ei.inputType & EditorInfo.TYPE_TEXT_FLAG_MULTI_LINE) != 0)
-			handleCharacter('\n');
-		else
-			ic.performEditorAction(getCurrentInputEditorInfo().imeOptions & EditorInfo.IME_MASK_ACTION);
-		// requirements
-		shouldReturn = false;
-		Controller.updateShift(getCurrentInputEditorInfo());
-	}
-
-    public void handleText(String text) {
-        InputConnection ic = getCurrentInputConnection();
-        if (ic == null)
-            return;
-
-        ic.finishComposingText();
-        composing.setLength(0);
-        ic.commitText(text, 0);
-    }
-
-	public void handleCharacter(int keyCode) {
-		InputConnection ic = getCurrentInputConnection();
-		if (ic == null)
-			return;
-		// if charachter
-		if (keyCode != ' ') {
-			// if predicting and is a letter add to composing
-			if (predicting && !Controller.onPassword && (Character.isLetter(keyCode) || Util.isNumber(keyCode))) {
-				//if cusor at the end of composing
-				if (composingIndex >= composing.length()) {
-					composing.append((char) keyCode);
-					ic.setComposingText(composing, 1);
-					composingIndex = composing.length();
-				}
-				//if cursor is not at the end of composing
-				else {
-					commitComposing();
-					ic.commitText(Character.toString((char) keyCode), 1);
-					//then the updateSelection() will update composing and composingIndex
-				}
-			}// if the character is a quote then handle it
-			else if (!Controller.onPassword && Settings.quickInsert && isOpener(keyCode)) {
-				commitComposing();
-                int i = ic.getExtractedText(new ExtractedTextRequest(), 0).selectionStart + 1;
-				ic.commitText(String.valueOf((char)keyCode) +
-							  String.valueOf((char)closers[getIndex(keyCode)]), 1);
-				ic.setSelection(i, i);
-			}
-			// else just send character
-			else {
-				commitComposing();
-				ic.commitText(Character.toString((char) keyCode), 1);
-			}
-			// handle returning to letters with special characters
-            //TODO: this is dumb should be in controller
-			shouldReturn = shouldReturnAfterSpace((char) keyCode); //set should return after space
-			//these characters return right away
-			if (keyCode == '\'' || keyCode == '"' || keyCode == '¿' || keyCode == '¡')
-                Controller.setKeys(DEFAULT_KEYS);
-		}// if space
-		else {
-			commitComposing();
-			ic.commitText(" ", 0);
-			//ic.commitText("\uD83D\uDE00", 0);
-			if (shouldReturn)
-                Controller.setKeys(DEFAULT_KEYS);
-			shouldReturn = false;
-		}
-		Controller.updateShift(getCurrentInputEditorInfo());
-	}
-
-    public void setSelection(int selectionStart, int selectionEnd) {
-        commitComposing();
-		//must set selection start first, just in case because of weird bug when user edits cursor it
-		// 			can select more to the right but nor the left
-		getCurrentInputConnection().setSelection(selectionStart, selectionStart);
-        getCurrentInputConnection().setSelection(selectionStart, selectionEnd);
-    }
-    public void moveSelection(int dSelectionStart, int dSelectionEnd) {
-		try {
-			ExtractedText et = getCurrentInputConnection()
-					.getExtractedText(new ExtractedTextRequest(), 0);
-			int s = et.selectionStart + dSelectionStart, e = et.selectionEnd + dSelectionEnd;
-			s = s < 0 ? 0 : s;
-			e = e < 0 ? 0 : e;
-			if (s <= e)
-				setSelection(s, e);
-			else {
-				Controller.addState(ROTATING | MOVING_CURSOR | CURSOR_LEFT);
-				setSelection(e, s);
-			}
-		} catch (Exception e) {
-		}
 	}
 
     public void handleClipboardAction(int action) {
@@ -590,16 +349,17 @@ public class NovaKey extends InputMethodService {
                         .getItemAt(clipboard.getPrimaryClip().getItemCount()-1)
                         .getText().toString();
                 if (text != null)
-                    handleText(text);
+                    mController.fire(new InputAction(text));
             }
 			// select all
 			else if (action == CB_SELECT_ALL) {
                 int end = eText.text.length();
-				setSelection(0, end);
+                mController.fire(new SelectionActions.Set(0, end));
             }
 			// deselect all
 			else if (action == CB_DESELECT_ALL) {
-                int i = Controller.hasState(CURSOR_LEFT) ? eText.selectionEnd : eText.selectionStart;
+                int i = mController.getTrueModel().getCursorMode() <= 0
+                        ? eText.selectionEnd : eText.selectionStart;
                     ic.setSelection(i, i);
             }
         } catch (Exception e) {}
@@ -618,12 +378,7 @@ public class NovaKey extends InputMethodService {
 	public void showToast(final String message, final int length) {
 		final Context context = this;
 		Handler h = new Handler(this.getMainLooper());
-		h.post(new Runnable() {
-			@Override
-			public void run() {
-				Toast.makeText(context, message, length).show();
-			}
-		});
+		h.post(() -> Toast.makeText(context, message, length).show());
 	}
 
     //vibrates if settings allow it
@@ -632,17 +387,17 @@ public class NovaKey extends InputMethodService {
             vibrator.vibrate(milliseconds);
     }
 
-	private void commitComposing() {
+	public void commitComposing() {
 		InputConnection ic = getCurrentInputConnection();
 		if (ic == null)
 			return;
 
         //AutoCorrect
-		if (Settings.autoCorrect && !Controller.onPassword) {
+		if (Settings.autoCorrect && !mController.getTrueModel().getInputState().onPassword()) {
 			int i = Util.isContraction(composing, getResources());
 			if (i != -1) {
 				String s = getResources().getStringArray(R.array.contractions)[i];
-				if (Controller.hasState(CAPSED_LOCKED))
+				if (mController.getTrueModel().getShiftState() == ShiftState.CAPS_LOCKED)
 					s = s.toUpperCase(Locale.US);//TODO: other languages
 				else if (Character.isUpperCase(composing.charAt(0)))
 					s = Util.capsFirst(s);

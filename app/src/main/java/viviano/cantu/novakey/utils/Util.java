@@ -6,8 +6,10 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.inputmethodservice.Keyboard;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import viviano.cantu.novakey.R;
 
@@ -269,7 +271,7 @@ public class Util {
         }
     }
 
-    // -----------------------------------Animator Util----------------------------------------
+    // -----------------------------------BadAnimator Util----------------------------------------
     public static AnimatorSet sequence(Animator[] anims, long delay) {
         return sequence(anims, delay, null);
     }
@@ -295,5 +297,25 @@ public class Util {
 
     public static float fromFrac(float beg, float end, float frac) {
         return beg + (end - beg) * frac;
+    }
+
+    //----------------------------------Area Util---------------------------------------
+    public static int getGesture(List<Integer> areasCrossed) {
+        int size = areasCrossed.size();
+        if (size < 3 || size > 5)
+            return Keyboard.KEYCODE_CANCEL;
+
+        int first = areasCrossed.get(0), last = areasCrossed.get(size-1);
+        boolean hasZero = areasCrossed.contains(0),
+                hasThree = areasCrossed.contains(3);
+        if (first == 2 && (hasZero || hasThree) && (last == 4 || last == 5))//swipe right
+            return ' ';//SPACE
+        if (first == 4 && (hasZero || hasThree) && last == 2)//swipe left
+            return Keyboard.KEYCODE_DELETE;
+        if ((first == 1 || first == 5) && hasZero && last == 3)//swipe down
+            return '\n'; //ENTER
+        if (first == 3 && hasZero && (last == 1 || last == 5))//swipe up
+            return Keyboard.KEYCODE_SHIFT;
+        return Keyboard.KEYCODE_CANCEL;
     }
 }

@@ -4,10 +4,10 @@ import android.app.Activity;
 import android.os.Bundle;
 
 import viviano.cantu.novakey.R;
-import viviano.cantu.novakey.drawing.Icons;
-import viviano.cantu.novakey.drawing.emoji.Emoji;
-import viviano.cantu.novakey.drawing.emoji.ThrowAwayView;
-import viviano.cantu.novakey.menus.HexGridView;
+import viviano.cantu.novakey.view.drawing.drawables.Drawable;
+import viviano.cantu.novakey.view.drawing.emoji.Emoji;
+import viviano.cantu.novakey.view.drawing.emoji.ThrowAwayView;
+import viviano.cantu.novakey.elements.menus.HexGridView;
 
 public class EmojiSettingActivity extends Activity {
 
@@ -20,7 +20,7 @@ public class EmojiSettingActivity extends Activity {
         setContentView(R.layout.activity_emoji_setting);
 
 
-        final Icons.Drawable[][] grid = new Icons.Drawable[10][10];
+        final Drawable[][] grid = new Drawable[10][10];
 
         final HexGridView hex = (HexGridView)findViewById(R.id.hex);
         hex.setGrid(grid);

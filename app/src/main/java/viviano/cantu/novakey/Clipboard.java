@@ -1,11 +1,22 @@
 package viviano.cantu.novakey;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import viviano.cantu.novakey.drawing.Icons;
-import viviano.cantu.novakey.menus.InfiniteMenu;
-import viviano.cantu.novakey.menus.OnUpMenu;
+import viviano.cantu.novakey.controller.Controller;
+import viviano.cantu.novakey.controller.actions.Action;
+import viviano.cantu.novakey.controller.actions.Actions;
+import viviano.cantu.novakey.controller.actions.EnableMenuAction;
+import viviano.cantu.novakey.controller.actions.ClipboardAction;
+import viviano.cantu.novakey.controller.actions.NoAction;
+import viviano.cantu.novakey.controller.actions.typing.DeleteAction;
+import viviano.cantu.novakey.controller.actions.typing.InputAction;
+import viviano.cantu.novakey.model.NovaKeyModel;
+import viviano.cantu.novakey.view.drawing.Icons;
+import viviano.cantu.novakey.elements.menus.InfiniteMenu;
+import viviano.cantu.novakey.elements.menus.Menu;
+import viviano.cantu.novakey.elements.menus.OnUpMenu;
 
 /**
  * Created by Viviano on 8/2/2015.
@@ -14,6 +25,8 @@ public class Clipboard {
 
     private static final int MAX_CLIP_SIZE = 20;
     private static List<String> clips = new ArrayList<String>();
+
+    public static int COPY = 1, SELECT_ALL = 2, PASTE = 3, DESELECT_ALL = 4, CUT = 5;
 
     public static void add(String text) {
         clips.add(0, text);
@@ -35,71 +48,75 @@ public class Clipboard {
     ///------------------------------------------On up menu--------------------------------
     public static OnUpMenu MENU;
 
-    public static void createMenu() {
-        Object[] list = new Object[] {
-                Icons.get("content_copy"),
-                Icons.get("select_all"),
-                Icons.get("content_paste"),
-                Icons.get("deselect_all"),
-                Icons.get("content_cut")
-        };
-        MENU = new OnUpMenu(list, new OnUpMenu.Action() {
-            @Override
-            public void onUp(int selected) {
-                Controller.performClipboardAction(selected);
+    /**
+     * Loads the clipboard and creates a menu
+     *
+     * @return returns an infinite menu with all the clipboard entries + a cancel entry
+     */
+    private static InfiniteMenu createClipboard() {
+        List<Menu.Entry> entries = new ArrayList<>();
+        for (int i=0; i<Clipboard.clipCount(); i++) {
+            try {
+                String text = Clipboard.get(i);
+                if (text != null)
+                    entries.add(new Menu.Entry(text, new InputAction(text)));
+            } catch (IndexOutOfBoundsException e) {
+                e.printStackTrace();
             }
+        }
+        entries.add(Menu.CANCEL);
 
-            @Override
-            public void onLongPress(int selected) {
-                //if paste is long pressed
-                if (selected == 3) {
-                    ArrayList<String> lst = new ArrayList<>();
-                    for (int i=0; i<Clipboard.clipCount(); i++) {
-                        try {
-                            String text = Clipboard.get(i);
-                            if (text != null)
-                                lst.add(text);
-                        } catch (IndexOutOfBoundsException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    lst.add(InfiniteMenu.CANCEL);
-                    Object[] arr = new Object[lst.size()];
-                    arr = lst.toArray(arr);
-                    Controller.startInfiniteMenu(new InfiniteMenu(arr,
-                            new InfiniteMenu.Action() {
-                                @Override
-                                public void onSelected(Object selected) {
-                                    if (!InfiniteMenu.isCancel(selected))
-                                        Controller.input(selected, 0);
-                                }
-                            }), MENU.fingerX, MENU.fingerY);
-                }
-                //If select_all is longPressed
-                else if (selected == 2) {
-                    Object[] arr = new Object[] {
-                            Icons.get("select_all"),
-                            Icons.get("select_all_copy"),
-                            Icons.get("select_all_cut"),
-                            Icons.get("select_all_clear"),
-                            InfiniteMenu.CANCEL//char is not an object so double cast is required
-                    };
-                    Controller.startInfiniteMenu(new InfiniteMenu(arr, new InfiniteMenu.Action() {
-                        @Override
-                        public void onSelected(Object selected) {
-                            if (!InfiniteMenu.isCancel(selected)) {
-                                Controller.performClipboardAction(NovaKey.CB_SELECT_ALL);
-                                if (selected == Icons.get("select_all_copy"))
-                                    Controller.performClipboardAction(NovaKey.CB_COPY);
-                                else if (selected == Icons.get("select_all_cut"))
-                                    Controller.performClipboardAction(NovaKey.CB_CUT);
-                                else if (selected == Icons.get("select_all_clear"))
-                                    Controller.input("", 0);
-                            }
-                        }
-                    }), MENU.fingerX, MENU.fingerY);
-                }
-            }
-        });
+        return new InfiniteMenu(entries);
+    }
+
+    public static void createMenu() {
+        Action copy = new ClipboardAction(COPY);
+        Action cut = new ClipboardAction(CUT);
+        Action paste = new ClipboardAction(PASTE);
+        Action select_all = new ClipboardAction(SELECT_ALL);
+        Action deselect_all = new ClipboardAction(DESELECT_ALL);
+
+        //select all list
+        List<Menu.Entry> select = Arrays.asList(
+                new Menu.Entry(Icons.get("select_all"),
+                        select_all),
+
+                new Menu.Entry(Icons.get("select_all_copy"),
+                        new Actions(select_all, copy)),
+
+                new Menu.Entry(Icons.get("select_all_cut"),
+                        new Actions(select_all, cut)),
+
+                new Menu.Entry(Icons.get("select_all_clear"),
+                        new Actions(select_all, new DeleteAction())),
+
+                Menu.CANCEL
+        );
+        InfiniteMenu selectAll = new InfiniteMenu(select);
+
+
+
+        //Main list
+        List<Menu.Entry> main = Arrays.asList(
+                new OnUpMenu.Entry(Icons.get("content_copy"),
+                        copy, new NoAction()),
+
+                new OnUpMenu.Entry(Icons.get("select_all"),
+                        select_all, new EnableMenuAction(selectAll)),
+
+                new OnUpMenu.Entry(Icons.get("content_paste"),
+                        paste, (ime, control, model) -> {
+                            InfiniteMenu clipboard = createClipboard();
+                            control.fire(new EnableMenuAction(clipboard));
+                            return null;
+                        }),
+
+                new OnUpMenu.Entry(Icons.get("deselect_all"),
+                        deselect_all, new NoAction()),
+
+                new OnUpMenu.Entry(Icons.get("content_cut"),
+                        cut, new NoAction())
+        );
+        MENU = new OnUpMenu(main);
     }
 }

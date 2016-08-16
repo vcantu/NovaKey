@@ -1,8 +1,7 @@
 package viviano.cantu.novakey.model.keyboards;
 
 import android.content.res.Resources;
-import android.graphics.Canvas;
-import android.graphics.Paint;
+import android.inputmethodservice.Keyboard;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,15 +10,9 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import viviano.cantu.novakey.R;
+import viviano.cantu.novakey.model.properties.KeyProperties;
+import viviano.cantu.novakey.utils.Util;
 
-/**
- * Holds information about all keyboards
- * Holds all keyboards
- * To get a keyboard use
- *      KeyLayout.get("NAME_HERE");
- * Compare KeyLayouts using
- *      .equals(layout);
- */
 public class KeyLayout implements Iterator<Key>, Iterable<Key> {
 
     private final Key[][] keys;
@@ -138,5 +131,76 @@ public class KeyLayout implements Iterator<Key>, Iterable<Key> {
             }
         }
         return result;
+    }
+
+    /*
+     * will return the keyCode for the actions done
+     * or Keyboard.KEYCODE_CANCEL if invalid
+     */
+    public int getKey(List<Integer> areasCrossed) {
+        if (areasCrossed.size() <= 0)
+            return Keyboard.KEYCODE_CANCEL;
+        //regular areas
+        //gets first and last of list
+        int firstArea = areasCrossed.get(0);
+        //Inside circle
+        if (firstArea >= 0) {
+            int key = Util.getGesture(areasCrossed);
+            if (key != Keyboard.KEYCODE_CANCEL) {
+                return key;
+            }
+            Location l = getLoc(areasCrossed);
+            try { //makes sure is l checks out
+                return getLowercase(l.x, l.y);
+            } catch (Exception e) {
+
+            }
+        }
+        return Keyboard.KEYCODE_CANCEL;
+    }
+
+    private Location getLoc(List<Integer> areasCrossed) {
+        if (areasCrossed.size() <= 0)
+            return null;
+        //regular areas
+        //gets first and last of list
+        int firstArea = areasCrossed.get(0);
+        int lastArea = areasCrossed.get(areasCrossed.size() > 1 ? areasCrossed.size() - 1 : 0);
+        //sets to last or first if there is only one value
+        int secondArea = areasCrossed.get(areasCrossed.size() > 1 ? 1 : 0);
+        //sets to second value or first if there is only one value
+
+        //Inside circle
+        if (firstArea >= 0) {
+            //loops twice checks first and last area first, then checks first and second area
+            int check = lastArea;
+            for (int i=0; i<2; i++) {
+                if (firstArea == 0 && check >= 0)//center
+                    return new Location(0, check);
+                else {
+                    if (firstArea == check)
+                        return new Location(firstArea, 0);
+                    else if (check == firstArea+1 || (firstArea == 5 && check == 1))
+                        return new Location(firstArea, 1);
+                    else if (check == 0)
+                        return new Location(firstArea, 2);
+                    else if (check == firstArea-1 || (firstArea == 1 && check == 5))
+                        return new Location(firstArea, 3);
+                    else if (check == -1 && areasCrossed.size() == 2)
+                        return new Location(firstArea, 4);
+                }
+                check = secondArea;
+            }
+        }
+        return null;
+    }
+
+    private static class Location {
+        final int x, y;
+
+        Location(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
     }
 }

@@ -1,13 +1,30 @@
 package viviano.cantu.novakey.model;
 
-import viviano.cantu.novakey.menus.InfiniteMenu;
-import viviano.cantu.novakey.menus.OnUpMenu;
+import android.view.inputmethod.EditorInfo;
+
+import viviano.cantu.novakey.elements.menus.Menu;
 import viviano.cantu.novakey.model.keyboards.KeyLayout;
+import viviano.cantu.novakey.model.states.InputState;
+import viviano.cantu.novakey.model.states.ShiftState;
+import viviano.cantu.novakey.model.states.UserState;
 
 /**
  * Created by Viviano on 6/10/2016.
  */
 public interface StateModel {
+
+    /**
+     * @return the current input state
+     */
+    InputState getInputState();
+
+    /**
+     * Uses the given editor info to update the input state
+     *
+     * @param editorInfo info used to generate input state
+     */
+    void updateInputState(EditorInfo editorInfo);
+
     /**
      * @return the current orientation state of the phone
      */
@@ -68,22 +85,12 @@ public interface StateModel {
     void setCursorMode(int cursorMode);
 
     /**
-     * @return the infinite menu, can be null
+     * @return the current menu or null if there is none
      */
-    InfiniteMenu getInfiniteMenu();
+    Menu getMenu();
 
     /**
-     * @param infiniteMenu menu to set
+     * @param menu menu to set
      */
-    void setInfiniteMenu(InfiniteMenu infiniteMenu);
-
-    /**
-     * @return the on up menu, can be null
-     */
-    OnUpMenu getOnUpMenu();
-
-    /**
-     * @param onUpMenu menu to set
-     */
-    void setOnUpMenu(OnUpMenu onUpMenu);
+    void setMenu(Menu menu);
 }

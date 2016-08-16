@@ -7,17 +7,16 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import viviano.cantu.novakey.model.keyboards.KeyLayout;
-import viviano.cantu.novakey.NovaKeyDimen;
 import viviano.cantu.novakey.R;
-import viviano.cantu.novakey.themes.BaseTheme;
-import viviano.cantu.novakey.themes.Theme;
+import viviano.cantu.novakey.view.themes.board.BaseTheme;
+import viviano.cantu.novakey.view.themes.board.BoardTheme;
 
 /**
  * Created by Viviano on 6/6/2015.
  */
 public class ThemePreview extends View {
 
-    protected Theme theme;
+    protected BoardTheme theme;
     protected Paint p;
 
     private NovaKeyDimen mDimens;
@@ -80,7 +79,7 @@ public class ThemePreview extends View {
 //        Draw.text(ratio + "", centerX + radius + 70, centerY, p, canvas);
     }
 
-    public void set(Theme t) {
+    public void set(BoardTheme t) {
         theme = t;
     }
 }

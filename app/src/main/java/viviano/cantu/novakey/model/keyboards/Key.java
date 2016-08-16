@@ -1,9 +1,10 @@
 package viviano.cantu.novakey.model.keyboards;
 
-import viviano.cantu.novakey.model.posns.DeltaPosn;
-import viviano.cantu.novakey.model.posns.RadiiPosn;
-import viviano.cantu.novakey.model.posns.RelativePosn;
-import viviano.cantu.novakey.model.posns.SmallRadiusPosn;
+import viviano.cantu.novakey.model.properties.KeyProperties;
+import viviano.cantu.novakey.view.posns.DeltaPosn;
+import viviano.cantu.novakey.view.posns.RadiiPosn;
+import viviano.cantu.novakey.view.posns.RelativePosn;
+import viviano.cantu.novakey.view.posns.SmallRadiusPosn;
 
 /**
  * Created by Viviano on 10/12/2015.
@@ -11,7 +12,7 @@ import viviano.cantu.novakey.model.posns.SmallRadiusPosn;
 public class Key {
 
     private final Character c;
-    private final int group, loc;
+    public final int group, loc;
     private final boolean mAltLayout;
     public final KeyProperties properties;
 
@@ -24,7 +25,7 @@ public class Key {
         this.group = group;
         this.loc = loc;
         this.mAltLayout = altLayout;
-        this.properties = new KeyProperties(this);
+        this.properties = new KeyProperties(this, getDesiredPosn());
     }
 
     /**

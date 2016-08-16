@@ -3,9 +3,8 @@ package viviano.cantu.novakey.settings.widgets.pickers;
 import android.content.Context;
 import android.util.AttributeSet;
 
-import viviano.cantu.novakey.themes.BaseTheme;
-import viviano.cantu.novakey.themes.Theme;
-import viviano.cantu.novakey.themes.ThemeBuilder;
+import viviano.cantu.novakey.view.themes.board.BoardTheme;
+import viviano.cantu.novakey.view.themes.ThemeFactory;
 
 /**
  * Created by Viviano on 1/24/2016.
@@ -29,8 +28,8 @@ public class ThemePicker extends HorizontalPicker {
      */
     @Override
     protected PickerItem[] initializeItems() {
-        PickerItem[] arr = new PickerItem[ThemeBuilder.THEME_COUNT];
-        for (Theme t : ThemeBuilder.allThemes()) {
+        PickerItem[] arr = new PickerItem[ThemeFactory.getThemeCount()];
+        for (BoardTheme t : ThemeFactory.allThemes()) {
             arr[t.themeID()] = t;
         }
         return arr;

@@ -3,7 +3,6 @@ package viviano.cantu.novakey;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.AttributeSet;
@@ -11,16 +10,17 @@ import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 
-import viviano.cantu.novakey.drawing.Draw;
-import viviano.cantu.novakey.drawing.Icons;
-import viviano.cantu.novakey.settings.Settings;
-import viviano.cantu.novakey.themes.Theme;
+import viviano.cantu.novakey.model.Settings;
+import viviano.cantu.novakey.view.themes.MasterTheme;
+import viviano.cantu.novakey.view.themes.Themeable;
+import viviano.cantu.novakey.view.themes.board.BoardTheme;
 import viviano.cantu.novakey.utils.Util;
 
 
-public class NovaKeyEditView extends View implements View.OnTouchListener {
+public class NovaKeyEditView extends View implements View.OnTouchListener, Themeable {
 
-    private Theme mTheme;
+    //Theme to use
+    private MasterTheme mTheme;
 
     //Dimensions
     private final int screenWidth, screenHeight;//in pixels
@@ -61,14 +61,12 @@ public class NovaKeyEditView extends View implements View.OnTouchListener {
     }
 
     /**
-     * Will set this view's theme with the given one
+     * Will set this object's theme
      *
-     * @param theme theme to set to
-     * @throws IllegalArgumentException if the theme passed is null
+     * @param theme a Master Theme
      */
-    public void setTheme(Theme theme) {
-        if (theme == null)
-            throw new IllegalArgumentException("Theme cannot be null");
+    @Override
+    public void setTheme(MasterTheme theme) {
         mTheme = theme;
     }
 
@@ -106,10 +104,11 @@ public class NovaKeyEditView extends View implements View.OnTouchListener {
 
     @Override
     public void onDraw(Canvas canvas) {
-        mTheme.drawBackground(0, (centerY - radius), viewWidth, viewHeight, centerX, centerY,
+        mTheme.getBackgroundTheme()
+                .drawBackground(0, (centerY - radius), viewWidth, viewHeight, centerX, centerY,
                 radius, radius / smallRadius, canvas);
 
-        mTheme.drawBoard(centerX, centerY, radius, radius / smallRadius, canvas);
+        mTheme.getBoardTheme().drawBoard(centerX, centerY, radius, radius / smallRadius, canvas);
     }
 
     @Override

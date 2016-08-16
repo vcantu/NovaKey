@@ -7,10 +7,9 @@ import android.os.Bundle;
 import android.view.Window;
 
 import viviano.cantu.novakey.NovaKey;
-import viviano.cantu.novakey.settings.Settings;
 
 public class SetupActivity extends Activity {
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -20,7 +19,7 @@ public class SetupActivity extends Activity {
 		Editor editor = pref.edit();
 		editor.putBoolean("has_setup", false);
 		editor.commit();
-		
+
 		setContentView(new SetupView(this));
 	}
 }

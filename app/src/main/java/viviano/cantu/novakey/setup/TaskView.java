@@ -13,8 +13,8 @@ import android.view.animation.OvershootInterpolator;
 
 import java.util.ArrayList;
 
-import viviano.cantu.novakey.drawing.Draw;
-import viviano.cantu.novakey.Font;
+import viviano.cantu.novakey.view.drawing.Draw;
+import viviano.cantu.novakey.view.drawing.Font;
 import viviano.cantu.novakey.R;
 import viviano.cantu.novakey.utils.Util;
 

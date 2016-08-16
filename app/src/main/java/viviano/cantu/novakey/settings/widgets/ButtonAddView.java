@@ -5,10 +5,8 @@ import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.View;
 
-import viviano.cantu.novakey.NovaKeyDimen;
-import viviano.cantu.novakey.drawing.Icons;
-import viviano.cantu.novakey.btns.Btn;
-import viviano.cantu.novakey.btns.BtnTheme;
+import viviano.cantu.novakey.elements.buttons.Button;
+import viviano.cantu.novakey.view.drawing.Icons;
 
 /**
  * Created by Viviano on 6/30/2015.
@@ -16,7 +14,7 @@ import viviano.cantu.novakey.btns.BtnTheme;
 public class ButtonAddView extends View {
 
     private float radius;
-    private Btn btn;
+    private Button button;
     private BtnTheme mBtnTheme;
 
     public ButtonAddView(Context context, AttributeSet attrs) {
@@ -24,7 +22,7 @@ public class ButtonAddView extends View {
         this.setLayerType(View.LAYER_TYPE_SOFTWARE, null);//allows svgs
         mBtnTheme = new BtnTheme();
         mBtnTheme.setColors(0xFF616161, 0xFFF5F5F5);
-        btn = new Btn(Math.PI/2,0,Btn.CIRCLE|Btn.SMALL);//this will be updated right away
+        button = new Button(Math.PI/2,0, Button.CIRCLE| Button.SMALL);//this will be updated right away
     }
 
     public void setRadius(float radius) {
@@ -39,27 +37,27 @@ public class ButtonAddView extends View {
                         radius * 2, radius * 2,
                         radius, radius / 2, null);
 
-        if ((btn.shape&Btn.SHAPE)==Btn.ARC) {
-            btn.dist = 1;
+        if ((button.shape& Button.SHAPE)== Button.ARC) {
+            button.dist = 1;
             dimens.y -= radius;
-            btn.draw(dimens, mBtnTheme, canvas);
+            button.draw(dimens, mBtnTheme, canvas);
         }
         else {
-            btn.dist = 0;
-            btn.draw(dimens, mBtnTheme, canvas);
+            button.dist = 0;
+            button.draw(dimens, mBtnTheme, canvas);
         }
     }
 
     public void setShape(int shape) {
-        btn.shape = shape;
+        button.shape = shape;
         invalidate();
     }
 
     public int btnShape() {
-        return btn.shape;
+        return button.shape;
     }
 
     public void enableAddIcon() {
-        btn.icon = Icons.get("add");
+        button.icon = Icons.get("add");
     }
 }

@@ -4,18 +4,18 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import viviano.cantu.novakey.R;
+import viviano.cantu.novakey.model.Settings;
 import viviano.cantu.novakey.settings.widgets.pickers.ColorPicker;
 import viviano.cantu.novakey.settings.widgets.pickers.HorizontalPicker;
 import viviano.cantu.novakey.settings.widgets.pickers.PickerItem;
 import viviano.cantu.novakey.settings.widgets.ThemePreview;
 import viviano.cantu.novakey.settings.widgets.pickers.ReleasePicker;
 import viviano.cantu.novakey.settings.widgets.pickers.ThemePicker;
-import viviano.cantu.novakey.themes.Theme;
-import viviano.cantu.novakey.themes.ThemeBuilder;
+import viviano.cantu.novakey.view.themes.board.BoardTheme;
+import viviano.cantu.novakey.view.themes.ThemeFactory;
 
 /**
  * Created by Viviano on 1/5/2016.
@@ -39,21 +39,13 @@ public class StylePreferenceActivity extends AbstractPreferenceActivity {
 
         final CheckBox autoCheck = (CheckBox)findViewById(R.id.autoColor);
         autoCheck.setChecked(mIsAuto);
-        autoCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mIsAuto = isChecked;
-            }
-        });
+        autoCheck.setOnCheckedChangeListener((buttonView, isChecked) -> mIsAuto = isChecked);
 
         final CheckBox _3dCheck = (CheckBox)findViewById(R.id.threeDee);
         _3dCheck.setChecked(mIs3d);
-        _3dCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mIs3d = isChecked;
-                updatePreview();
-            }
+        _3dCheck.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            mIs3d = isChecked;
+            updatePreview();
         });
 
         final ThemePicker themePicker = (ThemePicker)findViewById(R.id.themePicker);
@@ -62,7 +54,7 @@ public class StylePreferenceActivity extends AbstractPreferenceActivity {
         themePicker.setOnItemSelectedListener(new HorizontalPicker.OnItemSelectedListener() {
             @Override
             public void onItemSelected(PickerItem item, int subIndex) {
-                int index = ((Theme)item).themeID();
+                int index = ((BoardTheme)item).themeID();
                 mTheme = index;
                 updatePreview();
             }
@@ -111,7 +103,7 @@ public class StylePreferenceActivity extends AbstractPreferenceActivity {
      * Will update the theme preview
      */
     private void updatePreview() {
-        Theme t = ThemeBuilder.getTheme(mTheme);
+        BoardTheme t = ThemeFactory.createTheme(mTheme);
         t.setColors(mColor1, mColor2, mColor3);
         t.set3D(mIs3d);
         mPreview.set(t);

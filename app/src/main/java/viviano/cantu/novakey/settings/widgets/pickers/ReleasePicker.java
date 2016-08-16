@@ -1,7 +1,6 @@
 package viviano.cantu.novakey.settings.widgets.pickers;
 
 import android.animation.Animator;
-import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
@@ -13,8 +12,7 @@ import android.view.animation.OvershootInterpolator;
 
 import viviano.cantu.novakey.R;
 import viviano.cantu.novakey.utils.Util;
-import viviano.cantu.novakey.animations.DelayableInterpolator;
-import viviano.cantu.novakey.animations.MultiValueAnimator;
+import viviano.cantu.novakey.view.animations.MultiValueAnimator;
 
 /**
  * Created by Viviano on 1/8/2016.
