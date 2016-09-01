@@ -50,15 +50,13 @@ public class ThrowAwayView extends View implements View.OnTouchListener {
             if (index + i >= Emoji.emojis.size())
                 break;
             Emoji e = Emoji.emojis.get(index + i);
-            Icons.draw(e, x * emojiSize + (emojiSize / 2), y * emojiSize + (emojiSize / 2), size, p, canvas);
+            e.draw(x * emojiSize + (emojiSize / 2), y * emojiSize + (emojiSize / 2), size, p, canvas);
             x++;
             if (x >= maxLine) {
                 x = 0;
                 y++;
             }
         }
-
-
 
     }
 

@@ -1,16 +1,10 @@
 package viviano.cantu.novakey.view.themes.board;
 
 import android.graphics.Canvas;
-import android.graphics.LightingColorFilter;
 import android.graphics.Paint;
-import android.graphics.Path;
 
 import viviano.cantu.novakey.view.drawing.Draw;
 import viviano.cantu.novakey.view.drawing.drawables.Drawable;
-import viviano.cantu.novakey.view.drawing.Icons;
-import viviano.cantu.novakey.elements.menus.Menu;
-import viviano.cantu.novakey.model.DrawModel;
-import viviano.cantu.novakey.view.INovaKeyView;
 import viviano.cantu.novakey.view.themes.MasterTheme;
 
 /**
@@ -18,8 +12,8 @@ import viviano.cantu.novakey.view.themes.MasterTheme;
  */
 public class BaseTheme implements BoardTheme {
 
-    private final Paint pB, pT;
-    private MasterTheme mParent;
+    protected final Paint pB, pT;
+    protected MasterTheme mParent;
 
 
     public BaseTheme() {
@@ -89,24 +83,6 @@ public class BaseTheme implements BoardTheme {
         pT.setColor(mParent.getContrastColor());
         drawable.draw(x, y, size, pT, canvas);
         pT.clearShadowLayer();
-
-        //TODO: use this code for donut boards
-//        menu.draw(view, this, canvas);
-//        if (textColor() != textColors()[0]) {
-//            try {
-//                canvas.save();
-//                Path p = new Path();
-//                p.addCircle(x, y, sr + 2, Path.Direction.CW);
-//                canvas.clipPath(p);
-//
-//                pT.setColor(textColors()[0]);
-//                menu.draw(view, this, canvas);
-//                canvas.restore();
-//            } catch (IllegalStateException e) {
-//                e.printStackTrace();
-//            }
-//        }
-
     }
 
     /**
@@ -131,7 +107,7 @@ public class BaseTheme implements BoardTheme {
      * @param canvas   canvas to draw on
      */
     @Override
-    public void draw(float x, float y, float dimen, boolean selected, int index, Paint p, Canvas canvas) {
+    public void drawPickerItem(float x, float y, float dimen, boolean selected, int index, Paint p, Canvas canvas) {
         float r = dimen / 2 * .8f;
         float sr = (dimen / 2 * .8f) / 3;
         mParent.setColors(0xFFF0F0F0, 0xFF616161, 0xFF616161);

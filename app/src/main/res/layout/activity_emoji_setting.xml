@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <viviano.cantu.novakey.elements.menus.HexGridView
+        <viviano.cantu.novakey.HexGridView
             android:id="@+id/hex"
             android:layout_width="match_parent"
             android:layout_height="200dp" />

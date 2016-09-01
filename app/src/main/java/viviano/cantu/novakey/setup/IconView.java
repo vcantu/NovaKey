@@ -8,7 +8,6 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import viviano.cantu.novakey.view.drawing.drawables.Drawable;
-import viviano.cantu.novakey.view.drawing.Icons;
 
 /**
  * Created by Viviano on 10/22/2015.
@@ -47,7 +46,7 @@ public class IconView extends View implements View.OnTouchListener {
     public void onDraw(Canvas canvas) {
         float w = getWidth(), h = getHeight();
         p.setColor(touched ? mColor : mColor);//TODO: make color lighter
-        Icons.draw(icon, w / 2, h / 2, w * size, p, canvas);
+        icon.draw(w / 2, h / 2, w * size, p, canvas);
     }
 
     @Override
@@ -70,6 +69,7 @@ public class IconView extends View implements View.OnTouchListener {
     public void setClickListener(OnClickListener listener) {
         this.listener = listener;
     }
+
 
     public interface OnClickListener {
         void onClick();

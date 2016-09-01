@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <viviano.cantu.novakey.settings.widgets.ThemePreview
+        <viviano.cantu.novakey.view.MainView
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:paddingTop="5dp"

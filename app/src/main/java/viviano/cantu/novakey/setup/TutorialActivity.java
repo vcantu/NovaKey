@@ -15,9 +15,9 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import viviano.cantu.novakey.animations.FocusAnimation;
 import viviano.cantu.novakey.controller.Controller;
-import viviano.cantu.novakey.view.animations.animators.FocusBadAnimator;
-import viviano.cantu.novakey.view.animations.animators.TeachBadAnimator;
+import viviano.cantu.novakey.animations.animators.TeachBadAnimator;
 import viviano.cantu.novakey.view.drawing.Icons;
 import viviano.cantu.novakey.R;
 
@@ -51,7 +51,7 @@ public class TutorialActivity extends Activity {
                     mHintIC.setVisibility(mTasks.get(index).hasHint()
                             ? View.VISIBLE : View.INVISIBLE);
 
-                    //initialize depending on task
+                    //start depending on task
                     mTasks.get(prev).onEnd();
                     mEditText.setText("");
                     mTasks.get(index).onStart(mEditText);
@@ -164,7 +164,7 @@ public class TutorialActivity extends Activity {
             @Override
             void onStart(EditText text) {
                 text.setText("");
-                Controller.animate(new FocusBadAnimator(tappers).addDelay(400));
+                Controller.animate(new FocusAnimation(tappers).addDelay(400));
             }
 
             @Override
@@ -192,7 +192,7 @@ public class TutorialActivity extends Activity {
             @Override
             void onStart(EditText text) {
                 text.setText("");
-                Controller.animate(new FocusBadAnimator(swipers).addDelay(400));
+                Controller.animate(new FocusAnimation(swipers).addDelay(400));
             }
 
             @Override

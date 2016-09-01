@@ -6,9 +6,8 @@ import android.os.CountDownTimer;
 import java.util.ArrayList;
 import java.util.List;
 
-import viviano.cantu.novakey.elements.boards.Board;
 import viviano.cantu.novakey.controller.Controller;
-import viviano.cantu.novakey.controller.actions.EnableMenuAction;
+import viviano.cantu.novakey.controller.actions.SetOverlayAction;
 import viviano.cantu.novakey.controller.actions.SetUserStateAction;
 import viviano.cantu.novakey.elements.menus.InfiniteMenu;
 import viviano.cantu.novakey.model.states.UserState;
@@ -21,10 +20,10 @@ import viviano.cantu.novakey.utils.Util;
 public class TypingHandler extends AreaCrossedHandler {
 
     private final List<Integer> mAreas;
+
     private CountDownTimer mTimer;
 
-    public TypingHandler(Board board) {
-        super(board);
+    public TypingHandler() {
         mAreas = new ArrayList<>();
     }
 
@@ -40,8 +39,10 @@ public class TypingHandler extends AreaCrossedHandler {
 
             @Override
             public void onFinish() {
-                controller.fire(new EnableMenuAction(InfiniteMenu.getHiddenKeys(
-                        (char)controller.getTrueModel().getKeyboard().getKey(mAreas))
+                controller.fire(new SetOverlayAction(InfiniteMenu.getHiddenKeys(
+                        (char) controller.getModel().getKeyboard()
+                                .getKey(mAreas,
+                                        controller.getModel().getShiftState()))
                 ));
             }
         };
@@ -83,9 +84,11 @@ public class TypingHandler extends AreaCrossedHandler {
             int idx = repeatingIndex();
             if (idx != -1) {
                 //switch to repeat handler
-                int repeatingChar = controller.getTrueModel().getKeyboard().getKey(mAreas);
+                int repeatingChar = controller.getModel().getKeyboard()
+                        .getKey(mAreas,
+                                controller.getModel().getShiftState());
 
-                manager.setHandler(new RepeatHandler(mBoard, repeatingChar,
+                manager.setHandler(new RepeatHandler(repeatingChar,
                         mAreas.get(idx), mAreas.get(idx + 2)));
             }
             if (Util.getGesture(mAreas) == Keyboard.KEYCODE_DELETE) {

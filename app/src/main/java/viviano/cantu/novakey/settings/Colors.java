@@ -44,7 +44,7 @@ public class Colors implements PickerItem {
     }
 
     @Override
-    public void draw(float x, float y, float dimen, boolean selected, int index, Paint p, Canvas canvas) {
+    public void drawPickerItem(float x, float y, float dimen, boolean selected, int index, Paint p, Canvas canvas) {
         p.setShadowLayer(dimen * .1f / 2, 0, dimen * .1f / 2, 0x80000000);
         Draw.colorItem(shade(index), x, y, dimen / 2 * .8f, selected, p, canvas);
     }

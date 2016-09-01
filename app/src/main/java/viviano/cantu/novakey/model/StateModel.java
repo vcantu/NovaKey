@@ -2,14 +2,15 @@ package viviano.cantu.novakey.model;
 
 import android.view.inputmethod.EditorInfo;
 
-import viviano.cantu.novakey.elements.menus.Menu;
-import viviano.cantu.novakey.model.keyboards.KeyLayout;
+import viviano.cantu.novakey.elements.keyboards.Keyboard;
 import viviano.cantu.novakey.model.states.InputState;
 import viviano.cantu.novakey.model.states.ShiftState;
 import viviano.cantu.novakey.model.states.UserState;
 
 /**
  * Created by Viviano on 6/10/2016.
+ *
+ * Model interface which contains variables which can change throughout a typing session
  */
 public interface StateModel {
 
@@ -23,17 +24,12 @@ public interface StateModel {
      *
      * @param editorInfo info used to generate input state
      */
-    void updateInputState(EditorInfo editorInfo);
-
-    /**
-     * @return the current orientation state of the phone
-     */
-    boolean isLandscape();
+    void onStart(EditorInfo editorInfo);
 
     /**
      * @return the key layout that should be drawn
      */
-    KeyLayout getKeyboard();
+    Keyboard getKeyboard();
 
     /**
      * @return the code/index of the current keyboard
@@ -84,13 +80,4 @@ public interface StateModel {
      */
     void setCursorMode(int cursorMode);
 
-    /**
-     * @return the current menu or null if there is none
-     */
-    Menu getMenu();
-
-    /**
-     * @param menu menu to set
-     */
-    void setMenu(Menu menu);
 }

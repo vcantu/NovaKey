@@ -8,25 +8,33 @@ import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.controller.actions.Action;
 import viviano.cantu.novakey.controller.touch.HandlerManager;
 import viviano.cantu.novakey.controller.touch.TouchHandler;
+import viviano.cantu.novakey.elements.Element;
 import viviano.cantu.novakey.model.DrawModel;
+import viviano.cantu.novakey.model.Model;
 import viviano.cantu.novakey.model.Settings;
-import viviano.cantu.novakey.model.properties.ButtonProperties;
-import viviano.cantu.novakey.view.INovaKeyView;
+import viviano.cantu.novakey.model.StateModel;
 import viviano.cantu.novakey.view.drawing.drawables.Drawable;
 import viviano.cantu.novakey.view.drawing.shapes.Shape;
 import viviano.cantu.novakey.view.posns.RelativePosn;
 import viviano.cantu.novakey.view.themes.MasterTheme;
+import viviano.cantu.novakey.view.themes.button.ButtonTheme;
 
 /**
  * Created by Viviano on 6/22/2015.
  */
-public abstract class Button implements IButton, TouchHandler {
+public abstract class Button
+        implements TouchHandler, Element {
 
     private Drawable mIcon;
-    private ButtonProperties mProperties;
 
     private CountDownTimer mLongPress;
     private boolean mShouldClick = true;
+
+    private ButtonData mData;
+
+    public Button(ButtonData data) {
+        mData = data;
+    }
 
     /**
      * Must be called by children of this class in order to
@@ -48,52 +56,28 @@ public abstract class Button implements IButton, TouchHandler {
      */
     protected abstract Action onLongPressAction();
 
-
-    /**
-     * @return this class's properties
-     */
-    @Override
-    public ButtonProperties getProperties() {
-        return mProperties;
-    }
-
-    /**
-     * Sets this class's properties
-     *
-     * @param properties properties to set
-     */
-    @Override
-    public void setProperties(ButtonProperties properties) {
-        mProperties = properties;
-    }
-
     /**
      * Draws the button. Button must handle it's own paint.
      * Never call this method directly unless inside of a
      * View's onDraw() method
-     *  @param view   view given for context
      * @param theme  theme for drawing properties
      * @param canvas canvas to draw on
      */
     @Override
-    public void draw(INovaKeyView view, MasterTheme theme, Canvas canvas) {
-        //TODO: 3d button
-        Shape shape = mProperties.getShape();
-        RelativePosn posn = mProperties.getPosn();
-        float size = mProperties.getSize();
+    public void draw(Model model, MasterTheme theme, Canvas canvas) {
+        ButtonTheme buttonTheme = theme.getButtonTheme();
 
-        //TODO: get background paint
-        shape.draw(posn.getX(view.getDrawModel()), posn.getY(view.getDrawModel()),
-                size, p, canvas);
+        Shape shape = mData.getShape();
+        RelativePosn posn = mData.getPosn();
+        float size = mData.getSize();
 
-        //TODO get contrast paint
+        buttonTheme.drawBack(shape, posn.getX(model), posn.getY(model), size, canvas);
+
         if (mIcon != null)
-            mIcon.draw(posn.getX(view.getDrawModel()), posn.getY(view.getDrawModel()),
-                    size * .7f, p, canvas);
+            buttonTheme.drawIcon(mIcon, posn.getX(model), posn.getY(model), size * .7f, canvas);
     }
 
     /**
-     * @param controller provides context to the handler
      * @return a touch handler which returns true if being used
      * or false otherwise. For example if a button element is activated by being
      * clicked, if the handler detects this in the onDown event it will
@@ -101,7 +85,7 @@ public abstract class Button implements IButton, TouchHandler {
      * to be activated
      */
     @Override
-    public TouchHandler getTouchHandler(Controller controller) {
+    public TouchHandler getTouchHandler() {
         return this;
     }
 
@@ -116,22 +100,22 @@ public abstract class Button implements IButton, TouchHandler {
      */
     @Override
     public boolean handle(MotionEvent event, Controller control, HandlerManager manager) {
-        Shape shape = mProperties.getShape();
-        RelativePosn posn = mProperties.getPosn();
-        float size = mProperties.getSize();
-        DrawModel dm = control.getDrawModel();
+        Model model = control.getModel();
+        Shape shape = mData.getShape();
+        RelativePosn posn = mData.getPosn();
+        float size = mData.getSize();
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 if (shape.isInside(event.getX(), event.getY(),
-                        posn.getX(dm), posn.getY(dm), size)) {
+                        posn.getX(model), posn.getY(model), size)) {
                     startLongPress(control);
                     return true;
                 }
                 return false;
             case MotionEvent.ACTION_MOVE:
                 if (!shape.isInside(event.getX(), event.getY(),
-                        posn.getX(dm), posn.getY(dm), size)) {
+                        posn.getX(model), posn.getY(model), size)) {
                     cancelLongPress();
                     return false;
                 }
@@ -195,4 +179,5 @@ public abstract class Button implements IButton, TouchHandler {
 //        }
 //        return B;
 //    }
+
 }

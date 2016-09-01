@@ -2,7 +2,7 @@ package viviano.cantu.novakey.controller.actions;
 
 import viviano.cantu.novakey.NovaKey;
 import viviano.cantu.novakey.controller.Controller;
-import viviano.cantu.novakey.model.NovaKeyModel;
+import viviano.cantu.novakey.model.Model;
 
 /**
  * Does nothing, used as a filler for classes that require
@@ -19,7 +19,7 @@ public class NoAction implements Action<Void> {
      * @param model
      */
     @Override
-    public Void trigger(NovaKey ime, Controller control, NovaKeyModel model) {
+    public Void trigger(NovaKey ime, Controller control, Model model) {
         return null;
     }
 }

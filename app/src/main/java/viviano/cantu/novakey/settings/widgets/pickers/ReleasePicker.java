@@ -12,7 +12,7 @@ import android.view.animation.OvershootInterpolator;
 
 import viviano.cantu.novakey.R;
 import viviano.cantu.novakey.utils.Util;
-import viviano.cantu.novakey.view.animations.MultiValueAnimator;
+import viviano.cantu.novakey.animations.utils.MultiValueAnimator;
 
 /**
  * Created by Viviano on 1/8/2016.
@@ -75,7 +75,7 @@ public class ReleasePicker extends View {
     }
 
     private void drawItem(int i, Canvas canvas) {
-        mItems.draw(
+        mItems.drawPickerItem(
                 Util.xFromAngle(mCenterX, mData[i].distance, mData[i].angle),
                 Util.yFromAngle(mCenterY, mData[i].distance, mData[i].angle),
                 dimen * mData[i].scale * mData[i].scaleMultiplier,

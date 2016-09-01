@@ -271,7 +271,7 @@ public class Util {
         }
     }
 
-    // -----------------------------------BadAnimator Util----------------------------------------
+    // -----------------------------------BaseAnimation Util----------------------------------------
     public static AnimatorSet sequence(Animator[] anims, long delay) {
         return sequence(anims, delay, null);
     }

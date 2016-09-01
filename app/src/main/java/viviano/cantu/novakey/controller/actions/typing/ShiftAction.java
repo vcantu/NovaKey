@@ -9,9 +9,9 @@ import viviano.cantu.novakey.controller.actions.Action;
 import viviano.cantu.novakey.controller.actions.SelectionActions;
 import viviano.cantu.novakey.controller.actions.SetKeyboardAction;
 import viviano.cantu.novakey.controller.actions.SetShiftStateAction;
-import viviano.cantu.novakey.model.NovaKeyModel;
+import viviano.cantu.novakey.elements.keyboards.Keyboards;
+import viviano.cantu.novakey.model.Model;
 import viviano.cantu.novakey.model.states.ShiftState;
-import viviano.cantu.novakey.model.keyboards.KeyLayout;
 import viviano.cantu.novakey.utils.Util;
 
 /**
@@ -31,7 +31,7 @@ public class ShiftAction implements Action<Void> {
      * @param model
      */
     @Override
-    public Void trigger(NovaKey ime, Controller control, NovaKeyModel model) {
+    public Void trigger(NovaKey ime, Controller control, Model model) {
         String selectedText = ime.getSelectedText();
         boolean shiftText = selectedText.length() > 0;
         int s = 0, e = 0;
@@ -43,11 +43,11 @@ public class ShiftAction implements Action<Void> {
         }
 
         switch (model.getKeyboardCode()) {
-            case KeyLayout.PUNCTUATION:
-                control.fire(new SetKeyboardAction(KeyLayout.SYMBOLS));
+            case Keyboards.PUNCTUATION:
+                control.fire(new SetKeyboardAction(Keyboards.SYMBOLS));
                 break;
-            case KeyLayout.SYMBOLS:
-                control.fire(new SetKeyboardAction(KeyLayout.PUNCTUATION));
+            case Keyboards.SYMBOLS:
+                control.fire(new SetKeyboardAction(Keyboards.PUNCTUATION));
                 break;
             default:
                 switch (model.getShiftState()) {

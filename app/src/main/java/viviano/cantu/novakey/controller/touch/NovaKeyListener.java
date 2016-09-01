@@ -63,14 +63,15 @@ public class NovaKeyListener implements View.OnTouchListener, HandlerManager {
                 break;
         }
 
+        //if has a handler handle event
         if (mHandler != null) {
             boolean result = mHandler.handle(event, mController, this);
-            if (result)
+            if (result)//if event returns true handler is done
                 mHandler = null;
         } else {
-            for (Element e : mController.getElements()) {
-                if (e.getTouchHandler(mController).handle(event, mController, this)) {
-                    mHandler = e.getTouchHandler(mController);
+            for (Element e : mController.getModel().getElements()) {
+                if (e.getTouchHandler().handle(event, mController, this)) {
+                    mHandler = e.getTouchHandler();
                     break;
                 }
             }

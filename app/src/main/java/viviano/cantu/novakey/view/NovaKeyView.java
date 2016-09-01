@@ -1,124 +1,39 @@
 package viviano.cantu.novakey.view;
 
 import android.content.Context;
-import android.graphics.Canvas;
+import android.util.AttributeSet;
+import android.view.View;
 
-import java.util.List;
-
-import viviano.cantu.novakey.elements.Element;
 import viviano.cantu.novakey.controller.touch.NovaKeyListener;
-import viviano.cantu.novakey.model.DrawModel;
-import viviano.cantu.novakey.model.StateModel;
+import viviano.cantu.novakey.model.Model;
 
-public class NovaKeyView extends INovaKeyView {
-
-	private StateModel mStateModel;
-	private DrawModel mDrawModel;
-
-    private List<Element> mElements;
-
-	public NovaKeyView(Context context) {
-		super(context);
-		setLayerType(LAYER_TYPE_SOFTWARE, null);
-	}
+/**
+ * Created by Viviano on 6/9/2016.
+ */
+public abstract class NovaKeyView extends View {
 
     /**
-     * List of elements which this view will draw, in order
+     * Simple constructor to use when creating a view from code.
      *
-     * @param elements list to set
+     * @param context The Context the view is running in, through which it can
+     *                access the current theme, resources, etc.
      */
-    @Override
-    public void setElements(List<Element> elements) {
-        mElements = elements;
+    public NovaKeyView(Context context) {
+        this(context, null);
+    }
+
+    public NovaKeyView(Context context, AttributeSet attrs) {
+        this(context, attrs, 0);
+    }
+    public NovaKeyView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
     }
 
     /**
-     * @return returns this views elements
-     */
-    @Override
-    public List<Element> getElements() {
-        return mElements;
-    }
-
-    /**
-	 * Sets this view's model which determines
-	 * what to draw
-	 *
-	 * @param model model to set
-	 */
-	@Override
-	public void setStateModel(StateModel model) {
-		mStateModel = model;
-	}
-
-    /**
-     * @return returns this view's state model
-     */
-    @Override
-    public StateModel getStateModel() {
-        return mStateModel;
-    }
-
-    /**
-	 * Sets this view's model which determins
-	 * how to draw
-	 *
-	 * @param model model to set
-	 */
-	@Override
-	public void setDrawModel(DrawModel model) {
-		mDrawModel = model;
-	}
-
-    /**
-     * @return returns this view's draw model
-     */
-    @Override
-    public DrawModel getDrawModel() {
-        return mDrawModel;
-    }
-
-
-    /**
-     * Sets this view's touch listener
+     * Sets this view's model which determines
+     * how to draw
      *
-     * @param listener listener to set
+     * @param model model to set
      */
-    @Override
-    public void setListener(NovaKeyListener listener) {
-        this.setOnTouchListener(listener);
-    }
-
-
-	/**
-	 * redraws the view according to the model
-	 */
-	@Override
-	public void update() {
-		this.invalidate();
-	}
-
-
-	@Override
-	public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        setMeasuredDimension(mDrawModel.getWidth(), mDrawModel.getHeight());
-    }
-
-	@Override
-	public void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-		if (mElements == null)
-            return;
-
-        for (Element element : mElements) {
-            element.draw(this, mDrawModel.getTheme(), canvas);
-        }
-	}
+    public abstract void setModel(Model model);
 }
-
-
-
-
-
-
-

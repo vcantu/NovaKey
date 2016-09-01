@@ -6,7 +6,7 @@ import android.view.inputmethod.InputConnection;
 
 import viviano.cantu.novakey.NovaKey;
 import viviano.cantu.novakey.controller.Controller;
-import viviano.cantu.novakey.model.NovaKeyModel;
+import viviano.cantu.novakey.model.Model;
 
 /**
  * Created by Viviano on 6/26/2016.
@@ -38,7 +38,7 @@ public class SelectionActions {
          * @param model
          */
         @Override
-        public Void trigger(NovaKey ime, Controller control, NovaKeyModel model) {
+        public Void trigger(NovaKey ime, Controller control, Model model) {
             try {
                 ExtractedText et = ime.getCurrentInputConnection()
                         .getExtractedText(new ExtractedTextRequest(), 0);
@@ -81,7 +81,7 @@ public class SelectionActions {
          * @param model
          */
         @Override
-        public Void trigger(NovaKey ime, Controller control, NovaKeyModel model) {
+        public Void trigger(NovaKey ime, Controller control, Model model) {
             InputConnection ic = ime.getCurrentInputConnection();
             if (ic == null)
                 return null;

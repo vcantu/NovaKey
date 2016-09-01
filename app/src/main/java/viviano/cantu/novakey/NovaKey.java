@@ -32,13 +32,10 @@ import viviano.cantu.novakey.view.drawing.Font;
 import viviano.cantu.novakey.view.drawing.Icons;
 import viviano.cantu.novakey.elements.menus.InfiniteMenu;
 import viviano.cantu.novakey.model.states.ShiftState;
-import viviano.cantu.novakey.model.keyboards.KeyLayout;
 import viviano.cantu.novakey.settings.Colors;
 import viviano.cantu.novakey.model.Settings;
 import viviano.cantu.novakey.view.themes.AppTheme;
 import viviano.cantu.novakey.utils.Util;
-import viviano.cantu.novakey.view.INovaKeyView;
-import viviano.cantu.novakey.view.NovaKeyView;
 
 public class NovaKey extends InputMethodService {
 
@@ -75,7 +72,8 @@ public class NovaKey extends InputMethodService {
 	public void onCreate() {
 		getApplicationContext().setTheme(R.style.AppTheme);
 		super.onCreate();
-        //Services
+
+        //Phone Services
 		clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
         clipboard.addPrimaryClipChangedListener(() -> {
             try {
@@ -84,11 +82,8 @@ public class NovaKey extends InputMethodService {
         });
 		vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 		windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-
         mWindows = new ArrayList<>();
 
-        //create keyboards
-        KeyLayout.CreateKeyboards(getResources());
         //create colors
         Colors.initialize();
 		//load app themes
@@ -104,7 +99,7 @@ public class NovaKey extends InputMethodService {
         //Create Clipboard Menu
         Clipboard.createMenu();
         //Initialize settings
-        Settings.setSharedPref(PreferenceManager.getDefaultSharedPreferences(this));
+        Settings.setPrefs(PreferenceManager.getDefaultSharedPreferences(this));
 
         //Shared Preferences for setup activity //TODO: change this
 		Editor temp = getApplicationContext().getSharedPreferences(NovaKey.MY_PREFERENCES, MODE_PRIVATE).edit();
@@ -116,14 +111,7 @@ public class NovaKey extends InputMethodService {
 	@Override
 	public View onCreateInputView() {
 		AppTheme.load(this, getResources());
-        createController();//creates view if it has not been created
-//        //stops it from crashing when the orientation changes
-//        if (Controller.view() != null) {
-//            ViewGroup parent = (ViewGroup) Controller.view().getParent();
-//            if (parent != null) {
-//                parent.removeView(Controller.view());
-//            }
-//        }
+		createController();
 
 		return mController.getView();
 	}
@@ -163,7 +151,7 @@ public class NovaKey extends InputMethodService {
 	public void onStartInputView(EditorInfo info, boolean restarting) {
         super.onStartInputView(info, restarting);
         createController();
-        mController.getTrueModel().updateInputState(info);//updates editor info
+        mController.getModel().onStart(info);//updates editor info
 		// Reset State
 		composing.setLength(0);
 	}
@@ -183,7 +171,7 @@ public class NovaKey extends InputMethodService {
 			int newSelStart, int newSelEnd, int candidatesStart,
 			int candidatesEnd) {
 		InputConnection ic = getCurrentInputConnection();
-		if (ic == null || mController.getTrueModel()
+		if (ic == null || mController.getModel()
                 .getInputState().onPassword())// or keyInserted?
 			return;
 		//set composing region
@@ -358,7 +346,7 @@ public class NovaKey extends InputMethodService {
             }
 			// deselect all
 			else if (action == CB_DESELECT_ALL) {
-                int i = mController.getTrueModel().getCursorMode() <= 0
+                int i = mController.getModel().getCursorMode() <= 0
                         ? eText.selectionEnd : eText.selectionStart;
                     ic.setSelection(i, i);
             }
@@ -393,11 +381,11 @@ public class NovaKey extends InputMethodService {
 			return;
 
         //AutoCorrect
-		if (Settings.autoCorrect && !mController.getTrueModel().getInputState().onPassword()) {
+		if (Settings.autoCorrect && !mController.getModel().getInputState().onPassword()) {
 			int i = Util.isContraction(composing, getResources());
 			if (i != -1) {
 				String s = getResources().getStringArray(R.array.contractions)[i];
-				if (mController.getTrueModel().getShiftState() == ShiftState.CAPS_LOCKED)
+				if (mController.getModel().getShiftState() == ShiftState.CAPS_LOCKED)
 					s = s.toUpperCase(Locale.US);//TODO: other languages
 				else if (Character.isUpperCase(composing.charAt(0)))
 					s = Util.capsFirst(s);

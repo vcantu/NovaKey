@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import viviano.cantu.novakey.NovaKey;
-import viviano.cantu.novakey.setup.TutorialActivity;
 
 public class SetupView extends View {
 
@@ -24,9 +23,9 @@ public class SetupView extends View {
 	private int backgroundColor = 0xFF626262, lineColor = 0xFFF0F0F0, doneColor = 0xFF909090;
 	private float screenWidth, screenHeight;
 	private int deviceDensity;
-	
+
 	private int progress;
-	
+
 	public SetupView(Context context) {
 		super(context);
 		final Activity parent = (Activity) context;
@@ -34,12 +33,12 @@ public class SetupView extends View {
 		screenWidth = metrics.widthPixels;
 		screenHeight = metrics.heightPixels;
 		deviceDensity = metrics.densityDpi;
-		
+
 		SharedPreferences pref = parent.getApplicationContext().getSharedPreferences(NovaKey.MY_PREFERENCES, parent.MODE_PRIVATE);
 		final Editor editor = pref.edit();
 		editor.commit();
 		progress = pref.getInt("progress", 0);
-			
+
 		setOnTouchListener(new View.OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
@@ -72,24 +71,24 @@ public class SetupView extends View {
 			}
 		});
 	}
-	
+
 	@Override
 	public void onDraw(Canvas canvas) {
 		canvas.drawColor(backgroundColor);
-		
+
 		p.setStrokeWidth(4);
 		p.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
-		
+
 		float a = screenWidth / 4;
 
 		int dp = 50 * (deviceDensity / 160);
 		drawShadedLine(screenWidth / 2, screenHeight / 2 + dp, -a, a, 0, p, canvas);
 		drawShadedLine(screenWidth / 2, screenHeight / 2 - dp, -a, a, 0, p, canvas);
-		
+
 		p.setColor(lineColor);
 		p.setTextSize(dp / 1.6f);
 		drawText("Welcome to NovaKey!", screenWidth / 2, dp * 1.5f, p, canvas);
-		
+
 		p.setTextSize(dp / 2);
 		if (progress > 0)
 			p.setColor(doneColor);
@@ -104,7 +103,7 @@ public class SetupView extends View {
 		p.setColor(lineColor);
 		drawText("3. Learn to use", screenWidth / 2, screenHeight / 2 + dp * 2, p, canvas);
 	}
-	
+
 	private void drawShadedLine(float x, float y, float start, float end, double angle, Paint p, Canvas canvas) {
 		p.setShader(new RadialGradient(x + (float)Math.cos(angle) * ((end - start) / 2 + start),
 									   y - (float)Math.sin(angle) * ((end - start) / 2 + start),

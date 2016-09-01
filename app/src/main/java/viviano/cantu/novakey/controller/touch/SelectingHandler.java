@@ -1,6 +1,5 @@
 package viviano.cantu.novakey.controller.touch;
 
-import viviano.cantu.novakey.elements.boards.Board;
 import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.controller.actions.Action;
 import viviano.cantu.novakey.controller.actions.ToggleCursorModeAction;
@@ -13,8 +12,7 @@ public class SelectingHandler extends RotatingHandler {
 
     private final Action mRight, mLeft;
 
-    public SelectingHandler(Board board) {
-        super(board);
+    public SelectingHandler() {
         mRight = new UpdateSelectionAction(true);
         mLeft = new UpdateSelectionAction(false);
     }
@@ -58,7 +56,8 @@ public class SelectingHandler extends RotatingHandler {
      * @param manager
      */
     @Override
-    protected boolean onRotate(boolean clockwise, boolean inCenter, Controller controller, HandlerManager manager) {
+    protected boolean onRotate(boolean clockwise, boolean inCenter,
+                               Controller controller, HandlerManager manager) {
         if (!inCenter) {
             if (clockwise)
                 controller.fire(mRight);

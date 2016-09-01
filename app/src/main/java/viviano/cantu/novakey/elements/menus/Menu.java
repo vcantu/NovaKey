@@ -1,14 +1,13 @@
 package viviano.cantu.novakey.elements.menus;
 
 import viviano.cantu.novakey.controller.actions.NoAction;
-import viviano.cantu.novakey.elements.Element;
 import viviano.cantu.novakey.controller.actions.Action;
 import viviano.cantu.novakey.view.drawing.Icons;
 
 /**
  * Created by Viviano on 6/16/2016.
  */
-public interface Menu extends Element {
+public interface Menu {
 
     /**
      * Base class for each entry

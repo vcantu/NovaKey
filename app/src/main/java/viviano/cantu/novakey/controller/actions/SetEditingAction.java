@@ -1,11 +1,9 @@
 package viviano.cantu.novakey.controller.actions;
 
-import android.view.View;
-
-import viviano.cantu.novakey.EditView;
+import viviano.cantu.novakey.view.EditView;
 import viviano.cantu.novakey.NovaKey;
 import viviano.cantu.novakey.controller.Controller;
-import viviano.cantu.novakey.model.NovaKeyModel;
+import viviano.cantu.novakey.model.Model;
 
 /**
  * Created by Viviano on 6/15/2016.
@@ -31,10 +29,10 @@ public class SetEditingAction implements Action<Void> {
      * @param model
      */
     @Override
-    public Void trigger(NovaKey ime, Controller control, NovaKeyModel model) {
+    public Void trigger(NovaKey ime, Controller control, Model model) {
         if (mEditing) {
             //TODO: haptic feedback
-            EditView editView = new EditView(ime);
+            EditView editView = new EditView(ime, control);
             editView.setTheme(model.getTheme());
             ime.setInputView(editView);
             //main.setInputView(new ControlView(main));

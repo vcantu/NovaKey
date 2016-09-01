@@ -5,7 +5,6 @@ import java.util.Stack;
 
 
 import viviano.cantu.novakey.controller.actions.typing.InputAction;
-import viviano.cantu.novakey.elements.boards.Board;
 import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.controller.actions.Action;
 import viviano.cantu.novakey.controller.actions.typing.DeleteAction;
@@ -21,9 +20,7 @@ public class DeleteHandler extends RotatingHandler {
     private boolean mBackspacing = true;//false if deleting
     private boolean mGoingFast = false;
 
-    public DeleteHandler(Board board, String first) {
-        super(board);
-
+    public DeleteHandler(String first) {
         mDelete = new DeleteAction(true);
         mBackspace = new DeleteAction();
 

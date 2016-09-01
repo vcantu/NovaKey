@@ -1,6 +1,5 @@
 package viviano.cantu.novakey.controller.actions.typing;
 
-import android.inputmethodservice.Keyboard;
 import android.view.inputmethod.ExtractedTextRequest;
 import android.view.inputmethod.InputConnection;
 
@@ -8,8 +7,8 @@ import viviano.cantu.novakey.NovaKey;
 import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.controller.actions.Action;
 import viviano.cantu.novakey.controller.actions.SetKeyboardAction;
-import viviano.cantu.novakey.model.NovaKeyModel;
-import viviano.cantu.novakey.model.keyboards.KeyLayout;
+import viviano.cantu.novakey.elements.keyboards.Keyboards;
+import viviano.cantu.novakey.model.Model;
 import viviano.cantu.novakey.model.Settings;
 import viviano.cantu.novakey.utils.Util;
 
@@ -35,8 +34,8 @@ public class InputAction implements Action<Void> {
         return false;
     }
     //Closing Characters
-    private int[] openers = new int[] { '¿', '¡', '⌊', '⌈' },
-            closers = new int[] { '?', '!', '⌋', '⌉' };
+    private int[] openers = new int[] { },//'¿', '¡', '⌊', '⌈' },
+            closers = new int[] { };//'?', '!', '⌋', '⌉' };
     private int getIndex(int c) {
         for (int i=0; i<openers.length; i++) {
             if (openers[i] == c)
@@ -73,7 +72,7 @@ public class InputAction implements Action<Void> {
 
     public InputAction(String text, boolean beforeCursor) {
         mCursorPos = beforeCursor ? 0 : 1;
-        mKeyCode = Keyboard.KEYCODE_CANCEL;
+        mKeyCode = android.inputmethodservice.Keyboard.KEYCODE_CANCEL;
         mText = text;
     }
 
@@ -85,12 +84,12 @@ public class InputAction implements Action<Void> {
      * @param model
      */
     @Override
-    public Void trigger(NovaKey ime, Controller control, NovaKeyModel model) {
+    public Void trigger(NovaKey ime, Controller control, Model model) {
         InputConnection ic = ime.getCurrentInputConnection();
         if (ic == null)
             return null;
 
-        if (mKeyCode != Keyboard.KEYCODE_CANCEL){
+        if (mKeyCode != android.inputmethodservice.Keyboard.KEYCODE_CANCEL){
             if (mKeyCode != '\n' && mKeyCode >=0) {
                 if (mKeyCode == ' ')
                     handleSpace(ime, control, model);
@@ -100,7 +99,7 @@ public class InputAction implements Action<Void> {
             else {
                 if (mKeyCode == '\n')
                     control.fire(new EnterAction());
-                else if (mKeyCode == Keyboard.KEYCODE_SHIFT)
+                else if (mKeyCode == android.inputmethodservice.Keyboard.KEYCODE_SHIFT)
                     control.fire(new ShiftAction());
             }
         }
@@ -113,7 +112,7 @@ public class InputAction implements Action<Void> {
         return null;
     }
 
-    private void handleChar(NovaKey ime, Controller control, NovaKeyModel model) {
+    private void handleChar(NovaKey ime, Controller control, Model model) {
         InputConnection ic = ime.getCurrentInputConnection();
         //it letter or number
         if (!model.getInputState().onPassword()
@@ -146,15 +145,15 @@ public class InputAction implements Action<Void> {
 
         SHOULD_RETURN = shouldReturnAfterSpace((char) mKeyCode); //set should return after space
         if (mKeyCode == '\'' || mKeyCode == '"' || mKeyCode == '¿' || mKeyCode == '¡')
-            control.fire(new SetKeyboardAction(KeyLayout.DEFAULT));
+            control.fire(new SetKeyboardAction(Keyboards.DEFAULT));
     }
 
-    private void handleSpace(NovaKey ime, Controller control, NovaKeyModel model) {
+    private void handleSpace(NovaKey ime, Controller control, Model model) {
         InputConnection ic = ime.getCurrentInputConnection();
         ime.commitComposing();
         ic.commitText(" ", mCursorPos);
         if (SHOULD_RETURN)
-            control.fire(new SetKeyboardAction(KeyLayout.DEFAULT));
+            control.fire(new SetKeyboardAction(Keyboards.DEFAULT));
         SHOULD_RETURN = false;
 
     }

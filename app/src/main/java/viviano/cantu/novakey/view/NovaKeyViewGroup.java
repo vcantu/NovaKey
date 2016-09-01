@@ -10,7 +10,7 @@ import viviano.cantu.novakey.model.TrueModel;
  */
 public class NovaKeyViewGroup extends ViewGroup {
 
-    private NovaKeyView mView;
+    private MainView mView;
 
     /**
      * Initializes the view group
@@ -19,7 +19,7 @@ public class NovaKeyViewGroup extends ViewGroup {
      */
     public NovaKeyViewGroup(Context context) {
         super(context);
-        this.mView = new NovaKeyView(context, new TrueModel(context));
+        this.mView = new MainView(context);
         this.addView(mView);
     }
 

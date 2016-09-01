@@ -1,7 +1,6 @@
 package viviano.cantu.novakey.elements.menus;
 
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.os.CountDownTimer;
 
 import java.util.List;
@@ -12,20 +11,19 @@ import viviano.cantu.novakey.controller.touch.AreaCrossedHandler;
 import viviano.cantu.novakey.controller.touch.CrossEvent;
 import viviano.cantu.novakey.controller.touch.HandlerManager;
 import viviano.cantu.novakey.controller.touch.TouchHandler;
-import viviano.cantu.novakey.elements.boards.Board;
+import viviano.cantu.novakey.elements.OverlayElement;
+import viviano.cantu.novakey.model.Model;
 import viviano.cantu.novakey.model.Settings;
-import viviano.cantu.novakey.view.drawing.Draw;
 import viviano.cantu.novakey.view.drawing.drawables.Drawable;
 import viviano.cantu.novakey.view.drawing.drawables.TextDrawable;
 import viviano.cantu.novakey.view.themes.MasterTheme;
 import viviano.cantu.novakey.utils.Util;
-import viviano.cantu.novakey.view.INovaKeyView;
 import viviano.cantu.novakey.view.themes.board.BoardTheme;
 
 /**
  * Created by Viviano on 7/15/2015.
  */
-public class OnUpMenu implements Menu {
+public class OnUpMenu implements OverlayElement, Menu {
 
     private final List<Menu.Entry> mEntries;
     public float fingerX, fingerY;
@@ -39,17 +37,17 @@ public class OnUpMenu implements Menu {
      * This draw method will be called if this is not a
      * stand alone View, otherwise this method will never be called
      * by outside sources
-     * @param view   current view, can be used to get models
-     * @param theme   used to determine the color
+     * @param model for context
+     * @param theme used to determine the color
      * @param canvas canvas to draw on
      */
     @Override
-    public void draw(INovaKeyView view, MasterTheme theme, Canvas canvas) {
+    public void draw(Model model, MasterTheme theme, Canvas canvas) {
         BoardTheme bt = theme.getBoardTheme();
-        float x = view.getDrawModel().getX();
-        float y = view.getDrawModel().getY();
-        float r = view.getDrawModel().getRadius();
-        float sr = view.getDrawModel().getSmallRadius();
+        float x = model.getX();
+        float y = model.getY();
+        float r = model.getRadius();
+        float sr = model.getSmallRadius();
 
         float dist = (r - sr) / 2 + sr;
         double a = Math.PI / 2 - Math.PI * 2 / 5 / 2;
@@ -61,7 +59,6 @@ public class OnUpMenu implements Menu {
     }
 
     /**
-     * @param controller provides context to the handler
      * @return a touch handler which returns true if being used
      * or false otherwise. For example if a button element is activated by being
      * clicked, if the handler detects this in the onDown event it will
@@ -69,8 +66,8 @@ public class OnUpMenu implements Menu {
      * to be activated
      */
     @Override
-    public TouchHandler getTouchHandler(Controller controller) {
-        return new Handler(controller.getMainBoard());
+    public TouchHandler getTouchHandler() {
+        return new Handler();
     }
 
 
@@ -101,10 +98,6 @@ public class OnUpMenu implements Menu {
 
         private CountDownTimer mTimer;
         private int mArea = 0;
-
-        public Handler(Board board) {
-            super(board);
-        }
 
         private void startTimer(Controller control) {
             mTimer = new CountDownTimer(Settings.longPressTime, Settings.longPressTime) {
@@ -138,7 +131,7 @@ public class OnUpMenu implements Menu {
         protected boolean onMove(float x, float y, Controller controller, HandlerManager manager) {
             fingerX = x;
             fingerY = y;
-            controller.invalidate();
+            controller.getModel().update();
             return true;
         }
 

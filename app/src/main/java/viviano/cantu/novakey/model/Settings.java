@@ -2,10 +2,8 @@ package viviano.cantu.novakey.model;
 
 import android.content.SharedPreferences;
 
-import viviano.cantu.novakey.elements.buttons.ButtonFactory;
-import viviano.cantu.novakey.view.themes.board.BaseTheme;
-import viviano.cantu.novakey.view.themes.board.BoardTheme;
-import viviano.cantu.novakey.view.themes.ThemeFactory;
+import viviano.cantu.novakey.model.loaders.ThemeFactory;
+import viviano.cantu.novakey.view.themes.MasterTheme;
 
 /**
  * Created by Viviano on 6/22/2015.
@@ -25,7 +23,7 @@ public class Settings {
             pref_auto_correct = "pref_auto_correct",
             pref_quick_close = "pref_quick_close",
             //NovaKey 0.3
-            pref_theme = "pref_theme",//(DEPRECATED)
+            pref_bad_theme = "pref_theme",//(DEPRECATED)
             //pref_btns = "pref_btns",//(REMOVED)
             pref_rate = "pref_rate",//INTENT
             pref_tut = "pref_tut",//INTENT
@@ -39,7 +37,8 @@ public class Settings {
             //Novakey 0.3.7
             pref_vibrate_level = "pref_vibrate_level",
             //NovaKey 1.0
-            pref_auto_color = "pref_auto_color";
+            pref_auto_color = "pref_auto_color",
+            pref_theme = "pref_master_theme";
 
     //Global Settings
     public static String DEFAULT = "DEFAULT";
@@ -52,89 +51,65 @@ public class Settings {
     public static boolean autoColor;
 
     /**
-     * Pulls all values from the shared preferences & updates teh static fields
+     * Shared preferences
+     */
+    private static SharedPreferences prefs;
+    private static SharedPreferences.Editor edit;
+
+    public static void setPrefs(SharedPreferences pref) {
+        prefs = pref;
+        edit = prefs.edit();
+        prefs.registerOnSharedPreferenceChangeListener((sharedPreferences, s) -> update());
+    }
+
+    /**
+     * Pulls all values from the shared preferences & updates the static fields
      */
     public static void update() {
         //Boolean Flag settings
-        hideLetters = sharedPref.getBoolean(pref_hide_letters, false);
-        hidePassword = sharedPref.getBoolean(pref_hide_password, false);
-        vibrate = sharedPref.getBoolean(pref_vibrate, false);
-        quickInsert = sharedPref.getBoolean(pref_quick_insert, false);
+        hideLetters = prefs.getBoolean(pref_hide_letters, false);
+        hidePassword = prefs.getBoolean(pref_hide_password, false);
+        vibrate = prefs.getBoolean(pref_vibrate, false);
+        quickInsert = prefs.getBoolean(pref_quick_insert, false);
 
-        autoCorrect = sharedPref.getBoolean(pref_auto_correct, false);
-        quickClose = sharedPref.getBoolean(pref_quick_close, false);
+        autoCorrect = prefs.getBoolean(pref_auto_correct, false);
+        quickClose = prefs.getBoolean(pref_quick_close, false);
 
-        hasSpaceBar = sharedPref.getBoolean(pref_space_bar, false);
+        hasSpaceBar = prefs.getBoolean(pref_space_bar, false);
 
-        autoColor = sharedPref.getBoolean(pref_auto_color, false);
+        autoColor = prefs.getBoolean(pref_auto_color, false);
 
-        //Ints
+        //Integer settings
         //this will only default to the given number if the person has never had this preference
-        startVersion = sharedPref.getInt(pref_start_version, CURR_VERSION);
-
-        longPressTime = sharedPref.getInt(pref_long_press_time, 500);
-        vibrateLevel = sharedPref.getInt(pref_vibrate_level, 50);
-
-        commit();
-    }
-
-    /**
-     * Will save the settings that aren't saved in other classes
-     */
-    public static void commit() {
-        SharedPreferences.Editor edit = sharedPref.edit();
+        startVersion = prefs.getInt(pref_start_version, CURR_VERSION);
         if (startVersion == CURR_VERSION)
             edit.putInt(pref_start_version, startVersion);
+
+        longPressTime = prefs.getInt(pref_long_press_time, 500);
+        vibrateLevel = prefs.getInt(pref_vibrate_level, 50);
+
+        fixLegacyPrefs();
         edit.commit();
     }
 
-//    /**
-//     * Builds a theme from the sharedPref string
-//     *
-//     * theme will be a String that can be translated into a BoardTheme, with colors and other data
-//     * it will have the following format:
-//     *
-//     * t = the number theme id
-//     *
-//     * numbers represent the color so that:
-//     * c1 = primaryColor, c2 = accentColor, c3 = contrastColor
-//     *
-//     * 'A' or 'X' if theme has auto color enabled
-//     *
-//     * '3d' or 'X' if the theme has 3d enabled
-//     *
-//     * format:
-//     *     t,c1,c2,c3,A,3d
-//     *
-//     * @param s string to build theme from
-//     * @return theme built from a string using the above format
-//     */
-//    private static BoardTheme themeFromString(String s) {
-//        if (s.equals(DEFAULT)) {
-//            BaseTheme res = new BaseTheme();
-//            res.setColors(0xFF616161, 0xFFF5F5F5, 0xFFF5F5F5);
-//            return res;
-//        }
-//        String[] params = s.split(",");
-//        BoardTheme res = ThemeFactory.createTheme(Integer.valueOf(params[0]));
-//        res.setColors(Integer.valueOf(params[1]),
-//                Integer.valueOf(params[2]),
-//                Integer.valueOf(params[3]));
-//        if (params.length >= 5)
-//            autoColor = params[4].equalsIgnoreCase("A");
-//        if (params.length >= 6)
-//            res.set3D(params[5].equalsIgnoreCase("3d"));
-//
-//        return res;
-//    }
+    private static void fixLegacyPrefs() {
+        fixLegacyThemeing();
+    }
 
-
-    /**
-     * Shared preferences
-     */
-    public static SharedPreferences sharedPref;
-    public static void setSharedPref(SharedPreferences pref) {
-        sharedPref = pref;
-        sharedPref.registerOnSharedPreferenceChangeListener((sharedPreferences, s) -> update());
+    private static void fixLegacyThemeing() {
+        String str = prefs.getString(pref_bad_theme, DEFAULT);
+        if (!str.equals(DEFAULT)) {
+            //set new from old
+            String newStr = prefs.getString(pref_theme, DEFAULT);
+            if (newStr == DEFAULT) {//if new theme doesn't exist otherwise don't change
+                MasterTheme theme = ThemeFactory.themeFromLegacyString(str);
+                edit.putString(pref_theme, ThemeFactory.stringFromTheme(theme));
+            }
+            //set auto color
+            autoColor = str.split(",")[4].equalsIgnoreCase("A");
+            edit.putBoolean(pref_auto_color, autoColor);
+            //delete old
+            edit.remove(pref_bad_theme);
+        }
     }
 }

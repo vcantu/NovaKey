@@ -174,7 +174,7 @@ public abstract class HorizontalPicker extends View implements View.OnTouchListe
     @Override
     public void onDraw(Canvas canvas) {
         for (int i=0; i< mItems.length; i++) {
-            mItems[i].draw(i * dimen + dimen / 2, dimen / 2, dimen, mIndex == i,
+            mItems[i].drawPickerItem(i * dimen + dimen / 2, dimen / 2, dimen, mIndex == i,
                     mSubIndexes[i], p, canvas);
         }
     }
@@ -239,7 +239,7 @@ public abstract class HorizontalPicker extends View implements View.OnTouchListe
     }
 
     /**
-     * Will be called during the constructor to initialize the picker items
+     * Will be called during the constructor to start the picker items
      *
      * @return the array that will be set to the pickerItems
      */

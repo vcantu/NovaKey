@@ -9,7 +9,8 @@ import viviano.cantu.novakey.view.drawing.Icons;
  */
 public class SpaceButton extends Button {
 
-    public SpaceButton() {
+    public SpaceButton(ButtonData data) {
+        super(data);
         setIcon(Icons.get("space_bar"));
     }
 

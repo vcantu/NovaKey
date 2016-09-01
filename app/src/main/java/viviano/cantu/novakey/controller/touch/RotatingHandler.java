@@ -2,8 +2,8 @@ package viviano.cantu.novakey.controller.touch;
 
 import android.view.MotionEvent;
 
-import viviano.cantu.novakey.elements.boards.Board;
 import viviano.cantu.novakey.controller.Controller;
+import viviano.cantu.novakey.elements.MainElement;
 
 /**
  * Created by Viviano on 6/15/2016.
@@ -14,53 +14,49 @@ public abstract class RotatingHandler implements TouchHandler {
     private int currArea, prevArea;
     private int currSector, prevSector;
 
-    protected final Board mBoard;
-    public RotatingHandler(Board board) {
-        mBoard = board;
-    }
 
     /**
      * Handles the logic given a touch event and
      * a view
      *
      * @param event current touch event
-     * @param controller  view being acted on
+     * @param control
      * @param manager
      * @return true to continue action, false otherwise
      */
     @Override
-    public boolean handle(MotionEvent event, Controller controller, HandlerManager manager) {
+    public boolean handle(MotionEvent event, Controller control, HandlerManager manager) {
         currX = event.getX(0);
         currY = event.getY(0);
-        currArea = mBoard.getArea(currX, currY);
-        currSector = mBoard.getSector(currX, currY);
+        currArea = MainElement.getArea(currX, currY, control.getModel());
+        currSector = MainElement.getSector(currX, currY, control.getModel());
 
         boolean result = true;
         switch (event.getAction() & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_DOWN:
-                result = result & onDown(currX, currY, currArea, controller, manager);
+                result = result & onDown(currX, currY, currArea, control, manager);
                 prevArea = currArea;
                 prevSector = currSector;
                 break;
             case MotionEvent.ACTION_MOVE:
-                result = result & onMove(currX, currY, controller, manager);
+                result = result & onMove(currX, currY, control, manager);
                 if (currArea != prevArea) {
                     if (currArea == 0)
-                        result = result & onCenterCross(true, controller, manager);
+                        result = result & onCenterCross(true, control, manager);
                     else if (prevArea == 0)
-                        result = result & onCenterCross(false, controller, manager);
+                        result = result & onCenterCross(false, control, manager);
                     prevArea = currArea;
                 }
                 if (currSector != prevSector) {
                     boolean clockwise = !((prevSector < currSector
                             && !(prevSector == 1 && currSector == 5))
                             || (prevSector == 5 && currSector == 1));
-                    result = result & onRotate(clockwise, currArea == 0, controller, manager);
+                    result = result & onRotate(clockwise, currArea == 0, control, manager);
                     prevSector = currSector;
                 }
                 break;
             case MotionEvent.ACTION_UP:
-                result = result & onUp(controller, manager);
+                result = result & onUp(control, manager);
                 break;
         }
         return result;

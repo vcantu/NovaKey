@@ -2,20 +2,16 @@ package viviano.cantu.novakey.model;
 
 import java.util.List;
 
-import viviano.cantu.novakey.model.properties.ButtonProperties;
-import viviano.cantu.novakey.model.properties.KeyProperties;
+import viviano.cantu.novakey.elements.Element;
 import viviano.cantu.novakey.view.themes.MasterTheme;
-import viviano.cantu.novakey.view.themes.board.BoardTheme;
 
 /**
  * Created by Viviano on 6/10/2016.
+ *
+ * Model interface which contains variables which can only be altered
+ * via settings or edit view. However, can also be altered shortly to animate
  */
 public interface DrawModel {
-
-    /**
-     * @param model copies all the parameters of this model
-     */
-    void sync(DrawModel model);
 
     /**
      * @return the width of the board
@@ -86,26 +82,6 @@ public interface DrawModel {
      * @param padding padding to set
      */
     void setPadding(float padding);
-
-    /**
-     * @return the key properties of this model
-     */
-    List<KeyProperties> getKeyProperties();
-
-    /**
-     * @param properties sets the KeyProperties of this model to this
-     */
-    void setKeyProperties(List<KeyProperties> properties);
-
-    /**
-     * @return the button properties of this model
-     */
-    List<ButtonProperties> getButtonProperties();
-
-    /**
-     * @param properties sets the ButtonProperties of this model
-     */
-    void setButtonProperties(List<ButtonProperties> properties);
 
     /**
      * @return this model's theme

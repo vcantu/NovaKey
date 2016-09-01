@@ -1,7 +1,7 @@
 package viviano.cantu.novakey.elements.buttons;
 
 import viviano.cantu.novakey.controller.actions.Action;
-import viviano.cantu.novakey.controller.actions.EnableMenuAction;
+import viviano.cantu.novakey.controller.actions.SetOverlayAction;
 import viviano.cantu.novakey.controller.actions.typing.InputAction;
 import viviano.cantu.novakey.elements.menus.InfiniteMenu;
 import viviano.cantu.novakey.view.drawing.drawables.FlatTextDrawable;
@@ -11,7 +11,8 @@ import viviano.cantu.novakey.view.drawing.drawables.FlatTextDrawable;
  */
 public class PunctuationButton extends Button {
 
-    public PunctuationButton() {
+    public PunctuationButton(ButtonData data) {
+        super(data);
         setIcon(new FlatTextDrawable("."));
     }
 
@@ -28,6 +29,6 @@ public class PunctuationButton extends Button {
      */
     @Override
     protected Action onLongPressAction() {
-        return new EnableMenuAction(InfiniteMenu.getHiddenKeys('.'));
+        return new SetOverlayAction(InfiniteMenu.getHiddenKeys('.'));
     }
 }

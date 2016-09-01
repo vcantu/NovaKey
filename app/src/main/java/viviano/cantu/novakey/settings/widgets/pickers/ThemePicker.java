@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 
 import viviano.cantu.novakey.view.themes.board.BoardTheme;
-import viviano.cantu.novakey.view.themes.ThemeFactory;
+import viviano.cantu.novakey.model.loaders.ThemeFactory;
 
 /**
  * Created by Viviano on 1/24/2016.
@@ -22,15 +22,17 @@ public class ThemePicker extends HorizontalPicker {
     }
 
     /**
-     * Will be called during the constructor to initialize the picker items
+     * Will be called during the constructor to start the picker items
      *
      * @return the array that will be set to the pickerItems
      */
     @Override
     protected PickerItem[] initializeItems() {
-        PickerItem[] arr = new PickerItem[ThemeFactory.getThemeCount()];
-        for (BoardTheme t : ThemeFactory.allThemes()) {
-            arr[t.themeID()] = t;
+        PickerItem[] arr = new PickerItem[ThemeFactory.BOARDS.size()];
+        int i=0;
+        for (BoardTheme t : ThemeFactory.BOARDS) {
+            arr[i] = t;
+            i++;
         }
         return arr;
     }

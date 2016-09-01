@@ -10,7 +10,7 @@ import android.view.View;
 import java.util.ArrayList;
 
 import viviano.cantu.novakey.elements.buttons.Button;
-import viviano.cantu.novakey.model.keyboards.KeyLayout;
+import viviano.cantu.novakey.elements.keyboards.Keyboards;
 import viviano.cantu.novakey.utils.Util;
 import viviano.cantu.novakey.model.Settings;
 
@@ -71,7 +71,7 @@ public class BtnPreview extends View implements View.OnTouchListener {
                 mDimens.r, mDimens.sr, canvas);
         Settings.theme.drawBoard(mDimens.x, mDimens.y, mDimens.r, mDimens.sr, canvas);
         //draw main keys
-        Settings.theme.drawKeys(mDimens.x, mDimens.y, mDimens.r, mDimens.sr, KeyLayout.get("English"),
+        Settings.theme.drawKeys(mDimens.x, mDimens.y, mDimens.r, mDimens.sr, Keyboards.get("English"),
                 false, canvas);
 
         p.setColor(Settings.theme.buttonColor());
@@ -79,7 +79,7 @@ public class BtnPreview extends View implements View.OnTouchListener {
             float sw = p.getStrokeWidth();
             if (i==movingBtn)
                 p.setStrokeWidth(4);
-            buttons.get(i).draw(mDimens, btnTheme, canvas);
+            buttons.get(i).draw(, btnTheme, canvas);
             p.setStrokeWidth(sw);
         }
     }

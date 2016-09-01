@@ -1,6 +1,8 @@
 package viviano.cantu.novakey.view.themes;
 
 import viviano.cantu.novakey.view.themes.background.BackgroundTheme;
+import viviano.cantu.novakey.view.themes.background.FlatBackgroundTheme;
+import viviano.cantu.novakey.view.themes.board.BaseTheme;
 import viviano.cantu.novakey.view.themes.board.BoardTheme;
 import viviano.cantu.novakey.view.themes.button.ButtonTheme;
 
@@ -17,7 +19,14 @@ public class BaseMasterTheme implements MasterTheme {
     private ButtonTheme mButton;
 
     public BaseMasterTheme() {
-        //TODO: maybe builder
+        mBoard = new BaseTheme();
+        mBackground = new FlatBackgroundTheme();
+        mButton = null;//TODO: default button theme
+
+        mIs3d = false;
+        mPrimiary = 0xFF616161;
+        mAccent = 0xFFF5F5F5;
+        mContrast = 0xFFF5F5F5;
     }
 
     /**
@@ -26,8 +35,9 @@ public class BaseMasterTheme implements MasterTheme {
      * @param is3D true if theme should appear 3D
      */
     @Override
-    public void set3D(boolean is3D) {
+    public MasterTheme set3D(boolean is3D) {
         mIs3d = is3D;
+        return this;
     }
 
     /**
@@ -40,16 +50,16 @@ public class BaseMasterTheme implements MasterTheme {
 
     /**
      * Sets the colors of this theme given an array of colors
-     *
-     * @param primary  primary color of the theme
+     *  @param primary  primary color of the theme
      * @param accent   accent color of the theme
      * @param contrast contrast color of the theme
      */
     @Override
-    public void setColors(int primary, int accent, int contrast) {
+    public MasterTheme setColors(int primary, int accent, int contrast) {
         mPrimiary = primary;
         mAccent = accent;
         mContrast = contrast;
+        return this;
     }
 
     /**
@@ -59,15 +69,16 @@ public class BaseMasterTheme implements MasterTheme {
      * @param appPackage app to get colors from
      */
     @Override
-    public void setColors(String appPackage) {
+    public MasterTheme setPackage(String appPackage) {
         AppTheme app = AppTheme.fromPk(appPackage);
         if (app == null) {
             //App not supported
             //maybe ask user to support this app
             //TODO: AppTheme.promptUser()
-            return;
+            return this;
         }
         setColors(app.color1, app.color2, app.color3);
+        return this;
     }
 
     /**
@@ -78,12 +89,22 @@ public class BaseMasterTheme implements MasterTheme {
         return mPrimiary;
     }
 
+    @Override
+    public void setPrimaryColor(int color) {
+        mPrimiary = color;
+    }
+
     /**
      * @return accent color of this theme
      */
     @Override
     public int getAccentColor() {
         return mAccent;
+    }
+
+    @Override
+    public void setAccentColor(int color) {
+        mAccent = color;
     }
 
     /**
@@ -94,15 +115,21 @@ public class BaseMasterTheme implements MasterTheme {
         return mContrast;
     }
 
+    @Override
+    public void setContrastColor(int color) {
+        mContrast = color;
+    }
+
     /**
      * Set the board theme
      *
      * @param boardTheme board theme to set
      */
     @Override
-    public void setBoardTheme(BoardTheme boardTheme) {
+    public MasterTheme setBoardTheme(BoardTheme boardTheme) {
         mBoard = boardTheme;
         mBoard.setParent(this);
+        return this;
     }
 
     /**
@@ -119,9 +146,10 @@ public class BaseMasterTheme implements MasterTheme {
      * @param buttonTheme button theme to set
      */
     @Override
-    public void setButtonTheme(ButtonTheme buttonTheme) {
+    public MasterTheme setButtonTheme(ButtonTheme buttonTheme) {
         mButton = buttonTheme;
         mButton.setParent(this);
+        return this;
     }
 
     /**
@@ -138,9 +166,10 @@ public class BaseMasterTheme implements MasterTheme {
      * @param backgroundTheme background theme to set
      */
     @Override
-    public void setBackgroundTheme(BackgroundTheme backgroundTheme) {
+    public MasterTheme setBackgroundTheme(BackgroundTheme backgroundTheme) {
         mBackground = backgroundTheme;
         mBackground.setParent(this);
+        return this;
     }
 
     /**

@@ -1,7 +1,6 @@
 package viviano.cantu.novakey.controller.touch;
 
 
-import viviano.cantu.novakey.elements.boards.Board;
 import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.controller.actions.Action;
 import viviano.cantu.novakey.controller.actions.typing.InputAction;
@@ -17,8 +16,7 @@ public class RepeatHandler extends AreaCrossedHandler {
     private final int mFirst, mSecond;
     private final Action mAction;
 
-    public RepeatHandler(Board board, int keyCode, int firstArea, int secondArea) {
-        super(board);
+    public RepeatHandler(int keyCode, int firstArea, int secondArea) {
         mFirst = firstArea;
         mSecond = secondArea;
         mAction = new InputAction(keyCode);
@@ -37,7 +35,7 @@ public class RepeatHandler extends AreaCrossedHandler {
     protected boolean onCross(CrossEvent event, Controller controller, HandlerManager manager) {
         if (event.newArea == mFirst ||
                 event.newArea == mSecond) {
-            mAction.trigger(, , );//types character
+            controller.fire(mAction);//types character
         }
         else {
             return true;//false stops it

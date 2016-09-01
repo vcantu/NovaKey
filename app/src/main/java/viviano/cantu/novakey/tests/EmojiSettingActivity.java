@@ -7,7 +7,7 @@ import viviano.cantu.novakey.R;
 import viviano.cantu.novakey.view.drawing.drawables.Drawable;
 import viviano.cantu.novakey.view.drawing.emoji.Emoji;
 import viviano.cantu.novakey.view.drawing.emoji.ThrowAwayView;
-import viviano.cantu.novakey.elements.menus.HexGridView;
+import viviano.cantu.novakey.HexGridView;
 
 public class EmojiSettingActivity extends Activity {
 

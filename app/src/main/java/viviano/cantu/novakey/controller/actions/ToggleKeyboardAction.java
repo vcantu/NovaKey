@@ -2,8 +2,8 @@ package viviano.cantu.novakey.controller.actions;
 
 import viviano.cantu.novakey.NovaKey;
 import viviano.cantu.novakey.controller.Controller;
-import viviano.cantu.novakey.model.NovaKeyModel;
-import viviano.cantu.novakey.model.keyboards.KeyLayout;
+import viviano.cantu.novakey.elements.keyboards.Keyboards;
+import viviano.cantu.novakey.model.Model;
 
 /**
  * Created by Viviano on 6/21/2016.
@@ -19,15 +19,15 @@ public class ToggleKeyboardAction implements Action<Void> {
      * @param model
      */
     @Override
-    public Void trigger(NovaKey ime, Controller control, NovaKeyModel model) {
+    public Void trigger(NovaKey ime, Controller control, Model model) {
         switch (model.getKeyboardCode()) {
-            case KeyLayout.DEFAULT:
-                control.fire(new SetKeyboardAction(KeyLayout.PUNCTUATION));
+            case Keyboards.DEFAULT:
+                control.fire(new SetKeyboardAction(Keyboards.PUNCTUATION));
                 break;
             default:
-            case KeyLayout.PUNCTUATION:
-            case KeyLayout.SYMBOLS:
-                control.fire(new SetKeyboardAction(KeyLayout.DEFAULT));
+            case Keyboards.PUNCTUATION:
+            case Keyboards.SYMBOLS:
+                control.fire(new SetKeyboardAction(Keyboards.DEFAULT));
         }
         return null;
     }

@@ -1,21 +1,14 @@
 package viviano.cantu.novakey.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import viviano.cantu.novakey.elements.boards.Board;
-import viviano.cantu.novakey.elements.Element;
 import viviano.cantu.novakey.NovaKey;
 import viviano.cantu.novakey.controller.actions.Action;
 import viviano.cantu.novakey.controller.touch.HandlerManager;
 import viviano.cantu.novakey.controller.touch.NovaKeyListener;
-import viviano.cantu.novakey.elements.boards.MainBoard;
-import viviano.cantu.novakey.model.DrawModel;
+import viviano.cantu.novakey.model.MainModel;
 import viviano.cantu.novakey.model.TrueModel;
-import viviano.cantu.novakey.model.MainDrawModel;
-import viviano.cantu.novakey.model.NovaKeyModel;
-import viviano.cantu.novakey.view.INovaKeyView;
+import viviano.cantu.novakey.model.Model;
 import viviano.cantu.novakey.view.NovaKeyView;
+import viviano.cantu.novakey.view.MainView;
 
 /**
  * Created by Viviano on 7/10/2015.
@@ -23,12 +16,9 @@ import viviano.cantu.novakey.view.NovaKeyView;
 public class Controller implements Gun {
 
     private final NovaKey mIME;
-    private final NovaKeyModel mTrueModel;
-    private final DrawModel mDrawModel;
-    private final INovaKeyView mView;
+    private final Model mModel;
+    private final NovaKeyView mView;
     private final NovaKeyListener mListener;
-    private final List<Element> mElements;
-    private final Board mMainBoard;
 
     /**
      * Controller initializes models and creates private references to
@@ -39,65 +29,30 @@ public class Controller implements Gun {
     public Controller(NovaKey ime) {
         //context
         mIME = ime;
-        //view
-        mView = new NovaKeyView(ime);
         //models
-        mTrueModel = new TrueModel(mIME);
-        mDrawModel = new MainDrawModel(mTrueModel);
+        mModel = new MainModel(mIME);
+        //view
+        mView = new MainView(ime);
         //handler
         mListener = new NovaKeyListener(this);
-        //elements
-        mElements = new ArrayList<>();
-        mMainBoard = new MainBoard();
-        mElements.add(mMainBoard);
 
-        //initialize view
-        mView.setStateModel(mTrueModel);
-        mView.setDrawModel(mDrawModel);
-        mView.setListener(mListener);
-        mView.setElements(mElements);
+        //initialize
+        mView.setModel(mModel);
+        mView.setOnTouchListener(mListener);
     }
 
     /**
      * @return returns the main view
      */
-    public INovaKeyView getView() {
+    public NovaKeyView getView() {
         return mView;
-    }
-
-    /**
-     * Updates the view
-     */
-    public void invalidate() {
-        mView.update();
-    }
-
-    /**
-     * @return returns the true model
-     */
-    public NovaKeyModel getTrueModel() {
-        return mTrueModel;
     }
 
     /**
      * @return returns the draw model
      */
-    public DrawModel getDrawModel() {
-        return mDrawModel;
-    }
-
-    /**
-     * @return returns this views elements
-     */
-    public List<Element> getElements() {
-        return mElements;
-    }
-
-    /**
-     * @return returns the main board, or null if there is none
-     */
-    public Board getMainBoard() {
-        return mMainBoard;
+    public Model getModel() {
+        return mModel;
     }
 
     /**
@@ -115,6 +70,8 @@ public class Controller implements Gun {
      */
     @Override
     public <T> T fire(Action<T> action) {
-        return action.trigger(mIME, this, mTrueModel);
+        if (action != null)
+            return action.trigger(mIME, this, mModel);
+        return null;
     }
 }

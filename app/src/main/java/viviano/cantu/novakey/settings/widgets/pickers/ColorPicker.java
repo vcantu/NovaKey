@@ -27,7 +27,7 @@ public class ColorPicker extends HorizontalPicker {
     }
 
     /**
-     * Will be called during the constructor to initialize the picker items
+     * Will be called during the constructor to start the picker items
      *
      * @return the array that will be set to the pickerItems
      */

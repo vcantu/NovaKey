@@ -2,7 +2,7 @@ package viviano.cantu.novakey.controller.actions;
 
 import viviano.cantu.novakey.NovaKey;
 import viviano.cantu.novakey.controller.Controller;
-import viviano.cantu.novakey.model.NovaKeyModel;
+import viviano.cantu.novakey.model.Model;
 
 /**
  * Toggles the cursor mode state accordingly
@@ -20,7 +20,7 @@ public class ToggleCursorModeAction implements Action<Void> {
      * @param model
      */
     @Override
-    public Void trigger(NovaKey ime, Controller control, NovaKeyModel model) {
+    public Void trigger(NovaKey ime, Controller control, Model model) {
         int res = 0;
         switch (model.getCursorMode()) {
             case 0:

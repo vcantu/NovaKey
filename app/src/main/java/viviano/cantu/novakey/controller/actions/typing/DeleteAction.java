@@ -7,7 +7,7 @@ import android.view.inputmethod.InputConnection;
 import viviano.cantu.novakey.NovaKey;
 import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.controller.actions.Action;
-import viviano.cantu.novakey.model.NovaKeyModel;
+import viviano.cantu.novakey.model.Model;
 import viviano.cantu.novakey.utils.Pred;
 
 /**
@@ -38,7 +38,7 @@ public class DeleteAction implements Action<String> {
      * @param model
      */
     @Override
-    public String trigger(NovaKey ime, Controller control, NovaKeyModel model) {
+    public String trigger(NovaKey ime, Controller control, Model model) {
         Pred<Character> slow = character -> true,
                 fast = character -> character.charValue() == ' ';
         return handleDelete(ime, control, model,
@@ -53,7 +53,7 @@ public class DeleteAction implements Action<String> {
      * @param included true if it should delete the character which made it stop
      * @return the deleted string
      */
-    public String handleDelete(NovaKey ime, Controller control, NovaKeyModel model,
+    public String handleDelete(NovaKey ime, Controller control, Model model,
                                boolean backspace, Pred<Character> until, boolean included) {
         // add deleted character to temporary memory so it can be added
         InputConnection ic = ime.getCurrentInputConnection();

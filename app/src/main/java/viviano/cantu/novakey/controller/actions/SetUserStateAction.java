@@ -4,7 +4,7 @@ import viviano.cantu.novakey.NovaKey;
 import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.controller.actions.typing.DeleteAction;
 import viviano.cantu.novakey.controller.touch.DeleteHandler;
-import viviano.cantu.novakey.model.NovaKeyModel;
+import viviano.cantu.novakey.model.Model;
 import viviano.cantu.novakey.model.states.UserState;
 
 /**
@@ -25,7 +25,7 @@ public class SetUserStateAction implements Action<Void> {
      * @param model
      */
     @Override
-    public Void trigger(NovaKey ime, Controller control, NovaKeyModel model) {
+    public Void trigger(NovaKey ime, Controller control, Model model) {
         //TODO: userstate transitions
         model.setUserState(mUserState);
         switch (mUserState) {

@@ -1,29 +1,27 @@
 package viviano.cantu.novakey.elements.menus;
 
 import android.graphics.Canvas;
-import android.graphics.Paint;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import viviano.cantu.novakey.elements.boards.Board;
+import viviano.cantu.novakey.elements.OverlayElement;
+import viviano.cantu.novakey.model.Model;
 import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.controller.actions.typing.InputAction;
 import viviano.cantu.novakey.controller.touch.HandlerManager;
 import viviano.cantu.novakey.controller.touch.RotatingHandler;
 import viviano.cantu.novakey.controller.touch.TouchHandler;
-import viviano.cantu.novakey.view.drawing.Draw;
 import viviano.cantu.novakey.view.drawing.drawables.Drawable;
 import viviano.cantu.novakey.view.drawing.drawables.TextDrawable;
 import viviano.cantu.novakey.view.themes.MasterTheme;
 import viviano.cantu.novakey.utils.Util;
-import viviano.cantu.novakey.view.INovaKeyView;
 import viviano.cantu.novakey.view.themes.board.BoardTheme;
 
 /**
  * Created by Viviano on 6/16/2016.
  */
-public class InfiniteMenu implements Menu {
+public class InfiniteMenu implements OverlayElement, Menu {
 
     private static List<InfiniteMenu> HIDDEN_KEYS;
 
@@ -31,25 +29,26 @@ public class InfiniteMenu implements Menu {
     private float fingX, fingY;
     private int mIndex = 0;//current entry
 
-    public InfiniteMenu(List<Entry> entries) {
+    public InfiniteMenu(List<Menu.Entry> entries) {
         mEntries = entries;
     }
+
 
     /**
      * This draw method will be called if this is not a
      * stand alone View, otherwise this method will never be called
      * by outside sources
-     * @param view   current view, can be used to get models
+     * @param model for context
      * @param theme  used to determine the color
      * @param canvas canvas to draw on
      */
     @Override
-    public void draw(INovaKeyView view, MasterTheme theme, Canvas canvas) {
+    public void draw(Model model, MasterTheme theme, Canvas canvas) {
         BoardTheme bt = theme.getBoardTheme();
-        float x = view.getDrawModel().getX();
-        float y = view.getDrawModel().getY();
-        float r = view.getDrawModel().getRadius();
-        float sr = view.getDrawModel().getSmallRadius();
+        float x = model.getX();
+        float y = model.getY();
+        float r = model.getRadius();
+        float sr = model.getSmallRadius();
 
         float size = sr * 1.3f;
         //get distance
@@ -75,7 +74,7 @@ public class InfiniteMenu implements Menu {
                 //----------------------------------DRAW MIDDLE------------------------------------
                 if (i==0) {
                     float factor = (float) (distanceFromMiddle / Math.pow(2, i+1));
-                    if (Math.abs(distanceFromMiddle) < .25)//TODO: infinite meny pretty snap
+                    if (Math.abs(distanceFromMiddle) < .25)//TODO: infinite menu pretty snap
                         draw(mIndex, x, y, size, bt, canvas);
                     else
                         draw(mIndex, x + r * factor, y + r * (factor * factor / 2),
@@ -106,7 +105,6 @@ public class InfiniteMenu implements Menu {
     }
 
     /**
-     * @param controller provides context to the handler
      * @return a touch handler which returns true if being used
      * or false otherwise. For example if a button element is activated by being
      * clicked, if the handler detects this in the onDown event it will
@@ -114,8 +112,8 @@ public class InfiniteMenu implements Menu {
      * to be activated
      */
     @Override
-    public TouchHandler getTouchHandler(Controller controller) {
-        return new Handler(controller.getMainBoard());
+    public TouchHandler getTouchHandler() {
+        return new Handler();
     }
 
     private int indexInBounds(int i) {
@@ -168,10 +166,6 @@ public class InfiniteMenu implements Menu {
      */
     private class Handler extends RotatingHandler {
 
-        public Handler(Board board) {
-            super(board);
-        }
-
         /**
          * Called when the user enters or exits the inner circle.
          * Call unrelated to onMove()
@@ -198,7 +192,7 @@ public class InfiniteMenu implements Menu {
         protected boolean onMove(float x, float y, Controller controller, HandlerManager manager) {
             fingX = x;
             fingY = y;
-            controller.invalidate();
+            controller.getModel().update();
             return true;
         }
 
@@ -222,7 +216,7 @@ public class InfiniteMenu implements Menu {
                 if (mIndex >= mEntries.size())
                     mIndex = 0;
             }
-            controller.invalidate();//because onRotate is after on move
+            controller.getModel().update();//because onRotate is after on move
             return true;
         }
 
@@ -257,6 +251,7 @@ public class InfiniteMenu implements Menu {
                             new InputAction(s.charAt(i))));
                 }
                 HIDDEN_KEYS.add(new InfiniteMenu(entries));
+                //TODO: make hidden keys not an infinite array but a string array instead
             }
         }
     }

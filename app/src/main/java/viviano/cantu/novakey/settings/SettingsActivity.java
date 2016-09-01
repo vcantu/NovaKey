@@ -6,10 +6,10 @@ import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 
+import viviano.cantu.novakey.elements.keyboards.Keyboards;
 import viviano.cantu.novakey.model.Settings;
 import viviano.cantu.novakey.view.drawing.Font;
 import viviano.cantu.novakey.view.drawing.Icons;
-import viviano.cantu.novakey.model.keyboards.KeyLayout;
 import viviano.cantu.novakey.NovaKey;
 import viviano.cantu.novakey.setup.SetupActivity;
 import viviano.cantu.novakey.view.themes.AppTheme;
@@ -24,13 +24,12 @@ public class SettingsActivity extends PreferenceActivity {
         SharedPreferences pref = getApplicationContext().getSharedPreferences(NovaKey.MY_PREFERENCES, MODE_PRIVATE);
 
         //LoadStuff
-        KeyLayout.CreateKeyboards(getResources());
         Colors.initialize();
         AppTheme.load(this, getResources());
         Font.create(getApplicationContext());
         Icons.load(getApplicationContext());
 
-        Settings.setSharedPref(PreferenceManager.getDefaultSharedPreferences(getApplicationContext()));
+        Settings.setPrefs(PreferenceManager.getDefaultSharedPreferences(getApplicationContext()));
         Settings.update();
 
         if (!pref.getBoolean("has_setup", false)) {

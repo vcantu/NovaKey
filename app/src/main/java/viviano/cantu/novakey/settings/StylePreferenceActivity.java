@@ -7,110 +7,108 @@ import android.widget.CheckBox;
 import android.widget.Toast;
 
 import viviano.cantu.novakey.R;
+import viviano.cantu.novakey.model.MainModel;
+import viviano.cantu.novakey.model.Model;
 import viviano.cantu.novakey.model.Settings;
+import viviano.cantu.novakey.model.TrueModel;
+import viviano.cantu.novakey.model.loaders.ThemeFactory;
 import viviano.cantu.novakey.settings.widgets.pickers.ColorPicker;
 import viviano.cantu.novakey.settings.widgets.pickers.HorizontalPicker;
 import viviano.cantu.novakey.settings.widgets.pickers.PickerItem;
-import viviano.cantu.novakey.settings.widgets.ThemePreview;
 import viviano.cantu.novakey.settings.widgets.pickers.ReleasePicker;
 import viviano.cantu.novakey.settings.widgets.pickers.ThemePicker;
+import viviano.cantu.novakey.view.MainView;
 import viviano.cantu.novakey.view.themes.board.BoardTheme;
-import viviano.cantu.novakey.view.themes.ThemeFactory;
 
 /**
  * Created by Viviano on 1/5/2016.
+ *
+ * TODO: once model can properly update the view(even when the theme updates)
+ * remove any invalidate calls
  */
 public class StylePreferenceActivity extends AbstractPreferenceActivity {
 
-    private int mTheme, mColor1, mColor2, mColor3;
-    private boolean mIsAuto = false, mIs3d = false;
-    private ThemePreview mPreview;
+    private boolean mIsAuto = false;
+    private MainView mPreview;
+    private Model mModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        loadData();
 
         final ReleasePicker releasePicker = (ReleasePicker)findViewById(R.id.releasePick);
 
-        mPreview = (ThemePreview)findViewById(R.id.preview);
-        updatePreview();
-        mPreview.invalidate();
+        mPreview = (MainView) findViewById(R.id.preview);
+        initializeModel();
+        mPreview.setModel(mModel);
 
         final CheckBox autoCheck = (CheckBox)findViewById(R.id.autoColor);
         autoCheck.setChecked(mIsAuto);
         autoCheck.setOnCheckedChangeListener((buttonView, isChecked) -> mIsAuto = isChecked);
 
         final CheckBox _3dCheck = (CheckBox)findViewById(R.id.threeDee);
-        _3dCheck.setChecked(mIs3d);
+        _3dCheck.setChecked(mModel.getTheme().is3D());
         _3dCheck.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            mIs3d = isChecked;
-            updatePreview();
+            mModel.getTheme().set3D(isChecked);
+            mPreview.invalidate();
         });
 
         final ThemePicker themePicker = (ThemePicker)findViewById(R.id.themePicker);
-        themePicker.setItem(mTheme);
-        themePicker.invalidate();
-        themePicker.setOnItemSelectedListener(new HorizontalPicker.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(PickerItem item, int subIndex) {
-                int index = ((BoardTheme)item).themeID();
-                mTheme = index;
-                updatePreview();
-            }
+        themePicker.setItem(ThemeFactory.getBoardNum(mModel.getTheme().getBoardTheme()));
+        themePicker.setOnItemSelectedListener((item, subIndex) -> {
+            mModel.getTheme().setBoardTheme((BoardTheme)item);
+            mPreview.invalidate();
         });
 
         final ColorPicker primaryColor = (ColorPicker)findViewById(R.id.primaryColor);
         primaryColor.setReleasePicker(releasePicker);
-        primaryColor.setItem(Colors.path(mColor1)[0]);
-        primaryColor.setOnItemSelectedListener(new HorizontalPicker.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(PickerItem item, int subIndex) {
-                mColor1 = ((Colors)item).shade(subIndex);
-                updatePreview();
-            }
+        primaryColor.setItem(Colors.path(mModel.getTheme().getPrimaryColor())[0]);
+        primaryColor.setOnItemSelectedListener((item, subIndex) -> {
+            mModel.getTheme().setPrimaryColor(((Colors)item).shade(subIndex));
+            mPreview.invalidate();
         });
 
         final ColorPicker secondaryColor = (ColorPicker)findViewById(R.id.secondaryColor);
         secondaryColor.setReleasePicker(releasePicker);
-        secondaryColor.setItem(Colors.path(mColor2)[0]);
-        secondaryColor.setOnItemSelectedListener(new HorizontalPicker.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(PickerItem item, int subIndex) {
-                mColor2 = ((Colors)item).shade(subIndex);
-                updatePreview();
-            }
+        secondaryColor.setItem(Colors.path(mModel.getTheme().getAccentColor())[0]);
+        secondaryColor.setOnItemSelectedListener((item, subIndex) -> {
+            mModel.getTheme().setAccentColor(((Colors)item).shade(subIndex));
+            mPreview.invalidate();
         });
 
         final ColorPicker ternaryPicker = (ColorPicker)findViewById(R.id.ternaryColor);
         ternaryPicker.setReleasePicker(releasePicker);
-        ternaryPicker.setItem(Colors.path(mColor3)[0]);
-        ternaryPicker.setOnItemSelectedListener(new HorizontalPicker.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(PickerItem item, int subIndex) {
-                mColor3 = ((Colors)item).shade(subIndex);
-                updatePreview();
-            }
+        ternaryPicker.setItem(Colors.path(mModel.getTheme().getContrastColor())[0]);
+        ternaryPicker.setOnItemSelectedListener((item, subIndex) -> {
+            mModel.getTheme().setContrastColor(((Colors)item).shade(subIndex));
+            mPreview.invalidate();
         });
+    }
+
+    private void initializeModel() {
+        mModel = new MainModel(this);
+
+        float w = mPreview.getWidth();
+        float h = mPreview.getHeight();
+        float r = Math.min(h - mPreview.getPaddingTop() - mPreview.getPaddingBottom(),
+                w - mPreview.getPaddingRight() - mPreview.getPaddingLeft());
+        r /= 2;
+        float x = w / 2;
+        float y = mPreview.getPaddingTop() + r;
+        float sr = r / 3;
+
+        mModel.setWidth((int)w);
+        mModel.setHeight((int)h);
+        mModel.setRadius(r);
+        mModel.setSmallRadius(sr);
+        mModel.setPadding(mPreview.getPaddingTop());
+        mModel.setX(x);
+        mModel.setY(y);
     }
 
     @Override
     int getLayoutId() {
         return R.layout.layout_style_preference;
-    }
-
-    /**
-     * Will update the theme preview
-     */
-    private void updatePreview() {
-        BoardTheme t = ThemeFactory.createTheme(mTheme);
-        t.setColors(mColor1, mColor2, mColor3);
-        t.set3D(mIs3d);
-        mPreview.set(t);
-        if (mIsAuto) {
-            //todo: add something that lets user know auto is selected
-        }
-        mPreview.invalidate();
     }
 
     /**
@@ -125,46 +123,13 @@ public class StylePreferenceActivity extends AbstractPreferenceActivity {
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
             SharedPreferences.Editor editor = sharedPref.edit();
 
-            editor.putString(Settings.pref_theme, mTheme +
-                    "," + mColor1 + "," + mColor2 + "," + mColor3 +
-                    "," + (mIsAuto ? "A" : "X") + "," + (mIs3d ? "3d" : "X"));
+            editor.putBoolean(Settings.pref_auto_color, mIsAuto);
             editor.commit();
+
+            new TrueModel(this).setTheme(mModel.getTheme());
 
             Toast t = Toast.makeText(this, "Style Saved.", Toast.LENGTH_SHORT);
             t.show();
-        }
-    }
-
-    /**
-     * Will load the necessary data from the preference: pref_theme, and use that
-     * data to display the activity.
-     *
-     * Will also set the default theme if it has not previously been entered
-     */
-    private void loadData() {
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        String str = sharedPref.getString(Settings.pref_theme, Settings.DEFAULT);
-
-        if (str.equals(Settings.DEFAULT)) {
-             str = "0," +
-                    String.valueOf(0xFF616161) + "," +
-                    String.valueOf(0xFFF5F5F5) + "," +
-                    String.valueOf(0xFFF5F5F5) + "," +
-                    "X," + "X";//no auto & no 3d by default
-        }
-        String[] params = str.split(",");
-
-        mTheme = Integer.valueOf(params[0]);
-        mColor1 = Integer.valueOf(params[1]);
-        mColor2 =Integer.valueOf(params[2]);
-        mColor3 = Integer.valueOf(params[3]);
-        if (params.length >= 5) {
-            if (params[4].equalsIgnoreCase("A"))
-                mIsAuto = true;
-        }
-        if (params.length >= 6) {
-            if (params[5].equalsIgnoreCase("3d"))
-                mIs3d = true;
         }
     }
 }

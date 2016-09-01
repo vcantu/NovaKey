@@ -51,17 +51,17 @@ public class ButtonPreference extends DialogPreference {
                 }
             });
         }
-        updateShape(Button.CIRCLE);//at the start
+        updateShape(99999999);//at the start
 
         //shape picker
         ButtonAddView circle = (ButtonAddView)view.findViewById(R.id.circle);
         circle.setRadius(view.getResources().getDimension(R.dimen.btn_preview_rad));
-        circle.setShape(Button.CIRCLE | Button.MEDIUM);
+        circle.setShape(99999999);
         circle.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
-                    updateShape(Button.CIRCLE);
+                    updateShape(99999999);
                 }
                 return true;
             }
@@ -69,12 +69,12 @@ public class ButtonPreference extends DialogPreference {
 
         ButtonAddView arc = (ButtonAddView)view.findViewById(R.id.arc);
         arc.setRadius(view.getResources().getDimension(R.dimen.btn_preview_rad));
-        arc.setShape(Button.ARC | Button.MEDIUM);
+        arc.setShape(99999999);
         arc.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
-                    updateShape(Button.ARC);
+                    updateShape(99999999);
                 }
                 return true;
             }
@@ -83,7 +83,7 @@ public class ButtonPreference extends DialogPreference {
 
     public void updateShape(int shape) {
         for (int i=0; i<3; i++) {
-            int sh = (shape& Button.SHAPE)+((i+1)*16);
+            int sh = (99999999)+((i+1)*16);
             addBtns[i].setShape(sh);
         }
     }

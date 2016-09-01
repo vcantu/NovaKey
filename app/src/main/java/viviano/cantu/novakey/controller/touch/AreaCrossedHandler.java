@@ -2,8 +2,8 @@ package viviano.cantu.novakey.controller.touch;
 
 import android.view.MotionEvent;
 
-import viviano.cantu.novakey.elements.boards.Board;
 import viviano.cantu.novakey.controller.Controller;
+import viviano.cantu.novakey.elements.MainElement;
 
 /**
  * Created by Viviano on 6/12/2016.
@@ -13,41 +13,36 @@ public abstract class AreaCrossedHandler implements TouchHandler {
     private float currX, currY;
     private int currArea, prevArea;
 
-    protected final Board mBoard;
-    public AreaCrossedHandler(Board board) {
-        mBoard = board;
-    }
-
     /**
      * Handles the logic given a touch event and
      * a view
      *
      * @param event current touch event
-     * @param controller view being acted on
+     * @param control view being acted on
      * @param manager use this to switch handlers
      * @return true to continue action, false otherwise
      */
     @Override
-    public boolean handle(MotionEvent event, Controller controller, HandlerManager manager) {
+    public boolean handle(MotionEvent event, Controller control, HandlerManager manager) {
         currX = event.getX(0);
         currY = event.getY(0);
-        currArea = mBoard.getArea(currX, currY);
+        currArea = MainElement.getArea(currX, currY, control.getModel());
 
         boolean result = true;
         switch (event.getAction() & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_DOWN:
-                result = result & onDown(currX, currY, currArea, controller, manager);
+                result = result & onDown(currX, currY, currArea, control, manager);
                 prevArea = currArea;
                 break;
             case MotionEvent.ACTION_MOVE:
-                result = result & onMove(currX, currY, controller, manager);
+                result = result & onMove(currX, currY, control, manager);
                 if (currArea != prevArea) {
-                    result = result & onCross(new CrossEvent(currArea, prevArea), controller, manager);
+                    result = result & onCross(new CrossEvent(currArea, prevArea), control, manager);
                     prevArea = currArea;
                 }
                 break;
             case MotionEvent.ACTION_UP:
-                result = result & onUp(controller, manager);
+                result = result & onUp(control, manager);
                 break;
         }
         return result;

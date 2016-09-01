@@ -14,24 +14,6 @@ import viviano.cantu.novakey.utils.Util;
  */
 public class IconTheme extends BaseTheme {
 
-    /**
-     * @return Its name identifier, if it inherits from another theme
-     * it must include its parents name in the format ParentName.ThisName
-     */
-    @Override
-    public String themeName() {
-        return super.themeName() + ".Icon";
-    }
-
-    /**
-     * @return an integer ID unique to this theme
-     */
-    @Override
-    public int themeID() {
-        return 6;
-    }
-
-
     @Override
     public void drawBoardBack(float x, float y, float r, float sr, Canvas canvas) {
         pB.setStyle(Paint.Style.FILL);
@@ -40,15 +22,15 @@ public class IconTheme extends BaseTheme {
         Path p = new Path();
 
         boolean leftIsDark = false;
-        int c = Util.colorShade(primaryColor(), 4);
+        int c = Util.colorShade(mParent.getPrimaryColor(), 4);
         if (c == Color.WHITE) {
             leftIsDark = true;
-            c = Util.colorShade(primaryColor(), -4);
+            c = Util.colorShade(mParent.getPrimaryColor(), -4);
         }
 
         p.addArc(rect, 90, 180 * (leftIsDark ? -1 : 1));
         p.close();
-        pB.setColor(primaryColor());
+        pB.setColor(mParent.getPrimaryColor());
         canvas.drawPath(p, pB);
 
         p.reset();
@@ -63,13 +45,13 @@ public class IconTheme extends BaseTheme {
         float sw = r * w * 4;
         ShadowDimens sd = ShadowDimens.fromAngle(270, sw / 4);
 
-        if (is3D()) {
+        if (mParent.is3D()) {
             //pB.setStrokeWidth(sw);
             //Draw.shadedLines(x, y + sw * 2 / 3f, r - (sr * 0.1f), sr * 1.1f, 0x80000000, pB, canvas);
             pB.setShadowLayer(sd.r, sd.x, sd.y, 0x80000000);
         }
         //draw lines and circle
-        pB.setColor(accentColor());
+        pB.setColor(mParent.getAccentColor());
         pB.setStyle(Paint.Style.STROKE);
         pB.setStrokeWidth(sw);
         //draw circles
@@ -89,7 +71,7 @@ public class IconTheme extends BaseTheme {
             canvas.save();
             canvas.drawPath(p, pB);
             for (int i = 1; i <= 4; i++) {
-                if (is3D()) {
+                if (mParent.is3D()) {
                     sd = sd.fromAngle(270 + (360 / 5 * i));
                     pB.setShadowLayer(sd.r, sd.x, sd.y, 0x80000000);
                 }

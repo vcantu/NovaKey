@@ -40,11 +40,11 @@ public class ButtonAddView extends View {
         if ((button.shape& Button.SHAPE)== Button.ARC) {
             button.dist = 1;
             dimens.y -= radius;
-            button.draw(dimens, mBtnTheme, canvas);
+            button.draw(, mBtnTheme, canvas);
         }
         else {
             button.dist = 0;
-            button.draw(dimens, mBtnTheme, canvas);
+            button.draw(, mBtnTheme, canvas);
         }
     }
 

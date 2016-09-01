@@ -4,15 +4,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.controller.actions.Action;
 import viviano.cantu.novakey.controller.actions.Actions;
-import viviano.cantu.novakey.controller.actions.EnableMenuAction;
+import viviano.cantu.novakey.controller.actions.SetOverlayAction;
 import viviano.cantu.novakey.controller.actions.ClipboardAction;
 import viviano.cantu.novakey.controller.actions.NoAction;
 import viviano.cantu.novakey.controller.actions.typing.DeleteAction;
 import viviano.cantu.novakey.controller.actions.typing.InputAction;
-import viviano.cantu.novakey.model.NovaKeyModel;
 import viviano.cantu.novakey.view.drawing.Icons;
 import viviano.cantu.novakey.elements.menus.InfiniteMenu;
 import viviano.cantu.novakey.elements.menus.Menu;
@@ -102,12 +100,12 @@ public class Clipboard {
                         copy, new NoAction()),
 
                 new OnUpMenu.Entry(Icons.get("select_all"),
-                        select_all, new EnableMenuAction(selectAll)),
+                        select_all, new SetOverlayAction(selectAll)),
 
                 new OnUpMenu.Entry(Icons.get("content_paste"),
                         paste, (ime, control, model) -> {
                             InfiniteMenu clipboard = createClipboard();
-                            control.fire(new EnableMenuAction(clipboard));
+                            control.fire(new SetOverlayAction(clipboard));
                             return null;
                         }),
 
