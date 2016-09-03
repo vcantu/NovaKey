@@ -30,7 +30,7 @@ import viviano.cantu.novakey.controller.actions.typing.InputAction;
 import viviano.cantu.novakey.controller.actions.typing.UpdateShiftAction;
 import viviano.cantu.novakey.view.drawing.Font;
 import viviano.cantu.novakey.view.drawing.Icons;
-import viviano.cantu.novakey.elements.menus.InfiniteMenu;
+import viviano.cantu.novakey.model.elements.menus.InfiniteMenu;
 import viviano.cantu.novakey.model.states.ShiftState;
 import viviano.cantu.novakey.settings.Colors;
 import viviano.cantu.novakey.model.Settings;

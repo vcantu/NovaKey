@@ -1,9 +1,9 @@
-package viviano.cantu.novakey.elements;
+package viviano.cantu.novakey.model.elements;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import viviano.cantu.novakey.elements.keyboards.Keyboard;
+import viviano.cantu.novakey.model.elements.keyboards.Keyboard;
 
 /**
  * Created by Viviano on 8/21/2016.
@@ -15,14 +15,11 @@ public class DefaultElementManager implements ElementManager {
 
     private final List<Element> mList;
     private MainElement mMain;
-    private OverlayElement mOverlay;
 
     public DefaultElementManager(Keyboard keyboard) {
-        mOverlay = keyboard;
-        mMain = new MainElement(mOverlay);
+        mMain = new MainElement(keyboard);
 
         mList = new ArrayList<>();
-        mList.add(mOverlay);
         mList.add(mMain);
     }
 
@@ -35,7 +32,6 @@ public class DefaultElementManager implements ElementManager {
     public List<Element> getElements() {
         List<Element> list = new ArrayList<>(mList);
         mList.add(0, mMain);
-        mList.add(0, mOverlay);
         return list;
     }
 
@@ -47,7 +43,7 @@ public class DefaultElementManager implements ElementManager {
      */
     @Override
     public void setOverlayElement(OverlayElement element) {
-        mOverlay = element;
+        mMain.setOverlay(element);
     }
 
     /**
@@ -55,7 +51,7 @@ public class DefaultElementManager implements ElementManager {
      */
     @Override
     public void removeOverlayElement() {
-        mOverlay = null;
+        mMain.setOverlay(null);
     }
 
     /**

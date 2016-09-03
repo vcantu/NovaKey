@@ -2,10 +2,8 @@ package viviano.cantu.novakey.controller;
 
 import viviano.cantu.novakey.NovaKey;
 import viviano.cantu.novakey.controller.actions.Action;
-import viviano.cantu.novakey.controller.touch.HandlerManager;
 import viviano.cantu.novakey.controller.touch.NovaKeyListener;
 import viviano.cantu.novakey.model.MainModel;
-import viviano.cantu.novakey.model.TrueModel;
 import viviano.cantu.novakey.model.Model;
 import viviano.cantu.novakey.view.NovaKeyView;
 import viviano.cantu.novakey.view.MainView;
@@ -53,13 +51,6 @@ public class Controller implements Gun {
      */
     public Model getModel() {
         return mModel;
-    }
-
-    /**
-     * @return this controller's handler manager
-     */
-    public HandlerManager getManager() {
-        return mListener;
     }
 
     /**

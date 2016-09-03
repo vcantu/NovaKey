@@ -4,37 +4,23 @@ import android.os.CountDownTimer;
 import android.view.MotionEvent;
 import android.view.View;
 
-import viviano.cantu.novakey.elements.Element;
+import viviano.cantu.novakey.model.elements.Element;
 import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.controller.actions.SetEditingAction;
 
 /**
  * Created by Viviano on 7/10/2015.
  */
-public class NovaKeyListener implements View.OnTouchListener, HandlerManager {
+public class NovaKeyListener implements View.OnTouchListener {
 
     private final Controller mController;
     private TouchHandler mHandler;//current handler
     private CustomTimer mDoublePress;
-    private MotionEvent mLastEvent;
 
     public NovaKeyListener(Controller controller) {
         mController = controller;
         mDoublePress = new CustomTimer(1000, () ->
                 mController.fire(new SetEditingAction(true)));
-    }
-
-    /**
-     * Push a handler to take priority over the
-     * other handlers
-     *
-     * @param handler handler to take priority
-     */
-    @Override
-    public void setHandler(TouchHandler handler) {
-        mHandler = handler;
-        if (mLastEvent != null)
-            mHandler.handle(mLastEvent, mController, this);
     }
 
     /**
@@ -48,7 +34,6 @@ public class NovaKeyListener implements View.OnTouchListener, HandlerManager {
      */
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        mLastEvent = event;
         switch (event.getAction() & MotionEvent.ACTION_MASK) {
             //for multitouch
             case MotionEvent.ACTION_POINTER_DOWN:
@@ -58,25 +43,33 @@ public class NovaKeyListener implements View.OnTouchListener, HandlerManager {
                 mDoublePress.cancel();
                 break;
             case MotionEvent.ACTION_UP:
-                mLastEvent = null;//avoids actions happening when switching but not touching
                 mDoublePress.cancel();
                 break;
         }
 
         //if has a handler handle event
         if (mHandler != null) {
-            boolean result = mHandler.handle(event, mController, this);
-            if (result)//if event returns true handler is done
+            boolean result = mHandler.handle(event, mController);
+            if (!result) {//if event returns true handler is done
                 mHandler = null;
-        } else {
-            for (Element e : mController.getModel().getElements()) {
-                if (e.getTouchHandler().handle(event, mController, this)) {
-                    mHandler = e.getTouchHandler();
-                    break;
-                }
+                getNewHandler(event);
             }
         }
+        else {
+            getNewHandler(event);
+        }
         return true;//take in all events
+    }
+
+    //WARNING: this method will perform the first touch event if handler is found
+    private void getNewHandler(MotionEvent event) {
+        for (Element e : mController.getModel().getElements()) {
+            TouchHandler handler = e.getTouchHandler();
+            if (handler != null && handler.handle(event, mController)) {
+                mHandler = handler;
+                break;
+            }
+        }
     }
 
     private class CustomTimer {

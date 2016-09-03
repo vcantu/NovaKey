@@ -1,16 +1,14 @@
-package viviano.cantu.novakey.elements.keyboards;
+package viviano.cantu.novakey.model.elements.keyboards;
 
 import android.graphics.Canvas;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
 import viviano.cantu.novakey.controller.touch.TouchHandler;
 import viviano.cantu.novakey.controller.touch.TypingHandler;
-import viviano.cantu.novakey.elements.OverlayElement;
+import viviano.cantu.novakey.model.elements.OverlayElement;
 import viviano.cantu.novakey.model.Model;
 import viviano.cantu.novakey.model.Settings;
 import viviano.cantu.novakey.model.states.ShiftState;
@@ -19,6 +17,7 @@ import viviano.cantu.novakey.view.themes.MasterTheme;
 
 public class Keyboard implements OverlayElement, Iterator<Key>, Iterable<Key> {
 
+    private final TouchHandler mHandler;
     private final Key[][] keys;
     private final String name;
 
@@ -27,6 +26,8 @@ public class Keyboard implements OverlayElement, Iterator<Key>, Iterable<Key> {
     public Keyboard(String name, Key[][] keys) {
         this.keys = keys;
         this.name = name;
+
+        mHandler = new TypingHandler();
     }
 
     @Override
@@ -118,7 +119,7 @@ public class Keyboard implements OverlayElement, Iterator<Key>, Iterable<Key> {
      */
     @Override
     public TouchHandler getTouchHandler() {
-        return new TypingHandler();
+        return mHandler;
     }
 
     /**

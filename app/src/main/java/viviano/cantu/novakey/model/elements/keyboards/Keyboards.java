@@ -1,4 +1,4 @@
-package viviano.cantu.novakey.elements.keyboards;
+package viviano.cantu.novakey.model.elements.keyboards;
 
 import android.content.Context;
 import android.content.res.Resources;

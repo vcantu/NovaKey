@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 
-import viviano.cantu.novakey.elements.keyboards.Keyboards;
 import viviano.cantu.novakey.model.Settings;
 import viviano.cantu.novakey.view.drawing.Font;
 import viviano.cantu.novakey.view.drawing.Icons;

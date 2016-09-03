@@ -1,4 +1,4 @@
-package viviano.cantu.novakey.elements;
+package viviano.cantu.novakey.model.elements;
 
 import android.graphics.Canvas;
 import android.inputmethodservice.Keyboard;
@@ -16,13 +16,13 @@ import viviano.cantu.novakey.view.themes.board.BoardTheme;
  */
 public class MainElement implements Element {
 
-    private Element mOverlay;
+    private OverlayElement mOverlay;
 
-    public MainElement(Element overlay) {
+    public MainElement(OverlayElement overlay) {
         mOverlay = overlay;
     }
 
-    public void setOverlay(Element overlay) {
+    public void setOverlay(OverlayElement overlay) {
         mOverlay = overlay;
     }
 
@@ -43,17 +43,8 @@ public class MainElement implements Element {
 
         board.drawBoard(model.getX(), model.getY(), model.getRadius(), model.getSmallRadius(), canvas);
 
-        if (model.getUserState() == UserState.SELECTING) {
-            int cursorCode = model.getCursorMode();
-            board.drawItem(Icons.cursors, model.getX(), model.getY(), 1, canvas);
-            if (cursorCode >= 0)
-                board.drawItem(Icons.cursorLeft, model.getX(), model.getY(), 1, canvas);
-            if (cursorCode <= 0)
-                board.drawItem(Icons.cursorRight, model.getX(), model.getY(), 1, canvas);
-        }
-        else {
+        if (mOverlay != null)
             mOverlay.draw(model, theme, canvas);
-        }
     }
     /**
      * @return a touch handler which returns true if being used
@@ -64,6 +55,8 @@ public class MainElement implements Element {
      */
     @Override
     public TouchHandler getTouchHandler() {
+        if (mOverlay == null)
+            return null;
         return mOverlay.getTouchHandler();
     }
 

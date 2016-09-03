@@ -3,14 +3,13 @@ package viviano.cantu.novakey.animations;
 import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+import viviano.cantu.novakey.animations.utils.Animator;
 import viviano.cantu.novakey.animations.utils.DelayableInterpolator;
 import viviano.cantu.novakey.animations.utils.MultiValueAnimator;
-import viviano.cantu.novakey.elements.keyboards.Key;
+import viviano.cantu.novakey.model.elements.keyboards.Key;
 import viviano.cantu.novakey.model.Model;
 import viviano.cantu.novakey.utils.Util;
 
@@ -22,19 +21,18 @@ public abstract class CharAnimation extends BaseAnimation {
     public final static int NONE = -1, CENTER = 0, RANDOM = 1,
             FLIP_X = 2, FLIP_Y = 4, RIGHT = 8, UP = 16;
 
-    protected int style = 0;
-    protected long duration = 0;
-    protected final Map<String, Map<Key, Object>> values;//use to store initial values
-
+    private final int mStyle;
+    private final long mDuration;
+    private final Map<Key, Animator<Key>> mAnimators;
 
     public CharAnimation(int style) {
         this(style, 500);
     }
 
     public CharAnimation(int style, long duration) {
-        this.style = style;
-        this.duration = duration;
-        this.values = new HashMap<>();
+        mStyle = style;
+        mDuration = duration;
+        mAnimators = new HashMap<>();
     }
 
     /**
@@ -47,18 +45,19 @@ public abstract class CharAnimation extends BaseAnimation {
         MultiValueAnimator<Key> anim = MultiValueAnimator.create();
 
         for (Key k : model.getKeyboard()) {
-            long dur = duration / 2;
+            long dur = mDuration / 2;
             long delay = getDelay(model, k, dur);
             anim.addInterpolator(k,
                     new DelayableInterpolator(
-                            delay, dur, duration, getInterpolatorFor(k)),
-                    delay, dur);
-            this.setInitialState(k);
+                            delay, dur, mDuration, getInterpolatorFor(k)), delay, dur);
+            mAnimators.put(k, getAnimatorFor(k));
         }
         anim.setMultiUpdateListener(new MultiValueAnimator.MultiUpdateListener<Key>() {
             @Override
             public void onValueUpdate(ValueAnimator animator, float value, Key key) {
-                updateKey(key, value);
+                Animator<Key> anim = mAnimators.get(key);
+                if (anim != null)
+                    anim.update(key, value);
             }
 
             @Override
@@ -79,22 +78,14 @@ public abstract class CharAnimation extends BaseAnimation {
      */
     protected abstract TimeInterpolator getInterpolatorFor(Key k);
 
-
     /**
-     * Override this method if you want to set the initial state of a key
+     * Called when building the animation to determine which animator to assign
+     * to which key
      *
-     * @param k
+     * @param k key whose animator you wish to set
+     * @return the animator to set
      */
-    protected abstract void setInitialState(Key k);
-
-    /**
-     * Override this method and update the key accordingly
-     *
-     * @param k     key to update
-     * @param value percent of animation used tu update key
-     */
-    protected abstract void updateKey(Key k, float value);
-
+    protected abstract Animator<Key> getAnimatorFor(Key k);
 
     /**
      * Will determine the delay according to this animator's  parameters
@@ -104,18 +95,18 @@ public abstract class CharAnimation extends BaseAnimation {
      * @return the delay in milliseconds
      */
     private long getDelay(Model model, Key k, long max) {
-        if (style == -1)
+        if (mStyle == -1)
             return 0;
 
-        if ((style & RANDOM) == RANDOM)
+        if ((mStyle & RANDOM) == RANDOM)
             return (long) (Math.random() * max);
 
         float x = model.getX(), y = model.getY();
 
-        if ((style & RIGHT) == RIGHT)
-            x -= model.getRadius() * (((style & FLIP_X) == FLIP_X) ? -1 : 1);
-        if ((style & UP) == UP)
-            y += model.getRadius() * (((style & FLIP_Y) == FLIP_Y) ? -1 : 1);;
+        if ((mStyle & RIGHT) == RIGHT)
+            x -= model.getRadius() * (((mStyle & FLIP_X) == FLIP_X) ? -1 : 1);
+        if ((mStyle & UP) == UP)
+            y += model.getRadius() * (((mStyle & FLIP_Y) == FLIP_Y) ? -1 : 1);;
 
         float dist = Util.distance(x, y, k.getPosn().getX(model), k.getPosn().getX(model));
         float ratio = dist / (model.getRadius() * 2);

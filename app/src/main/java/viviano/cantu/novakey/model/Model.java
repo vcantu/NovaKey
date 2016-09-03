@@ -1,6 +1,6 @@
 package viviano.cantu.novakey.model;
 
-import viviano.cantu.novakey.elements.ElementManager;
+import viviano.cantu.novakey.model.elements.ElementManager;
 
 /**
  * Created by Viviano on 6/6/2016.

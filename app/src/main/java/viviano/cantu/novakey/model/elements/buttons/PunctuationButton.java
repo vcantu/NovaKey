@@ -1,9 +1,9 @@
-package viviano.cantu.novakey.elements.buttons;
+package viviano.cantu.novakey.model.elements.buttons;
 
 import viviano.cantu.novakey.controller.actions.Action;
 import viviano.cantu.novakey.controller.actions.SetOverlayAction;
 import viviano.cantu.novakey.controller.actions.typing.InputAction;
-import viviano.cantu.novakey.elements.menus.InfiniteMenu;
+import viviano.cantu.novakey.model.elements.menus.InfiniteMenu;
 import viviano.cantu.novakey.view.drawing.drawables.FlatTextDrawable;
 
 /**

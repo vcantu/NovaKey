@@ -4,8 +4,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 
-import viviano.cantu.novakey.elements.Element;
-import viviano.cantu.novakey.controller.touch.NovaKeyListener;
 import viviano.cantu.novakey.model.Model;
 
 public class MainView extends NovaKeyView {

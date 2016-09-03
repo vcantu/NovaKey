@@ -2,6 +2,7 @@ package viviano.cantu.novakey.controller.touch;
 
 import android.inputmethodservice.Keyboard;
 import android.os.CountDownTimer;
+import android.view.MotionEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.List;
 import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.controller.actions.SetOverlayAction;
 import viviano.cantu.novakey.controller.actions.SetUserStateAction;
-import viviano.cantu.novakey.elements.menus.InfiniteMenu;
+import viviano.cantu.novakey.model.elements.menus.InfiniteMenu;
 import viviano.cantu.novakey.model.states.UserState;
 import viviano.cantu.novakey.model.Settings;
 import viviano.cantu.novakey.utils.Util;
@@ -20,15 +21,15 @@ import viviano.cantu.novakey.utils.Util;
 public class TypingHandler extends AreaCrossedHandler {
 
     private final List<Integer> mAreas;
-
     private CountDownTimer mTimer;
+    private RepeatHandler mRepeat;
 
     public TypingHandler() {
         mAreas = new ArrayList<>();
     }
 
     /**
-     * Srarts longpress timer
+     * Starts longpress timer
      * @param controller
      */
     private void start(Controller controller) {
@@ -53,16 +54,31 @@ public class TypingHandler extends AreaCrossedHandler {
     }
 
     /**
+     * Handles the logic given a touch event and
+     * a view
+     *
+     * @param event   current touch event
+     * @param control view being acted on
+     * @return true to continue action, false otherwise
+     */
+    @Override
+    public boolean handle(MotionEvent event, Controller control) {
+        if (mRepeat == null)
+            return super.handle(event, control);
+        else
+            return mRepeat.handle(event, control);
+    }
+
+    /**
      * Override this to specify onDown behaviour
      * @param x       current x position
      * @param y       current y position
      * @param area    current area
      * @param controller    view being called on
-     * @param manager use this to switch handlers
      */
     @Override
     protected boolean onDown(float x, float y, int area,
-                             Controller controller, HandlerManager manager) {
+                             Controller controller) {
         mAreas.add(area);
         start(controller);
         return true;
@@ -73,14 +89,14 @@ public class TypingHandler extends AreaCrossedHandler {
      * has been a cross, either in sector or range
      * @param event describes the event
      * @param controller
-     * @param manager
      */
     @Override
-    protected boolean onCross(CrossEvent event, Controller controller, HandlerManager manager) {
+    protected boolean onCross(CrossEvent event, Controller controller) {
         cancel();
         start(controller);
         mAreas.add(event.newArea);
         if (mAreas.size() >= 3) {
+            //test if duplicate
             int idx = repeatingIndex();
             if (idx != -1) {
                 //switch to repeat handler
@@ -88,14 +104,13 @@ public class TypingHandler extends AreaCrossedHandler {
                         .getKey(mAreas,
                                 controller.getModel().getShiftState());
 
-                manager.setHandler(new RepeatHandler(repeatingChar,
-                        mAreas.get(idx), mAreas.get(idx + 2)));
+                mRepeat = new RepeatHandler(repeatingChar, mAreas.get(idx), mAreas.get(idx + 2));
             }
-            if (Util.getGesture(mAreas) == Keyboard.KEYCODE_DELETE) {
+            else if (Util.getGesture(mAreas) == Keyboard.KEYCODE_DELETE) {
                 //switch to delete handler
                 controller.fire(new SetUserStateAction(UserState.DELETING));
             }
-            if (isRotating(mAreas)) {
+            else if (isRotating(mAreas)) {
                 controller.fire(new SetUserStateAction(UserState.SELECTING));
             }
         }
@@ -107,10 +122,10 @@ public class TypingHandler extends AreaCrossedHandler {
      * method expects a finalized action to be triggered
      * like typing a character
      * @param controller
-     * @param manager
+     *
      */
     @Override
-    protected boolean onUp(Controller controller, HandlerManager manager) {
+    protected boolean onUp(Controller controller) {
         cancel();
         return false;
     }
@@ -130,7 +145,6 @@ public class TypingHandler extends AreaCrossedHandler {
     }
 
     /**
-     * //TODO: base rotation of keyLayout
      * Determines if the user began rotating
      *
      * @param areasCrossed list of areas crossed

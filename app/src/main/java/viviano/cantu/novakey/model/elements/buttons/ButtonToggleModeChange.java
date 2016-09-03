@@ -1,11 +1,11 @@
-package viviano.cantu.novakey.elements.buttons;
+package viviano.cantu.novakey.model.elements.buttons;
 
 import android.graphics.Canvas;
 
 import viviano.cantu.novakey.controller.actions.Action;
 import viviano.cantu.novakey.controller.actions.SetKeyboardAction;
 import viviano.cantu.novakey.controller.actions.ToggleKeyboardAction;
-import viviano.cantu.novakey.elements.keyboards.Keyboards;
+import viviano.cantu.novakey.model.elements.keyboards.Keyboards;
 import viviano.cantu.novakey.model.Model;
 import viviano.cantu.novakey.view.drawing.drawables.TextDrawable;
 import viviano.cantu.novakey.view.themes.MasterTheme;

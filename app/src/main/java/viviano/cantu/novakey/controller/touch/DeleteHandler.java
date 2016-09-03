@@ -38,10 +38,9 @@ public class DeleteHandler extends RotatingHandler {
      * @param entered true if event was triggered by entering the
      *                inner circle, false if was triggered by exit
      * @param controller
-     * @param manager
      */
     @Override
-    protected boolean onCenterCross(boolean entered, Controller controller, HandlerManager manager) {
+    protected boolean onCenterCross(boolean entered, Controller controller) {
         return true;
     }
 
@@ -51,10 +50,9 @@ public class DeleteHandler extends RotatingHandler {
      * @param x current finger x position
      * @param y current finger y position
      * @param controller
-     * @param manager
      */
     @Override
-    protected boolean onMove(float x, float y, Controller controller, HandlerManager manager) {
+    protected boolean onMove(float x, float y, Controller controller) {
         return true;
     }
 
@@ -64,10 +62,9 @@ public class DeleteHandler extends RotatingHandler {
      * @param clockwise true if rotation is clockwise, false otherwise
      * @param inCenter  if finger position is currently in the center
      * @param controller
-     * @param manager
      */
     @Override
-    protected boolean onRotate(boolean clockwise, boolean inCenter, Controller controller, HandlerManager manager) {
+    protected boolean onRotate(boolean clockwise, boolean inCenter, Controller controller) {
         if (mBackspacing) {
             if (!clockwise) {//backspace
                String str = controller.fire(mBackspace);
@@ -101,10 +98,10 @@ public class DeleteHandler extends RotatingHandler {
      * method expects a finalized action to be triggered
      * like typing a character
      * @param controller
-     * @param manager
+     *
      */
     @Override
-    protected boolean onUp(Controller controller, HandlerManager manager) {
+    protected boolean onUp(Controller controller) {
         return false;
     }
 }

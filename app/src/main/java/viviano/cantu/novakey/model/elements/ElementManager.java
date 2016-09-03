@@ -1,4 +1,4 @@
-package viviano.cantu.novakey.elements;
+package viviano.cantu.novakey.model.elements;
 
 import java.util.List;
 

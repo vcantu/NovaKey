@@ -7,7 +7,6 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import viviano.cantu.novakey.R;
-import viviano.cantu.novakey.elements.buttons.Button;
 import viviano.cantu.novakey.settings.widgets.BtnPreview;
 import viviano.cantu.novakey.settings.widgets.ButtonAddView;
 

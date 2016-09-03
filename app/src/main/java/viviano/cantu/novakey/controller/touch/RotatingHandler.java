@@ -3,7 +3,7 @@ package viviano.cantu.novakey.controller.touch;
 import android.view.MotionEvent;
 
 import viviano.cantu.novakey.controller.Controller;
-import viviano.cantu.novakey.elements.MainElement;
+import viviano.cantu.novakey.model.elements.MainElement;
 
 /**
  * Created by Viviano on 6/15/2016.
@@ -21,11 +21,10 @@ public abstract class RotatingHandler implements TouchHandler {
      *
      * @param event current touch event
      * @param control
-     * @param manager
      * @return true to continue action, false otherwise
      */
     @Override
-    public boolean handle(MotionEvent event, Controller control, HandlerManager manager) {
+    public boolean handle(MotionEvent event, Controller control) {
         currX = event.getX(0);
         currY = event.getY(0);
         currArea = MainElement.getArea(currX, currY, control.getModel());
@@ -34,29 +33,27 @@ public abstract class RotatingHandler implements TouchHandler {
         boolean result = true;
         switch (event.getAction() & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_DOWN:
-                result = result & onDown(currX, currY, currArea, control, manager);
+                result = result & onDown(currX, currY, currArea, control);
                 prevArea = currArea;
                 prevSector = currSector;
                 break;
             case MotionEvent.ACTION_MOVE:
-                result = result & onMove(currX, currY, control, manager);
+                result = result & onMove(currX, currY, control);
                 if (currArea != prevArea) {
                     if (currArea == 0)
-                        result = result & onCenterCross(true, control, manager);
+                        result = result & onCenterCross(true, control);
                     else if (prevArea == 0)
-                        result = result & onCenterCross(false, control, manager);
+                        result = result & onCenterCross(false, control);
                     prevArea = currArea;
                 }
                 if (currSector != prevSector) {
-                    boolean clockwise = !((prevSector < currSector
-                            && !(prevSector == 1 && currSector == 5))
-                            || (prevSector == 5 && currSector == 1));
-                    result = result & onRotate(clockwise, currArea == 0, control, manager);
+                    boolean clockwise = prevSector == (currSector + 1 );
+                    result = result & onRotate(clockwise, currArea == 0, control);
                     prevSector = currSector;
                 }
                 break;
             case MotionEvent.ACTION_UP:
-                result = result & onUp(control, manager);
+                result = result & onUp(control);
                 break;
         }
         return result;
@@ -68,10 +65,8 @@ public abstract class RotatingHandler implements TouchHandler {
      * @param y current y position
      * @param area current area
      * @param controller controller used for context
-     * @param manager use this to switch handlers
      */
-    protected boolean onDown(float x, float y, int area,
-                             Controller controller, HandlerManager manager) {
+    protected boolean onDown(float x, float y, int area, Controller controller) {
         return true;
     }
 
@@ -81,10 +76,8 @@ public abstract class RotatingHandler implements TouchHandler {
      * @param entered true if event was triggered by entering the
      *                inner circle, false if was triggered by exit
      * @param controller provides context
-     * @param manager allows for switching the handler
      */
-    protected abstract boolean onCenterCross(boolean entered,
-                                             Controller controller, HandlerManager manager);
+    protected abstract boolean onCenterCross(boolean entered, Controller controller);
 
     /**
      * Called for every move event so that the handler can update
@@ -92,9 +85,8 @@ public abstract class RotatingHandler implements TouchHandler {
      * @param x current finger x position
      * @param y current finger y position
      * @param controller provides context
-     * @param manager allows for switching the handler
      */
-    protected boolean onMove(float x, float y, Controller controller, HandlerManager manager) {
+    protected boolean onMove(float x, float y, Controller controller) {
         return true;
     }
 
@@ -104,10 +96,8 @@ public abstract class RotatingHandler implements TouchHandler {
      * @param clockwise true if rotation is clockwise, false otherwise
      * @param inCenter if finger position is currently in the center
      * @param controller provides context
-     * @param manager allows for switching the handler
      */
-    protected abstract boolean onRotate(boolean clockwise, boolean inCenter,
-                                        Controller controller, HandlerManager manager);
+    protected abstract boolean onRotate(boolean clockwise, boolean inCenter, Controller controller);
 
 
     /**
@@ -115,7 +105,7 @@ public abstract class RotatingHandler implements TouchHandler {
      * method expects a finalized action to be triggered
      * like typing a character
      * @param controller provides context
-     * @param manager allows for switching the handler
+     *
      */
-    protected abstract boolean onUp(Controller controller, HandlerManager manager);
+    protected abstract boolean onUp(Controller controller);
 }

@@ -8,10 +8,9 @@ import android.preference.PreferenceManager;
 import java.util.ArrayList;
 import java.util.List;
 
-import viviano.cantu.novakey.elements.Element;
+import viviano.cantu.novakey.model.elements.Element;
 import viviano.cantu.novakey.R;
-import viviano.cantu.novakey.elements.buttons.PunctuationButton;
-import viviano.cantu.novakey.elements.keyboards.Keyboards;
+import viviano.cantu.novakey.model.elements.keyboards.Keyboards;
 import viviano.cantu.novakey.model.loaders.Loader;
 import viviano.cantu.novakey.model.loaders.ThemeLoader;
 import viviano.cantu.novakey.view.themes.MasterTheme;

@@ -1,15 +1,14 @@
-package viviano.cantu.novakey.elements.menus;
+package viviano.cantu.novakey.model.elements.menus;
 
 import android.graphics.Canvas;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import viviano.cantu.novakey.elements.OverlayElement;
+import viviano.cantu.novakey.model.elements.OverlayElement;
 import viviano.cantu.novakey.model.Model;
 import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.controller.actions.typing.InputAction;
-import viviano.cantu.novakey.controller.touch.HandlerManager;
 import viviano.cantu.novakey.controller.touch.RotatingHandler;
 import viviano.cantu.novakey.controller.touch.TouchHandler;
 import viviano.cantu.novakey.view.drawing.drawables.Drawable;
@@ -25,12 +24,15 @@ public class InfiniteMenu implements OverlayElement, Menu {
 
     private static List<InfiniteMenu> HIDDEN_KEYS;
 
+
     private final List<Entry> mEntries;
+    private final TouchHandler mHandler;
     private float fingX, fingY;
     private int mIndex = 0;//current entry
 
     public InfiniteMenu(List<Menu.Entry> entries) {
         mEntries = entries;
+        mHandler = new Handler();
     }
 
 
@@ -172,10 +174,9 @@ public class InfiniteMenu implements OverlayElement, Menu {
          * @param entered true if event was triggered by entering the
          *                inner circle, false if was triggered by exit
          * @param controller
-         * @param manager
          */
         @Override
-        protected boolean onCenterCross(boolean entered, Controller controller, HandlerManager manager) {
+        protected boolean onCenterCross(boolean entered, Controller controller) {
             //do nothing
             return true;
         }
@@ -186,10 +187,9 @@ public class InfiniteMenu implements OverlayElement, Menu {
          * @param x current fing x position
          * @param y current fing y position
          * @param controller
-         * @param manager
          */
         @Override
-        protected boolean onMove(float x, float y, Controller controller, HandlerManager manager) {
+        protected boolean onMove(float x, float y, Controller controller) {
             fingX = x;
             fingY = y;
             controller.getModel().update();
@@ -202,10 +202,9 @@ public class InfiniteMenu implements OverlayElement, Menu {
          * @param clockwise true if rotation is clockwise, false otherwise
          * @param inCenter  if fing position is currently in the center
          * @param controller
-         * @param manager
          */
         @Override
-        protected boolean onRotate(boolean clockwise, boolean inCenter, Controller controller, HandlerManager manager) {
+        protected boolean onRotate(boolean clockwise, boolean inCenter, Controller controller) {
             if (clockwise) {
                 mIndex--;
                 if (mIndex < 0)
@@ -225,10 +224,10 @@ public class InfiniteMenu implements OverlayElement, Menu {
          * method expects a finalized action to be triggered
          * like typing a character
          * @param controller
-         * @param manager
+         *
          */
         @Override
-        protected boolean onUp(Controller controller, HandlerManager manager) {
+        protected boolean onUp(Controller controller) {
             controller.fire(mEntries.get(mIndex).action);
             return false;
         }

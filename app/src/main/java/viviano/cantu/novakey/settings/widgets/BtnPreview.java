@@ -9,8 +9,8 @@ import android.view.View;
 
 import java.util.ArrayList;
 
-import viviano.cantu.novakey.elements.buttons.Button;
-import viviano.cantu.novakey.elements.keyboards.Keyboards;
+import viviano.cantu.novakey.model.elements.buttons.Button;
+import viviano.cantu.novakey.model.elements.keyboards.Keyboards;
 import viviano.cantu.novakey.utils.Util;
 import viviano.cantu.novakey.model.Settings;
 

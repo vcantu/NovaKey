@@ -2,9 +2,9 @@ package viviano.cantu.novakey.controller.actions;
 
 import viviano.cantu.novakey.NovaKey;
 import viviano.cantu.novakey.controller.Controller;
-import viviano.cantu.novakey.elements.Element;
-import viviano.cantu.novakey.elements.menus.Menu;
+import viviano.cantu.novakey.model.elements.Element;
 import viviano.cantu.novakey.model.Model;
+import viviano.cantu.novakey.model.elements.OverlayElement;
 import viviano.cantu.novakey.model.states.UserState;
 
 /**
@@ -12,9 +12,9 @@ import viviano.cantu.novakey.model.states.UserState;
  */
 public class SetOverlayAction implements Action<Void> {
 
-    private final Element mElement;
+    private final OverlayElement mElement;
 
-    public SetOverlayAction(Element element) {
+    public SetOverlayAction(OverlayElement element) {
         mElement = element;
     }
 
@@ -29,8 +29,6 @@ public class SetOverlayAction implements Action<Void> {
     public Void trigger(NovaKey ime, Controller control, Model model) {
         //TODO: animation
         model.setOverlayElement(mElement);
-        model.setUserState(UserState.ON_MENU);
-        control.getManager().setHandler(mElement.getTouchHandler());
         return null;
     }
 }

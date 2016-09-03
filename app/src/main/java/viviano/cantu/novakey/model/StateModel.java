@@ -2,7 +2,7 @@ package viviano.cantu.novakey.model;
 
 import android.view.inputmethod.EditorInfo;
 
-import viviano.cantu.novakey.elements.keyboards.Keyboard;
+import viviano.cantu.novakey.model.elements.keyboards.Keyboard;
 import viviano.cantu.novakey.model.states.InputState;
 import viviano.cantu.novakey.model.states.ShiftState;
 import viviano.cantu.novakey.model.states.UserState;

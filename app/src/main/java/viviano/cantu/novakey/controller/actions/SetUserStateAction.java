@@ -5,6 +5,7 @@ import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.controller.actions.typing.DeleteAction;
 import viviano.cantu.novakey.controller.touch.DeleteHandler;
 import viviano.cantu.novakey.model.Model;
+import viviano.cantu.novakey.model.elements.overlays.DeleteOverlay;
 import viviano.cantu.novakey.model.states.UserState;
 
 /**
@@ -17,6 +18,7 @@ public class SetUserStateAction implements Action<Void> {
     public SetUserStateAction(UserState userState) {
         mUserState = userState;
     }
+
     /**
      * Called when the action is triggered
      * Actual logic for the action goes here
@@ -33,8 +35,7 @@ public class SetUserStateAction implements Action<Void> {
                 break;
             case DELETING:
                 String del = control.fire(new DeleteAction());
-                control.getManager().setHandler(
-                        new DeleteHandler(control.getMainBoard(), del));
+                model.setOverlayElement(new DeleteOverlay(del));
                 break;
             case SELECTING:
                 model.setCursorMode(0);

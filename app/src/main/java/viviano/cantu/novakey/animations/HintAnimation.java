@@ -2,8 +2,11 @@ package viviano.cantu.novakey.animations;
 
 import android.animation.TimeInterpolator;
 import android.view.animation.AccelerateInterpolator;
+import android.view.animation.OvershootInterpolator;
 
-import viviano.cantu.novakey.elements.keyboards.Key;
+import viviano.cantu.novakey.animations.utils.Animator;
+import viviano.cantu.novakey.model.elements.keyboards.Key;
+import viviano.cantu.novakey.model.elements.keyboards.KeySizeAnimator;
 import viviano.cantu.novakey.utils.Util;
 
 /**
@@ -11,11 +14,12 @@ import viviano.cantu.novakey.utils.Util;
  */
 public class HintAnimation extends CharAnimation {
 
-    private int area;
+    private final TimeInterpolator mInterpolator = new AccelerateInterpolator();
+    private final int mArea;
 
     public HintAnimation(int area, long duration) {
         super(-1, duration);
-        this.area = area;
+        mArea = area;
     }
 
     public HintAnimation(int area) {
@@ -31,53 +35,40 @@ public class HintAnimation extends CharAnimation {
      */
     @Override
     protected TimeInterpolator getInterpolatorFor(Key k) {
-        return new AccelerateInterpolator();
+        return mInterpolator;
     }
 
     /**
-     * Use this to set the keys of the value maps you want
-     */
-    @Override
-    protected String[] initializeValues() {
-        return new String[0];
-    }
-
-    /**
-     * Override this method if you want to set the initial state of a key
+     * Called when building the animation to determine which animator to assign
+     * to which key
      *
-     * @param k
+     * @param k key whose animator you wish to set
+     * @return the animator to set
      */
     @Override
-    protected void setInitialState(Key k) {
-        this.values.get("endSize").put(k, k.group == area ? 1.2f : 0);
-        this.values.get("begSize").put(k, k.size);
-        this.values.get("begx").put(k, k.x);
-        this.values.get("begy").put(k, k.y);
-        this.values.get("destx").put(k,
-                k.group == area ? view.getAreaX(lastArea(k.group, k.loc)) : k.x);
-        this.values.get("desty").put(k,
-                k.group == area ? view.getAreaY(lastArea(k.group, k.loc)) : k.y);
+    protected Animator<Key> getAnimatorFor(Key k) {
+        if (k.group == mArea) {
+            new KeySizeAnimator(k.getSize(), 1.2f);
+        }
+        return new KeySizeAnimator(k.getSize(), 0);
     }
 
-    /**
-     * Override this method and update the key accordingly
-     *
-     * @param k     key to update
-     * @param value percent of animation used tu update key
-     * @return the updated key
-     */
-    @Override
-    protected void updateKey(Key k, float value) {
-        k.size = Util.fromFrac(
-                (Float)values.get("begSize").get(k),
-                (Float)values.get("endSize").get(k), value);
-        k.x = Util.fromFrac(
-                (Float)values.get("begx").get(k),
-                (Float)values.get("destx").get(k), value);
-        k.y = Util.fromFrac(
-                (Float)values.get("begy").get(k),
-                (Float)values.get("desty").get(k), value);
-    }
+//    /**
+//     * Override this method if you want to set the initial state of a key
+//     *
+//     * @param k
+//     */
+//    @Override
+//    protected void setInitialState(Key k) {
+//        this.values.get("endSize").put(k, k.group == mArea ? 1.2f : 0);
+//        this.values.get("begSize").put(k, k.size);
+//        this.values.get("begx").put(k, k.x);
+//        this.values.get("begy").put(k, k.y);
+//        this.values.get("destx").put(k,
+//                k.group == mArea ? view.getAreaX(lastArea(k.group, k.loc)) : k.x);
+//        this.values.get("desty").put(k,
+//                k.group == mArea ? view.getAreaY(lastArea(k.group, k.loc)) : k.y);
+//    }
 
     private static int lastArea(int group, int loc) {
         if (loc == 0)

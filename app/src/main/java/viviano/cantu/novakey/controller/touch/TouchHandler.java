@@ -15,8 +15,7 @@ public interface TouchHandler {
      *
      * @param event current touch event
      * @param control controller used for context
-     * @param manager used this to switch handler
      * @return true to continue action, false otherwise
      */
-    boolean handle(MotionEvent event, Controller control, HandlerManager manager);
+    boolean handle(MotionEvent event, Controller control);
 }

@@ -1,4 +1,4 @@
-package viviano.cantu.novakey.elements.menus;
+package viviano.cantu.novakey.model.elements.menus;
 
 import android.graphics.Canvas;
 import android.os.CountDownTimer;
@@ -9,9 +9,8 @@ import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.controller.actions.Action;
 import viviano.cantu.novakey.controller.touch.AreaCrossedHandler;
 import viviano.cantu.novakey.controller.touch.CrossEvent;
-import viviano.cantu.novakey.controller.touch.HandlerManager;
 import viviano.cantu.novakey.controller.touch.TouchHandler;
-import viviano.cantu.novakey.elements.OverlayElement;
+import viviano.cantu.novakey.model.elements.OverlayElement;
 import viviano.cantu.novakey.model.Model;
 import viviano.cantu.novakey.model.Settings;
 import viviano.cantu.novakey.view.drawing.drawables.Drawable;
@@ -26,10 +25,12 @@ import viviano.cantu.novakey.view.themes.board.BoardTheme;
 public class OnUpMenu implements OverlayElement, Menu {
 
     private final List<Menu.Entry> mEntries;
+    private final TouchHandler mHandler;
     public float fingerX, fingerY;
 
     public OnUpMenu(List<Menu.Entry> entries) {
         mEntries = entries;
+        mHandler = new Handler();
     }
 
 
@@ -59,6 +60,8 @@ public class OnUpMenu implements OverlayElement, Menu {
     }
 
     /**
+     * WARNING: this should not instanciate a new handler
+     *
      * @return a touch handler which returns true if being used
      * or false otherwise. For example if a button element is activated by being
      * clicked, if the handler detects this in the onDown event it will
@@ -67,7 +70,7 @@ public class OnUpMenu implements OverlayElement, Menu {
      */
     @Override
     public TouchHandler getTouchHandler() {
-        return new Handler();
+        return mHandler;
     }
 
 
@@ -125,10 +128,9 @@ public class OnUpMenu implements OverlayElement, Menu {
          * @param x    current x position
          * @param y    current y position
          * @param controller view being called on
-         * @param manager
          */
         @Override
-        protected boolean onMove(float x, float y, Controller controller, HandlerManager manager) {
+        protected boolean onMove(float x, float y, Controller controller) {
             fingerX = x;
             fingerY = y;
             controller.getModel().update();
@@ -140,10 +142,9 @@ public class OnUpMenu implements OverlayElement, Menu {
          * has been a cross, either in sector or range
          * @param event describes the event
          * @param controller  view being called on
-         * @param manager
          */
         @Override
-        protected boolean onCross(CrossEvent event, Controller controller, HandlerManager manager) {
+        protected boolean onCross(CrossEvent event, Controller controller) {
             mTimer.cancel();
             mTimer.start();
             mArea = event.newArea;
@@ -154,10 +155,10 @@ public class OnUpMenu implements OverlayElement, Menu {
          * Called when the user lifts finger, typically this
          * method expects a finalized action to be triggered
          * like typing a character
-         *  @param controller view being called on
-         * @param manager*/
+         * @param controller view being called on
+         * */
         @Override
-        protected boolean onUp(Controller controller, HandlerManager manager) {
+        protected boolean onUp(Controller controller) {
             mTimer.cancel();
             controller.fire(mEntries.get(mArea - 1).action);
             return false;

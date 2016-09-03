@@ -1,4 +1,4 @@
-package viviano.cantu.novakey.elements.keyboards;
+package viviano.cantu.novakey.model.elements.keyboards;
 
 import viviano.cantu.novakey.model.states.ShiftState;
 import viviano.cantu.novakey.view.drawing.Font;
@@ -13,8 +13,8 @@ import viviano.cantu.novakey.view.posns.SmallRadiusPosn;
  */
 public class Key {
 
-    public final Character VALUE;
-    private final int mGroup, mLoc;
+    public final Character value;
+    public final int group, loc;
     private final boolean mAltLayout;
 
     private RelativePosn mPosn;
@@ -26,26 +26,26 @@ public class Key {
     }
 
     public Key(Character c, int group, int loc, boolean altLayout) {
-        VALUE = c;
-        mGroup = group;
-        mLoc = loc;
+        value = c;
+        this.group = group;
+        this.loc = loc;
         mAltLayout = altLayout;
         mPosn = getDesiredPosn();
-        mDrawable = new TextDrawable(VALUE.toString(), Font.SANS_SERIF_LIGHT);
+        mDrawable = new TextDrawable(value.toString(), Font.SANS_SERIF_LIGHT);
     }
 
     /**
      * @return this key's character in uppercase
      */
     public Character getUppercase() {
-        return Character.toUpperCase(VALUE);
+        return Character.toUpperCase(value);
     }
 
     /**
      * @return this key's character in lowercase
      */
     public Character getLowercase() {
-        return Character.toLowerCase(VALUE);
+        return Character.toLowerCase(value);
     }
 
     /**
@@ -100,35 +100,57 @@ public class Key {
 
 
     private RelativePosn getDesiredPosn() {
-        if (mGroup == 0) {
-            if (mLoc == 0)
+        if (group == 0) {
+            if (loc == 0)
                 return new DeltaPosn(0, 0);
             else {
                 return new SmallRadiusPosn(2f / 3f, getAngle());
             }
         }
         else {
-            if (mLoc == 0)
+            if (loc == 0)
                 return new RadiiPosn(1f / 6f, getAngle());
-            if (mLoc == (mAltLayout ? 4 : 0))
+            if (loc == (mAltLayout ? 4 : 0))
                 return new RadiiPosn(1f + 1f/6f, getAngle());
             return new RadiiPosn(.5f, getAngle());
         }
     }
 
     private double getAngle() {
-        if (mGroup == 0)
-            return angleAt(mLoc);
+        if (group == 0)
+            return angleAt(loc);
         double areaWidth = Math.PI / 5;
-        if (mLoc == 3)
-            return angleAt(mGroup) - 2 * areaWidth / 3;
-        if (mLoc == 1)
-            return angleAt(mGroup) + 2 * areaWidth / 3;
-        return angleAt(mGroup);
+        if (loc == 3)
+            return angleAt(group) - 2 * areaWidth / 3;
+        if (loc == 1)
+            return angleAt(group) + 2 * areaWidth / 3;
+        return angleAt(group);
     }
 
     private double angleAt(int i) {
         return ((i-1) * 2 * Math.PI) / 5 + Math.PI / 2 + Math.PI / 5;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Key key = (Key) o;
+
+        if (group != key.group) return false;
+        if (loc != key.loc) return false;
+        if (mAltLayout != key.mAltLayout) return false;
+        return value.equals(key.value);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = value.hashCode();
+        result = 31 * result + group;
+        result = 31 * result + loc;
+        result = 31 * result + (mAltLayout ? 1 : 0);
+        return result;
+    }
 }

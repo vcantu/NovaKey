@@ -5,12 +5,12 @@ import android.view.inputmethod.EditorInfo;
 
 import java.util.List;
 
-import viviano.cantu.novakey.elements.DefaultElementManager;
-import viviano.cantu.novakey.elements.Element;
-import viviano.cantu.novakey.elements.ElementManager;
-import viviano.cantu.novakey.elements.OverlayElement;
-import viviano.cantu.novakey.elements.keyboards.Keyboard;
-import viviano.cantu.novakey.elements.keyboards.Keyboards;
+import viviano.cantu.novakey.model.elements.DefaultElementManager;
+import viviano.cantu.novakey.model.elements.Element;
+import viviano.cantu.novakey.model.elements.ElementManager;
+import viviano.cantu.novakey.model.elements.OverlayElement;
+import viviano.cantu.novakey.model.elements.keyboards.Keyboard;
+import viviano.cantu.novakey.model.elements.keyboards.Keyboards;
 import viviano.cantu.novakey.model.states.InputState;
 import viviano.cantu.novakey.model.states.ShiftState;
 import viviano.cantu.novakey.model.states.UserState;

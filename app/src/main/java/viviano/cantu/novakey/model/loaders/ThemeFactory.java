@@ -19,7 +19,6 @@ import viviano.cantu.novakey.view.themes.board.MulticolorTheme;
 import viviano.cantu.novakey.view.themes.board.SeparateSectionsTheme;
 
 /**
- * TODO: use reflection to create instead of id
  * Created by Viviano on 2/4/2016.
  */
 public class ThemeFactory {

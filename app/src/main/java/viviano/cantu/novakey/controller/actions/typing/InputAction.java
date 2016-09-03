@@ -7,7 +7,7 @@ import viviano.cantu.novakey.NovaKey;
 import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.controller.actions.Action;
 import viviano.cantu.novakey.controller.actions.SetKeyboardAction;
-import viviano.cantu.novakey.elements.keyboards.Keyboards;
+import viviano.cantu.novakey.model.elements.keyboards.Keyboards;
 import viviano.cantu.novakey.model.Model;
 import viviano.cantu.novakey.model.Settings;
 import viviano.cantu.novakey.utils.Util;
@@ -34,8 +34,8 @@ public class InputAction implements Action<Void> {
         return false;
     }
     //Closing Characters
-    private int[] openers = new int[] { },//'¿', '¡', '⌊', '⌈' },
-            closers = new int[] { };//'?', '!', '⌋', '⌉' };
+    private int[] openers = new int[] { '¿', '¡', '⌊', '⌈' },
+            closers = new int[] { '?', '!', '⌋', '⌉' };
     private int getIndex(int c) {
         for (int i=0; i<openers.length; i++) {
             if (openers[i] == c)

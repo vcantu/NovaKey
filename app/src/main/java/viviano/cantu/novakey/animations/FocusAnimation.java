@@ -3,8 +3,9 @@ package viviano.cantu.novakey.animations;
 import android.animation.TimeInterpolator;
 import android.view.animation.AnticipateInterpolator;
 
-import viviano.cantu.novakey.elements.keyboards.Key;
-import viviano.cantu.novakey.utils.Util;
+import viviano.cantu.novakey.animations.utils.Animator;
+import viviano.cantu.novakey.model.elements.keyboards.Key;
+import viviano.cantu.novakey.model.elements.keyboards.KeySizeAnimator;
 
 /**
  * Created by Viviano on 10/25/2015.
@@ -13,6 +14,8 @@ import viviano.cantu.novakey.utils.Util;
  */
 public class FocusAnimation extends CharAnimation {
 
+    private final TimeInterpolator mInterpolator = new AnticipateInterpolator();
+    private final Animator<Key> mAnimator = new KeySizeAnimator(1, 0);
     private Character[] mChars;
 
     public FocusAnimation(Character[] chars) {
@@ -29,33 +32,22 @@ public class FocusAnimation extends CharAnimation {
      */
     @Override
     protected TimeInterpolator getInterpolatorFor(Key k) {
-        return new AnticipateInterpolator();
+        return mInterpolator;
     }
 
     /**
-     * Override this method if you want to set the initial state of a key
+     * Called when building the animation to determine which animator to assign
+     * to which key
      *
-     * @param k
+     * @param k key whose animator you wish to set
+     * @return the animator to set
      */
     @Override
-    protected void setInitialState(Key k) {
-        //nothing
-    }
-
-    /**
-     * Override this method and update the key accordingly
-     *
-     *
-     * @param k     key to update
-     * @param value percent of animation used tu update key
-     * @return the updated key
-     */
-    @Override
-    protected void updateKey(Key k, float value) {
+    protected Animator<Key> getAnimatorFor(Key k) {
         for (Character c : mChars) {
-            if (c.equals(k.VALUE))
-                return;
+            if (c.equals(k.value))
+                return null;
         }
-        k.setSize(Util.fromFrac(1, 0, value));
+        return mAnimator;
     }
 }

@@ -1,4 +1,4 @@
-package viviano.cantu.novakey.elements;
+package viviano.cantu.novakey.model.elements;
 
 /**
  * Created by Viviano on 8/31/2016.

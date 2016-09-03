@@ -5,7 +5,7 @@ import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.View;
 
-import viviano.cantu.novakey.elements.buttons.Button;
+import viviano.cantu.novakey.model.elements.buttons.Button;
 import viviano.cantu.novakey.view.drawing.Icons;
 
 /**

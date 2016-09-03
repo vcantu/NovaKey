@@ -1,8 +1,5 @@
 package viviano.cantu.novakey.model;
 
-import java.util.List;
-
-import viviano.cantu.novakey.elements.Element;
 import viviano.cantu.novakey.view.themes.MasterTheme;
 
 /**

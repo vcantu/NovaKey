@@ -1,4 +1,4 @@
-package viviano.cantu.novakey.elements.buttons;
+package viviano.cantu.novakey.model.elements.buttons;
 
 import viviano.cantu.novakey.view.drawing.shapes.Shape;
 import viviano.cantu.novakey.view.posns.RelativePosn;

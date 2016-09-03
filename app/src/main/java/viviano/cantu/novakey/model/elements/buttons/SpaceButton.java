@@ -1,4 +1,4 @@
-package viviano.cantu.novakey.elements.buttons;
+package viviano.cantu.novakey.model.elements.buttons;
 
 import viviano.cantu.novakey.controller.actions.Action;
 import viviano.cantu.novakey.controller.actions.typing.InputAction;

@@ -11,6 +11,7 @@ public abstract class BaseAnimation implements Animation{
 
     private long mDelay = 0;
     private ValueAnimator mAnim;
+    private OnEndListener mOnEnd;
 
     /**
      * Should start the animation
@@ -23,7 +24,8 @@ public abstract class BaseAnimation implements Animation{
     public void start(Model model) {
         mAnim = animator(model);
         if (mAnim == null) {
-            onEnd();
+            if (mOnEnd != null)
+                mOnEnd.onEnd();
             return;
         }
         mAnim.setStartDelay(mAnim.getStartDelay() + mDelay);
@@ -34,7 +36,8 @@ public abstract class BaseAnimation implements Animation{
 
             @Override
             public void onAnimationEnd(android.animation.Animator animation) {
-                onEnd();
+                if (mOnEnd != null)
+                    mOnEnd.onEnd();
             }
 
             @Override
@@ -47,11 +50,6 @@ public abstract class BaseAnimation implements Animation{
     }
 
     /**
-     * Override this method to set any post animation behavior
-     */
-    protected void onEnd() {}
-
-    /**
      * @param model given to reference. Also should call
      *              model.update() to invalidate the view
      * @return ValueAnimator which will be called
@@ -59,11 +57,13 @@ public abstract class BaseAnimation implements Animation{
     protected abstract ValueAnimator animator(Model model);
 
     /**
-     * Will add a delay to this animator and return it
-     * @param delay ammount in milliseconds
-     * @return this animator
+     * Set the start delay of this animation
+     *
+     * @param delay start delay in milliseconds
+     * @return this animation
      */
-    public BaseAnimation addDelay(long delay) {
+    @Override
+    public Animation setDelay(long delay) {
         mDelay = delay;
         return this;
     }
@@ -76,4 +76,11 @@ public abstract class BaseAnimation implements Animation{
             mAnim.cancel();
     }
 
+    /**
+     * @param listener set this animation's on end listener
+     */
+    @Override
+    public void setOnEndListener(OnEndListener listener) {
+        mOnEnd = listener;
+    }
 }

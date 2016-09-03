@@ -1,7 +1,7 @@
 package viviano.cantu.novakey.model.loaders;
 
-import viviano.cantu.novakey.elements.buttons.Button;
-import viviano.cantu.novakey.elements.buttons.ButtonData;
+import viviano.cantu.novakey.model.elements.buttons.Button;
+import viviano.cantu.novakey.model.elements.buttons.ButtonData;
 
 /**
  * TODO: entire class

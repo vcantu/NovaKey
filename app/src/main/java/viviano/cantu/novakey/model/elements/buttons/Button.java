@@ -1,4 +1,4 @@
-package viviano.cantu.novakey.elements.buttons;
+package viviano.cantu.novakey.model.elements.buttons;
 
 import android.graphics.Canvas;
 import android.os.CountDownTimer;
@@ -6,13 +6,10 @@ import android.view.MotionEvent;
 
 import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.controller.actions.Action;
-import viviano.cantu.novakey.controller.touch.HandlerManager;
 import viviano.cantu.novakey.controller.touch.TouchHandler;
-import viviano.cantu.novakey.elements.Element;
-import viviano.cantu.novakey.model.DrawModel;
+import viviano.cantu.novakey.model.elements.Element;
 import viviano.cantu.novakey.model.Model;
 import viviano.cantu.novakey.model.Settings;
-import viviano.cantu.novakey.model.StateModel;
 import viviano.cantu.novakey.view.drawing.drawables.Drawable;
 import viviano.cantu.novakey.view.drawing.shapes.Shape;
 import viviano.cantu.novakey.view.posns.RelativePosn;
@@ -95,11 +92,10 @@ public abstract class Button
      *
      * @param event current touch event
      * @param control  view being acted on
-     * @param manager
      * @return true to continue action, false otherwise
      */
     @Override
-    public boolean handle(MotionEvent event, Controller control, HandlerManager manager) {
+    public boolean handle(MotionEvent event, Controller control) {
         Model model = control.getModel();
         Shape shape = mData.getShape();
         RelativePosn posn = mData.getPosn();

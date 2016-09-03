@@ -28,11 +28,10 @@ public class RepeatHandler extends AreaCrossedHandler {
      *
      * @param event describes the event
      * @param controller view being called on
-     * @param manager use this to switch handlers
      * @return
      */
     @Override
-    protected boolean onCross(CrossEvent event, Controller controller, HandlerManager manager) {
+    protected boolean onCross(CrossEvent event, Controller controller) {
         if (event.newArea == mFirst ||
                 event.newArea == mSecond) {
             controller.fire(mAction);//types character
@@ -47,11 +46,11 @@ public class RepeatHandler extends AreaCrossedHandler {
      * Called when the user lifts finger, typically this
      * method expects a finalized action to be triggered
      * like typing a character
-     *  @param controller view being called on
-     * @param manager use this to switch handlers
+     * @param controller view being called on
+     *
      */
     @Override
-    protected boolean onUp(Controller controller, HandlerManager manager) {
+    protected boolean onUp(Controller controller) {
         return false;
     }
 }

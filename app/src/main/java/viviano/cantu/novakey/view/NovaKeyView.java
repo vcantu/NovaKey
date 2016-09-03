@@ -25,6 +25,7 @@ public abstract class NovaKeyView extends View {
     public NovaKeyView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
+
     public NovaKeyView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }

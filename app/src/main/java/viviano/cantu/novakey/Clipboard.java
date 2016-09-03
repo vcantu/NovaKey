@@ -12,9 +12,9 @@ import viviano.cantu.novakey.controller.actions.NoAction;
 import viviano.cantu.novakey.controller.actions.typing.DeleteAction;
 import viviano.cantu.novakey.controller.actions.typing.InputAction;
 import viviano.cantu.novakey.view.drawing.Icons;
-import viviano.cantu.novakey.elements.menus.InfiniteMenu;
-import viviano.cantu.novakey.elements.menus.Menu;
-import viviano.cantu.novakey.elements.menus.OnUpMenu;
+import viviano.cantu.novakey.model.elements.menus.InfiniteMenu;
+import viviano.cantu.novakey.model.elements.menus.Menu;
+import viviano.cantu.novakey.model.elements.menus.OnUpMenu;
 
 /**
  * Created by Viviano on 8/2/2015.

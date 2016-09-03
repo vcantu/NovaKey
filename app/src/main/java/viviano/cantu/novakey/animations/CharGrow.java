@@ -3,13 +3,17 @@ package viviano.cantu.novakey.animations;
 import android.animation.TimeInterpolator;
 import android.view.animation.OvershootInterpolator;
 
-import viviano.cantu.novakey.elements.keyboards.Key;
-import viviano.cantu.novakey.elements.keyboards.Keyboard;
+import viviano.cantu.novakey.animations.utils.Animator;
+import viviano.cantu.novakey.model.elements.keyboards.Key;
+import viviano.cantu.novakey.model.elements.keyboards.KeySizeAnimator;
 
 /**
  * Created by Viviano on 10/27/2015.
  */
 public class CharGrow extends CharAnimation {
+
+    private final TimeInterpolator mInterpolator = new OvershootInterpolator();
+    private final Animator<Key> mAnimator = new KeySizeAnimator(0, 1);
 
     public CharGrow(int style, long duration) {
         super(style, duration);
@@ -28,28 +32,18 @@ public class CharGrow extends CharAnimation {
      */
     @Override
     protected TimeInterpolator getInterpolatorFor(Key k) {
-        return new OvershootInterpolator();
+        return mInterpolator;
     }
 
     /**
-     * Override this method if you want to set the initial state of a key
+     * Called when building the animation to determine which animator to assign
+     * to which key
      *
-     * @param k
+     * @param k key whose animator you wish to set
+     * @return the animator to set
      */
     @Override
-    protected void setInitialState(Key k) {
-        k.setSize(0);
-    }
-
-    /**
-     * Override this method and update the key accordingly
-     *
-     * @param k     key to update
-     * @param value percent of animation used tu update key
-     * @return the updated key
-     */
-    @Override
-    protected void updateKey(Key k, float value) {
-        k.setSize(value);
+    protected Animator<Key> getAnimatorFor(Key k) {
+        return mAnimator;
     }
 }
