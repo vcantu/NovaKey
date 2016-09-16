@@ -50,7 +50,6 @@ public class ThemeFactory {
         MasterTheme theme = new BaseMasterTheme();
         try {
             JSONObject obj = new JSONObject(str);
-            obj.getJSONObject("master");
             JSONArray colors = obj.getJSONArray("colors");
             theme.setColors(
                     colors.getInt(0),
@@ -93,7 +92,7 @@ public class ThemeFactory {
     public static String stringFromTheme(MasterTheme theme) {
         try {
             //master
-            JSONObject master = new JSONObject("master");
+            JSONObject master = new JSONObject();
             JSONArray colors = new JSONArray()
                     .put(theme.getPrimaryColor())
                     .put(theme.getPrimaryColor())
@@ -101,13 +100,13 @@ public class ThemeFactory {
             master.put("colors", colors);
             master.put("is3D", theme.is3D());
             //board
-            JSONObject board = new JSONObject("board");
-            board.put("class", BOARDS.getKey(theme.getBoardTheme()));
+            JSONObject board = new JSONObject();
+            board.put("class", BOARDS.getKey(theme.getBoardTheme().getClass()));
             //background
-            JSONObject background = new JSONObject("background");
+            JSONObject background = new JSONObject();
 
             //button
-            JSONObject button = new JSONObject("button");
+            JSONObject button = new JSONObject();
 
             //add all
             master.put("board", board);
@@ -157,7 +156,7 @@ public class ThemeFactory {
     }
 
     public static int getBoardNum(BoardTheme theme) {
-        return BOARDS.getKey(theme);
+        return BOARDS.getKey(theme.getClass());
     }
 
     public static BoardTheme getBoard(int num) {
@@ -174,7 +173,7 @@ public class ThemeFactory {
         @Override
         protected void build(Map<Integer, Class> map) {
             map.put(0, BaseTheme.class);
-            map.put(1, MasterTheme.class);
+            map.put(1, MaterialTheme.class);
             map.put(2, SeparateSectionsTheme.class);
             map.put(3, DonutTheme.class);
             map.put(4, MulticolorDonutTheme.class);

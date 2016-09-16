@@ -102,7 +102,7 @@ public class AppTheme {
         protected String doInBackground(String... params) {
             try {
                 data = downloadUrl(params[0]);
-                Log.d("App Colors", "Data received from network: " + data);
+                //Log.d("App Colors", "Data received from network: " + data);
             } catch (Exception e) {
                 Log.d("Background Task", e.toString());
             }

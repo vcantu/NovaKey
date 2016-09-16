@@ -9,6 +9,12 @@ public interface Model
         extends DrawModel, StateModel, ElementManager {
 
     /**
+     * Syncs the models with the user preferenes
+     *
+     */
+    void syncWithPrefs();
+
+    /**
      * Update's it's update listener. Typically a view.
      * Call this, rather than invalidating a view directly to limit access &
      * to guarantee that the view attached to this model is updated accordingly.

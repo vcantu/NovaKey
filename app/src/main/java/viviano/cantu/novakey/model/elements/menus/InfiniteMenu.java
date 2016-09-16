@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import java.util.ArrayList;
 import java.util.List;
 
+import viviano.cantu.novakey.controller.actions.SetOverlayAction;
 import viviano.cantu.novakey.model.elements.OverlayElement;
 import viviano.cantu.novakey.model.Model;
 import viviano.cantu.novakey.controller.Controller;
@@ -115,7 +116,7 @@ public class InfiniteMenu implements OverlayElement, Menu {
      */
     @Override
     public TouchHandler getTouchHandler() {
-        return new Handler();
+        return mHandler;
     }
 
     private int indexInBounds(int i) {
@@ -228,7 +229,9 @@ public class InfiniteMenu implements OverlayElement, Menu {
          */
         @Override
         protected boolean onUp(Controller controller) {
+            mIndex = 0;//reset index
             controller.fire(mEntries.get(mIndex).action);
+            controller.fire(new SetOverlayAction(controller.getModel().getKeyboard()));
             return false;
         }
     }
@@ -250,7 +253,7 @@ public class InfiniteMenu implements OverlayElement, Menu {
                             new InputAction(s.charAt(i))));
                 }
                 HIDDEN_KEYS.add(new InfiniteMenu(entries));
-                //TODO: make hidden keys not an infinite array but a string array instead
+                //TODO: make hidden keys not an array but a string array instead
             }
         }
     }
@@ -263,8 +266,8 @@ public class InfiniteMenu implements OverlayElement, Menu {
      */
     public static InfiniteMenu getHiddenKeys(char parent) {
         for (InfiniteMenu menu : HIDDEN_KEYS) {
-            for (Object o : menu.mEntries) {
-                if (((Character)o).charValue() == parent)
+            for (Menu.Entry o : menu.mEntries) {
+                if (((Character)o.data).charValue() == parent)
                     return menu;
             }
         }

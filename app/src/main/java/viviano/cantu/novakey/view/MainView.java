@@ -4,7 +4,10 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 
+import java.util.List;
+
 import viviano.cantu.novakey.model.Model;
+import viviano.cantu.novakey.model.elements.Element;
 
 public class MainView extends NovaKeyView {
 
@@ -42,9 +45,8 @@ public class MainView extends NovaKeyView {
         super.onDraw(canvas);
 		if (mModel.getElements() == null)
             return;
-
-        for (int i = mModel.getElements().size() - 1; i >= 0; i--) {
-            mModel.getElements().get(i).draw(mModel, mModel.getTheme(), canvas);
+        for (Element e : mModel.getElements()) {
+            e.draw(mModel, mModel.getTheme(), canvas);
         }
 	}
 }

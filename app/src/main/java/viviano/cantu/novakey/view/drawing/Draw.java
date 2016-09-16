@@ -58,7 +58,8 @@ public class Draw {
      */
     public static void shadedLine(float x, float y, float start, float end, double angle,
                                   int color, Paint p, Canvas canvas) {
-        p.setShader(new RadialGradient(x + (float) Math.cos(angle) * ((end - start) / 2 + start),
+        p.setShader(new RadialGradient(
+                x + (float) Math.cos(angle) * ((end - start) / 2 + start),
                 y - (float) Math.sin(angle) * ((end - start) / 2 + start),
                 (end - start) / 2,
                 color, color & 0x00FFFFFF, Shader.TileMode.CLAMP));

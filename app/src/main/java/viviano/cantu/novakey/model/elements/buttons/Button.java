@@ -71,7 +71,7 @@ public abstract class Button
         buttonTheme.drawBack(shape, posn.getX(model), posn.getY(model), size, canvas);
 
         if (mIcon != null)
-            buttonTheme.drawIcon(mIcon, posn.getX(model), posn.getY(model), size * .7f, canvas);
+            buttonTheme.drawIcon(mIcon, posn.getX(model), posn.getY(model), size * .5f, canvas);
     }
 
     /**
@@ -143,6 +143,7 @@ public abstract class Button
                     control.fire(a);
             }
         };
+        mLongPress.start();
     }
 
     private void cancelLongPress() {

@@ -1,11 +1,11 @@
 package viviano.cantu.novakey.model;
 
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputConnection;
 
 import viviano.cantu.novakey.model.elements.keyboards.Keyboard;
 import viviano.cantu.novakey.model.states.InputState;
 import viviano.cantu.novakey.model.states.ShiftState;
-import viviano.cantu.novakey.model.states.UserState;
 
 /**
  * Created by Viviano on 6/10/2016.
@@ -23,8 +23,9 @@ public interface StateModel {
      * Uses the given editor info to update the input state
      *
      * @param editorInfo info used to generate input state
+     * @param inputConnection
      */
-    void onStart(EditorInfo editorInfo);
+    void onStart(EditorInfo editorInfo, InputConnection inputConnection);
 
     /**
      * @return the key layout that should be drawn
@@ -50,16 +51,6 @@ public interface StateModel {
      * @param shiftState the shiftState to set the keyboard to
      */
     void setShiftState(ShiftState shiftState);
-
-    /**
-     * @return the general action the user is doing
-     */
-    UserState getUserState();
-
-    /**
-     * @param userState the user state to set
-     */
-    void setUserState(UserState userState);
 
     /**
      * if cursor mode is 0 both the left and the right are moving,

@@ -3,6 +3,8 @@ package viviano.cantu.novakey.settings.widgets.pickers;
 import android.content.Context;
 import android.util.AttributeSet;
 
+import viviano.cantu.novakey.view.themes.BaseMasterTheme;
+import viviano.cantu.novakey.view.themes.MasterTheme;
 import viviano.cantu.novakey.view.themes.board.BoardTheme;
 import viviano.cantu.novakey.model.loaders.ThemeFactory;
 
@@ -28,10 +30,12 @@ public class ThemePicker extends HorizontalPicker {
      */
     @Override
     protected PickerItem[] initializeItems() {
+        MasterTheme base = new BaseMasterTheme();
         PickerItem[] arr = new PickerItem[ThemeFactory.BOARDS.size()];
         int i=0;
         for (BoardTheme t : ThemeFactory.BOARDS) {
             arr[i] = t;
+            t.setParent(base);
             i++;
         }
         return arr;

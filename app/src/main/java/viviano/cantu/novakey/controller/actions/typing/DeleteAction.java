@@ -63,6 +63,7 @@ public class DeleteAction implements Action<String> {
         StringBuilder sb = new StringBuilder();
 
         ExtractedText et = ic.getExtractedText(new ExtractedTextRequest(), 0);
+        //TODO: sometimes extracted Text request fails
         String text = (String) et.text;
         String back = text.substring(0, et.selectionStart);
         String front = text.substring(et.selectionEnd);

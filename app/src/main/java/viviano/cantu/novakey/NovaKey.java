@@ -52,18 +52,10 @@ public class NovaKey extends InputMethodService {
 	private Vibrator vibrator;
 	private ClipboardManager clipboard;
 
-
-	private boolean shouldReturn = false; // if the keyboard should return after a space
-
-
 	private WindowManager windowManager;
     private List<View> mWindows;
 
     private Controller mController;
-
-    public void createController() {
-        mController = new Controller(this);
-    }
 
 	/**
 	 * Called when the keyboard is enabled
@@ -100,6 +92,10 @@ public class NovaKey extends InputMethodService {
         Clipboard.createMenu();
         //Initialize settings
         Settings.setPrefs(PreferenceManager.getDefaultSharedPreferences(this));
+        Settings.update();
+
+        //Controller creation
+        mController = new Controller(this);
 
         //Shared Preferences for setup activity //TODO: change this
 		Editor temp = getApplicationContext().getSharedPreferences(NovaKey.MY_PREFERENCES, MODE_PRIVATE).edit();
@@ -111,7 +107,6 @@ public class NovaKey extends InputMethodService {
 	@Override
 	public View onCreateInputView() {
 		AppTheme.load(this, getResources());
-		createController();
 
 		return mController.getView();
 	}
@@ -150,8 +145,7 @@ public class NovaKey extends InputMethodService {
 	@Override
 	public void onStartInputView(EditorInfo info, boolean restarting) {
         super.onStartInputView(info, restarting);
-        createController();
-        mController.getModel().onStart(info);//updates editor info
+        mController.getModel().onStart(info, getCurrentInputConnection());//updates editor info
 		// Reset State
 		composing.setLength(0);
 	}
@@ -376,7 +370,7 @@ public class NovaKey extends InputMethodService {
     }
 
 	public void commitComposing() {
-		InputConnection ic = getCurrentInputConnection();
+        InputConnection ic = getCurrentInputConnection();
 		if (ic == null)
 			return;
 

@@ -2,6 +2,7 @@ package viviano.cantu.novakey.model.states;
 
 import android.text.InputType;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputConnection;
 
 /**
  * Created by Viviano on 6/16/2016.
@@ -15,7 +16,13 @@ public class InputState {
 
     private Type mType = Type.TEXT;
 
-    public InputState(EditorInfo editorInfo) {
+    private InputConnection mConnection;
+
+    private int mCloserCount = 0;
+
+
+    public void updateConnection(EditorInfo editorInfo, InputConnection inputConnection) {
+        mConnection = inputConnection;
         int inputType = editorInfo.inputType;
 
         int var = inputType & InputType.TYPE_MASK_VARIATION,
@@ -71,40 +78,6 @@ public class InputState {
     public Type getType() {
         return mType;
     }
-
-//    public static void onInputStart(EditorInfo info, boolean restarting) {
-//
-//    int inputType = editorInfo.inputType;
-//
-//    model.setUserState(UserState.TYPING);
-//    model.setShiftState(ShiftState.LOWERCASE);
-//    int keyboardCode = 0;//TODO: add curr keyboard sharedPref
-//    model.setKeyboard(keyboardCode);
-//    mOnPassword = false;
-//
-//    int var = inputType & InputType.TYPE_MASK_VARIATION,
-//            flags = inputType & InputType.TYPE_MASK_FLAGS;
-//
-//    switch (info.inputType & InputType.TYPE_MASK_CLASS) {
-//        case InputType.TYPE_CLASS_TEXT:
-//            model.setKeyboard(keyboardCode);
-//            if (var == InputType.TYPE_TEXT_VARIATION_PASSWORD ||
-//                    var == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD ||
-//                    var == InputType.TYPE_TEXT_VARIATION_WEB_PASSWORD)
-//                mOnPassword = true;
-//            break;
-//        case InputType.TYPE_CLASS_NUMBER:
-//            model.setKeyboard(Keyboard.PUNCTUATION);
-//            if (var == InputType.TYPE_NUMBER_VARIATION_PASSWORD)
-//                mOnPassword = true;
-//            break;
-//        case InputType.TYPE_CLASS_DATETIME:
-//            model.setKeyboard(Keyboard.PUNCTUATION);
-//            break;
-//        case InputType.TYPE_CLASS_PHONE:
-//            model.setKeyboard(Keyboard.PUNCTUATION);
-//            break;
-//    }
 
     public enum Type {
         TEXT,

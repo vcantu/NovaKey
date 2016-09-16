@@ -17,7 +17,7 @@ import viviano.cantu.novakey.view.themes.MasterTheme;
 
 public class Keyboard implements OverlayElement, Iterator<Key>, Iterable<Key> {
 
-    private final TouchHandler mHandler;
+    private final TouchHandler mHandler = new TypingHandler(this);
     private final Key[][] keys;
     private final String name;
 
@@ -26,8 +26,6 @@ public class Keyboard implements OverlayElement, Iterator<Key>, Iterable<Key> {
     public Keyboard(String name, Key[][] keys) {
         this.keys = keys;
         this.name = name;
-
-        mHandler = new TypingHandler();
     }
 
     @Override
@@ -59,25 +57,6 @@ public class Keyboard implements OverlayElement, Iterator<Key>, Iterable<Key> {
     public void remove() {
         throw new UnsupportedOperationException();
     }
-
-    /**
-     * @param group key group
-     * @param loc key location
-     * @return the key's char in uppercase at the given group and location
-     */
-    public Character getUppercase(int group, int loc) {
-        return getKey(group, loc).getUppercase();
-    }
-
-    /**
-     * @param group key group
-     * @param loc key location
-     * @return the key's char in lowercase at the given group and location
-     */
-    public Character getLowercase(int group, int loc) {
-        return getKey(group, loc).getLowercase();
-    }
-
 
     private Key getKey(int group, int loc) {
         if (loc > keys[group].length)//for alt layouts
@@ -126,9 +105,9 @@ public class Keyboard implements OverlayElement, Iterator<Key>, Iterable<Key> {
      * will return the keyCode for the actions done
      * or Keyboard.KEYCODE_CANCEL if invalid
      */
-    public int getKey(List<Integer> areasCrossed, ShiftState shiftState) {
+    public Key getKey(List<Integer> areasCrossed) {
         if (areasCrossed.size() <= 0)
-            return android.inputmethodservice.Keyboard.KEYCODE_CANCEL;
+            return null;
         //regular areas
         //gets first and last of list
         int firstArea = areasCrossed.get(0);
@@ -139,14 +118,9 @@ public class Keyboard implements OverlayElement, Iterator<Key>, Iterable<Key> {
                 return key;
             }
             Location l = getLoc(areasCrossed);
-            try { //makes sure is l checks out
-                if (shiftState == ShiftState.LOWERCASE)
-                    return getLowercase(l.x, l.y);
-                else
-                    return getUppercase(l.x, l.y);
-            } catch (Exception e) { }
+            return getKey(l.x, l.y);
         }
-        return android.inputmethodservice.Keyboard.KEYCODE_CANCEL;
+        return null;
     }
 
     private Location getLoc(List<Integer> areasCrossed) {

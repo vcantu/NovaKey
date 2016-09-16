@@ -6,6 +6,8 @@ import viviano.cantu.novakey.controller.touch.DeleteHandler;
 import viviano.cantu.novakey.controller.touch.TouchHandler;
 import viviano.cantu.novakey.model.Model;
 import viviano.cantu.novakey.model.elements.OverlayElement;
+import viviano.cantu.novakey.view.drawing.Icons;
+import viviano.cantu.novakey.view.drawing.drawables.Drawable;
 import viviano.cantu.novakey.view.themes.MasterTheme;
 
 /**
@@ -14,9 +16,11 @@ import viviano.cantu.novakey.view.themes.MasterTheme;
 public class DeleteOverlay implements OverlayElement {
 
     private final TouchHandler mHandler;
+    private final Drawable mIcon;
 
-    public DeleteOverlay(String firstDeleted) {
-        mHandler = new DeleteHandler(firstDeleted);
+    public DeleteOverlay() {
+        mHandler = new DeleteHandler();
+        mIcon = Icons.get("backspace");
     }
 
     /**
@@ -30,7 +34,8 @@ public class DeleteOverlay implements OverlayElement {
      */
     @Override
     public void draw(Model model, MasterTheme theme, Canvas canvas) {
-        //draws nothing...currently
+        theme.getBoardTheme().drawItem(mIcon, model.getX(), model.getY(),
+                model.getSmallRadius() * .8f, canvas);
     }
 
     /**

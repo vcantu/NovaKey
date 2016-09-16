@@ -10,9 +10,15 @@ import java.util.List;
 
 import viviano.cantu.novakey.model.elements.Element;
 import viviano.cantu.novakey.R;
+import viviano.cantu.novakey.model.elements.buttons.Button;
+import viviano.cantu.novakey.model.elements.buttons.ButtonData;
+import viviano.cantu.novakey.model.elements.buttons.ButtonToggleModeChange;
+import viviano.cantu.novakey.model.elements.buttons.PunctuationButton;
 import viviano.cantu.novakey.model.elements.keyboards.Keyboards;
 import viviano.cantu.novakey.model.loaders.Loader;
 import viviano.cantu.novakey.model.loaders.ThemeLoader;
+import viviano.cantu.novakey.view.drawing.shapes.Circle;
+import viviano.cantu.novakey.view.posns.DeltaRadiusPosn;
 import viviano.cantu.novakey.view.themes.MasterTheme;
 
 /**
@@ -210,6 +216,18 @@ public class TrueModel implements DrawModel {
      */
     public List<Element> getButtons() {
         List<Element> buttons = new ArrayList<>();
+        Button b1 = new ButtonToggleModeChange(
+                new ButtonData()
+                        .setPosn(new DeltaRadiusPosn(75, Math.PI * 5 / 4))
+                        .setSize(150)
+                        .setShape(new Circle()));
+        buttons.add(b1);
+        Button b2 = new PunctuationButton(
+                new ButtonData()
+                        .setPosn(new DeltaRadiusPosn(75, Math.PI * 7 / 4))
+                        .setSize(150)
+                        .setShape(new Circle()));
+        buttons.add(b2);
         return buttons;
     }
 }

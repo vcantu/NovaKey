@@ -2,9 +2,11 @@ package viviano.cantu.novakey.model;
 
 import android.content.Context;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputConnection;
 
 import java.util.List;
 
+import viviano.cantu.novakey.NovaKey;
 import viviano.cantu.novakey.model.elements.DefaultElementManager;
 import viviano.cantu.novakey.model.elements.Element;
 import viviano.cantu.novakey.model.elements.ElementManager;
@@ -13,7 +15,6 @@ import viviano.cantu.novakey.model.elements.keyboards.Keyboard;
 import viviano.cantu.novakey.model.elements.keyboards.Keyboards;
 import viviano.cantu.novakey.model.states.InputState;
 import viviano.cantu.novakey.model.states.ShiftState;
-import viviano.cantu.novakey.model.states.UserState;
 import viviano.cantu.novakey.view.themes.MasterTheme;
 
 /**
@@ -39,13 +40,12 @@ public class MainModel implements Model {
 
     //States
     private ShiftState mShiftState;
-    private UserState mUserState;
     private int mCursorMode = 0;
     private InputState mInputState;
 
     //Keyboard
     private int mKeyboardCode = 0;
-    private final Keyboards mKeyboards;
+    private Keyboards mKeyboards;
 
     //Elements
     private final ElementManager mElements;
@@ -53,24 +53,36 @@ public class MainModel implements Model {
 
     public MainModel(Context context) {
         mTrueModel = new TrueModel(context);
+        syncWithPrefs();
 
+        //Input State determined during start
+        mInputState = new InputState();
+        mShiftState = ShiftState.UPPERCASE;
+
+        mElements = new DefaultElementManager(mKeyboards.get(Keyboards.DEFAULT));
+        List<Element> btns = mTrueModel.getButtons();
+        for (Element b : btns) {
+            mElements.addElement(b);
+        }
+    }
+
+    /**
+     * Syncs the models with the user preferences
+     *
+     */
+    @Override
+    public void syncWithPrefs() {
         mWidth = mTrueModel.getWidth();
         mHeight = mTrueModel.getHeight();
         mX = mTrueModel.getX();
         mY = mTrueModel.getY();
         mRadius = mTrueModel.getRadius();
-        mSmallRadius = mTrueModel.getRadius();
+        mSmallRadius = mTrueModel.getSmallRadius();
         mPadding = mTrueModel.getPadding();
 
         mTheme = mTrueModel.getTheme();
 
-        mShiftState = ShiftState.UPPERCASE;
-        mUserState = UserState.TYPING;
-        //Input State determined during start
-
         mKeyboards = mTrueModel.getKeyboards();
-
-        mElements = new DefaultElementManager(mKeyboards.get(Keyboards.DEFAULT));
     }
 
     /**
@@ -213,15 +225,16 @@ public class MainModel implements Model {
      * Uses the given editor info to update the input state
      *
      * @param editorInfo info used to generate input state
+     * @param inputConnection connection used to input
      */
     @Override
-    public void onStart(EditorInfo editorInfo) {
-        mInputState = new InputState(editorInfo);
+    public void onStart(EditorInfo editorInfo, InputConnection inputConnection) {
+        mInputState.updateConnection(editorInfo, inputConnection);
 
         //reads theme from preferences & colors according to the app
-        setTheme(mTrueModel.getTheme().setPackage(editorInfo.packageName));
+        if (Settings.autoColor)
+            setTheme(mTrueModel.getTheme().setPackage(editorInfo.packageName));
 
-        setUserState(UserState.TYPING);
         switch (mInputState.getType()) {
             default:
             case TEXT:
@@ -239,6 +252,7 @@ public class MainModel implements Model {
         }
 
         //TODO: update shiftstate
+        update();
     }
 
     /**
@@ -262,7 +276,9 @@ public class MainModel implements Model {
      */
     @Override
     public void setKeyboard(int code) {
-        this.mKeyboardCode = code;
+        mKeyboardCode = code;
+        setOverlayElement(getKeyboard());
+        update();
     }
 
     /**
@@ -279,22 +295,7 @@ public class MainModel implements Model {
     @Override
     public void setShiftState(ShiftState shiftState) {
         this.mShiftState = shiftState;
-    }
-
-    /**
-     * @return the current general action the user is doing
-     */
-    @Override
-    public UserState getUserState() {
-        return mUserState;
-    }
-
-    /**
-     * @param userState the user state to set
-     */
-    @Override
-    public void setUserState(UserState userState) {
-        mUserState = userState;
+        update();
     }
 
     /**
@@ -365,6 +366,7 @@ public class MainModel implements Model {
     @Override
     public void setOverlayElement(OverlayElement element) {
         mElements.setOverlayElement(element);
+        update();
     }
 
     /**
@@ -373,6 +375,7 @@ public class MainModel implements Model {
     @Override
     public void removeOverlayElement() {
         mElements.removeOverlayElement();
+        update();
     }
 
     /**

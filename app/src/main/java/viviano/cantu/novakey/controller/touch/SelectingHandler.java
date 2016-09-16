@@ -2,6 +2,7 @@ package viviano.cantu.novakey.controller.touch;
 
 import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.controller.actions.Action;
+import viviano.cantu.novakey.controller.actions.SetOverlayAction;
 import viviano.cantu.novakey.controller.actions.ToggleCursorModeAction;
 import viviano.cantu.novakey.controller.actions.UpdateSelectionAction;
 
@@ -73,7 +74,7 @@ public class SelectingHandler extends RotatingHandler {
      */
     @Override
     protected boolean onUp(Controller controller) {
-        //does nothing
+        controller.fire(new SetOverlayAction(controller.getModel().getKeyboard()));
         return false;
     }
 }

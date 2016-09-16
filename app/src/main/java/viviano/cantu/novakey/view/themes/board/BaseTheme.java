@@ -5,6 +5,7 @@ import android.graphics.Paint;
 
 import viviano.cantu.novakey.view.drawing.Draw;
 import viviano.cantu.novakey.view.drawing.drawables.Drawable;
+import viviano.cantu.novakey.view.themes.BaseMasterTheme;
 import viviano.cantu.novakey.view.themes.MasterTheme;
 
 /**
@@ -107,7 +108,8 @@ public class BaseTheme implements BoardTheme {
      * @param canvas   canvas to draw on
      */
     @Override
-    public void drawPickerItem(float x, float y, float dimen, boolean selected, int index, Paint p, Canvas canvas) {
+    public void drawPickerItem(float x, float y, float dimen, boolean selected,
+                               int index, Paint p, Canvas canvas) {
         float r = dimen / 2 * .8f;
         float sr = (dimen / 2 * .8f) / 3;
         mParent.setColors(0xFFF0F0F0, 0xFF616161, 0xFF616161);

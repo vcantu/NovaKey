@@ -20,18 +20,16 @@ public class DefaultElementManager implements ElementManager {
         mMain = new MainElement(keyboard);
 
         mList = new ArrayList<>();
-        mList.add(mMain);
     }
 
     /**
      * @return a list of elements where:
      * the first on the list are the first drawn
-     * and the last to receive touch input
      */
     @Override
     public List<Element> getElements() {
         List<Element> list = new ArrayList<>(mList);
-        mList.add(0, mMain);
+        list.add(0, mMain);//first element
         return list;
     }
 

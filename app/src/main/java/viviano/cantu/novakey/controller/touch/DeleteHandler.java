@@ -4,6 +4,7 @@ package viviano.cantu.novakey.controller.touch;
 import java.util.Stack;
 
 
+import viviano.cantu.novakey.controller.actions.SetOverlayAction;
 import viviano.cantu.novakey.controller.actions.typing.InputAction;
 import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.controller.actions.Action;
@@ -20,7 +21,7 @@ public class DeleteHandler extends RotatingHandler {
     private boolean mBackspacing = true;//false if deleting
     private boolean mGoingFast = false;
 
-    public DeleteHandler(String first) {
+    public DeleteHandler() {
         mDelete = new DeleteAction(true);
         mBackspace = new DeleteAction();
 
@@ -28,8 +29,6 @@ public class DeleteHandler extends RotatingHandler {
         mFastBackspace = new DeleteAction(false, true);
 
         mStack = new Stack<>();
-        if (first != null)
-            mStack.add(first);
     }
 
     /**
@@ -68,7 +67,7 @@ public class DeleteHandler extends RotatingHandler {
         if (mBackspacing) {
             if (!clockwise) {//backspace
                String str = controller.fire(mBackspace);
-                if (str != null)
+                if (str != null && str.length() > 0)
                     mStack.add(str);
             } else {//add
                 if (mStack.size() >= 1)
@@ -79,11 +78,11 @@ public class DeleteHandler extends RotatingHandler {
         } else {
             if (clockwise) {//delete
                 String str = controller.fire(mDelete);
-                if (str != null)
+                if (str != null && str.length() > 0)
                     mStack.add(str);
             } else {//add
                 if (mStack.size() >= 1)
-                    controller.fire(new InputAction(mStack.pop(), false));
+                    controller.fire(new InputAction(mStack.pop(), true));
                 //inputs to the right of the cursor
                 if (mStack.size() == 0)
                     mBackspacing = true;
@@ -102,6 +101,7 @@ public class DeleteHandler extends RotatingHandler {
      */
     @Override
     protected boolean onUp(Controller controller) {
+        controller.fire(new SetOverlayAction(controller.getModel().getKeyboard()));
         return false;
     }
 }

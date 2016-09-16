@@ -40,6 +40,8 @@ public class SetEditingAction implements Action<Void> {
             //TODO: floating view support with settings
         }
         else {
+            //updates the main model
+            model.syncWithPrefs();
             ime.clearWindows();
             ime.setInputView(control.getView());
         }

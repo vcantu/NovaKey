@@ -35,11 +35,14 @@ public class CursorOverlay implements OverlayElement {
         BoardTheme board = theme.getBoardTheme();
 
         int cursorCode = model.getCursorMode();
-        board.drawItem(Icons.cursors, model.getX(), model.getY(), 1, canvas);
+        board.drawItem(Icons.cursors, model.getX(), model.getY(),
+                model.getSmallRadius(), canvas);
         if (cursorCode >= 0)
-            board.drawItem(Icons.cursorLeft, model.getX(), model.getY(), 1, canvas);
+            board.drawItem(Icons.cursorLeft, model.getX(), model.getY(),
+                    model.getSmallRadius(), canvas);
         if (cursorCode <= 0)
-            board.drawItem(Icons.cursorRight, model.getX(), model.getY(), 1, canvas);
+            board.drawItem(Icons.cursorRight, model.getX(), model.getY(),
+                    model.getSmallRadius(), canvas);
     }
 
     /**

@@ -34,8 +34,8 @@ public class InputAction implements Action<Void> {
         return false;
     }
     //Closing Characters
-    private int[] openers = new int[] { '¿', '¡', '⌊', '⌈' },
-            closers = new int[] { '?', '!', '⌋', '⌉' };
+    private int[] openers = new int[] { };
+    private int[] closers = new int[] { };
     private int getIndex(int c) {
         for (int i=0; i<openers.length; i++) {
             if (openers[i] == c)
@@ -57,7 +57,7 @@ public class InputAction implements Action<Void> {
     private final int mCursorPos;
 
     public InputAction(int keyCode) {
-        this(keyCode, true);
+        this(keyCode, false);
     }
 
     public InputAction(int keyCode, boolean beforeCursor) {
@@ -99,14 +99,19 @@ public class InputAction implements Action<Void> {
             else {
                 if (mKeyCode == '\n')
                     control.fire(new EnterAction());
-                else if (mKeyCode == android.inputmethodservice.Keyboard.KEYCODE_SHIFT)
+                else if (mKeyCode == android.inputmethodservice.Keyboard.KEYCODE_SHIFT) {
                     control.fire(new ShiftAction());
+                    return null;
+                }
             }
         }
         else if (mText != null) {
             ic.finishComposingText();
             ime.composing.setLength(0);
             ic.commitText(mText, mCursorPos);
+        }
+        else if (mKey != null) {
+
         }
         control.fire(new UpdateShiftAction());
         return null;
@@ -144,7 +149,7 @@ public class InputAction implements Action<Void> {
         }
 
         SHOULD_RETURN = shouldReturnAfterSpace((char) mKeyCode); //set should return after space
-        if (mKeyCode == '\'' || mKeyCode == '"' || mKeyCode == '¿' || mKeyCode == '¡')
+        if (mKeyCode == '\'' || mKeyCode == '"')//upside down question mark
             control.fire(new SetKeyboardAction(Keyboards.DEFAULT));
     }
 
@@ -155,7 +160,6 @@ public class InputAction implements Action<Void> {
         if (SHOULD_RETURN)
             control.fire(new SetKeyboardAction(Keyboards.DEFAULT));
         SHOULD_RETURN = false;
-
     }
 
 

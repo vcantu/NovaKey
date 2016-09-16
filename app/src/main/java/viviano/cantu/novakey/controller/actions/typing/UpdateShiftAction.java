@@ -20,7 +20,7 @@ public class UpdateShiftAction implements Action<Void> {
      */
     @Override
     public Void trigger(NovaKey ime, Controller control, Model model) {
-        if (model.getKeyboardCode() > 0) {
+        if (model.getKeyboardCode() >= 0) {
             switch (model.getShiftState()) {
                 case LOWERCASE:
                 case UPPERCASE:

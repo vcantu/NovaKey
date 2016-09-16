@@ -1,5 +1,10 @@
 package viviano.cantu.novakey.model.elements.keyboards;
 
+import viviano.cantu.novakey.controller.actions.Action;
+import viviano.cantu.novakey.controller.input.Inputable;
+import viviano.cantu.novakey.controller.input.KeyInput;
+import viviano.cantu.novakey.model.elements.menus.InfiniteMenu;
+import viviano.cantu.novakey.model.states.InputState;
 import viviano.cantu.novakey.model.states.ShiftState;
 import viviano.cantu.novakey.view.drawing.Font;
 import viviano.cantu.novakey.view.drawing.drawables.TextDrawable;
@@ -11,9 +16,10 @@ import viviano.cantu.novakey.view.posns.SmallRadiusPosn;
 /**
  * Created by Viviano on 10/12/2015.
  */
-public class Key {
+public class Key implements Inputable {
 
-    public final Character value;
+    private final Character mChar;
+    private final KeyInput mInput;//set just 1 to save memory during runtime
     public final int group, loc;
     private final boolean mAltLayout;
 
@@ -26,26 +32,27 @@ public class Key {
     }
 
     public Key(Character c, int group, int loc, boolean altLayout) {
-        value = c;
+        mChar = c;
+        mInput = new KeyInput(mChar);
         this.group = group;
         this.loc = loc;
         mAltLayout = altLayout;
         mPosn = getDesiredPosn();
-        mDrawable = new TextDrawable(value.toString(), Font.SANS_SERIF_LIGHT);
+        mDrawable = new TextDrawable(mChar.toString(), Font.SANS_SERIF_LIGHT);
     }
 
     /**
      * @return this key's character in uppercase
      */
     public Character getUppercase() {
-        return Character.toUpperCase(value);
+        return Character.toUpperCase(mChar);
     }
 
     /**
      * @return this key's character in lowercase
      */
     public Character getLowercase() {
-        return Character.toLowerCase(value);
+        return Character.toLowerCase(mChar);
     }
 
     /**
@@ -98,6 +105,12 @@ public class Key {
         return mDrawable;
     }
 
+    /**
+     * @return this key's character code
+     */
+    public char getChar() {
+        return mChar;
+    }
 
     private RelativePosn getDesiredPosn() {
         if (group == 0) {
@@ -108,10 +121,12 @@ public class Key {
             }
         }
         else {
-            if (loc == 0)
+            if (loc == 2)
                 return new RadiiPosn(1f / 6f, getAngle());
-            if (loc == (mAltLayout ? 4 : 0))
+            if (loc == (mAltLayout ? 0 : 4))
                 return new RadiiPosn(1f + 1f/6f, getAngle());
+            if (loc == 0)
+                return new RadiiPosn(1f - 1f/6f, getAngle());
             return new RadiiPosn(.5f, getAngle());
         }
     }
@@ -131,26 +146,25 @@ public class Key {
         return ((i-1) * 2 * Math.PI) / 5 + Math.PI / 2 + Math.PI / 5;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Key key = (Key) o;
-
-        if (group != key.group) return false;
-        if (loc != key.loc) return false;
-        if (mAltLayout != key.mAltLayout) return false;
-        return value.equals(key.value);
-
+    /**
+     * Returns the hidden keys menu based on this key
+     *
+     * @return an infinite menu or null if none was found
+     */
+    public InfiniteMenu getHiddenKeys() {
+        return InfiniteMenu.getHiddenKeys(mChar);
     }
 
+
+    /**
+     * Inputs this object
+     *
+     * @param state      state for context
+     * @param shiftState shift state for context
+     * @return a side effect to this input action
+     */
     @Override
-    public int hashCode() {
-        int result = value.hashCode();
-        result = 31 * result + group;
-        result = 31 * result + loc;
-        result = 31 * result + (mAltLayout ? 1 : 0);
-        return result;
+    public Action input(InputState state, ShiftState shiftState) {
+        return mInput.input(state, shiftState);
     }
 }

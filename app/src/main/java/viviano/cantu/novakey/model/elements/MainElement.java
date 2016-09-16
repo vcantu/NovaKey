@@ -2,27 +2,31 @@ package viviano.cantu.novakey.model.elements;
 
 import android.graphics.Canvas;
 import android.inputmethodservice.Keyboard;
+import android.view.MotionEvent;
 
+import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.controller.touch.TouchHandler;
 import viviano.cantu.novakey.model.Model;
-import viviano.cantu.novakey.model.states.UserState;
 import viviano.cantu.novakey.utils.Util;
-import viviano.cantu.novakey.view.drawing.Icons;
 import viviano.cantu.novakey.view.themes.MasterTheme;
 import viviano.cantu.novakey.view.themes.board.BoardTheme;
 
 /**
  * Created by Viviano on 6/20/2016.
  */
-public class MainElement implements Element {
+public class MainElement implements Element, TouchHandler {
 
     private OverlayElement mOverlay;
 
     public MainElement(OverlayElement overlay) {
+        if (overlay == null)
+            throw new NullPointerException("Overlay cannot be null");
         mOverlay = overlay;
     }
 
     public void setOverlay(OverlayElement overlay) {
+        if (mOverlay == null)
+            throw new NullPointerException("Overlay cannot be null");
         mOverlay = overlay;
     }
 
@@ -55,11 +59,22 @@ public class MainElement implements Element {
      */
     @Override
     public TouchHandler getTouchHandler() {
-        if (mOverlay == null)
-            return null;
-        return mOverlay.getTouchHandler();
+        return this;
     }
 
+
+    /**
+     * Handles the logic given a touch event and
+     * a view
+     *
+     * @param event   current touch event
+     * @param control controller used for context
+     * @return true to continue action, false otherwise
+     */
+    @Override
+    public boolean handle(MotionEvent event, Controller control) {
+        return mOverlay.getTouchHandler().handle(event, control);
+    }
 
 
     //------------------------------------Static Helper Methods--------------------------------------

@@ -31,8 +31,8 @@ public class RadiiPosn extends RelativePosn {
     private double angle;
 
     public RadiiPosn(float distance, double angle) {
-        this.angle = angle;
         this.distance = distance;
+        this.angle = angle;
     }
 
     /**
@@ -42,7 +42,7 @@ public class RadiiPosn extends RelativePosn {
     @Override
     public float getX(DrawModel model) {
         float dist = model.getSmallRadius() +
-                (model.getRadius() - model.getSmallRadius()) * distance;
+                ((model.getRadius() - model.getSmallRadius()) * distance);
         return Util.xFromAngle(model.getX(), dist, angle);
     }
 
@@ -54,6 +54,6 @@ public class RadiiPosn extends RelativePosn {
     public float getY(DrawModel model) {
         float dist = model.getSmallRadius() +
                 (model.getRadius() - model.getSmallRadius()) * distance;
-        return Util.xFromAngle(model.getX(), dist, angle);
+        return Util.yFromAngle(model.getY(), dist, angle);
     }
 }

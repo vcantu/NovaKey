@@ -4,6 +4,7 @@ import viviano.cantu.novakey.view.themes.background.BackgroundTheme;
 import viviano.cantu.novakey.view.themes.background.FlatBackgroundTheme;
 import viviano.cantu.novakey.view.themes.board.BaseTheme;
 import viviano.cantu.novakey.view.themes.board.BoardTheme;
+import viviano.cantu.novakey.view.themes.button.BaseButtonTheme;
 import viviano.cantu.novakey.view.themes.button.ButtonTheme;
 
 /**
@@ -19,9 +20,9 @@ public class BaseMasterTheme implements MasterTheme {
     private ButtonTheme mButton;
 
     public BaseMasterTheme() {
-        mBoard = new BaseTheme();
-        mBackground = new FlatBackgroundTheme();
-        mButton = null;//TODO: default button theme
+        setBoardTheme(new BaseTheme());
+        setBackgroundTheme(new FlatBackgroundTheme());
+        setButtonTheme(new BaseButtonTheme());
 
         mIs3d = false;
         mPrimiary = 0xFF616161;

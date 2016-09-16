@@ -29,9 +29,9 @@ public abstract class InstanceList<T> implements Iterator<T>, Iterable<T> {
         return mMap.size();
     }
 
-    private T construct(Class<T> clazz) {
+    private T construct(Class clazz) {
         try {
-            clazz.getConstructor().newInstance();
+            return (T) clazz.getConstructor().newInstance();
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
@@ -53,10 +53,9 @@ public abstract class InstanceList<T> implements Iterator<T>, Iterable<T> {
         }
     }
 
-    public Integer getKey(T t) {
-        Class clazz = t.getClass();
+    public Integer getKey(Class clazz) {
         for (Map.Entry<Integer, Class> e : mMap.entrySet()) {
-            if (e.getValue().getClass() == clazz) {
+            if (e.getValue() == clazz) {
                 return e.getKey();
             }
         }

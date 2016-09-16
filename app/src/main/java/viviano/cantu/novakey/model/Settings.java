@@ -23,7 +23,7 @@ public class Settings {
             pref_auto_correct = "pref_auto_correct",
             pref_quick_close = "pref_quick_close",
             //NovaKey 0.3
-            pref_bad_theme = "pref_theme",//(DEPRECATED)
+            pref_theme_legacy = "pref_theme",//(DEPRECATED)
             //pref_btns = "pref_btns",//(REMOVED)
             pref_rate = "pref_rate",//INTENT
             pref_tut = "pref_tut",//INTENT
@@ -97,7 +97,8 @@ public class Settings {
     }
 
     private static void fixLegacyThemeing() {
-        String str = prefs.getString(pref_bad_theme, DEFAULT);
+        String str = prefs.getString(pref_theme_legacy, DEFAULT);
+
         if (!str.equals(DEFAULT)) {
             //set new from old
             String newStr = prefs.getString(pref_theme, DEFAULT);
@@ -109,7 +110,7 @@ public class Settings {
             autoColor = str.split(",")[4].equalsIgnoreCase("A");
             edit.putBoolean(pref_auto_color, autoColor);
             //delete old
-            edit.remove(pref_bad_theme);
+            edit.remove(pref_theme_legacy);
         }
     }
 }

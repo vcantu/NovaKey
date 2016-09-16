@@ -12,6 +12,7 @@ import android.view.View;
 
 import viviano.cantu.novakey.R;
 import viviano.cantu.novakey.model.Settings;
+import viviano.cantu.novakey.model.TrueModel;
 import viviano.cantu.novakey.view.themes.MasterTheme;
 import viviano.cantu.novakey.view.themes.Themeable;
 import viviano.cantu.novakey.view.themes.board.BoardTheme;
@@ -23,12 +24,12 @@ public class NovaKeyEditView extends View implements View.OnTouchListener, Theme
     //Theme to use
     private MasterTheme mTheme;
 
+    private final TrueModel mModel;
+
     //Dimensions
     private final int screenWidth, screenHeight;//in pixels
     private int viewWidth, viewHeight;
     private float centerX, centerY;
-    //Landscape
-    private boolean landscape;
     //circle
     private float radius, smallRadius;
     //Drawing
@@ -58,7 +59,8 @@ public class NovaKeyEditView extends View implements View.OnTouchListener, Theme
         DisplayMetrics metrics = getResources().getDisplayMetrics();
         screenWidth = metrics.widthPixels;
         screenHeight = metrics.heightPixels;
-        landscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+
+        mModel = new TrueModel(context);
     }
 
     /**
@@ -71,13 +73,6 @@ public class NovaKeyEditView extends View implements View.OnTouchListener, Theme
         mTheme = theme;
     }
 
-    //Checks if phone orientation has been changed
-    @Override
-    public void onConfigurationChanged(Configuration config) {
-        landscape = config.orientation == Configuration.ORIENTATION_LANDSCAPE;
-        super.onConfigurationChanged(config);
-    }
-
     //When created or resized
     @Override
     public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -86,13 +81,11 @@ public class NovaKeyEditView extends View implements View.OnTouchListener, Theme
         viewWidth = screenWidth;
         viewHeight = screenHeight;
 
-        //set radius to default or to saved size
-        radius = Settings.sharedPref.getFloat("size" + (landscape ? "_land" : ""),
-                getResources().getDimension(R.dimen.default_radius));
+        radius = mModel.getRadius();
+        smallRadius = mModel.getSmallRadius();
 
-        smallRadius = Settings.sharedPref.getFloat("smallRadius", 3);
         //sets location to saved size
-        centerX = Settings.sharedPref.getFloat("x" + (landscape ? "_land" : ""), screenWidth / 2);
+        centerX = mModel.getX();
 
         //centerY will be set after method
         setMeasuredDimension(viewWidth, viewHeight);
@@ -100,7 +93,7 @@ public class NovaKeyEditView extends View implements View.OnTouchListener, Theme
         viewWidth = MeasureSpec.getSize(widthMeasureSpec);
         viewHeight = MeasureSpec.getSize(heightMeasureSpec);//fixes title bar
 
-        centerY = viewHeight - Settings.sharedPref.getFloat("y" + (landscape ? "_land" : ""), radius);
+        centerY = viewHeight - mModel.getY();
     }
 
     @Override
@@ -194,12 +187,10 @@ public class NovaKeyEditView extends View implements View.OnTouchListener, Theme
     }
 
     public void saveDimens() {
-        SharedPreferences.Editor editor = Settings.sharedPref.edit();
-        editor.putFloat("size" + (landscape ? "_land" : ""), radius);
-        editor.putFloat("smallRadius", smallRadius);
-        editor.putFloat("x" + (landscape ? "_land" : ""), centerX);
-        editor.putFloat("y" + (landscape ? "_land" : ""), viewHeight - centerY);
-        editor.commit();
+        mModel.setRadius(radius);
+        mModel.setSmallRadius(smallRadius);
+        mModel.setX(centerX);
+        mModel.setY(viewHeight - centerY);
     }
 
     public void setSmallRadius(float sr) {

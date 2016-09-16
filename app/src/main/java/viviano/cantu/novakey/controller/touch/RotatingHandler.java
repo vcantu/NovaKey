@@ -47,7 +47,7 @@ public abstract class RotatingHandler implements TouchHandler {
                     prevArea = currArea;
                 }
                 if (currSector != prevSector) {
-                    boolean clockwise = prevSector == (currSector + 1 );
+                    boolean clockwise = (prevSector - 1) == (currSector % 5);
                     result = result & onRotate(clockwise, currArea == 0, control);
                     prevSector = currSector;
                 }

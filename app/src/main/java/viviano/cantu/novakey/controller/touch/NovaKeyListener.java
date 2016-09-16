@@ -4,6 +4,9 @@ import android.os.CountDownTimer;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import viviano.cantu.novakey.model.elements.Element;
 import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.controller.actions.SetEditingAction;
@@ -50,26 +53,22 @@ public class NovaKeyListener implements View.OnTouchListener {
         //if has a handler handle event
         if (mHandler != null) {
             boolean result = mHandler.handle(event, mController);
-            if (!result) {//if event returns true handler is done
+            if (!result)
                 mHandler = null;
-                getNewHandler(event);
-            }
         }
         else {
-            getNewHandler(event);
-        }
-        return true;//take in all events
-    }
-
-    //WARNING: this method will perform the first touch event if handler is found
-    private void getNewHandler(MotionEvent event) {
-        for (Element e : mController.getModel().getElements()) {
-            TouchHandler handler = e.getTouchHandler();
-            if (handler != null && handler.handle(event, mController)) {
-                mHandler = handler;
-                break;
+            //instantiate new handlers until one returns true
+            List<Element> elems = mController.getModel().getElements();
+            for (int i = elems.size() - 1; i >= 0; i--) {
+                TouchHandler handler = elems.get(i).getTouchHandler();
+                boolean res = handler.handle(event, mController);
+                if (res) {
+                    mHandler = handler;
+                    break;
+                }
             }
         }
+        return true;//take in all events
     }
 
     private class CustomTimer {

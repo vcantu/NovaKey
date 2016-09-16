@@ -7,6 +7,7 @@ import java.util.List;
 
 import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.controller.actions.Action;
+import viviano.cantu.novakey.controller.actions.SetOverlayAction;
 import viviano.cantu.novakey.controller.touch.AreaCrossedHandler;
 import viviano.cantu.novakey.controller.touch.CrossEvent;
 import viviano.cantu.novakey.controller.touch.TouchHandler;
@@ -161,6 +162,7 @@ public class OnUpMenu implements OverlayElement, Menu {
         protected boolean onUp(Controller controller) {
             mTimer.cancel();
             controller.fire(mEntries.get(mArea - 1).action);
+            controller.fire(new SetOverlayAction(controller.getModel().getKeyboard()));
             return false;
         }
     }
