@@ -1,41 +1,28 @@
 package viviano.cantu.novakey;
 
-import android.content.ClipData;
 import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.SharedPreferences.Editor;
 import android.graphics.PixelFormat;
 import android.inputmethodservice.InputMethodService;
-import android.os.Handler;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.text.InputType;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.ExtractedText;
-import android.view.inputmethod.ExtractedTextRequest;
 import android.view.inputmethod.InputConnection;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import viviano.cantu.novakey.controller.Controller;
-import viviano.cantu.novakey.controller.actions.SelectionActions;
-import viviano.cantu.novakey.controller.actions.typing.InputAction;
-import viviano.cantu.novakey.controller.actions.typing.UpdateShiftAction;
 import viviano.cantu.novakey.view.drawing.Font;
 import viviano.cantu.novakey.view.drawing.Icons;
 import viviano.cantu.novakey.model.elements.menus.InfiniteMenu;
-import viviano.cantu.novakey.model.states.ShiftState;
 import viviano.cantu.novakey.settings.Colors;
 import viviano.cantu.novakey.model.Settings;
 import viviano.cantu.novakey.view.themes.AppTheme;
-import viviano.cantu.novakey.utils.Util;
 
 public class NovaKey extends InputMethodService {
 
@@ -43,15 +30,9 @@ public class NovaKey extends InputMethodService {
 	public static String MY_PREFERENCES = "MyPreferences";
 	public static int OVERLAY_PERMISSION_REQ_CODE = 1234;
 
-	public static int CB_COPY = 1, CB_SELECT_ALL = 2, CB_PASTE = 3, CB_DESELECT_ALL = 4, CB_CUT = 5;
-
-	public StringBuilder composing = new StringBuilder();//TODO: move fields to controller
-    public int composingIndex = 0;
-
     //Services
 	private Vibrator vibrator;
 	private ClipboardManager clipboard;
-
 	private WindowManager windowManager;
     private List<View> mWindows;
 
@@ -146,8 +127,6 @@ public class NovaKey extends InputMethodService {
 	public void onStartInputView(EditorInfo info, boolean restarting) {
         super.onStartInputView(info, restarting);
         mController.getModel().onStart(info, getCurrentInputConnection());//updates editor info
-		// Reset State
-		composing.setLength(0);
 	}
 
 	@Override
@@ -160,46 +139,12 @@ public class NovaKey extends InputMethodService {
 //		setInputView(InputView);
 	}
 
+	//TODO: move to input state
 	@Override
 	public void onUpdateSelection(int oldSelStart, int oldSelEnd,
 			int newSelStart, int newSelEnd, int candidatesStart,
 			int candidatesEnd) {
-		InputConnection ic = getCurrentInputConnection();
-		if (ic == null || mController.getModel()
-                .getInputState().onPassword())// or keyInserted?
-			return;
-		//set composing region
-		if (newSelStart == newSelEnd && oldSelEnd != newSelStart) {
-			try {
-				String text = ic.getExtractedText(new ExtractedTextRequest(), 0).text.toString();
-				int s, e;
-				for (s=newSelStart-1; s>=0; s--) {
-					char c;
-					try { c = text.charAt(s); }
-					catch (Exception x) { s++; break;}
-					if (!Character.isLetter(c) && !Util.isNumber(c) && c != '\'')
-					{ s++; break; }
-				}
-				for (e=newSelStart; e<text.length(); e++) {
-					char c = text.charAt(e);
-					if (!Character.isLetter(c) && !Util.isNumber(c) && c != '\'')
-						break;
-				}
-				try {
-					if (s < 0)
-						s=0;
-					ic.setComposingRegion(s, e);
-					composing.replace(0, composing.length(), text.substring(s, e));
-				}
-				catch (Exception x) { composing.setLength(0); }//TODO: did this
-				composingIndex = newSelStart - s;
-				}
-			catch (Exception e) { composing.setLength(0); }//TODO: did this too
-		}
-		else if (newSelStart != newSelEnd) {
-			ic.finishComposingText();
-			composing.setLength(0);
-		}
+		mController.getModel().getInputState().updateSelection(newSelStart, newSelEnd);
 	}
 
 //TODO: this code is for undocking
@@ -243,24 +188,17 @@ public class NovaKey extends InputMethodService {
 	 */
 	@Override
 	public void onFinishInput() {
-		commitComposing();
+		//TODO: finish input
         super.onFinishInput();
+	}
+
+	public ClipboardManager getClipboard() {
+		return clipboard;
 	}
 
 	//-----------------------------------------helper methods---------------------------------------//
 
-    /**
-     * @return the text inside the current selection or an empty string if none
-     */
-    public String getSelectedText() {
-        try {
-            return getCurrentInputConnection().getSelectedText(0).toString();
-        } catch (Exception e) {
-            //if input connection or selected text is null
-            return "";
-        }
-    }
-
+	//TODO: move to inputState
     public int getCurrentCapsMode(EditorInfo editorInfo) {
         InputConnection ic = getCurrentInputConnection();
         //if null caps if needed only
@@ -272,122 +210,9 @@ public class NovaKey extends InputMethodService {
             return getCurrentInputConnection().getCursorCapsMode(editorInfo.inputType);
     }
 
-	/**
-	 * Deletes the character right before, and returns the character it just deleted,
-	 * If there is nothing to delete it will return 0;
- 	*/
-	public char handleDelete() {
-		// add deleted character to temporary memory so it can be added
-		InputConnection ic = getCurrentInputConnection();
-        if (ic == null)
-            return (char)0;
-
-		char result = 0;
-		CharSequence c = ic.getTextBeforeCursor(1, 0);
-		if (c != null && c.length() > 0) {
-			result = c.charAt(0);
-		}
-
-        //if composing isnt blank &
-		if (composing.length() > 0 && composingIndex >= composing.length() && false) {
-			if (composing.length() > 1) {
-				composing.deleteCharAt(composing.length() - 1);
-				ic.setComposingText(composing, 1);
-			} else {
-				composing.setLength(0);
-				ic.commitText("", 0);
-			}
-			//TODO: update candidates
-		} else {
-			ic.finishComposingText();
-			composing.setLength(0);
-			ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL));
-			ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DEL));
-		}
-		mController.fire(new UpdateShiftAction());
-		return result;
-	}
-
-    public void handleClipboardAction(int action) {
-        try {//try statement because clip could be empty or selection could be empty
-            InputConnection ic = getCurrentInputConnection();
-            ExtractedText eText = ic.getExtractedText(new ExtractedTextRequest(), 0);
-			// copy/cut
-            if (action == CB_COPY || action == CB_CUT) {
-                String text = (String) ic.getSelectedText(0);
-                if (copy(text)) {
-                    // cut
-                    if (action == CB_CUT) {
-                        ic.finishComposingText();
-                        composing.setLength(0);
-                        ic.commitText("", 0);
-                    }
-                }
-				showToast("Text Copied", Toast.LENGTH_SHORT);
-			}
-			// paste
-			else if (action == CB_PASTE) {
-                String text = clipboard.getPrimaryClip()
-                        .getItemAt(clipboard.getPrimaryClip().getItemCount()-1)
-                        .getText().toString();
-                if (text != null)
-                    mController.fire(new InputAction(text));
-            }
-			// select all
-			else if (action == CB_SELECT_ALL) {
-                int end = eText.text.length();
-                mController.fire(new SelectionActions.Set(0, end));
-            }
-			// deselect all
-			else if (action == CB_DESELECT_ALL) {
-                int i = mController.getModel().getCursorMode() <= 0
-                        ? eText.selectionEnd : eText.selectionStart;
-                    ic.setSelection(i, i);
-            }
-        } catch (Exception e) {}
-    }
-
-    //Returns true if copy was successful
-    public boolean copy(String text) {
-        if (text.length() > 0) {
-            ClipData cd = ClipData.newPlainText("text", text);
-            clipboard.setPrimaryClip(cd);
-            return true;
-        }
-        return false;
-    }
-
-	public void showToast(final String message, final int length) {
-		final Context context = this;
-		Handler h = new Handler(this.getMainLooper());
-		h.post(() -> Toast.makeText(context, message, length).show());
-	}
-
-    //vibrates if settings allow it
+    //TODO: make action
     public void vibrate(long milliseconds) {
         if (Settings.vibrate)
             vibrator.vibrate(milliseconds);
     }
-
-	public void commitComposing() {
-        InputConnection ic = getCurrentInputConnection();
-		if (ic == null)
-			return;
-
-        //AutoCorrect
-		if (Settings.autoCorrect && !mController.getModel().getInputState().onPassword()) {
-			int i = Util.isContraction(composing, getResources());
-			if (i != -1) {
-				String s = getResources().getStringArray(R.array.contractions)[i];
-				if (mController.getModel().getShiftState() == ShiftState.CAPS_LOCKED)
-					s = s.toUpperCase(Locale.US);//TODO: other languages
-				else if (Character.isUpperCase(composing.charAt(0)))
-					s = Util.capsFirst(s);
-				composing.replace(0, composing.length(), s);
-				ic.setComposingText(composing, 1);
-			}
-		}
-		ic.finishComposingText();
-		composing.setLength(0);
-	}
 }

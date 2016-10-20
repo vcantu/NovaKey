@@ -12,6 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import viviano.cantu.novakey.R;
+import viviano.cantu.novakey.controller.actions.Action;
+import viviano.cantu.novakey.controller.actions.input.DeleteAction;
+import viviano.cantu.novakey.controller.actions.input.EnterAction;
+import viviano.cantu.novakey.controller.actions.input.ShiftAction;
+import viviano.cantu.novakey.controller.actions.input.SpaceAction;
 
 /**
  * Created by Viviano on 7/4/2015.
@@ -138,24 +143,6 @@ public class Util {
     public static int webToColor(String webColor) {
         String s = webColor.substring(webColor.length()-6, webColor.length());
         return Integer.valueOf(s, 16) + 0xFF000000;
-    }
-
-    public static int isContraction(StringBuilder text, Resources res) {
-        String[] S = res.getStringArray(R.array.contractions);
-        for (int i = 0; i < S.length; i++) {
-            String check = S[i].replace("\'", "");
-            if (check.equalsIgnoreCase(text.toString()))
-                return i;
-        }
-        return -1;
-    }
-
-    public static boolean isQuestionWord(StringBuilder text, Resources res) {
-        for (String s : res.getStringArray(R.array.question_words)) {
-            if (s.equalsIgnoreCase(text.toString()))
-                return true;
-        }
-        return false;
     }
 
     public static int countMatches(String str, String match) {
@@ -300,22 +287,22 @@ public class Util {
     }
 
     //----------------------------------Area Util---------------------------------------
-    public static int getGesture(List<Integer> areasCrossed) {
+    public static Action getGesture(List<Integer> areasCrossed) {
         int size = areasCrossed.size();
         if (size < 3 || size > 5)
-            return Keyboard.KEYCODE_CANCEL;
+            return null;
 
         int first = areasCrossed.get(0), last = areasCrossed.get(size-1);
         boolean hasZero = areasCrossed.contains(0),
                 hasThree = areasCrossed.contains(3);
         if (first == 2 && (hasZero || hasThree) && (last == 4 || last == 5))//swipe right
-            return ' ';//SPACE
+            return new SpaceAction();
         if (first == 4 && (hasZero || hasThree) && last == 2)//swipe left
-            return Keyboard.KEYCODE_DELETE;
+            return new DeleteAction();
         if ((first == 1 || first == 5) && hasZero && last == 3)//swipe down
-            return '\n'; //ENTER
+            return new EnterAction();
         if (first == 3 && hasZero && (last == 1 || last == 5))//swipe up
-            return Keyboard.KEYCODE_SHIFT;
-        return Keyboard.KEYCODE_CANCEL;
+            return new ShiftAction();
+        return null;
     }
 }

@@ -1,7 +1,8 @@
 package viviano.cantu.novakey.model.elements.buttons;
 
 import viviano.cantu.novakey.controller.actions.Action;
-import viviano.cantu.novakey.controller.actions.typing.InputAction;
+import viviano.cantu.novakey.controller.actions.input.InputAction;
+import viviano.cantu.novakey.controller.actions.input.SpaceAction;
 import viviano.cantu.novakey.view.drawing.Icons;
 
 /**
@@ -19,7 +20,7 @@ public class SpaceButton extends Button {
      */
     @Override
     protected Action onClickAction() {
-        return new InputAction(" ");
+        return new SpaceAction();
     }
 
     /**

@@ -1,35 +1,38 @@
 package viviano.cantu.novakey.controller.actions;
 
+
+import android.os.Handler;
+import android.widget.Toast;
+
 import viviano.cantu.novakey.NovaKey;
 import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.model.Model;
 
 /**
- * Created by Viviano on 6/15/2016.
+ * Created by vcantu on 9/18/16.
  */
-public class UpdateSelectionAction implements Action<Void> {
+public class ShowToastAction implements Action<Void> {
 
-    private boolean mMoveRight;
+    private final String mMessage;
+    private final int mLength;
 
-    public UpdateSelectionAction(boolean moveRight) {
-        mMoveRight = moveRight;
+    public ShowToastAction(String message, int length) {
+        mMessage = message;
+        mLength = length;
     }
 
     /**
      * Called when the action is triggered
      * Actual logic for the action goes here
+     *
      * @param ime
      * @param control
      * @param model
      */
     @Override
     public Void trigger(NovaKey ime, Controller control, Model model) {
-        int ds = 0, de = 0;
-        if (model.getCursorMode() <= 0)
-            ds = mMoveRight ? 1 : -1;
-        if (model.getCursorMode() >= 0)
-            de = mMoveRight ? 1 : -1;
-        model.getInputState().moveSelection(ds, de);
+        Handler h = new Handler(ime.getMainLooper());
+        h.post(() -> Toast.makeText(ime, mMessage, mLength).show());
         return null;
     }
 }

@@ -7,8 +7,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import viviano.cantu.novakey.controller.Controller;
+import viviano.cantu.novakey.controller.actions.Action;
 import viviano.cantu.novakey.controller.actions.SetOverlayAction;
-import viviano.cantu.novakey.controller.actions.typing.InputAction;
+import viviano.cantu.novakey.controller.actions.VibrateAction;
+import viviano.cantu.novakey.controller.actions.input.DeleteAction;
+import viviano.cantu.novakey.controller.actions.input.InputAction;
+import viviano.cantu.novakey.model.elements.keyboards.Key;
 import viviano.cantu.novakey.model.elements.keyboards.Keyboard;
 import viviano.cantu.novakey.model.elements.menus.InfiniteMenu;
 import viviano.cantu.novakey.model.Settings;
@@ -26,7 +30,7 @@ public class TypingHandler extends AreaCrossedHandler {
 
     private CountDownTimer mTimer;
 
-    private int mRepeatingChar;
+    private Key mRepeatingKey;
     public boolean mRepeating = false;
     private int mArea1, mArea2;
 
@@ -47,10 +51,14 @@ public class TypingHandler extends AreaCrossedHandler {
 
             @Override
             public void onFinish() {
-                InfiniteMenu newMenu = InfiniteMenu.getHiddenKeys(
-                        (char) mKeyboard.getKey(mAreas));
-                if (newMenu != null)
-                    controller.fire(new SetOverlayAction(newMenu));
+                //TODO: fix getting of hidden keys...make shift state aware
+                Action a = mKeyboard.getKey(mAreas);
+                if (a instanceof Key) {
+                    InfiniteMenu newMenu = ((Key)a).getHiddenKeys(
+                            controller.getModel().getShiftState());
+                    if (newMenu != null)
+                        controller.fire(new SetOverlayAction(newMenu));
+                }
             }
         };
         if (true)//TODO: make this flag a in tutorial and longpress is disabled
@@ -74,8 +82,10 @@ public class TypingHandler extends AreaCrossedHandler {
                              Controller controller) {
         mAreas.clear();
         mRepeating = false;
-        mAreas.add(area);
+        if (area != -1)
+            mAreas.add(area);
         start(controller);
+        System.out.println("on down " + mAreas);
         return true;
     }
 
@@ -87,42 +97,52 @@ public class TypingHandler extends AreaCrossedHandler {
      */
     @Override
     protected boolean onCross(CrossEvent event, Controller controller) {
+        if (mAreas.size() > 0 && event.newArea == mAreas.get(mAreas.size() - 1) ||
+                event.newArea == -1)
+            return true;
+        controller.fire(new VibrateAction(Settings.vibrateLevel));
         cancel();
-        start(controller);
         mAreas.add(event.newArea);
-        if (mRepeating) {
-            if (event.newArea == mArea1 || event.newArea == mArea2) {
-                controller.fire(new InputAction(mRepeatingChar));
-            }
-            else {
-                mRepeating = false;
-            }
+        //TODO: validate
+        //no need to start long press for non-keys
+        if (mAreas.size() <= 3 && !mRepeating)
+            start(controller);
+
+        if (mRepeating && (event.newArea == mArea1 || event.newArea == mArea2)) {
+            controller.fire(mRepeatingKey);
+            controller.getModel().getInputState().incrementRepeat();
         }
-        else if (mAreas.size() >= 3) {
-            //test if duplicate
-            int idx = repeatingIndex();
-            if (idx != -1) {
+        else if (mAreas.size() >= 3 && !mRepeating) {
+            if (mAreas.size() == 3 &&
+                mAreas.get(0) == mAreas.get(2)) {
                 //switch to repeat handler
-                mArea1 = mAreas.get(idx);
-                mArea2 = mAreas.get(idx + 1);
+                mArea1 = mAreas.get(0);
+                mArea2 = mAreas.get(1);
 
                 List<Integer> areas = new ArrayList<>(mAreas);
                 areas.remove(areas.size() - 1);
 
-                mRepeatingChar = mKeyboard.getKey(Arrays.asList(mArea1, mArea2)
-                );
-                mRepeating = true;
-                controller.fire(new InputAction(mRepeatingChar));
-                return true;
+                Action a = mKeyboard.getKey(Arrays.asList(mArea1, mArea2));
+                if (a instanceof Key) {
+                    mRepeatingKey = (Key) a;
+                    mRepeating = true;
+                    cancel();
+                    controller.getModel().getInputState().resetRepeat();
+                    controller.fire(mRepeatingKey);
+                    controller.getModel().getInputState().incrementRepeat();
+                    controller.fire(mRepeatingKey);
+                    controller.getModel().getInputState().incrementRepeat();
+                }
+                    return true;
             }
-            if (Util.getGesture(mAreas) == android.inputmethodservice.Keyboard.KEYCODE_DELETE) {
+            if (Util.getGesture(mAreas) instanceof DeleteAction) {
                 //switch to delete handler
                 controller.fire(new SetOverlayAction(new DeleteOverlay()));
                 cancel();
                 return false;
             }
             if (isRotating(mAreas)) {
-                controller.fire(new SetOverlayAction(new CursorOverlay()));
+                controller.fire(new SetOverlayAction(new CursorOverlay(true)));
                 cancel();
                 return false;
             }
@@ -139,12 +159,11 @@ public class TypingHandler extends AreaCrossedHandler {
      */
     @Override
     protected boolean onUp(Controller controller) {
+        System.out.println("ON UP!!!");
         cancel();
         if (!mRepeating) {
-            int keyCode = mKeyboard.getKey(mAreas);
-            controller.fire(new InputAction(keyCode));
+            controller.fire(mKeyboard.getKey(mAreas));
         }
-        System.out.println(mAreas);
         mAreas.clear();
         mRepeating = false;
         return false;

@@ -5,31 +5,28 @@ import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.model.Model;
 
 /**
- * Created by Viviano on 6/15/2016.
+ * Created by vcantu on 9/22/16.
  */
-public class UpdateSelectionAction implements Action<Void> {
+public class VibrateAction implements Action<Void> {
 
-    private boolean mMoveRight;
+    private final long mTime;
 
-    public UpdateSelectionAction(boolean moveRight) {
-        mMoveRight = moveRight;
+    public VibrateAction(int vibrateLevel) {
+        mTime = vibrateLevel;
     }
+
 
     /**
      * Called when the action is triggered
      * Actual logic for the action goes here
+     *
      * @param ime
      * @param control
      * @param model
      */
     @Override
     public Void trigger(NovaKey ime, Controller control, Model model) {
-        int ds = 0, de = 0;
-        if (model.getCursorMode() <= 0)
-            ds = mMoveRight ? 1 : -1;
-        if (model.getCursorMode() >= 0)
-            de = mMoveRight ? 1 : -1;
-        model.getInputState().moveSelection(ds, de);
+        ime.vibrate(mTime);
         return null;
     }
 }

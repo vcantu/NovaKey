@@ -82,7 +82,7 @@ public class NovaKeyEditView extends View implements View.OnTouchListener, Theme
         viewHeight = screenHeight;
 
         radius = mModel.getRadius();
-        smallRadius = mModel.getSmallRadius();
+        smallRadius = mModel.getRadius() / mModel.getSmallRadius();
 
         //sets location to saved size
         centerX = mModel.getX();

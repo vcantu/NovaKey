@@ -31,5 +31,4 @@ dependencies {
     compile 'com.android.support:support-v4:23.1.+'
     compile 'com.rengwuxian.materialedittext:library:2.1.4'
     compile 'com.pavelsikun:material-seekbar-preference:0.12.1+'
-
 }

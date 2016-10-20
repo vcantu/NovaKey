@@ -3,7 +3,7 @@ package viviano.cantu.novakey.controller.actions;
 import viviano.cantu.novakey.NovaKey;
 import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.model.Model;
-import viviano.cantu.novakey.model.states.ShiftState;
+import viviano.cantu.novakey.model.ShiftState;
 
 /**
  * Created by Viviano on 6/15/2016.

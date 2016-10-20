@@ -5,10 +5,10 @@ import java.util.Stack;
 
 
 import viviano.cantu.novakey.controller.actions.SetOverlayAction;
-import viviano.cantu.novakey.controller.actions.typing.InputAction;
+import viviano.cantu.novakey.controller.actions.input.InputAction;
 import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.controller.actions.Action;
-import viviano.cantu.novakey.controller.actions.typing.DeleteAction;
+import viviano.cantu.novakey.controller.actions.input.DeleteAction;
 
 /**
  * Created by Viviano on 6/15/2016.

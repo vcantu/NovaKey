@@ -95,7 +95,7 @@ public class ThemeFactory {
             JSONObject master = new JSONObject();
             JSONArray colors = new JSONArray()
                     .put(theme.getPrimaryColor())
-                    .put(theme.getPrimaryColor())
+                    .put(theme.getAccentColor())
                     .put(theme.getContrastColor());
             master.put("colors", colors);
             master.put("is3D", theme.is3D());

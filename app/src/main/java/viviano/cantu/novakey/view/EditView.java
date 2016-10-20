@@ -53,7 +53,8 @@ public class EditView extends RelativeLayout implements Themeable {
         mSeekBar = (SeekBar)findViewById(R.id.seek_bar);
         mSeekBar.setMax(MAX - MIN);
 
-        float sr = new TrueModel(context).getSmallRadius();
+        TrueModel tm = new TrueModel(context);
+        float sr = tm.getRadius() / tm.getSmallRadius();
         mSeekBar.setProgress(srToProgress(sr));
         mResizeView.setSmallRadius(sr);
         mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {

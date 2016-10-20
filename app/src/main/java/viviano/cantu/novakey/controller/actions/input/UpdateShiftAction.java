@@ -1,11 +1,11 @@
-package viviano.cantu.novakey.controller.actions.typing;
+package viviano.cantu.novakey.controller.actions.input;
 
 import viviano.cantu.novakey.NovaKey;
 import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.controller.actions.Action;
 import viviano.cantu.novakey.controller.actions.SetShiftStateAction;
 import viviano.cantu.novakey.model.Model;
-import viviano.cantu.novakey.model.states.ShiftState;
+import viviano.cantu.novakey.model.ShiftState;
 
 /**
  * Created by Viviano on 6/15/2016.

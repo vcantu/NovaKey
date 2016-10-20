@@ -12,7 +12,7 @@ public abstract class RotatingHandler implements TouchHandler {
 
     private float currX, currY;
     private int currArea, prevArea;
-    private int currSector, prevSector;
+    private int currSector = -1, prevSector = -1;
 
 
     /**
@@ -44,13 +44,14 @@ public abstract class RotatingHandler implements TouchHandler {
                         result = result & onCenterCross(true, control);
                     else if (prevArea == 0)
                         result = result & onCenterCross(false, control);
-                    prevArea = currArea;
                 }
-                if (currSector != prevSector) {
+                prevArea = currArea;
+                if (currSector != prevSector) {//if not initial handling
+                    //to not perform onRotate on start make add prevSector != -1 to if statement
                     boolean clockwise = (prevSector - 1) == (currSector % 5);
                     result = result & onRotate(clockwise, currArea == 0, control);
-                    prevSector = currSector;
                 }
+                prevSector = currSector;
                 break;
             case MotionEvent.ACTION_UP:
                 result = result & onUp(control);

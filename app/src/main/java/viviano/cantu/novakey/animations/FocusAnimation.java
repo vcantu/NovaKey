@@ -45,7 +45,7 @@ public class FocusAnimation extends CharAnimation {
     @Override
     protected Animator<Key> getAnimatorFor(Key k) {
         for (Character c : mChars) {
-            if (c.equals(k.value))
+            if (c.equals(k.getChar()))
                 return null;
         }
         return mAnimator;

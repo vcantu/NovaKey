@@ -1,7 +1,6 @@
-package viviano.cantu.novakey.controller.actions.typing;
+package viviano.cantu.novakey.controller.actions.input;
 
 import android.view.inputmethod.ExtractedText;
-import android.view.inputmethod.ExtractedTextRequest;
 import android.view.inputmethod.InputConnection;
 
 import viviano.cantu.novakey.NovaKey;
@@ -61,20 +60,18 @@ public class DeleteAction implements Action<String> {
             return "";
 
         StringBuilder sb = new StringBuilder();
-
-        ExtractedText et = ic.getExtractedText(new ExtractedTextRequest(), 0);
-        //TODO: sometimes extracted Text request fails
+        ExtractedText et = model.getInputState().getExtractedText();
         String text = (String) et.text;
-        String back = text.substring(0, et.selectionStart);
-        String front = text.substring(et.selectionEnd);
+        String left = text.substring(0, et.selectionStart);
+        String right = text.substring(et.selectionEnd);
 
         char curr = 0;
         if (backspace) {
-            if (back.length() > 0)
-                curr = back.charAt(back.length() - 1);
+            if (left.length() > 0)
+                curr = left.charAt(left.length() - 1);
         } else {
-            if (front.length() > 0)
-                curr = front.charAt(0);
+            if (right.length() > 0)
+                curr = right.charAt(0);
         }
 
         int soFar = 1;
@@ -87,11 +84,11 @@ public class DeleteAction implements Action<String> {
 
             curr = 0;
             if (backspace) {
-                if (back.length() - soFar > 0)
-                    curr = back.charAt(back.length() - 1 - soFar);
+                if (left.length() - soFar > 0)
+                    curr = left.charAt(left.length() - 1 - soFar);
             } else {
-                if (front.length() - soFar > 0)
-                    curr = front.charAt(soFar);
+                if (right.length() - soFar > 0)
+                    curr = right.charAt(soFar);
             }
             soFar++;
         }
@@ -102,7 +99,7 @@ public class DeleteAction implements Action<String> {
                 sb.append(curr);
         }
 
-        ime.commitComposing();
+        model.getInputState().commitCorrection();
         if (sb.length() >= 1) {
             if (backspace)
                 ic.deleteSurroundingText(sb.length(), 0);

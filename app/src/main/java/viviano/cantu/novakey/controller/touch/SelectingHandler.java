@@ -13,7 +13,7 @@ public class SelectingHandler extends RotatingHandler {
 
     private final Action mRight, mLeft;
 
-    public SelectingHandler() {
+    public SelectingHandler(boolean clockwise) {
         mRight = new UpdateSelectionAction(true);
         mLeft = new UpdateSelectionAction(false);
     }

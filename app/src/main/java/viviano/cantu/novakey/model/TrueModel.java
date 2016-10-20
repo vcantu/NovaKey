@@ -215,17 +215,19 @@ public class TrueModel implements DrawModel {
      * @return a list of the buttons saved by user preferences
      */
     public List<Element> getButtons() {
+        //TODO: get button size from DPI and preferences
+        int size = 150;
         List<Element> buttons = new ArrayList<>();
         Button b1 = new ButtonToggleModeChange(
                 new ButtonData()
-                        .setPosn(new DeltaRadiusPosn(75, Math.PI * 5 / 4))
-                        .setSize(150)
+                        .setPosn(new DeltaRadiusPosn(size / 2, Math.PI * 5 / 4))
+                        .setSize(size)
                         .setShape(new Circle()));
         buttons.add(b1);
         Button b2 = new PunctuationButton(
                 new ButtonData()
-                        .setPosn(new DeltaRadiusPosn(75, Math.PI * 7 / 4))
-                        .setSize(150)
+                        .setPosn(new DeltaRadiusPosn(size / 2, Math.PI * 7 / 4))
+                        .setSize(size)
                         .setShape(new Circle()));
         buttons.add(b2);
         return buttons;

@@ -6,15 +6,14 @@ import android.view.inputmethod.InputConnection;
 
 import java.util.List;
 
-import viviano.cantu.novakey.NovaKey;
+import viviano.cantu.novakey.controller.BasicCorrections;
+import viviano.cantu.novakey.controller.Corrections;
 import viviano.cantu.novakey.model.elements.DefaultElementManager;
 import viviano.cantu.novakey.model.elements.Element;
 import viviano.cantu.novakey.model.elements.ElementManager;
 import viviano.cantu.novakey.model.elements.OverlayElement;
 import viviano.cantu.novakey.model.elements.keyboards.Keyboard;
 import viviano.cantu.novakey.model.elements.keyboards.Keyboards;
-import viviano.cantu.novakey.model.states.InputState;
-import viviano.cantu.novakey.model.states.ShiftState;
 import viviano.cantu.novakey.view.themes.MasterTheme;
 
 /**
@@ -57,6 +56,10 @@ public class MainModel implements Model {
 
         //Input State determined during start
         mInputState = new InputState();
+        Corrections corrections = new BasicCorrections();
+        corrections.initialize(context);
+        mInputState.setCorrections(corrections);
+
         mShiftState = ShiftState.UPPERCASE;
 
         mElements = new DefaultElementManager(mKeyboards.get(Keyboards.DEFAULT));
@@ -230,6 +233,7 @@ public class MainModel implements Model {
     @Override
     public void onStart(EditorInfo editorInfo, InputConnection inputConnection) {
         mInputState.updateConnection(editorInfo, inputConnection);
+        syncWithPrefs();
 
         //reads theme from preferences & colors according to the app
         if (Settings.autoColor)

@@ -22,7 +22,7 @@ import viviano.cantu.novakey.view.drawing.drawables.FontIcon;
 public class Icons {
 
     public static BMPDrawable cursors, cursorLeft, cursorRight;//TODO: add to list
-    public static Bitmap cancel, accept, refresh, border_center;
+    public static Bitmap cancel, accept, refresh;
     private static ArrayList<Drawable> icons;
 
     public static void load(Context context) {
@@ -37,8 +37,6 @@ public class Icons {
         cancel = BitmapFactory.decodeResource(res, R.drawable.ic_action_cancel);
         accept = BitmapFactory.decodeResource(res, R.drawable.ic_action_accept);
         refresh = BitmapFactory.decodeResource(res, R.drawable.ic_action_refresh);
-
-        border_center = BitmapFactory.decodeResource(res, R.drawable.ic_border_vertical_white_36dp);
 
         setMaterialIcons(res);
         setCustomIcons(res);

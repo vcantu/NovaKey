@@ -2,6 +2,7 @@ package viviano.cantu.novakey.utils;
 
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.view.inputmethod.ExtractedText;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -52,5 +53,13 @@ public class Print {
         } catch (Exception e) {
             ln("try print failed!");
         }
+    }
+
+    public static void extText(ExtractedText et) {
+        ln('"' +
+                et.text.toString().substring(0, et.selectionStart) +
+                "|" + (et.selectionEnd == et.selectionEnd ? "" :
+                et.text.toString().substring(et.selectionStart, et.selectionEnd) + "|") +
+                et.text.toString().substring(et.selectionEnd));
     }
 }

@@ -1,4 +1,4 @@
-package viviano.cantu.novakey.controller.actions.typing;
+package viviano.cantu.novakey.controller.actions.input;
 
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
@@ -30,7 +30,7 @@ public class EnterAction implements Action<Void> {
 
         if (imeAction == EditorInfo.IME_ACTION_NONE ||
                 imeAction == EditorInfo.IME_ACTION_UNSPECIFIED)
-            control.fire(new InputAction('\n'));
+            model.getInputState().inputText("\n", 1);
         else
             ic.performEditorAction(imeAction);
 

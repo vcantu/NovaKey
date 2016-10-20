@@ -1,11 +1,12 @@
 package viviano.cantu.novakey.model.elements.keyboards;
 
+import viviano.cantu.novakey.NovaKey;
+import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.controller.actions.Action;
-import viviano.cantu.novakey.controller.input.Inputable;
-import viviano.cantu.novakey.controller.input.KeyInput;
+import viviano.cantu.novakey.controller.actions.input.KeyAction;
+import viviano.cantu.novakey.model.Model;
 import viviano.cantu.novakey.model.elements.menus.InfiniteMenu;
-import viviano.cantu.novakey.model.states.InputState;
-import viviano.cantu.novakey.model.states.ShiftState;
+import viviano.cantu.novakey.model.ShiftState;
 import viviano.cantu.novakey.view.drawing.Font;
 import viviano.cantu.novakey.view.drawing.drawables.TextDrawable;
 import viviano.cantu.novakey.view.posns.DeltaPosn;
@@ -16,10 +17,10 @@ import viviano.cantu.novakey.view.posns.SmallRadiusPosn;
 /**
  * Created by Viviano on 10/12/2015.
  */
-public class Key implements Inputable {
+public class Key implements Action<Void> {
 
     private final Character mChar;
-    private final KeyInput mInput;//set just 1 to save memory during runtime
+    private final KeyAction mInput;//set just 1 to save memory during runtime
     public final int group, loc;
     private final boolean mAltLayout;
 
@@ -33,7 +34,7 @@ public class Key implements Inputable {
 
     public Key(Character c, int group, int loc, boolean altLayout) {
         mChar = c;
-        mInput = new KeyInput(mChar);
+        mInput = new KeyAction(mChar);
         this.group = group;
         this.loc = loc;
         mAltLayout = altLayout;
@@ -149,22 +150,30 @@ public class Key implements Inputable {
     /**
      * Returns the hidden keys menu based on this key
      *
+     * @param shiftState whether to get the uppercase or lowercase keys
      * @return an infinite menu or null if none was found
      */
-    public InfiniteMenu getHiddenKeys() {
-        return InfiniteMenu.getHiddenKeys(mChar);
+    public InfiniteMenu getHiddenKeys(ShiftState shiftState) {
+        switch (shiftState) {
+            default:
+            case LOWERCASE:
+                return InfiniteMenu.getHiddenKeys(getLowercase());
+            case UPPERCASE:
+            case CAPS_LOCKED:
+                return InfiniteMenu.getHiddenKeys(getUppercase());
+        }
     }
 
-
     /**
-     * Inputs this object
+     * Called when the action is triggered
+     * Actual logic for the action goes here
      *
-     * @param state      state for context
-     * @param shiftState shift state for context
-     * @return a side effect to this input action
+     * @param ime
+     * @param control
+     * @param model
      */
     @Override
-    public Action input(InputState state, ShiftState shiftState) {
-        return mInput.input(state, shiftState);
+    public Void trigger(NovaKey ime, Controller control, Model model) {
+        return control.fire(mInput);
     }
 }

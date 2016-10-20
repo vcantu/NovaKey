@@ -6,18 +6,18 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import viviano.cantu.novakey.controller.actions.Action;
 import viviano.cantu.novakey.controller.touch.TouchHandler;
 import viviano.cantu.novakey.controller.touch.TypingHandler;
 import viviano.cantu.novakey.model.elements.OverlayElement;
 import viviano.cantu.novakey.model.Model;
 import viviano.cantu.novakey.model.Settings;
-import viviano.cantu.novakey.model.states.ShiftState;
 import viviano.cantu.novakey.utils.Util;
 import viviano.cantu.novakey.view.themes.MasterTheme;
 
 public class Keyboard implements OverlayElement, Iterator<Key>, Iterable<Key> {
 
-    private final TouchHandler mHandler = new TypingHandler(this);
+    private final TouchHandler mHandler;
     private final Key[][] keys;
     private final String name;
 
@@ -26,6 +26,7 @@ public class Keyboard implements OverlayElement, Iterator<Key>, Iterable<Key> {
     public Keyboard(String name, Key[][] keys) {
         this.keys = keys;
         this.name = name;
+        mHandler = new TypingHandler(this);
     }
 
     @Override
@@ -105,7 +106,7 @@ public class Keyboard implements OverlayElement, Iterator<Key>, Iterable<Key> {
      * will return the keyCode for the actions done
      * or Keyboard.KEYCODE_CANCEL if invalid
      */
-    public Key getKey(List<Integer> areasCrossed) {
+    public Action getKey(List<Integer> areasCrossed) {
         if (areasCrossed.size() <= 0)
             return null;
         //regular areas
@@ -113,12 +114,13 @@ public class Keyboard implements OverlayElement, Iterator<Key>, Iterable<Key> {
         int firstArea = areasCrossed.get(0);
         //Inside circle
         if (firstArea >= 0) {
-            int key = Util.getGesture(areasCrossed);
-            if (key != android.inputmethodservice.Keyboard.KEYCODE_CANCEL) {
-                return key;
+            Action act = Util.getGesture(areasCrossed);
+            if (act != null) {
+                return act;
             }
             Location l = getLoc(areasCrossed);
-            return getKey(l.x, l.y);
+            if (l != null)
+                return getKey(l.x, l.y);
         }
         return null;
     }

@@ -12,12 +12,10 @@ import viviano.cantu.novakey.model.Model;
 import viviano.cantu.novakey.model.Settings;
 import viviano.cantu.novakey.model.TrueModel;
 import viviano.cantu.novakey.model.loaders.ThemeFactory;
+import viviano.cantu.novakey.settings.widgets.NovaKeyPreview;
 import viviano.cantu.novakey.settings.widgets.pickers.ColorPicker;
-import viviano.cantu.novakey.settings.widgets.pickers.HorizontalPicker;
-import viviano.cantu.novakey.settings.widgets.pickers.PickerItem;
 import viviano.cantu.novakey.settings.widgets.pickers.ReleasePicker;
 import viviano.cantu.novakey.settings.widgets.pickers.ThemePicker;
-import viviano.cantu.novakey.view.MainView;
 import viviano.cantu.novakey.view.themes.board.BoardTheme;
 
 /**
@@ -29,7 +27,7 @@ import viviano.cantu.novakey.view.themes.board.BoardTheme;
 public class StylePreferenceActivity extends AbstractPreferenceActivity {
 
     private boolean mIsAuto = false;
-    private MainView mPreview;
+    private NovaKeyPreview mPreview;
     private Model mModel;
 
     @Override
@@ -38,8 +36,8 @@ public class StylePreferenceActivity extends AbstractPreferenceActivity {
 
         final ReleasePicker releasePicker = (ReleasePicker)findViewById(R.id.releasePick);
 
-        mPreview = (MainView) findViewById(R.id.preview);
-        initializeModel();
+        mPreview = (NovaKeyPreview) findViewById(R.id.preview);
+        mModel = new MainModel(this);
         mPreview.setModel(mModel);
 
         final CheckBox autoCheck = (CheckBox)findViewById(R.id.autoColor);
@@ -49,6 +47,7 @@ public class StylePreferenceActivity extends AbstractPreferenceActivity {
         final CheckBox _3dCheck = (CheckBox)findViewById(R.id.threeDee);
         _3dCheck.setChecked(mModel.getTheme().is3D());
         _3dCheck.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            System.out.println("3d triggered");
             mModel.getTheme().set3D(isChecked);
             mPreview.invalidate();
         });
@@ -85,30 +84,9 @@ public class StylePreferenceActivity extends AbstractPreferenceActivity {
         });
     }
 
-    private void initializeModel() {
-        mModel = new MainModel(this);
-
-        float w = mPreview.getWidth();
-        float h = mPreview.getHeight();
-        float r = Math.min(h - mPreview.getPaddingTop() - mPreview.getPaddingBottom(),
-                w - mPreview.getPaddingRight() - mPreview.getPaddingLeft());
-        r /= 2;
-        float x = w / 2;
-        float y = mPreview.getPaddingTop() + r;
-        float sr = r / 3;
-
-        mModel.setWidth((int)w);
-        mModel.setHeight((int)h);
-        mModel.setRadius(r);
-        mModel.setSmallRadius(sr);
-        mModel.setPadding(mPreview.getPaddingTop());
-        mModel.setX(x);
-        mModel.setY(y);
-    }
-
     @Override
     int getLayoutId() {
-        return R.layout.layout_style_preference;
+        return R.layout.style_preference_layout;
     }
 
     /**

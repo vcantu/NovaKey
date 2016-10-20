@@ -6,10 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import viviano.cantu.novakey.controller.actions.SetOverlayAction;
+import viviano.cantu.novakey.controller.actions.input.KeyAction;
 import viviano.cantu.novakey.model.elements.OverlayElement;
 import viviano.cantu.novakey.model.Model;
 import viviano.cantu.novakey.controller.Controller;
-import viviano.cantu.novakey.controller.actions.typing.InputAction;
+import viviano.cantu.novakey.controller.actions.input.InputAction;
 import viviano.cantu.novakey.controller.touch.RotatingHandler;
 import viviano.cantu.novakey.controller.touch.TouchHandler;
 import viviano.cantu.novakey.view.drawing.drawables.Drawable;
@@ -229,9 +230,9 @@ public class InfiniteMenu implements OverlayElement, Menu {
          */
         @Override
         protected boolean onUp(Controller controller) {
-            mIndex = 0;//reset index
             controller.fire(mEntries.get(mIndex).action);
             controller.fire(new SetOverlayAction(controller.getModel().getKeyboard()));
+            mIndex = 0;//reset index
             return false;
         }
     }
@@ -250,7 +251,7 @@ public class InfiniteMenu implements OverlayElement, Menu {
                 for (int i=0; i<s.length(); i++) {
                     entries.add(new Entry(
                             s.charAt(i),
-                            new InputAction(s.charAt(i))));
+                            new KeyAction(s.charAt(i))));
                 }
                 HIDDEN_KEYS.add(new InfiniteMenu(entries));
                 //TODO: make hidden keys not an array but a string array instead
@@ -266,9 +267,8 @@ public class InfiniteMenu implements OverlayElement, Menu {
      */
     public static InfiniteMenu getHiddenKeys(char parent) {
         for (InfiniteMenu menu : HIDDEN_KEYS) {
-            for (Menu.Entry o : menu.mEntries) {
-                if (((Character)o.data).charValue() == parent)
-                    return menu;
+            if (((Character)menu.mEntries.get(0).data).charValue() == parent) {
+                return menu;
             }
         }
         return null;

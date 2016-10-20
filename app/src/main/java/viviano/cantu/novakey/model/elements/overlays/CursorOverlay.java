@@ -17,8 +17,8 @@ public class CursorOverlay implements OverlayElement {
 
     private final TouchHandler mHandler;
 
-    public CursorOverlay() {
-        mHandler = new SelectingHandler();
+    public CursorOverlay(boolean clockwise) {
+        mHandler = new SelectingHandler(clockwise);
     }
 
     /**

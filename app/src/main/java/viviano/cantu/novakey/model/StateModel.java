@@ -4,8 +4,6 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 
 import viviano.cantu.novakey.model.elements.keyboards.Keyboard;
-import viviano.cantu.novakey.model.states.InputState;
-import viviano.cantu.novakey.model.states.ShiftState;
 
 /**
  * Created by Viviano on 6/10/2016.

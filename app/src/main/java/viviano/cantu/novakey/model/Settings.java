@@ -2,6 +2,7 @@ package viviano.cantu.novakey.model;
 
 import android.content.SharedPreferences;
 
+import viviano.cantu.novakey.BuildConfig;
 import viviano.cantu.novakey.model.loaders.ThemeFactory;
 import viviano.cantu.novakey.view.themes.MasterTheme;
 
@@ -9,7 +10,6 @@ import viviano.cantu.novakey.view.themes.MasterTheme;
  * Created by Viviano on 6/22/2015.
  */
 public class Settings {
-    private static final int CURR_VERSION = 24;
 
     //KEYS
     public static String
@@ -81,8 +81,8 @@ public class Settings {
 
         //Integer settings
         //this will only default to the given number if the person has never had this preference
-        startVersion = prefs.getInt(pref_start_version, CURR_VERSION);
-        if (startVersion == CURR_VERSION)
+        startVersion = prefs.getInt(pref_start_version, BuildConfig.VERSION_CODE);
+        if (startVersion == BuildConfig.VERSION_CODE)
             edit.putInt(pref_start_version, startVersion);
 
         longPressTime = prefs.getInt(pref_long_press_time, 500);

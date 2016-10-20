@@ -1,6 +1,7 @@
 package viviano.cantu.novakey.view.themes.button;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 
 import viviano.cantu.novakey.view.drawing.Font;
@@ -49,8 +50,8 @@ public class BaseButtonTheme implements ButtonTheme {
      */
     @Override
     public void drawIcon(Drawable drawable, float x, float y, float size, Canvas canvas) {
-        if (mParent.is3D())
-            p.setShadowLayer(100, 0, 100, 0x80000000);//TODO: globalize shadow height
+        if (mParent.is3D() && false)
+            p.setShadowLayer(50, 0, 50, 0x80000000);//TODO: globalize shadow height
         p.setStyle(Paint.Style.FILL);
         p.setColor(mParent.getContrastColor());
         drawable.draw(x, y, size, p, canvas);
