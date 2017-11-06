@@ -5,14 +5,17 @@ import android.inputmethodservice.Keyboard;
 import android.view.MotionEvent;
 
 import viviano.cantu.novakey.controller.Controller;
-import viviano.cantu.novakey.controller.touch.TouchHandler;
+import viviano.cantu.novakey.controller.touch.handlers.TouchHandler;
 import viviano.cantu.novakey.model.Model;
+import viviano.cantu.novakey.model.elements.keyboards.overlays.OverlayElement;
 import viviano.cantu.novakey.utils.Util;
 import viviano.cantu.novakey.view.themes.MasterTheme;
 import viviano.cantu.novakey.view.themes.board.BoardTheme;
 
 /**
  * Created by Viviano on 6/20/2016.
+ *
+ * Main keyboard element, must have an overlay
  */
 public class MainElement implements Element, TouchHandler {
 

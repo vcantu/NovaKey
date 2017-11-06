@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import viviano.cantu.novakey.model.elements.keyboards.Keyboard;
+import viviano.cantu.novakey.model.elements.keyboards.overlays.OverlayElement;
 
 /**
  * Created by Viviano on 8/21/2016.
  *
  * Manages the elements with the default behavior.
+ *
+ * Default behavior is to always have a MainElement
  * The main element is always at the end of the list
  */
 public class DefaultElementManager implements ElementManager {

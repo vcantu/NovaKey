@@ -9,6 +9,7 @@ import android.preference.PreferenceManager;
 import android.text.InputType;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
@@ -17,9 +18,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import viviano.cantu.novakey.controller.Controller;
+import viviano.cantu.novakey.utils.Print;
 import viviano.cantu.novakey.view.drawing.Font;
 import viviano.cantu.novakey.view.drawing.Icons;
-import viviano.cantu.novakey.model.elements.menus.InfiniteMenu;
+import viviano.cantu.novakey.model.elements.keyboards.overlays.menus.InfiniteMenu;
 import viviano.cantu.novakey.settings.Colors;
 import viviano.cantu.novakey.model.Settings;
 import viviano.cantu.novakey.view.themes.AppTheme;
@@ -89,7 +91,11 @@ public class NovaKey extends InputMethodService {
 	public View onCreateInputView() {
 		AppTheme.load(this, getResources());
 
-		return mController.getView();
+		View v = mController.getView();
+		//must review parent
+		if (v.getParent() != null)
+			((ViewGroup)v.getParent()).removeView(v);
+		return v;
 	}
 
     public void addWindow(View view, boolean fullscreen) {

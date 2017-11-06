@@ -3,7 +3,6 @@ package viviano.cantu.novakey.controller;
 import viviano.cantu.novakey.NovaKey;
 import viviano.cantu.novakey.controller.actions.Action;
 import viviano.cantu.novakey.controller.touch.NovaKeyListener;
-import viviano.cantu.novakey.controller.touch.TouchHandler;
 import viviano.cantu.novakey.model.MainModel;
 import viviano.cantu.novakey.model.Model;
 import viviano.cantu.novakey.view.NovaKeyView;

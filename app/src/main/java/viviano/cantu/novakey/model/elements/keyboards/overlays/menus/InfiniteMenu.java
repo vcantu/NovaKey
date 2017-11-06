@@ -1,4 +1,4 @@
-package viviano.cantu.novakey.model.elements.menus;
+package viviano.cantu.novakey.model.elements.keyboards.overlays.menus;
 
 import android.graphics.Canvas;
 
@@ -7,12 +7,11 @@ import java.util.List;
 
 import viviano.cantu.novakey.controller.actions.SetOverlayAction;
 import viviano.cantu.novakey.controller.actions.input.KeyAction;
-import viviano.cantu.novakey.model.elements.OverlayElement;
+import viviano.cantu.novakey.model.elements.keyboards.overlays.OverlayElement;
 import viviano.cantu.novakey.model.Model;
 import viviano.cantu.novakey.controller.Controller;
-import viviano.cantu.novakey.controller.actions.input.InputAction;
-import viviano.cantu.novakey.controller.touch.RotatingHandler;
-import viviano.cantu.novakey.controller.touch.TouchHandler;
+import viviano.cantu.novakey.controller.touch.handlers.RotatingHandler;
+import viviano.cantu.novakey.controller.touch.handlers.TouchHandler;
 import viviano.cantu.novakey.view.drawing.drawables.Drawable;
 import viviano.cantu.novakey.view.drawing.drawables.TextDrawable;
 import viviano.cantu.novakey.view.themes.MasterTheme;

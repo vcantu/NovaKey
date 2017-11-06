@@ -1,4 +1,4 @@
-package viviano.cantu.novakey.model.elements.menus;
+package viviano.cantu.novakey.model.elements.keyboards.overlays.menus;
 
 import viviano.cantu.novakey.controller.actions.NoAction;
 import viviano.cantu.novakey.controller.actions.Action;

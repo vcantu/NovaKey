@@ -1,4 +1,4 @@
-package viviano.cantu.novakey.controller.touch;
+package viviano.cantu.novakey.controller.touch.handlers;
 
 import android.os.CountDownTimer;
 
@@ -11,13 +11,12 @@ import viviano.cantu.novakey.controller.actions.Action;
 import viviano.cantu.novakey.controller.actions.SetOverlayAction;
 import viviano.cantu.novakey.controller.actions.VibrateAction;
 import viviano.cantu.novakey.controller.actions.input.DeleteAction;
-import viviano.cantu.novakey.controller.actions.input.InputAction;
 import viviano.cantu.novakey.model.elements.keyboards.Key;
 import viviano.cantu.novakey.model.elements.keyboards.Keyboard;
-import viviano.cantu.novakey.model.elements.menus.InfiniteMenu;
+import viviano.cantu.novakey.model.elements.keyboards.overlays.menus.InfiniteMenu;
 import viviano.cantu.novakey.model.Settings;
-import viviano.cantu.novakey.model.elements.overlays.CursorOverlay;
-import viviano.cantu.novakey.model.elements.overlays.DeleteOverlay;
+import viviano.cantu.novakey.model.elements.keyboards.overlays.CursorOverlay;
+import viviano.cantu.novakey.model.elements.keyboards.overlays.DeleteOverlay;
 import viviano.cantu.novakey.utils.Util;
 
 /**

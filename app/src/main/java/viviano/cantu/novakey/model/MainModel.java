@@ -11,7 +11,7 @@ import viviano.cantu.novakey.controller.Corrections;
 import viviano.cantu.novakey.model.elements.DefaultElementManager;
 import viviano.cantu.novakey.model.elements.Element;
 import viviano.cantu.novakey.model.elements.ElementManager;
-import viviano.cantu.novakey.model.elements.OverlayElement;
+import viviano.cantu.novakey.model.elements.keyboards.overlays.OverlayElement;
 import viviano.cantu.novakey.model.elements.keyboards.Keyboard;
 import viviano.cantu.novakey.model.elements.keyboards.Keyboards;
 import viviano.cantu.novakey.view.themes.MasterTheme;

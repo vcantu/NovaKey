@@ -1,4 +1,4 @@
-package viviano.cantu.novakey.controller.touch;
+package viviano.cantu.novakey.controller.touch.handlers;
 
 import android.view.MotionEvent;
 

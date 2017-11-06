@@ -5,7 +5,7 @@ import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.controller.actions.Action;
 import viviano.cantu.novakey.controller.actions.input.KeyAction;
 import viviano.cantu.novakey.model.Model;
-import viviano.cantu.novakey.model.elements.menus.InfiniteMenu;
+import viviano.cantu.novakey.model.elements.keyboards.overlays.menus.InfiniteMenu;
 import viviano.cantu.novakey.model.ShiftState;
 import viviano.cantu.novakey.view.drawing.Font;
 import viviano.cantu.novakey.view.drawing.drawables.TextDrawable;

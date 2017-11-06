@@ -1,24 +1,25 @@
-package viviano.cantu.novakey.model.elements.overlays;
+package viviano.cantu.novakey.model.elements.keyboards.overlays;
 
 import android.graphics.Canvas;
 
-import viviano.cantu.novakey.controller.touch.SelectingHandler;
-import viviano.cantu.novakey.controller.touch.TouchHandler;
+import viviano.cantu.novakey.controller.touch.handlers.DeleteHandler;
+import viviano.cantu.novakey.controller.touch.handlers.TouchHandler;
 import viviano.cantu.novakey.model.Model;
-import viviano.cantu.novakey.model.elements.OverlayElement;
 import viviano.cantu.novakey.view.drawing.Icons;
+import viviano.cantu.novakey.view.drawing.drawables.Drawable;
 import viviano.cantu.novakey.view.themes.MasterTheme;
-import viviano.cantu.novakey.view.themes.board.BoardTheme;
 
 /**
  * Created by Viviano on 9/2/2016.
  */
-public class CursorOverlay implements OverlayElement {
+public class DeleteOverlay implements OverlayElement {
 
     private final TouchHandler mHandler;
+    private final Drawable mIcon;
 
-    public CursorOverlay(boolean clockwise) {
-        mHandler = new SelectingHandler(clockwise);
+    public DeleteOverlay() {
+        mHandler = new DeleteHandler();
+        mIcon = Icons.get("backspace");
     }
 
     /**
@@ -32,17 +33,8 @@ public class CursorOverlay implements OverlayElement {
      */
     @Override
     public void draw(Model model, MasterTheme theme, Canvas canvas) {
-        BoardTheme board = theme.getBoardTheme();
-
-        int cursorCode = model.getCursorMode();
-        board.drawItem(Icons.cursors, model.getX(), model.getY(),
-                model.getSmallRadius(), canvas);
-        if (cursorCode >= 0)
-            board.drawItem(Icons.cursorLeft, model.getX(), model.getY(),
-                    model.getSmallRadius(), canvas);
-        if (cursorCode <= 0)
-            board.drawItem(Icons.cursorRight, model.getX(), model.getY(),
-                    model.getSmallRadius(), canvas);
+        theme.getBoardTheme().drawItem(mIcon, model.getX(), model.getY(),
+                model.getSmallRadius() * .8f, canvas);
     }
 
     /**

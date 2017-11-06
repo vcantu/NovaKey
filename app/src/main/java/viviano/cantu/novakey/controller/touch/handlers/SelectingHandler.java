@@ -1,4 +1,4 @@
-package viviano.cantu.novakey.controller.touch;
+package viviano.cantu.novakey.controller.touch.handlers;
 
 import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.controller.actions.Action;

@@ -12,6 +12,8 @@ import viviano.cantu.novakey.utils.Util;
 
 /**
  * Created by Viviano on 6/16/2016.
+ *
+ * Represents the state of a typing session
  */
 public class InputState {
 

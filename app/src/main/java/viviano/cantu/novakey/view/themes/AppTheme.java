@@ -78,7 +78,7 @@ public class AppTheme {
             }
             loadFromJSON(sb.toString());
         } catch (FileNotFoundException e) {
-            Log.e("FileNotFoundExceptio ", "app_colors.json does not exist");
+            Log.e("FileNotFoundException", "app_colors.json does not exist");
         } catch (IOException e) {
             Log.e("IOException", "app_colors.json is empty");
         }

@@ -20,6 +20,8 @@ import viviano.cantu.novakey.view.themes.board.SeparateSectionsTheme;
 
 /**
  * Created by Viviano on 2/4/2016.
+ *
+ * Static Methods for generating Themes
  */
 public class ThemeFactory {
 

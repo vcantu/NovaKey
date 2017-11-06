@@ -1,6 +1,4 @@
-package viviano.cantu.novakey.controller.touch;
-
-import java.util.Objects;
+package viviano.cantu.novakey.controller.touch.handlers;
 
 /**
  * TODO: add velocityX & velocityY to crossEvent

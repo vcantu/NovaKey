@@ -4,9 +4,9 @@ import android.os.CountDownTimer;
 import android.view.MotionEvent;
 import android.view.View;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import viviano.cantu.novakey.controller.touch.handlers.TouchHandler;
 import viviano.cantu.novakey.model.elements.Element;
 import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.controller.actions.SetEditingAction;

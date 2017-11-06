@@ -6,7 +6,7 @@ import android.view.MotionEvent;
 
 import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.controller.actions.Action;
-import viviano.cantu.novakey.controller.touch.TouchHandler;
+import viviano.cantu.novakey.controller.touch.handlers.TouchHandler;
 import viviano.cantu.novakey.model.elements.Element;
 import viviano.cantu.novakey.model.Model;
 import viviano.cantu.novakey.model.Settings;

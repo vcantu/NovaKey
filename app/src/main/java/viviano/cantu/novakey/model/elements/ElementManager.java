@@ -2,10 +2,12 @@ package viviano.cantu.novakey.model.elements;
 
 import java.util.List;
 
+import viviano.cantu.novakey.model.elements.keyboards.overlays.OverlayElement;
+
 /**
  * Created by Viviano on 8/21/2016.
  *
- * THis will store and manage elements.
+ * This will store and manage elements.
  * It will receive updates and update the element list appropriately
  *
  */

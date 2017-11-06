@@ -8,6 +8,9 @@ import java.util.NoSuchElementException;
 
 /**
  * Created by Viviano on 8/27/2016.
+ *
+ * Holds a list of "Constructors" which can be used to instanciate new objects
+ * using the construct(Class) method
  */
 public abstract class InstanceList<T> implements Iterator<T>, Iterable<T> {
 

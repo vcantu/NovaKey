@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import viviano.cantu.novakey.controller.actions.Action;
-import viviano.cantu.novakey.controller.touch.TouchHandler;
-import viviano.cantu.novakey.controller.touch.TypingHandler;
-import viviano.cantu.novakey.model.elements.OverlayElement;
+import viviano.cantu.novakey.controller.touch.handlers.TouchHandler;
+import viviano.cantu.novakey.controller.touch.handlers.TypingHandler;
+import viviano.cantu.novakey.model.elements.keyboards.overlays.OverlayElement;
 import viviano.cantu.novakey.model.Model;
 import viviano.cantu.novakey.model.Settings;
 import viviano.cantu.novakey.utils.Util;

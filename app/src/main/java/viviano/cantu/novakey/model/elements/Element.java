@@ -2,7 +2,7 @@ package viviano.cantu.novakey.model.elements;
 
 import android.graphics.Canvas;
 
-import viviano.cantu.novakey.controller.touch.TouchHandler;
+import viviano.cantu.novakey.controller.touch.handlers.TouchHandler;
 import viviano.cantu.novakey.model.Model;
 import viviano.cantu.novakey.view.themes.MasterTheme;
 
