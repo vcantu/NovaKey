@@ -1,19 +1,27 @@
 package viviano.cantu.novakey.model;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import viviano.cantu.novakey.controller.BasicCorrections;
+import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.controller.Corrections;
-import viviano.cantu.novakey.model.elements.DefaultElementManager;
-import viviano.cantu.novakey.model.elements.Element;
-import viviano.cantu.novakey.model.elements.ElementManager;
-import viviano.cantu.novakey.model.elements.keyboards.overlays.OverlayElement;
-import viviano.cantu.novakey.model.elements.keyboards.Keyboard;
-import viviano.cantu.novakey.model.elements.keyboards.Keyboards;
+import viviano.cantu.novakey.elements.Element;
+import viviano.cantu.novakey.elements.MainElement;
+import viviano.cantu.novakey.elements.keyboards.overlays.OverlayElement;
+import viviano.cantu.novakey.elements.keyboards.Keyboard;
+import viviano.cantu.novakey.elements.keyboards.Keyboards;
+import viviano.cantu.novakey.model.loaders.ElementsLoader;
+import viviano.cantu.novakey.model.loaders.KeyboardsLoader;
+import viviano.cantu.novakey.model.loaders.Loader;
+import viviano.cantu.novakey.model.loaders.MainDimensionsLoader;
+import viviano.cantu.novakey.model.loaders.ThemeLoader;
 import viviano.cantu.novakey.view.themes.MasterTheme;
 
 /**
@@ -25,14 +33,13 @@ import viviano.cantu.novakey.view.themes.MasterTheme;
  *
  */
 public class MainModel implements Model {
+    //Loaders
+    private final Loader<List<Element>> mElementLoader;
+    private final Loader<MainDimensions> mMainDimensionsLoader;
+    private final Loader<MasterTheme> mThemeLoader;
+    private final Loader<Keyboards> mKeyboardsLoader;
 
-    private UpdateListener mListener;
-
-    private final TrueModel mTrueModel;
-
-    //Dimensions
-    private int mWidth, mHeight;
-    private float mX, mY, mRadius, mSmallRadius, mPadding;
+    private MainDimensions mDimensions;
 
     //Theme
     private MasterTheme mTheme;
@@ -43,15 +50,21 @@ public class MainModel implements Model {
     private InputState mInputState;
 
     //Keyboard
-    private int mKeyboardCode = 0;
+    private int mKeyboardCode = Keyboards.DEFAULT;
     private Keyboards mKeyboards;
 
     //Elements
-    private final ElementManager mElements;
+    private MainElement mMain;
+    private final List<Element> mElements;
 
 
     public MainModel(Context context) {
-        mTrueModel = new TrueModel(context);
+        //loaders
+        mThemeLoader = new ThemeLoader(context);
+        mMainDimensionsLoader = new MainDimensionsLoader(context);
+        mElementLoader = new ElementsLoader();
+        mKeyboardsLoader = new KeyboardsLoader(context);
+
         syncWithPrefs();
 
         //Input State determined during start
@@ -62,10 +75,12 @@ public class MainModel implements Model {
 
         mShiftState = ShiftState.UPPERCASE;
 
-        mElements = new DefaultElementManager(mKeyboards.get(Keyboards.DEFAULT));
-        List<Element> btns = mTrueModel.getButtons();
+
+        mMain = new MainElement(getKeyboard());
+        mElements = new ArrayList<>();
+        List<Element> btns = mElementLoader.load();
         for (Element b : btns) {
-            mElements.addElement(b);
+            mElements.add(b);
         }
     }
 
@@ -75,142 +90,34 @@ public class MainModel implements Model {
      */
     @Override
     public void syncWithPrefs() {
-        mWidth = mTrueModel.getWidth();
-        mHeight = mTrueModel.getHeight();
-        mX = mTrueModel.getX();
-        mY = mTrueModel.getY();
-        mRadius = mTrueModel.getRadius();
-        mSmallRadius = mTrueModel.getSmallRadius();
-        mPadding = mTrueModel.getPadding();
-
-        mTheme = mTrueModel.getTheme();
-
-        mKeyboards = mTrueModel.getKeyboards();
+        mDimensions = mMainDimensionsLoader.load();
+        mTheme = mThemeLoader.load();
+        mKeyboards = mKeyboardsLoader.load();
     }
 
-    /**
-     * @return the width of the board
-     */
     @Override
-    public int getWidth() {
-        return mWidth;
+    public List<Element> getElements() {
+        List<Element> list = new ArrayList<>(mElements);
+        list.add(0, mMain);//first element
+        return list;
     }
 
-    /**
-     * @param width width to set
-     */
+
     @Override
-    public void setWidth(int width) {
-        mWidth = width;
+    public void setOverlayElement(OverlayElement element) {
+        mMain.setOverlay(element);
     }
 
-    /**
-     * @return the height of the board
-     */
     @Override
-    public int getHeight() {
-        return mHeight;
+    public MainDimensions getMainDimensions() {
+        return mDimensions;
     }
 
-    /**
-     * @param height height to set
-     */
-    @Override
-    public void setHeight(int height) {
-        mHeight = height;
-    }
-
-    /**
-     * @return the center X position of the board
-     */
-    @Override
-    public float getX() {
-        return mX;
-    }
-
-    /**
-     * @param x x coord to set
-     */
-    @Override
-    public void setX(float x) {
-        mX = x;
-    }
-
-    /**
-     * @return the center Y position of the board
-     */
-    @Override
-    public float getY() {
-        return mY;
-    }
-
-    /**
-     * @param y y coord to set
-     */
-    @Override
-    public void setY(float y) {
-        mY = y;
-    }
-
-    /**
-     * @return the radius of the board
-     */
-    @Override
-    public float getRadius() {
-        return mRadius;
-    }
-
-    /**
-     * @param radius radius to set
-     */
-    @Override
-    public void setRadius(float radius) {
-        mRadius = radius;
-    }
-
-    /**
-     * @return the small radius of the board
-     */
-    @Override
-    public float getSmallRadius() {
-        return mSmallRadius;
-    }
-
-    /**
-     * @param smallRadius radius to set
-     */
-    @Override
-    public void setSmallRadius(float smallRadius) {
-        mSmallRadius = smallRadius;
-    }
-
-    /**
-     * @return the top vertical padding
-     */
-    @Override
-    public float getPadding() {
-        return mPadding;
-    }
-
-    /**
-     * @param padding padding to set
-     */
-    @Override
-    public void setPadding(float padding) {
-        mPadding = padding;
-    }
-
-    /**
-     * @return this model's theme
-     */
     @Override
     public MasterTheme getTheme() {
         return mTheme;
     }
 
-    /**
-     * @param theme theme to set
-     */
     @Override
     public void setTheme(MasterTheme theme) {
         mTheme = theme;
@@ -237,7 +144,7 @@ public class MainModel implements Model {
 
         //reads theme from preferences & colors according to the app
         if (Settings.autoColor)
-            setTheme(mTrueModel.getTheme().setPackage(editorInfo.packageName));
+            mTheme.setPackage(editorInfo.packageName);
 
         switch (mInputState.getType()) {
             default:
@@ -256,7 +163,6 @@ public class MainModel implements Model {
         }
 
         //TODO: update shiftstate
-        update();
     }
 
     /**
@@ -282,7 +188,6 @@ public class MainModel implements Model {
     public void setKeyboard(int code) {
         mKeyboardCode = code;
         setOverlayElement(getKeyboard());
-        update();
     }
 
     /**
@@ -299,7 +204,6 @@ public class MainModel implements Model {
     @Override
     public void setShiftState(ShiftState shiftState) {
         this.mShiftState = shiftState;
-        update();
     }
 
     /**
@@ -327,68 +231,5 @@ public class MainModel implements Model {
         if (cursorMode < -1 || cursorMode > 1)
             throw new IllegalArgumentException(cursorMode + " is outside the range [-1, 1]");
         mCursorMode = cursorMode;
-    }
-
-    /**
-     * Update's it's update listener. Typically a view.
-     * Call this, rather than invalidating a view directly to limit access &
-     * to guarantee that the view attached to this model is updated accordingly.
-     */
-    @Override
-    public void update() {
-        if (mListener != null)
-            mListener.onUpdate();
-    }
-
-    /**
-     * Set this model's update listener
-     *
-     * @param listener called when the model updates
-     */
-    @Override
-    public void setUpdateListener(UpdateListener listener) {
-        this.mListener = listener;
-    }
-
-    /**
-     * @return a list of elements where:
-     * the first on the list are the first drawn.
-     * Used by a view to draw, or touch listeners to send events to
-     * the first handlers on the list
-     */
-    @Override
-    public List<Element> getElements() {
-        return mElements.getElements();
-    }
-
-    /**
-     * Replaces or adds the given element to the topmost element which lives
-     * on top of the main element
-     *
-     * @param element element to live on th
-     */
-    @Override
-    public void setOverlayElement(OverlayElement element) {
-        mElements.setOverlayElement(element);
-        update();
-    }
-
-    /**
-     * clears the overlaying element
-     */
-    @Override
-    public void removeOverlayElement() {
-        mElements.removeOverlayElement();
-        update();
-    }
-
-    /**
-     * adds a new element to the stack below the main and overlay elements
-     *
-     * @param element element to add
-     */
-    @Override
-    public void addElement(Element element) {
-        mElements.addElement(element);
     }
 }

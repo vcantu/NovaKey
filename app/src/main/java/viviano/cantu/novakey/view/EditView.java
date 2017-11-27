@@ -12,7 +12,6 @@ import android.widget.SeekBar;
 import viviano.cantu.novakey.R;
 import viviano.cantu.novakey.controller.Gun;
 import viviano.cantu.novakey.controller.actions.SetEditingAction;
-import viviano.cantu.novakey.model.TrueModel;
 import viviano.cantu.novakey.settings.widgets.FloatingButton;
 import viviano.cantu.novakey.setup.IconView;
 import viviano.cantu.novakey.view.drawing.Icons;
@@ -53,8 +52,7 @@ public class EditView extends RelativeLayout implements Themeable {
         mSeekBar = (SeekBar)findViewById(R.id.seek_bar);
         mSeekBar.setMax(MAX - MIN);
 
-        TrueModel tm = new TrueModel(context);
-        float sr = tm.getRadius() / tm.getSmallRadius();
+        float sr = mResizeView.getRadius() / mResizeView.getSmallRadius();
         mSeekBar.setProgress(srToProgress(sr));
         mResizeView.setSmallRadius(sr);
         mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -77,31 +75,11 @@ public class EditView extends RelativeLayout implements Themeable {
         mResetSr = (IconView)findViewById(R.id.reset_sr);
         mResetSr.setIcon(Icons.get("refresh"));
         mResetSr.setSize(.8f);
-        mResetSr.setClickListener(new IconView.OnClickListener() {
-            @Override
-            public void onClick() {
-                mSeekBar.setProgress(srToProgress(DEFAULT));
-            }
-        });
+        mResetSr.setClickListener(() -> mSeekBar.setProgress(srToProgress(DEFAULT)));
 
-        mCancel.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onCancel();
-            }
-        });
-        mRefresh.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onRefresh();
-            }
-        });
-        mAccept.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onSave();
-            }
-        });
+        mCancel.setOnClickListener(v -> onCancel());
+        mRefresh.setOnClickListener(v -> onRefresh());
+        mAccept.setOnClickListener(v -> onSave());
     }
 
     /**

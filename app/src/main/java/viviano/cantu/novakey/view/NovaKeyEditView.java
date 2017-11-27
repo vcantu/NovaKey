@@ -11,8 +11,10 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import viviano.cantu.novakey.R;
+import viviano.cantu.novakey.model.MainDimensions;
 import viviano.cantu.novakey.model.Settings;
-import viviano.cantu.novakey.model.TrueModel;
+import viviano.cantu.novakey.model.loaders.Loader;
+import viviano.cantu.novakey.model.loaders.MainDimensionsLoader;
 import viviano.cantu.novakey.view.themes.MasterTheme;
 import viviano.cantu.novakey.view.themes.Themeable;
 import viviano.cantu.novakey.view.themes.board.BoardTheme;
@@ -21,16 +23,15 @@ import viviano.cantu.novakey.utils.Util;
 
 public class NovaKeyEditView extends View implements View.OnTouchListener, Themeable {
 
-    //Theme to use
     private MasterTheme mTheme;
 
-    private final TrueModel mModel;
 
     //Dimensions
     private final int screenWidth, screenHeight;//in pixels
+    private final Loader<MainDimensions> mMainDimensionsLoader;
+    private final MainDimensions mDimens;
     private int viewWidth, viewHeight;
     private float centerX, centerY;
-    //circle
     private float radius, smallRadius;
     //Drawing
     private Paint p;
@@ -60,7 +61,8 @@ public class NovaKeyEditView extends View implements View.OnTouchListener, Theme
         screenWidth = metrics.widthPixels;
         screenHeight = metrics.heightPixels;
 
-        mModel = new TrueModel(context);
+        mMainDimensionsLoader = new MainDimensionsLoader(context);
+        mDimens = mMainDimensionsLoader.load();
     }
 
     /**
@@ -81,11 +83,11 @@ public class NovaKeyEditView extends View implements View.OnTouchListener, Theme
         viewWidth = screenWidth;
         viewHeight = screenHeight;
 
-        radius = mModel.getRadius();
-        smallRadius = mModel.getRadius() / mModel.getSmallRadius();
+        radius = mDimens.getRadius();
+        smallRadius = mDimens.getRadius() / mDimens.getSmallRadius();
 
         //sets location to saved size
-        centerX = mModel.getX();
+        centerX = mDimens.getX();
 
         //centerY will be set after method
         setMeasuredDimension(viewWidth, viewHeight);
@@ -93,7 +95,7 @@ public class NovaKeyEditView extends View implements View.OnTouchListener, Theme
         viewWidth = MeasureSpec.getSize(widthMeasureSpec);
         viewHeight = MeasureSpec.getSize(heightMeasureSpec);//fixes title bar
 
-        centerY = viewHeight - mModel.getY();
+        centerY = viewHeight - mDimens.getY();
     }
 
     @Override
@@ -187,10 +189,18 @@ public class NovaKeyEditView extends View implements View.OnTouchListener, Theme
     }
 
     public void saveDimens() {
-        mModel.setRadius(radius);
-        mModel.setSmallRadius(smallRadius);
-        mModel.setX(centerX);
-        mModel.setY(viewHeight - centerY);
+        mDimens.setRadius(radius);
+        mDimens.setSmallRadius(smallRadius);
+        mDimens.setX(centerX);
+        mDimens.setY(viewHeight - centerY);
+        mMainDimensionsLoader.save(mDimens);
+    }
+
+    public float getRadius() {
+        return radius;
+    }
+    public float getSmallRadius() {
+        return smallRadius;
     }
 
     public void setSmallRadius(float sr) {

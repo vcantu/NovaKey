@@ -1,37 +1,113 @@
 package viviano.cantu.novakey.model;
 
-import viviano.cantu.novakey.model.elements.ElementManager;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputConnection;
+
+import java.util.List;
+
+import viviano.cantu.novakey.elements.Element;
+import viviano.cantu.novakey.elements.keyboards.Keyboard;
+import viviano.cantu.novakey.elements.keyboards.overlays.OverlayElement;
+import viviano.cantu.novakey.view.themes.MasterTheme;
 
 /**
  * Created by Viviano on 6/6/2016.
+ *
+ * Provides all starting data
  */
-public interface Model
-        extends DrawModel, StateModel, ElementManager {
+public interface Model {
 
     /**
-     * Syncs the models with the user preferenes
+     * @return a list of elements where:
+     * the first on the list are the first drawn.
+     * Used by a view to draw, or touch listeners to send events to
+     * the first handlers on the list
+     */
+    List<Element> getElements();
+
+    /**
+     * Replaces or adds the given element to the topmost element which lives
+     * on top of the main element
+     *
+     * @param element element to live on top of the main element
+     */
+    void setOverlayElement(OverlayElement element);
+
+    /**
+     * @return main dimensions of the keyboard, update this object to update dimensions
+     */
+    MainDimensions getMainDimensions();
+
+    /**
+     * @return this model's theme
+     */
+    MasterTheme getTheme();
+
+    /**
+     * @param theme theme to set
+     */
+    void setTheme(MasterTheme theme);
+
+    /**
+     * Syncs the models with the user preferences
      *
      */
     void syncWithPrefs();
 
     /**
-     * Update's it's update listener. Typically a view.
-     * Call this, rather than invalidating a view directly to limit access &
-     * to guarantee that the view attached to this model is updated accordingly.
+     * @return the current input state
      */
-    void update();
+    InputState getInputState();
 
     /**
-     * Set this model's update listener
+     * Uses the given editor info to update the input state
      *
-     * @param listener called when th
+     * @param editorInfo info used to generate input state
+     * @param inputConnection
      */
-    void setUpdateListener(UpdateListener listener);
+    void onStart(EditorInfo editorInfo, InputConnection inputConnection);
 
-    public interface UpdateListener {
-        /**
-         * Called every time the model updates and it's view should be redrawn
-         */
-        void onUpdate();
-    }
+    /**
+     * @return the key layout that should be drawn
+     */
+    Keyboard getKeyboard();
+
+    /**
+     * @return the code/index of the current keyboard
+     */
+    int getKeyboardCode();
+
+    /**
+     * @param code key layout code
+     */
+    void setKeyboard(int code);
+
+    /**
+     * @return the shift state of the keyboard
+     */
+    ShiftState getShiftState();
+
+    /**
+     * @param shiftState the shiftState to set the keyboard to
+     */
+    void setShiftState(ShiftState shiftState);
+
+    /**
+     * if cursor mode is 0 both the left and the right are moving,
+     * if cursor mode is -1 the left only is moving,
+     * if cursor mode is 1 the right only is moving
+     *
+     * @return cursor mode
+     */
+    int getCursorMode();
+
+    /**
+     * if cursor mode is 0 both the left and the right are moving,
+     * if cursor mode is -1 the left only is moving,
+     * if cursor mdoe is 1 the right only is moving
+     *
+     * @param cursorMode cursor mode to set
+     * @throws IllegalArgumentException if the param is outside the range [-1, 1]
+     */
+    void setCursorMode(int cursorMode);
 }

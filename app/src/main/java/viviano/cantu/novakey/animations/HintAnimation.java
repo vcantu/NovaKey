@@ -2,12 +2,10 @@ package viviano.cantu.novakey.animations;
 
 import android.animation.TimeInterpolator;
 import android.view.animation.AccelerateInterpolator;
-import android.view.animation.OvershootInterpolator;
 
 import viviano.cantu.novakey.animations.utils.Animator;
-import viviano.cantu.novakey.model.elements.keyboards.Key;
-import viviano.cantu.novakey.model.elements.keyboards.KeySizeAnimator;
-import viviano.cantu.novakey.utils.Util;
+import viviano.cantu.novakey.elements.keyboards.Key;
+import viviano.cantu.novakey.elements.keyboards.KeySizeAnimator;
 
 /**
  * Created by Viviano on 11/15/2015.

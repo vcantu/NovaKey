@@ -3,7 +3,7 @@ package viviano.cantu.novakey.controller.actions;
 import viviano.cantu.novakey.NovaKey;
 import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.model.Model;
-import viviano.cantu.novakey.model.elements.keyboards.overlays.OverlayElement;
+import viviano.cantu.novakey.elements.keyboards.overlays.OverlayElement;
 
 /**
  * Created by Viviano on 6/16/2016.

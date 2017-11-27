@@ -9,7 +9,8 @@ import java.util.Map;
 import viviano.cantu.novakey.animations.utils.Animator;
 import viviano.cantu.novakey.animations.utils.DelayableInterpolator;
 import viviano.cantu.novakey.animations.utils.MultiValueAnimator;
-import viviano.cantu.novakey.model.elements.keyboards.Key;
+import viviano.cantu.novakey.elements.keyboards.Key;
+import viviano.cantu.novakey.model.MainDimensions;
 import viviano.cantu.novakey.model.Model;
 import viviano.cantu.novakey.utils.Util;
 
@@ -62,7 +63,7 @@ public abstract class CharAnimation extends BaseAnimation {
 
             @Override
             public void onAllUpdate(ValueAnimator animator, float value) {
-                model.update();
+                //TODO: need way to update
             }
         });
 
@@ -95,21 +96,22 @@ public abstract class CharAnimation extends BaseAnimation {
      * @return the delay in milliseconds
      */
     private long getDelay(Model model, Key k, long max) {
+        MainDimensions d = model.getMainDimensions();
         if (mStyle == -1)
             return 0;
 
         if ((mStyle & RANDOM) == RANDOM)
             return (long) (Math.random() * max);
 
-        float x = model.getX(), y = model.getY();
+        float x = d.getX(), y = d.getY();
 
         if ((mStyle & RIGHT) == RIGHT)
-            x -= model.getRadius() * (((mStyle & FLIP_X) == FLIP_X) ? -1 : 1);
+            x -= d.getRadius() * (((mStyle & FLIP_X) == FLIP_X) ? -1 : 1);
         if ((mStyle & UP) == UP)
-            y += model.getRadius() * (((mStyle & FLIP_Y) == FLIP_Y) ? -1 : 1);;
+            y += d.getRadius() * (((mStyle & FLIP_Y) == FLIP_Y) ? -1 : 1);;
 
-        float dist = Util.distance(x, y, k.getPosn().getX(model), k.getPosn().getX(model));
-        float ratio = dist / (model.getRadius() * 2);
+        float dist = Util.distance(x, y, k.getPosn().getX(d), k.getPosn().getX(d));
+        float ratio = dist / (d.getRadius() * 2);
         return (long)(max * ratio);
     }
 }

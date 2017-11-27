@@ -18,10 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import viviano.cantu.novakey.controller.Controller;
-import viviano.cantu.novakey.utils.Print;
 import viviano.cantu.novakey.view.drawing.Font;
 import viviano.cantu.novakey.view.drawing.Icons;
-import viviano.cantu.novakey.model.elements.keyboards.overlays.menus.InfiniteMenu;
+import viviano.cantu.novakey.elements.keyboards.overlays.menus.InfiniteMenu;
 import viviano.cantu.novakey.settings.Colors;
 import viviano.cantu.novakey.model.Settings;
 import viviano.cantu.novakey.view.themes.AppTheme;

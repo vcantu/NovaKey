@@ -5,7 +5,7 @@ import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.controller.actions.Action;
 import viviano.cantu.novakey.controller.actions.SetKeyboardAction;
 import viviano.cantu.novakey.model.Model;
-import viviano.cantu.novakey.model.elements.keyboards.Keyboards;
+import viviano.cantu.novakey.elements.keyboards.Keyboards;
 import viviano.cantu.novakey.model.InputState;
 
 /**

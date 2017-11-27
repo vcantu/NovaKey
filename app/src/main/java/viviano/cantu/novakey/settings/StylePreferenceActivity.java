@@ -10,8 +10,8 @@ import viviano.cantu.novakey.R;
 import viviano.cantu.novakey.model.MainModel;
 import viviano.cantu.novakey.model.Model;
 import viviano.cantu.novakey.model.Settings;
-import viviano.cantu.novakey.model.TrueModel;
 import viviano.cantu.novakey.model.loaders.ThemeFactory;
+import viviano.cantu.novakey.model.loaders.ThemeLoader;
 import viviano.cantu.novakey.settings.widgets.NovaKeyPreview;
 import viviano.cantu.novakey.settings.widgets.pickers.ColorPicker;
 import viviano.cantu.novakey.settings.widgets.pickers.ReleasePicker;
@@ -104,7 +104,7 @@ public class StylePreferenceActivity extends AbstractPreferenceActivity {
             editor.putBoolean(Settings.pref_auto_color, mIsAuto);
             editor.commit();
 
-            new TrueModel(this).setTheme(mModel.getTheme());
+            new ThemeLoader(this).save(mModel.getTheme());
 
             Toast t = Toast.makeText(this, "Style Saved.", Toast.LENGTH_SHORT);
             t.show();

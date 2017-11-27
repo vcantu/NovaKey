@@ -1,6 +1,6 @@
 package viviano.cantu.novakey.view.posns;
 
-import viviano.cantu.novakey.model.DrawModel;
+import viviano.cantu.novakey.model.MainDimensions;
 import viviano.cantu.novakey.utils.Util;
 
 /**
@@ -24,7 +24,7 @@ public class RadiusPosn extends RelativePosn {
      * @return x coordinate based on the model dimensions
      */
     @Override
-    public float getX(DrawModel model) {
+    public float getX(MainDimensions model) {
         return Util.xFromAngle(model.getX(), model.getRadius() * distance, angle);
     }
 
@@ -33,7 +33,7 @@ public class RadiusPosn extends RelativePosn {
      * @return y coordinate based on the model dimensions
      */
     @Override
-    public float getY(DrawModel model) {
+    public float getY(MainDimensions model) {
         return Util.yFromAngle(model.getY(), model.getRadius() * distance, angle);
     }
 }

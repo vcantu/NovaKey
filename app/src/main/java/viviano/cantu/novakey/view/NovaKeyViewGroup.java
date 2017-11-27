@@ -3,8 +3,6 @@ package viviano.cantu.novakey.view;
 import android.content.Context;
 import android.view.ViewGroup;
 
-import viviano.cantu.novakey.model.TrueModel;
-
 /**
  * Created by Viviano on 6/6/2016.
  */

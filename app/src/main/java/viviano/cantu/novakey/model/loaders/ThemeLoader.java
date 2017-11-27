@@ -1,6 +1,8 @@
 package viviano.cantu.novakey.model.loaders;
 
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import viviano.cantu.novakey.model.Settings;
 import viviano.cantu.novakey.view.themes.MasterTheme;
@@ -12,8 +14,8 @@ public class ThemeLoader implements Loader<MasterTheme> {
 
     private final SharedPreferences mSharedPref;
 
-    public ThemeLoader(SharedPreferences sharedPreferences) {
-        mSharedPref = sharedPreferences;
+    public ThemeLoader(Context context) {
+        mSharedPref =  PreferenceManager.getDefaultSharedPreferences(context);;
     }
 
     /**

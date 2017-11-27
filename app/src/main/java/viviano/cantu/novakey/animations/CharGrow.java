@@ -4,8 +4,8 @@ import android.animation.TimeInterpolator;
 import android.view.animation.OvershootInterpolator;
 
 import viviano.cantu.novakey.animations.utils.Animator;
-import viviano.cantu.novakey.model.elements.keyboards.Key;
-import viviano.cantu.novakey.model.elements.keyboards.KeySizeAnimator;
+import viviano.cantu.novakey.elements.keyboards.Key;
+import viviano.cantu.novakey.elements.keyboards.KeySizeAnimator;
 
 /**
  * Created by Viviano on 10/27/2015.

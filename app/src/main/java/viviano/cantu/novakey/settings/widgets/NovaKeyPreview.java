@@ -2,6 +2,8 @@ package viviano.cantu.novakey.settings.widgets;
 
 import android.content.Context;
 import android.util.AttributeSet;
+
+import viviano.cantu.novakey.model.MainDimensions;
 import viviano.cantu.novakey.view.NovaKeyView;
 
 /**
@@ -29,12 +31,13 @@ public class NovaKeyPreview extends NovaKeyView {
         float y = getPaddingTop() + r;
         float sr = r / 3;
 
-        mModel.setWidth((int)w);
-        mModel.setHeight((int)h);
-        mModel.setRadius(r);
-        mModel.setSmallRadius(sr);
-        mModel.setPadding(getPaddingTop());
-        mModel.setX(x);
-        mModel.setY(y);
+        MainDimensions dimens = mModel.getMainDimensions();
+        dimens.setWidth((int)w);
+        dimens.setHeight((int)h);
+        dimens.setRadius(r);
+        dimens.setSmallRadius(sr);
+        dimens.setPadding(getPaddingTop());
+        dimens.setX(x);
+        dimens.setY(y);
     }
 }

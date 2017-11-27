@@ -5,23 +5,19 @@ import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.View;
 
-import viviano.cantu.novakey.controller.touch.NovaKeyListener;
+import viviano.cantu.novakey.elements.Element;
 import viviano.cantu.novakey.model.Model;
-import viviano.cantu.novakey.model.elements.Element;
+import viviano.cantu.novakey.view.themes.MasterTheme;
+import viviano.cantu.novakey.view.themes.Themeable;
 
 /**
  * Created by Viviano on 6/9/2016.
  */
-public abstract class NovaKeyView extends View {
+public abstract class NovaKeyView extends View implements Themeable {
 
     protected Model mModel;
+    protected MasterTheme mTheme;
 
-    /**
-     * Simple constructor to use when creating a view from code.
-     *
-     * @param context The Context the view is running in, through which it can
-     *                access the current theme, resources, etc.
-     */
     public NovaKeyView(Context context) {
         this(context, null);
     }
@@ -34,15 +30,14 @@ public abstract class NovaKeyView extends View {
         super(context, attrs, defStyleAttr);
     }
 
-    /**
-     * Sets this view's model which determines
-     * how to draw
-     *
-     * @param model model to set
-     */
+
     public void setModel(Model model) {
         mModel = model;
-        mModel.setUpdateListener(() -> invalidate());
+    }
+
+    @Override
+    public void setTheme(MasterTheme theme) {
+        mTheme = theme;
     }
 
     @Override
@@ -54,4 +49,5 @@ public abstract class NovaKeyView extends View {
             e.draw(mModel, mModel.getTheme(), canvas);
         }
     }
+
 }
