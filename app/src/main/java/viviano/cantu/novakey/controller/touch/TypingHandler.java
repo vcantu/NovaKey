@@ -1,3 +1,23 @@
+/*
+ * NovaKey - An alternative touchscreen input method
+ * Copyright (C) 2019  Viviano Cantu
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>
+ *
+ * Any questions about the program or source may be directed to <strellastudios@gmail.com>
+ */
+
 package viviano.cantu.novakey.controller.touch;
 
 import android.os.CountDownTimer;
@@ -9,6 +29,7 @@ import java.util.List;
 import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.controller.actions.Action;
 import viviano.cantu.novakey.controller.actions.SetOverlayAction;
+import viviano.cantu.novakey.controller.actions.UpdateSelectionAction;
 import viviano.cantu.novakey.controller.actions.VibrateAction;
 import viviano.cantu.novakey.controller.actions.input.DeleteAction;
 import viviano.cantu.novakey.elements.keyboards.Key;
@@ -136,12 +157,17 @@ public class TypingHandler extends AreaCrossedHandler {
             }
             if (Util.getGesture(mAreas) instanceof DeleteAction) {
                 //switch to delete handler
+                // First rotating event must be fired initially
+                controller.fire( new DeleteAction());
                 controller.fire(new SetOverlayAction(new DeleteOverlay()));
                 cancel();
                 return false;
             }
-            if (isRotating(mAreas)) {
-                controller.fire(new SetOverlayAction(new CursorOverlay(true)));
+            int rotatingStatus = getRotatingStatus(mAreas);
+            if (rotatingStatus != 0) {
+                // First rotating event must be fired initially
+                controller.fire( new UpdateSelectionAction(rotatingStatus == -1));
+                controller.fire(new SetOverlayAction(new CursorOverlay()));
                 cancel();
                 return false;
             }
@@ -158,7 +184,6 @@ public class TypingHandler extends AreaCrossedHandler {
      */
     @Override
     protected boolean onUp(Controller controller) {
-        System.out.println("ON UP!!!");
         cancel();
         if (!mRepeating) {
             controller.fire(mKeyboard.getKey(mAreas));
@@ -186,9 +211,9 @@ public class TypingHandler extends AreaCrossedHandler {
      * Determines if the user began rotating
      *
      * @param areasCrossed list of areas crossed
-     * @return if the user began rotating
+     * @return 0 if not rotating, -1 if clockwise 1 if counter clockwise
      */
-    private boolean isRotating(List<Integer> areasCrossed) {
+    private int getRotatingStatus(List<Integer> areasCrossed) {
         int checkIdx = 0;
         if (areasCrossed.get(0) == -1)
             checkIdx = 1;
@@ -201,12 +226,13 @@ public class TypingHandler extends AreaCrossedHandler {
             int two = areasCrossed.get(checkIdx + 1);
             int three = areasCrossed.get(checkIdx + 2);
             boolean hasZero = one == 0 || two == 0 || three == 0;
-            if (two != 3 && !hasZero && (
-                    ((one+1)%5 == two%5 && (two+1)%5 == three%5) ||
-                            ((three+1)%5 == two%5 && (two+1)%5 == one%5) )) {
-                return true;
+            if (two != 3 && !hasZero) {
+                if ((one+1)%5 == two%5 && (two+1)%5 == three%5)
+                    return 1;
+                if ((three+1)%5 == two%5 && (two+1)%5 == one%5)
+                    return -1;
             }
         }
-        return false;
+        return 0;
     }
 }

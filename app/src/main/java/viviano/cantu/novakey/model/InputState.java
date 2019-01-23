@@ -1,3 +1,23 @@
+/*
+ * NovaKey - An alternative touchscreen input method
+ * Copyright (C) 2019  Viviano Cantu
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>
+ *
+ * Any questions about the program or source may be directed to <strellastudios@gmail.com>
+ */
+
 package viviano.cantu.novakey.model;
 
 import android.text.InputType;
@@ -79,8 +99,68 @@ public class InputState {
         }
     }
 
-    public void updateSelection(int newSelStart, int newSelEnd) {
-        if (onPassword() && !Settings.autoCorrect)// or keyInserted?
+    /**
+     *
+     * @param newSelStart
+     * @param newSelEnd
+     */
+    public void onUpdateSelection(int newSelStart, int newSelEnd) {
+        if (!Settings.autoCorrect && shouldAutoCorrect())
+            return;
+        //set composing region
+        //if single cursor AND oldEnd is not newStart?
+        if (newSelStart == newSelEnd) {
+            ExtractedText et = getExtractedText();
+            if (et == null) {
+                mComposing.setLength(0);
+                return;
+            }
+            String text = et.text.toString();
+            if (text.length() == 0) {
+                mComposing.setLength(0);
+                return;
+            }
+
+            int e, s;//start of end of composing
+            //loop from start of cursor to the left
+            //if not a letter, number or ' adjust s and stop loop
+            for (s = Math.min(text.length(), newSelStart); s > 0; s--) {
+                char c = text.charAt(s - 1);
+                if (!Character.isLetter(c) && !Util.isNumber(c) && c != '\'')
+                    break;
+            }
+
+            //loop from end of cursor to the right
+            //if not a letter, number or ' stop loop
+            for (e = Math.min(text.length(), newSelEnd); e < text.length(); e++) {
+                char c = text.charAt(e);
+                if (!Character.isLetter(c) && !Util.isNumber(c) && c != '\'')
+                    break;
+            }
+
+            Print.extText(et);
+
+            //finally update ICs composing region
+            //match composing region to our composing StringBuilder
+            //update composing index
+            mConnection.setComposingRegion(s, e);
+            mComposing.setLength(0);
+            mComposing.append(text.substring(s, e));
+            mComposingIndex = newSelStart - s;
+        }
+        else {
+            mConnection.finishComposingText();
+            mComposing.setLength(0);
+        }
+    }
+
+    /**
+     *
+     * @param newSelStart
+     * @param newSelEnd
+     */
+    public void onUpdateSelectionOld(int newSelStart, int newSelEnd) {
+        if (!Settings.autoCorrect && shouldAutoCorrect())
             return;
         //set composing region
         //if single cursor AND oldEnd is not newStart?
@@ -96,7 +176,7 @@ public class InputState {
                 return;
             }
             int e, s;//start of end of composing
-            //loop from start of cursor back
+            //loop from start of cursor to the left
             //if not a letter, number or ' adjust s and stop loop
             for (s = Math.min(text.length(), newSelStart); s > 0; s--) {
                 char c = text.charAt(s - 1);
@@ -104,7 +184,7 @@ public class InputState {
                     break;
             }
 
-            //loop from end of cursor forwards
+            //loop from end of cursor to the right
             //if not a letter, number or ' stop loop
             for (e = Math.min(text.length(), newSelEnd); e < text.length(); e++) {
                 char c = text.charAt(e);
@@ -112,9 +192,7 @@ public class InputState {
                     break;
             }
 
-            //System.out.println("input " + newSelStart + " " + newSelEnd);
             Print.extText(et);
-            //System.out.println("output " + s + " " + e);
 
             //finally update ICs composing region
             //match composing region to our composing StringBuilder
@@ -124,7 +202,7 @@ public class InputState {
             mComposing.append(text.substring(s, e));
             mComposingIndex = newSelStart - s;
         }
-        else if (newSelStart != newSelEnd) {
+        else {
             mConnection.finishComposingText();
             mComposing.setLength(0);
         }
@@ -141,7 +219,6 @@ public class InputState {
         mComposing.setLength(0);
 
         mConnection.commitText(text, newCursorPos);
-        mConnection.finishComposingText();
     }
 
     /**
@@ -150,11 +227,19 @@ public class InputState {
      */
     public void commitCorrection() {
         //AutoCorrect
-        if (Settings.autoCorrect && !onPassword()) {
+        if (Settings.autoCorrect && !shouldAutoCorrect()) {
             setComposingText(mCorrections.correction(mComposing.toString()), 1);
             //TODO: multi language
             //TODO: caps locked
+            //TODO: markov chains
         }
+        commitComposing();
+    }
+
+    /**
+     * releases the composing text
+     */
+    public void commitComposing() {
         mConnection.finishComposingText();
         mComposing.setLength(0);
     }
@@ -238,6 +323,21 @@ public class InputState {
     }
 
     /**
+     * Gets the current capitalization mode
+     *
+     * @param editorInfo uses editor info to get the caps mode
+     * @return 1 for caps 0 for not caps
+     */
+    public int getCurrentCapsMode(EditorInfo editorInfo) {
+        //if null caps if needed only
+        if (mConnection == null)
+            return (editorInfo.inputType & InputType.TYPE_MASK_CLASS) == InputType.TYPE_CLASS_TEXT
+                    && (editorInfo.inputType & 0x4000) == 0 ? 0 : 1;
+        else
+            return mConnection.getCursorCapsMode(editorInfo.inputType);
+    }
+
+    /**
      * adds 1 to the repeating character count
      */
     public void incrementRepeat() {
@@ -269,6 +369,20 @@ public class InputState {
      * @return whether the user is currently typing on an email address field
      */
     public boolean onEmailAddress() { return mOnEmailAddress; }
+
+    /**
+     * @return whether the user is currently typing on a URI
+     */
+    public boolean onURI() {
+        return mOnURI;
+    }
+
+    /**
+     * @return whether it should use autocorrect and composing text
+     */
+    public boolean shouldAutoCorrect() {
+        return onPassword() && onEmailAddress() && onURI();
+    }
 
     /**
      * @return the current user's type class

@@ -1,3 +1,23 @@
+/*
+ * NovaKey - An alternative touchscreen input method
+ * Copyright (C) 2019  Viviano Cantu
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>
+ *
+ * Any questions about the program or source may be directed to <strellastudios@gmail.com>
+ */
+
 package viviano.cantu.novakey;
 
 import android.content.ClipboardManager;
@@ -6,13 +26,11 @@ import android.graphics.PixelFormat;
 import android.inputmethodservice.InputMethodService;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
-import android.text.InputType;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputConnection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,12 +85,12 @@ public class NovaKey extends InputMethodService {
         //load icons
         Icons.load(this);
 		//load emojis
-		//Emoji.load(this);
+//		Emoji.load(this);
         //Create Hidden Keys
         InfiniteMenu.setHiddenKeys(getResources().getStringArray(R.array.hidden_keys));
         //Create Clipboard Menu
         Clipboard.createMenu();
-        //Initialize settings
+        //Initialize setting
         Settings.setPrefs(PreferenceManager.getDefaultSharedPreferences(this));
         Settings.update();
 
@@ -131,7 +149,7 @@ public class NovaKey extends InputMethodService {
 	@Override
 	public void onStartInputView(EditorInfo info, boolean restarting) {
         super.onStartInputView(info, restarting);
-        mController.getModel().onStart(info, getCurrentInputConnection());//updates editor info
+        mController.onStart(info, getCurrentInputConnection());//updates editor info
 	}
 
 	@Override
@@ -144,12 +162,12 @@ public class NovaKey extends InputMethodService {
 //		setInputView(InputView);
 	}
 
-	//TODO: move to input state
+
 	@Override
 	public void onUpdateSelection(int oldSelStart, int oldSelEnd,
 			int newSelStart, int newSelEnd, int candidatesStart,
 			int candidatesEnd) {
-		mController.getModel().getInputState().updateSelection(newSelStart, newSelEnd);
+		mController.getModel().getInputState().onUpdateSelection(newSelStart, newSelEnd);
 	}
 
 //TODO: this code is for undocking
@@ -202,18 +220,6 @@ public class NovaKey extends InputMethodService {
 	}
 
 	//-----------------------------------------helper methods---------------------------------------//
-
-	//TODO: move to inputState
-    public int getCurrentCapsMode(EditorInfo editorInfo) {
-        InputConnection ic = getCurrentInputConnection();
-        //if null caps if needed only
-        if (ic == null) {
-            return (editorInfo.inputType & InputType.TYPE_MASK_CLASS) == InputType.TYPE_CLASS_TEXT &&
-                   (editorInfo.inputType & 0x4000) == 0 ? 0 : 1;
-        }
-		else
-            return getCurrentInputConnection().getCursorCapsMode(editorInfo.inputType);
-    }
 
     //TODO: make action
     public void vibrate(long milliseconds) {

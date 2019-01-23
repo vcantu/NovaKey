@@ -1,3 +1,23 @@
+/*
+ * NovaKey - An alternative touchscreen input method
+ * Copyright (C) 2019  Viviano Cantu
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>
+ *
+ * Any questions about the program or source may be directed to <strellastudios@gmail.com>
+ */
+
 package viviano.cantu.novakey.view;
 
 import android.content.Context;
@@ -31,7 +51,8 @@ public class NovaKeyEditView extends View implements View.OnTouchListener, Theme
     private final Loader<MainDimensions> mMainDimensionsLoader;
     private final MainDimensions mDimens;
     private int viewWidth, viewHeight;
-    private float centerX, centerY;
+    private float centerX, centerY, padding;
+    private int height;
     private float radius, smallRadius;
     //Drawing
     private Paint p;
@@ -78,31 +99,63 @@ public class NovaKeyEditView extends View implements View.OnTouchListener, Theme
     //When created or resized
     @Override
     public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        //set view dimensions
-        //set view Dimens
-        viewWidth = screenWidth;
-        viewHeight = screenHeight;
 
         radius = mDimens.getRadius();
         smallRadius = mDimens.getRadius() / mDimens.getSmallRadius();
 
         //sets location to saved size
         centerX = mDimens.getX();
+        padding = mDimens.getPadding();
 
+        //set view Dimens
+        viewWidth = screenWidth;
+        viewHeight = screenHeight;
         //centerY will be set after method
         setMeasuredDimension(viewWidth, viewHeight);
-
         viewWidth = MeasureSpec.getSize(widthMeasureSpec);
         viewHeight = MeasureSpec.getSize(heightMeasureSpec);//fixes title bar
 
-        centerY = viewHeight - mDimens.getY();
+        height = mDimens.getHeight();
+
+        // centerY needs to be overriden to actual centerY for touch logic
+        centerY = viewHeight - height + mDimens.getY();
+    }
+
+    public void resetDimens() {
+        radius = getResources().getDimension(R.dimen.default_radius);
+        centerX = viewWidth / 2;
+        centerY = viewHeight - radius;
+        smallRadius = 3;
+        height = (int)(radius * 2 + padding);
+        invalidate();
+    }
+
+    public void saveDimens() {
+        mDimens.setRadius(radius);
+        mDimens.setSmallRadius(smallRadius);
+        mDimens.setX(centerX);
+        mDimens.setY(radius + padding);
+        mDimens.setHeight((int) (viewHeight - (centerY - radius - padding)));
+        mMainDimensionsLoader.save(mDimens);
+    }
+
+    public float getRadius() {
+        return radius;
+    }
+    public float getSmallRadius() {
+        return smallRadius;
+    }
+
+    public void setSmallRadius(float sr) {
+        smallRadius = sr;
     }
 
     @Override
     public void onDraw(Canvas canvas) {
         mTheme.getBackgroundTheme()
-                .drawBackground(0, (centerY - radius), viewWidth, viewHeight, centerX, centerY,
-                radius, radius / smallRadius, canvas);
+                .drawBackground(0, (centerY - radius - padding), viewWidth, viewHeight,
+                        centerX, centerY,
+                        radius, radius / smallRadius, canvas);
 
         mTheme.getBoardTheme().drawBoard(centerX, centerY, radius, radius / smallRadius, canvas);
     }
@@ -154,6 +207,8 @@ public class NovaKeyEditView extends View implements View.OnTouchListener, Theme
                     //min radius
                     if (radius < getResources().getDimension(R.dimen.min_radius))
                         radius = getResources().getDimension(R.dimen.min_radius);
+
+
                 }
                 invalidate();
                 break;
@@ -178,32 +233,5 @@ public class NovaKeyEditView extends View implements View.OnTouchListener, Theme
                 break;
         }
         return true;
-    }
-
-    public void resetDimens() {
-        radius = getResources().getDimension(R.dimen.default_radius);
-        centerX = viewWidth / 2;
-        centerY = viewHeight - radius;
-        smallRadius = 3;
-        invalidate();
-    }
-
-    public void saveDimens() {
-        mDimens.setRadius(radius);
-        mDimens.setSmallRadius(smallRadius);
-        mDimens.setX(centerX);
-        mDimens.setY(viewHeight - centerY);
-        mMainDimensionsLoader.save(mDimens);
-    }
-
-    public float getRadius() {
-        return radius;
-    }
-    public float getSmallRadius() {
-        return smallRadius;
-    }
-
-    public void setSmallRadius(float sr) {
-        smallRadius = sr;
     }
 }

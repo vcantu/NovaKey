@@ -1,3 +1,23 @@
+/*
+ * NovaKey - An alternative touchscreen input method
+ * Copyright (C) 2019  Viviano Cantu
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>
+ *
+ * Any questions about the program or source may be directed to <strellastudios@gmail.com>
+ */
+
 package viviano.cantu.novakey.controller.actions.input;
 
 
@@ -81,28 +101,26 @@ public class KeyAction implements Action<Void> {
     @Override
     public Void trigger(NovaKey ime, Controller control, Model model) {
         InputState state = model.getInputState();
-        boolean regText = state.onPassword() || state.onEmailAddress();
-        System.out.println("key action: " + mChar);
+        boolean regText = state.shouldAutoCorrect();
 
         //TODO: insert keys normally
-        if (!regText && Settings.autoCorrect
-                && (Character.isLetter(mChar) || Util.isNumber(mChar))) {
-            System.out.println("\t normal insert");
+        // Regular text with autocorrecting
+        if (!regText && Settings.autoCorrect && (Character.isLetter(mChar) || Util.isNumber(mChar))) {
             char c;
             if (model.getShiftState() == ShiftState.LOWERCASE) {
                 c = Character.toLowerCase(mChar);
             } else {
                 c = Character.toUpperCase(mChar);
             }
-            state.inputText(c + "", 1);
+            state.inputText(Character.toString(c), 1);
         }
-        else if (!regText && Settings.quickInsert && isOpener(mChar)) {//auto insert
-            System.out.println("\t quick insert");
+        // Quick Insert
+        else if (!regText && Settings.quickInsert && isOpener(mChar)) {
             state.inputText(mChar.toString(), 1);
             state.inputText(String.valueOf(getCloser(mChar)), -1);
         }
+        // Quick Close
         else if (!regText && Settings.quickClose && isQuickOpener(mChar)) {
-            System.out.println("\t quick close");
             switch (state.getRepeatCount()) {
                 default:
                 case 0:
@@ -119,7 +137,6 @@ public class KeyAction implements Action<Void> {
             }
         }
         else {
-            System.out.println("\t else insert");
             //TODO if regular keys but not auto correcting(MAKE PRETTIER)
             char c;
             if (model.getShiftState() == ShiftState.LOWERCASE) {
@@ -127,12 +144,12 @@ public class KeyAction implements Action<Void> {
             } else {
                 c = Character.toUpperCase(mChar);
             }
-            state.inputText(c + "", 1);
+            state.inputText(Character.toString(c), 1);
         }
 
         //side effects
         state.setReturnAfterSpace(shouldReturnAfterSpace(mChar));
-        if (state.getRepeatCount() < 0 &&
+        if (state.getRepeatCount() <= 0 &&
                 (mChar == '\'' || mChar == '"' || mChar == '¿' || mChar == '¡'))
             control.fire(new SetKeyboardAction(Keyboards.DEFAULT));
 
