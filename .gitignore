@@ -1,3 +1,7 @@
+app/build
+app/release
+*.idea/
+
 # Built application files
 *.apk
 *.ap_
