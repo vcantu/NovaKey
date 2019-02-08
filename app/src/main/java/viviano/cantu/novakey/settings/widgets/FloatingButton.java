@@ -28,11 +28,10 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import viviano.cantu.novakey.R;
-import viviano.cantu.novakey.view.drawing.drawables.Drawable;
 import viviano.cantu.novakey.view.drawing.Icons;
+import viviano.cantu.novakey.view.drawing.drawables.Drawable;
 import viviano.cantu.novakey.view.themes.MasterTheme;
 import viviano.cantu.novakey.view.themes.Themeable;
-import viviano.cantu.novakey.view.themes.board.BoardTheme;
 
 /**
  * Created by Viviano on 3/8/2016.
@@ -46,20 +45,23 @@ public class FloatingButton extends View implements Themeable {
 
     private Paint p;
 
+
     public FloatingButton(Context context) {
         this(context, null);
     }
 
+
     public FloatingButton(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
+
 
     public FloatingButton(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
         p = new Paint();
         p.setAntiAlias(true);
-        mRadius = (int)getResources().getDimension(R.dimen.button_radius);
+        mRadius = (int) getResources().getDimension(R.dimen.button_radius);
 
         TypedArray a = context.obtainStyledAttributes(
                 attrs, R.styleable.FloatingButton, defStyleAttr, 0);
@@ -77,10 +79,12 @@ public class FloatingButton extends View implements Themeable {
         mRealHeight = mHeight;
     }
 
+
     @Override
     public void onMeasure(int w, int h) {
-        setMeasuredDimension(mHeight * 2 + (int)mRadius * 2, mHeight * 2 + (int)mRadius * 2);
+        setMeasuredDimension(mHeight * 2 + (int) mRadius * 2, mHeight * 2 + (int) mRadius * 2);
     }
+
 
     @Override
     public void onDraw(Canvas canvas) {
@@ -97,37 +101,46 @@ public class FloatingButton extends View implements Themeable {
         mIcon.draw(x, y - mRealHeight, mRadius, p, canvas);
     }
 
+
     public int getBackColor() {
         return mBackground;
     }
+
 
     public void setBackColor(int backColor) {
         this.mBackground = backColor;
     }
 
+
     public Drawable getIcon() {
         return mIcon;
     }
+
 
     public void setIcon(Drawable icon) {
         this.mIcon = icon;
     }
 
+
     public int getButtonHeight() {
         return mHeight;
     }
+
 
     public void setButtonHeight(int height) {
         this.mHeight = height;
     }
 
+
     public int getFrontColor() {
         return mFront;
     }
 
+
     public void setFrontColor(int front) {
         this.mFront = front;
     }
+
 
     public void setTheme(MasterTheme theme) {
         setBackColor(theme.getPrimaryColor());

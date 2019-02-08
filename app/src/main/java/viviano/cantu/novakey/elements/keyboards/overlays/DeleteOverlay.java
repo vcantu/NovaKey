@@ -40,10 +40,12 @@ public class DeleteOverlay implements OverlayElement {
     private final TouchHandler mHandler;
     private final Drawable mIcon;
 
+
     public DeleteOverlay() {
         mHandler = new DeleteHandler();
         mIcon = Icons.get("backspace");
     }
+
 
     /**
      * Draws the element.
@@ -60,6 +62,7 @@ public class DeleteOverlay implements OverlayElement {
         theme.getBoardTheme().drawItem(mIcon, d.getX(), d.getY(),
                 d.getSmallRadius() * .8f, canvas);
     }
+
 
     @Override
     public boolean handle(MotionEvent event, Controller control) {

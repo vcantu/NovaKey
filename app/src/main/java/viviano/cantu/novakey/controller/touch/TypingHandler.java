@@ -28,16 +28,16 @@ import java.util.List;
 
 import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.controller.actions.Action;
+import viviano.cantu.novakey.controller.actions.RenameSelectionAction;
 import viviano.cantu.novakey.controller.actions.SetOverlayAction;
-import viviano.cantu.novakey.controller.actions.UpdateSelectionAction;
 import viviano.cantu.novakey.controller.actions.VibrateAction;
 import viviano.cantu.novakey.controller.actions.input.DeleteAction;
 import viviano.cantu.novakey.elements.keyboards.Key;
 import viviano.cantu.novakey.elements.keyboards.Keyboard;
-import viviano.cantu.novakey.elements.keyboards.overlays.menus.InfiniteMenu;
-import viviano.cantu.novakey.model.Settings;
 import viviano.cantu.novakey.elements.keyboards.overlays.CursorOverlay;
 import viviano.cantu.novakey.elements.keyboards.overlays.DeleteOverlay;
+import viviano.cantu.novakey.elements.keyboards.overlays.menus.InfiniteMenu;
+import viviano.cantu.novakey.model.Settings;
 import viviano.cantu.novakey.utils.Util;
 
 /**
@@ -54,13 +54,16 @@ public class TypingHandler extends AreaCrossedHandler {
     public boolean mRepeating = false;
     private int mArea1, mArea2;
 
+
     public TypingHandler(Keyboard keyboard) {
         mKeyboard = keyboard;
         mAreas = new ArrayList<>();
     }
 
+
     /**
      * Starts longpress timer
+     *
      * @param controller
      */
     private void start(Controller controller) {
@@ -69,12 +72,13 @@ public class TypingHandler extends AreaCrossedHandler {
             public void onTick(long millisUntilFinished) {
             }
 
+
             @Override
             public void onFinish() {
                 //TODO: fix getting of hidden keys...make shift state aware
                 Action a = mKeyboard.getKey(mAreas);
                 if (a instanceof Key) {
-                    InfiniteMenu newMenu = ((Key)a).getHiddenKeys(
+                    InfiniteMenu newMenu = ((Key) a).getHiddenKeys(
                             controller.getModel().getShiftState());
                     if (newMenu != null)
                         controller.fire(new SetOverlayAction(newMenu));
@@ -84,6 +88,8 @@ public class TypingHandler extends AreaCrossedHandler {
         if (true)//TODO: make this flag a in tutorial and longpress is disabled
             mTimer.start();
     }
+
+
     private void cancel() {
         if (mTimer != null)
             mTimer.cancel();
@@ -92,10 +98,11 @@ public class TypingHandler extends AreaCrossedHandler {
 
     /**
      * Override this to specify onDown behaviour
-     * @param x       current x position
-     * @param y       current y position
-     * @param area    current area
-     * @param controller    view being called on
+     *
+     * @param x          current x position
+     * @param y          current y position
+     * @param area       current area
+     * @param controller view being called on
      */
     @Override
     protected boolean onDown(float x, float y, int area,
@@ -109,10 +116,12 @@ public class TypingHandler extends AreaCrossedHandler {
         return true;
     }
 
+
     /**
      * Called when the touch listener detects that there
      * has been a cross, either in sector or range
-     * @param event describes the event
+     *
+     * @param event      describes the event
      * @param controller
      */
     @Override
@@ -131,10 +140,9 @@ public class TypingHandler extends AreaCrossedHandler {
         if (mRepeating && (event.newArea == mArea1 || event.newArea == mArea2)) {
             controller.fire(mRepeatingKey);
             controller.getModel().getInputState().incrementRepeat();
-        }
-        else if (mAreas.size() >= 3 && !mRepeating) {
+        } else if (mAreas.size() >= 3 && !mRepeating) {
             if (mAreas.size() == 3 &&
-                mAreas.get(0) == mAreas.get(2)) {
+                    mAreas.get(0) == mAreas.get(2)) {
                 //switch to repeat handler
                 mArea1 = mAreas.get(0);
                 mArea2 = mAreas.get(1);
@@ -153,12 +161,12 @@ public class TypingHandler extends AreaCrossedHandler {
                     controller.fire(mRepeatingKey);
                     controller.getModel().getInputState().incrementRepeat();
                 }
-                    return true;
+                return true;
             }
             if (Util.getGesture(mAreas) instanceof DeleteAction) {
                 //switch to delete handler
                 // First rotating event must be fired initially
-                controller.fire( new DeleteAction());
+                controller.fire(new DeleteAction());
                 controller.fire(new SetOverlayAction(new DeleteOverlay()));
                 cancel();
                 return false;
@@ -166,7 +174,7 @@ public class TypingHandler extends AreaCrossedHandler {
             int rotatingStatus = getRotatingStatus(mAreas);
             if (rotatingStatus != 0) {
                 // First rotating event must be fired initially
-                controller.fire( new UpdateSelectionAction(rotatingStatus == -1));
+                controller.fire(new RenameSelectionAction(rotatingStatus == -1));
                 controller.fire(new SetOverlayAction(new CursorOverlay()));
                 cancel();
                 return false;
@@ -175,12 +183,13 @@ public class TypingHandler extends AreaCrossedHandler {
         return true;
     }
 
+
     /**
      * Called when the user lifts finger, typically this
      * method expects a finalized action to be triggered
      * like typing a character
-     * @param controller
      *
+     * @param controller
      */
     @Override
     protected boolean onUp(Controller controller) {
@@ -193,19 +202,22 @@ public class TypingHandler extends AreaCrossedHandler {
         return false;
     }
 
+
     /**
      * finds the index of the first area which has a duplicate
      * exactly two spaces away. Which means the user swiped back
      * and forth
+     *
      * @return an index or -1 if no repetition is found
      */
     private int repeatingIndex() {
-        for (int i = 0; i< mAreas.size() - 2; i++) {
-            if (mAreas.get(i) == mAreas.get(i+2))
+        for (int i = 0; i < mAreas.size() - 2; i++) {
+            if (mAreas.get(i) == mAreas.get(i + 2))
                 return i;
         }
         return -1;
     }
+
 
     /**
      * Determines if the user began rotating
@@ -227,9 +239,9 @@ public class TypingHandler extends AreaCrossedHandler {
             int three = areasCrossed.get(checkIdx + 2);
             boolean hasZero = one == 0 || two == 0 || three == 0;
             if (two != 3 && !hasZero) {
-                if ((one+1)%5 == two%5 && (two+1)%5 == three%5)
+                if ((one + 1) % 5 == two % 5 && (two + 1) % 5 == three % 5)
                     return 1;
-                if ((three+1)%5 == two%5 && (two+1)%5 == one%5)
+                if ((three + 1) % 5 == two % 5 && (two + 1) % 5 == one % 5)
                     return -1;
             }
         }

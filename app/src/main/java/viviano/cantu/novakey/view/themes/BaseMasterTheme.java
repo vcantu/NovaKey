@@ -39,6 +39,7 @@ public class BaseMasterTheme implements MasterTheme {
     private BackgroundTheme mBackground;
     private ButtonTheme mButton;
 
+
     public BaseMasterTheme() {
         setBoardTheme(new BaseTheme());
         setBackgroundTheme(new FlatBackgroundTheme());
@@ -49,6 +50,7 @@ public class BaseMasterTheme implements MasterTheme {
         mAccent = 0xFFF5F5F5;
         mContrast = 0xFFF5F5F5;
     }
+
 
     /**
      * sets whether theme should use shadows to appear 3D
@@ -61,6 +63,7 @@ public class BaseMasterTheme implements MasterTheme {
         return this;
     }
 
+
     /**
      * @returns whether this theme has 3d mode set
      */
@@ -69,9 +72,11 @@ public class BaseMasterTheme implements MasterTheme {
         return mIs3d;
     }
 
+
     /**
      * Sets the colors of this theme given an array of colors
-     *  @param primary  primary color of the theme
+     *
+     * @param primary  primary color of the theme
      * @param accent   accent color of the theme
      * @param contrast contrast color of the theme
      */
@@ -82,6 +87,7 @@ public class BaseMasterTheme implements MasterTheme {
         mContrast = contrast;
         return this;
     }
+
 
     /**
      * Sets the colors of this theme given an app package.
@@ -102,6 +108,7 @@ public class BaseMasterTheme implements MasterTheme {
         return this;
     }
 
+
     /**
      * @return primary color of this theme
      */
@@ -110,10 +117,12 @@ public class BaseMasterTheme implements MasterTheme {
         return mPrimiary;
     }
 
+
     @Override
     public void setPrimaryColor(int color) {
         mPrimiary = color;
     }
+
 
     /**
      * @return accent color of this theme
@@ -123,10 +132,12 @@ public class BaseMasterTheme implements MasterTheme {
         return mAccent;
     }
 
+
     @Override
     public void setAccentColor(int color) {
         mAccent = color;
     }
+
 
     /**
      * @return contrast color of this theme
@@ -136,10 +147,12 @@ public class BaseMasterTheme implements MasterTheme {
         return mContrast;
     }
 
+
     @Override
     public void setContrastColor(int color) {
         mContrast = color;
     }
+
 
     /**
      * Set the board theme
@@ -153,6 +166,7 @@ public class BaseMasterTheme implements MasterTheme {
         return this;
     }
 
+
     /**
      * @return this master theme's board theme
      */
@@ -160,6 +174,7 @@ public class BaseMasterTheme implements MasterTheme {
     public BoardTheme getBoardTheme() {
         return mBoard;
     }
+
 
     /**
      * Sets the button theme
@@ -173,6 +188,7 @@ public class BaseMasterTheme implements MasterTheme {
         return this;
     }
 
+
     /**
      * @return this master theme's button theme
      */
@@ -180,6 +196,7 @@ public class BaseMasterTheme implements MasterTheme {
     public ButtonTheme getButtonTheme() {
         return mButton;
     }
+
 
     /**
      * Sets the background theme
@@ -192,6 +209,7 @@ public class BaseMasterTheme implements MasterTheme {
         mBackground.setParent(this);
         return this;
     }
+
 
     /**
      * @return this master theme's background theme

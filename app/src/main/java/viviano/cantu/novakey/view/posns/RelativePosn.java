@@ -33,6 +33,7 @@ public abstract class RelativePosn {
      */
     public abstract float getX(MainDimensions model);
 
+
     /**
      * @param model model to base posn off
      * @return y coordinate based on the model dimensions

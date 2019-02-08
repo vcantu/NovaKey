@@ -32,14 +32,17 @@ public class KeyboardsLoader implements Loader<Keyboards> {
 
     private final Context mContext;
 
+
     public KeyboardsLoader(Context context) {
         mContext = context;
     }
+
 
     @Override
     public Keyboards load() {
         return new Keyboards(mContext);
     }
+
 
     @Override
     public void save(Keyboards keyboards) {

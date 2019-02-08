@@ -22,9 +22,9 @@ package viviano.cantu.novakey.controller.touch;
 
 import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.controller.actions.Action;
+import viviano.cantu.novakey.controller.actions.RenameSelectionAction;
 import viviano.cantu.novakey.controller.actions.SetOverlayAction;
 import viviano.cantu.novakey.controller.actions.ToggleCursorModeAction;
-import viviano.cantu.novakey.controller.actions.UpdateSelectionAction;
 
 /**
  * Created by Viviano on 6/15/2016.
@@ -33,16 +33,19 @@ public class SelectingHandler extends RotatingHandler {
 
     private final Action mRight, mLeft;
 
+
     public SelectingHandler() {
-        mRight = new UpdateSelectionAction(true);
-        mLeft = new UpdateSelectionAction(false);
+        mRight = new RenameSelectionAction(true);
+        mLeft = new RenameSelectionAction(false);
     }
+
 
     /**
      * Called when the user enters or exits the inner circle.
      * Call unrelated to onMove()
-     * @param entered true if event was triggered by entering the
-     *                inner circle, false if was triggered by exit
+     *
+     * @param entered    true if event was triggered by entering the
+     *                   inner circle, false if was triggered by exit
      * @param controller
      */
     @Override
@@ -53,11 +56,13 @@ public class SelectingHandler extends RotatingHandler {
         return true;
     }
 
+
     /**
      * Called for every move event so that the handler can update
      * display properly. Called before onRotate()
-     * @param x current finger x position
-     * @param y current finger y position
+     *
+     * @param x          current finger x position
+     * @param y          current finger y position
      * @param controller
      */
     @Override
@@ -66,11 +71,13 @@ public class SelectingHandler extends RotatingHandler {
         return true;
     }
 
+
     /**
      * Called when the touch listener detects that there
      * has been a cross, either in sector or range
-     * @param clockwise true if rotation is clockwise, false otherwise
-     * @param inCenter  if finger position is currently in the center
+     *
+     * @param clockwise  true if rotation is clockwise, false otherwise
+     * @param inCenter   if finger position is currently in the center
      * @param controller
      */
     @Override
@@ -82,12 +89,13 @@ public class SelectingHandler extends RotatingHandler {
         return true;
     }
 
+
     /**
      * Called when the user lifts finger, typically this
      * method expects a finalized action to be triggered
      * like typing a character
-     * @param controller
      *
+     * @param controller
      */
     @Override
     protected boolean onUp(Controller controller) {

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ NovaKey - An alternative touchscreen input method
   ~ Copyright (C) 2019  Viviano Cantu
   ~
@@ -22,7 +21,7 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="#CABBBBBB"/>
+            <solid android:color="#CABBBBBB" />
             <corners android:radius="2dp" />
         </shape>
     </item>
@@ -33,7 +32,7 @@
         android:top="1dp"
         android:bottom="4dp">
         <shape android:shape="rectangle">
-            <solid android:color="@android:color/white"/>
+            <solid android:color="@android:color/white" />
             <corners android:radius="2dp" />
         </shape>
     </item>

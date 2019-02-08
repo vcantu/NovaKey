@@ -25,7 +25,6 @@ import android.graphics.Paint;
 
 import viviano.cantu.novakey.view.drawing.Draw;
 import viviano.cantu.novakey.view.drawing.drawables.Drawable;
-import viviano.cantu.novakey.view.themes.BaseMasterTheme;
 import viviano.cantu.novakey.view.themes.MasterTheme;
 
 /**
@@ -45,6 +44,7 @@ public class BaseTheme implements BoardTheme {
         pT.setFlags(Paint.ANTI_ALIAS_FLAG);
     }
 
+
     /**
      * Draw the center of the board
      *
@@ -60,14 +60,17 @@ public class BaseTheme implements BoardTheme {
         drawLines(x, y, r, sr, canvas);
     }
 
+
     //Override to change drawing
     protected void drawBoardBack(float x, float y, float r, float sr, Canvas canvas) {
         //Does nothing
     }
 
+
     private void drawLines(float x, float y, float r, float sr, Canvas canvas) {
         drawLines(x, y, r, sr, 1 / 72f, canvas);
     }
+
 
     //override to change drawing
     protected void drawLines(float x, float y, float r, float sr, float w, Canvas canvas) {
@@ -85,6 +88,7 @@ public class BaseTheme implements BoardTheme {
 
         Draw.shadedLines(x, y, r, sr, mParent.getAccentColor(), pB, canvas);
     }
+
 
     /**
      * Draws an object, ensuring contrast, on top of the board.
@@ -106,6 +110,7 @@ public class BaseTheme implements BoardTheme {
         pT.clearShadowLayer();
     }
 
+
     /**
      * Sets this child's master theme for reference
      *
@@ -115,6 +120,7 @@ public class BaseTheme implements BoardTheme {
     public void setParent(MasterTheme masterTheme) {
         mParent = masterTheme;
     }
+
 
     /**
      * Draw method for the picker item

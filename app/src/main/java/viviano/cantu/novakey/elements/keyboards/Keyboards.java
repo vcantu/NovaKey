@@ -40,6 +40,7 @@ public class Keyboards {
     private final Keyboard mSymbols, mPunctuation;
     private final List<Keyboard> mLanguages;
 
+
     public Keyboards(Context context) {
         Resources res = context.getResources();
 
@@ -49,6 +50,7 @@ public class Keyboards {
         mLanguages = new ArrayList<>();
         mLanguages.add(new Keyboard("English", convert(R.array.English, res)));
     }
+
 
     /**
      * @param code keyboard code, which can be symbols or punctuation
@@ -70,10 +72,10 @@ public class Keyboards {
     private static Key[][] convert(int ID, Resources res) {
         String[] S = res.getStringArray(ID);
         Key[][] result = new Key[S.length][];
-        for (int i=0; i<S.length; i++) {
+        for (int i = 0; i < S.length; i++) {
             result[i] = new Key[S[i].length()];
             boolean altLayout = i > 0 && S[i].length() > 4;
-            for (int j=0; j<S[i].length(); j++) {
+            for (int j = 0; j < S[i].length(); j++) {
                 result[i][j] = new Key(S[i].charAt(j), i, j, altLayout);
             }
         }

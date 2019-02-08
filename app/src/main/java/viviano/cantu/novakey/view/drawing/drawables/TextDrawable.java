@@ -25,7 +25,6 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 
 import viviano.cantu.novakey.view.drawing.Draw;
-import viviano.cantu.novakey.view.drawing.drawables.Drawable;
 
 /**
  * Created by Viviano on 6/21/2016.
@@ -35,14 +34,17 @@ public class TextDrawable implements Drawable {
     private String mText;
     private Typeface mFont;
 
+
     public TextDrawable(String text, Typeface font) {
         mText = text;
         mFont = font;
     }
 
+
     public TextDrawable(String text) {
         this(text, null);
     }
+
 
     /**
      * Interface for any kind of drawable
@@ -60,6 +62,7 @@ public class TextDrawable implements Drawable {
         Draw.text(mText, x, y, size, p, canvas);
     }
 
+
     /**
      * Sets this drawables font
      *
@@ -68,6 +71,7 @@ public class TextDrawable implements Drawable {
     public void setFont(Typeface font) {
         mFont = font;
     }
+
 
     /**
      * Sets this drawables text

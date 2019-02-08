@@ -22,8 +22,8 @@ package viviano.cantu.novakey.controller.actions;
 
 import viviano.cantu.novakey.NovaKey;
 import viviano.cantu.novakey.controller.Controller;
-import viviano.cantu.novakey.model.Model;
 import viviano.cantu.novakey.elements.keyboards.overlays.OverlayElement;
+import viviano.cantu.novakey.model.Model;
 
 /**
  * Created by Viviano on 6/16/2016.
@@ -32,13 +32,16 @@ public class SetOverlayAction implements Action<Void> {
 
     private final OverlayElement mElement;
 
+
     public SetOverlayAction(OverlayElement element) {
         mElement = element;
     }
 
+
     /**
      * Called when the action is triggered
      * Actual logic for the action goes here
+     *
      * @param ime
      * @param control
      * @param model
@@ -46,7 +49,6 @@ public class SetOverlayAction implements Action<Void> {
     @Override
     public Void trigger(NovaKey ime, Controller control, Model model) {
         //TODO: animation
-        //control.changeHandler(null);
         model.setOverlayElement(mElement);
         control.invalidate();
         return null;

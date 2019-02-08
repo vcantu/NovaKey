@@ -44,6 +44,7 @@ public class Square implements Shape {
                 fingY >= y - size / 2 && fingY <= y + size / 2;
     }
 
+
     /**
      * Interface for any kind of drawable
      *

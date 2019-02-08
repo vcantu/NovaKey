@@ -46,15 +46,18 @@ public abstract class CharAnimation extends BaseAnimation {
     private final long mDuration;
     private final Map<Key, Animator<Key>> mAnimators;
 
+
     public CharAnimation(int style) {
         this(style, 500);
     }
+
 
     public CharAnimation(int style, long duration) {
         mStyle = style;
         mDuration = duration;
         mAnimators = new HashMap<>();
     }
+
 
     /**
      * @param model given to reference. Also should call
@@ -81,6 +84,7 @@ public abstract class CharAnimation extends BaseAnimation {
                     anim.update(key, value);
             }
 
+
             @Override
             public void onAllUpdate(ValueAnimator animator, float value) {
                 //TODO: need way to update
@@ -89,6 +93,7 @@ public abstract class CharAnimation extends BaseAnimation {
 
         return anim;
     }
+
 
     /**
      * Will be called when building the animation to set this particular key's
@@ -99,6 +104,7 @@ public abstract class CharAnimation extends BaseAnimation {
      */
     protected abstract TimeInterpolator getInterpolatorFor(Key k);
 
+
     /**
      * Called when building the animation to determine which animator to assign
      * to which key
@@ -107,6 +113,7 @@ public abstract class CharAnimation extends BaseAnimation {
      * @return the animator to set
      */
     protected abstract Animator<Key> getAnimatorFor(Key k);
+
 
     /**
      * Will determine the delay according to this animator's  parameters
@@ -128,10 +135,11 @@ public abstract class CharAnimation extends BaseAnimation {
         if ((mStyle & RIGHT) == RIGHT)
             x -= d.getRadius() * (((mStyle & FLIP_X) == FLIP_X) ? -1 : 1);
         if ((mStyle & UP) == UP)
-            y += d.getRadius() * (((mStyle & FLIP_Y) == FLIP_Y) ? -1 : 1);;
+            y += d.getRadius() * (((mStyle & FLIP_Y) == FLIP_Y) ? -1 : 1);
+        ;
 
         float dist = Util.distance(x, y, k.getPosn().getX(d), k.getPosn().getX(d));
         float ratio = dist / (d.getRadius() * 2);
-        return (long)(max * ratio);
+        return (long) (max * ratio);
     }
 }

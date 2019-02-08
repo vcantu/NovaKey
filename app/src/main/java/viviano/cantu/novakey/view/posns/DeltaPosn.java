@@ -25,17 +25,19 @@ import viviano.cantu.novakey.model.MainDimensions;
 /**
  * RelativePosn that returns coordinates translated
  * based on a given deltaX and deltaY(in pixels)
- *
+ * <p>
  * Created by Viviano on 6/10/2016.
  */
 public class DeltaPosn extends RelativePosn {
 
     private float dx, dy;
 
+
     public DeltaPosn(float deltaX, float deltaY) {
         this.dx = deltaX;
         this.dy = deltaY;
     }
+
 
     /**
      * @param model model to base posn off
@@ -45,6 +47,7 @@ public class DeltaPosn extends RelativePosn {
     public float getX(MainDimensions model) {
         return model.getX() + dx;
     }
+
 
     /**
      * @param model model to base posn off

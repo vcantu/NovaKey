@@ -28,7 +28,7 @@ import java.util.NoSuchElementException;
 
 /**
  * Created by Viviano on 8/27/2016.
- *
+ * <p>
  * Holds a list of "Constructors" which can be used to instantiate new objects
  * using the construct(Class) method
  */
@@ -37,20 +37,25 @@ public abstract class InstanceList<T> implements Iterator<T>, Iterable<T> {
     private final Map<Integer, Class> mMap;
     private Iterator<Map.Entry<Integer, Class>> mIter;
 
+
     public InstanceList() {
         mMap = new LinkedHashMap<>();
         build(mMap);
     }
 
+
     /**
      * Called when constructing, use this to build the
+     *
      * @param map
      */
     protected abstract void build(Map<Integer, Class> map);
 
+
     public int size() {
         return mMap.size();
     }
+
 
     private T construct(Class clazz) {
         try {
@@ -67,14 +72,15 @@ public abstract class InstanceList<T> implements Iterator<T>, Iterable<T> {
         return null;
     }
 
+
     public T getValue(int key) {
         try {
             return construct(mMap.get(key));
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return null;
         }
     }
+
 
     public Integer getKey(Class clazz) {
         for (Map.Entry<Integer, Class> e : mMap.entrySet()) {
@@ -84,6 +90,7 @@ public abstract class InstanceList<T> implements Iterator<T>, Iterable<T> {
         }
         return null;
     }
+
 
     /**
      * Returns an {@link Iterator} for the elements in this object.
@@ -96,6 +103,7 @@ public abstract class InstanceList<T> implements Iterator<T>, Iterable<T> {
         return this;
     }
 
+
     /**
      * Returns true if there is at least one more element, false otherwise.
      *
@@ -105,6 +113,7 @@ public abstract class InstanceList<T> implements Iterator<T>, Iterable<T> {
     public boolean hasNext() {
         return mIter.hasNext();
     }
+
 
     /**
      * Returns the next object and advances the iterator.
@@ -117,6 +126,7 @@ public abstract class InstanceList<T> implements Iterator<T>, Iterable<T> {
     public T next() {
         return construct(mIter.next().getValue());
     }
+
 
     /**
      * Removes the last object returned by {@code next} from the collection.

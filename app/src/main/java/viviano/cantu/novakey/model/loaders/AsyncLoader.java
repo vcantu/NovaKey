@@ -30,14 +30,17 @@ public abstract class AsyncLoader<T> {
     private final LoadListener<T> mListener;
     private final Loader<T> mLoader;
 
+
     public AsyncLoader(LoadListener<T> listener, Loader<T> loader) {
         mListener = listener;
         mLoader = loader;
     }
 
+
     /**
      * Loads the element from where ever this interface saved it from
      * asynchronously
+     *
      * @return a new loaded object
      */
     public void load() {
@@ -47,6 +50,7 @@ public abstract class AsyncLoader<T> {
                 return mLoader.load();
             }
 
+
             @Override
             protected void onPostExecute(T t) {
                 super.onPostExecute(t);
@@ -55,9 +59,11 @@ public abstract class AsyncLoader<T> {
         }.execute();
     }
 
+
     /**
      * Saves the element to be loaded later.
      * May execute asynchronously
+     *
      * @param t object to be saved
      */
     public abstract void save(T t);
@@ -66,6 +72,7 @@ public abstract class AsyncLoader<T> {
     public interface LoadListener<T> {
         /**
          * Called when the loader has finished loading the object
+         *
          * @param t loaded object
          */
         void onLoad(T t);

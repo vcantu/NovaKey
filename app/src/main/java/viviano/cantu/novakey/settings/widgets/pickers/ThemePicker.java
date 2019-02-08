@@ -23,10 +23,10 @@ package viviano.cantu.novakey.settings.widgets.pickers;
 import android.content.Context;
 import android.util.AttributeSet;
 
+import viviano.cantu.novakey.model.factories.ThemeFactory;
 import viviano.cantu.novakey.view.themes.BaseMasterTheme;
 import viviano.cantu.novakey.view.themes.MasterTheme;
 import viviano.cantu.novakey.view.themes.board.BoardTheme;
-import viviano.cantu.novakey.model.factories.ThemeFactory;
 
 /**
  * Created by Viviano on 1/24/2016.
@@ -43,6 +43,7 @@ public class ThemePicker extends HorizontalPicker {
         super(context, attrs);
     }
 
+
     /**
      * Will be called during the constructor to start the picker items
      *
@@ -52,7 +53,7 @@ public class ThemePicker extends HorizontalPicker {
     protected PickerItem[] initializeItems() {
         MasterTheme base = new BaseMasterTheme();
         PickerItem[] arr = new PickerItem[ThemeFactory.BOARDS.size()];
-        int i=0;
+        int i = 0;
         for (BoardTheme t : ThemeFactory.BOARDS) {
             arr[i] = t;
             t.setParent(base);
@@ -60,6 +61,7 @@ public class ThemePicker extends HorizontalPicker {
         }
         return arr;
     }
+
 
     /**
      * Will be called when the given item is long pressed. Used to communicate,

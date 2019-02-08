@@ -22,44 +22,41 @@ package viviano.cantu.novakey.model;
 
 import android.text.InputType;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.ExtractedText;
-import android.view.inputmethod.ExtractedTextRequest;
-import android.view.inputmethod.InputConnection;
-
-import viviano.cantu.novakey.controller.Corrections;
-import viviano.cantu.novakey.utils.Print;
-import viviano.cantu.novakey.utils.Util;
 
 /**
  * Created by Viviano on 6/16/2016.
- *
+ * <p>
  * Represents the state of a typing session
  */
 public class InputState {
 
+    /**
+     * Editor data
+     */
     private boolean mOnPassword = false;
     private boolean mOnEmailAddress = false;
-
     private boolean mOnURI = false;
-
     private Type mType = Type.TEXT;
 
+    /**
+     * Session data
+     */
     private int mRepeatCount = 0;//current count of closing chars
     private StringBuilder mComposing = new StringBuilder();
-    private int mComposingIndex = 0;
-
-    private InputConnection mConnection;
-
-    private Corrections mCorrections;
-
     private boolean mReturnAfterSpace;
 
-    public void setCorrections(Corrections corrections) {
-        mCorrections = corrections;
-    }
+    /**
+     * Cursor data
+     */
+    private int mOldSelelectionStart;
+    private int mOldSelectionEnd;
+    private int mSelectionStart;
+    private int mSelectionEnd;
+    private int mCandidatesStart;
+    private int mCandidatesEnd;
 
-    public void updateConnection(EditorInfo editorInfo, InputConnection inputConnection) {
-        mConnection = inputConnection;
+
+    public void updateEditorInfo(EditorInfo editorInfo) {
         mComposing.setLength(0);
 
         int inputType = editorInfo.inputType;
@@ -99,207 +96,51 @@ public class InputState {
         }
     }
 
+
     /**
-     *
-     * @param newSelStart
-     * @param newSelEnd
+     * The goal of this method in this class is to update the input state
      */
-    public void onUpdateSelection(int newSelStart, int newSelEnd) {
-        if (!Settings.autoCorrect && shouldAutoCorrect())
-            return;
-        //set composing region
-        //if single cursor AND oldEnd is not newStart?
-        if (newSelStart == newSelEnd) {
-            ExtractedText et = getExtractedText();
-            if (et == null) {
-                mComposing.setLength(0);
-                return;
-            }
-            String text = et.text.toString();
-            if (text.length() == 0) {
-                mComposing.setLength(0);
-                return;
-            }
-
-            int e, s;//start of end of composing
-            //loop from start of cursor to the left
-            //if not a letter, number or ' adjust s and stop loop
-            for (s = Math.min(text.length(), newSelStart); s > 0; s--) {
-                char c = text.charAt(s - 1);
-                if (!Character.isLetter(c) && !Util.isNumber(c) && c != '\'')
-                    break;
-            }
-
-            //loop from end of cursor to the right
-            //if not a letter, number or ' stop loop
-            for (e = Math.min(text.length(), newSelEnd); e < text.length(); e++) {
-                char c = text.charAt(e);
-                if (!Character.isLetter(c) && !Util.isNumber(c) && c != '\'')
-                    break;
-            }
-
-            Print.extText(et);
-
-            //finally update ICs composing region
-            //match composing region to our composing StringBuilder
-            //update composing index
-            mConnection.setComposingRegion(s, e);
-            mComposing.setLength(0);
-            mComposing.append(text.substring(s, e));
-            mComposingIndex = newSelStart - s;
-        }
-        else {
-            mConnection.finishComposingText();
-            mComposing.setLength(0);
-        }
+    public void updateSelection(int oldSelStart, int oldSelEnd,
+                                int newSelStart, int newSelEnd,
+                                int candidatesStart, int candidatesEnd) {
+        /**
+         * Update cursors
+         */
+        mOldSelelectionStart = oldSelStart;
+        mOldSelectionEnd = oldSelEnd;
+        mSelectionStart = newSelStart;
+        mSelectionEnd = newSelEnd;
+        mCandidatesStart = candidatesStart;
+        mCandidatesEnd = candidatesEnd;
     }
 
+
     /**
-     *
-     * @param newSelStart
-     * @param newSelEnd
+     * @return current composing string
      */
-    public void onUpdateSelectionOld(int newSelStart, int newSelEnd) {
-        if (!Settings.autoCorrect && shouldAutoCorrect())
-            return;
-        //set composing region
-        //if single cursor AND oldEnd is not newStart?
-        if (newSelStart == newSelEnd) {
-            ExtractedText et = getExtractedText();
-            if (et == null) {
-                mComposing.setLength(0);
-                return;
-            }
-            String text = et.text.toString();
-            if (text.length() == 0) {
-                mComposing.setLength(0);
-                return;
-            }
-            int e, s;//start of end of composing
-            //loop from start of cursor to the left
-            //if not a letter, number or ' adjust s and stop loop
-            for (s = Math.min(text.length(), newSelStart); s > 0; s--) {
-                char c = text.charAt(s - 1);
-                if (!Character.isLetter(c) && !Util.isNumber(c) && c != '\'')
-                    break;
-            }
-
-            //loop from end of cursor to the right
-            //if not a letter, number or ' stop loop
-            for (e = Math.min(text.length(), newSelEnd); e < text.length(); e++) {
-                char c = text.charAt(e);
-                if (!Character.isLetter(c) && !Util.isNumber(c) && c != '\'')
-                    break;
-            }
-
-            Print.extText(et);
-
-            //finally update ICs composing region
-            //match composing region to our composing StringBuilder
-            //update composing index
-            mConnection.setComposingRegion(s, e);
-            mComposing.setLength(0);
-            mComposing.append(text.substring(s, e));
-            mComposingIndex = newSelStart - s;
-        }
-        else {
-            mConnection.finishComposingText();
-            mComposing.setLength(0);
-        }
+    public String getComposingText() {
+        return mComposing.toString();
     }
 
-    /**
-     * inputs the given text as is
-     *
-     * @param text         text to input
-     * @param newCursorPos were the cursor should end
-     */
-    public void inputText(String text, int newCursorPos) {
-        mConnection.finishComposingText();
-        mComposing.setLength(0);
-
-        mConnection.commitText(text, newCursorPos);
-    }
 
     /**
-     * releases the composing text and fixes it
-     * if it should be fixed and it needs to be fixed
+     * Clears the composing text
      */
-    public void commitCorrection() {
-        //AutoCorrect
-        if (Settings.autoCorrect && !shouldAutoCorrect()) {
-            setComposingText(mCorrections.correction(mComposing.toString()), 1);
-            //TODO: multi language
-            //TODO: caps locked
-            //TODO: markov chains
-        }
-        commitComposing();
-    }
-
-    /**
-     * releases the composing text
-     */
-    public void commitComposing() {
-        mConnection.finishComposingText();
+    public void clearComposingText() {
         mComposing.setLength(0);
     }
+
 
     /**
      * replaces the composing text
      *
-     * @param text         text to replace with
-     * @param newCursorPos where the cursor should end
+     * @param text text to replace with
      */
-    public void setComposingText(String text, int newCursorPos) {
+    public void setComposingText(String text) {
         mComposing.setLength(0);
         mComposing.append(text);
-        mConnection.setComposingText(text, newCursorPos);
     }
 
-    /**
-     * move the selection from it's current position
-     *
-     * @param deltaStart difference of start cursor
-     * @param deltaEnd   difference of end cursor
-     */
-    public void moveSelection(int deltaStart, int deltaEnd) {
-        ExtractedText et = getExtractedText();
-        int s = et.selectionStart + deltaStart, e = et.selectionEnd + deltaEnd;
-        s = s < 0 ? 0 : s;
-        e = e < 0 ? 0 : e;
-        if (s <= e)
-            mConnection.setSelection(s, e);
-        else {
-            mConnection.setSelection(e, s);
-        }
-    }
-
-    /**
-     * move the selection to the absolute position
-     *
-     * @param start start of cursor
-     * @param end   end of cursor
-     */
-    public void setSelection(int start, int end) {
-        mConnection.setSelection(start, start);
-        mConnection.setSelection(start, end);
-    }
-
-    /**
-     * @return extracted text object, which receives updates
-     */
-    public ExtractedText getExtractedText() {
-        return mConnection.getExtractedText(new ExtractedTextRequest(), 0);
-    }
-
-    /**
-     * delete text before & after cursor
-     * @param beforeLength number of codepoints before the cursor to delete
-     * @param afterLength number of codepoints after the cursor to delete
-     */
-    public void deleteSurroundingText(int beforeLength, int afterLength) {
-        mConnection.deleteSurroundingText(beforeLength, afterLength);
-    }
 
     /**
      * @return whether
@@ -308,6 +149,7 @@ public class InputState {
         return mReturnAfterSpace;
     }
 
+
     /**
      * @param returnAfterSpace true if should return back to default keys after space
      */
@@ -315,27 +157,6 @@ public class InputState {
         mReturnAfterSpace = returnAfterSpace;
     }
 
-    public String getSelectedText() {
-        CharSequence cs = mConnection.getSelectedText(0);
-        if (cs != null)
-            return cs.toString();
-        return "";
-    }
-
-    /**
-     * Gets the current capitalization mode
-     *
-     * @param editorInfo uses editor info to get the caps mode
-     * @return 1 for caps 0 for not caps
-     */
-    public int getCurrentCapsMode(EditorInfo editorInfo) {
-        //if null caps if needed only
-        if (mConnection == null)
-            return (editorInfo.inputType & InputType.TYPE_MASK_CLASS) == InputType.TYPE_CLASS_TEXT
-                    && (editorInfo.inputType & 0x4000) == 0 ? 0 : 1;
-        else
-            return mConnection.getCursorCapsMode(editorInfo.inputType);
-    }
 
     /**
      * adds 1 to the repeating character count
@@ -344,12 +165,14 @@ public class InputState {
         mRepeatCount++;
     }
 
+
     /**
      * sets repeating character count to 0
      */
     public void resetRepeat() {
         mRepeatCount = 0;
     }
+
 
     /**
      * @return the current repeating characters inputed
@@ -358,6 +181,7 @@ public class InputState {
         return mRepeatCount;
     }
 
+
     /**
      * @return whether the user is currently typing a password
      */
@@ -365,10 +189,14 @@ public class InputState {
         return mOnPassword;
     }
 
+
     /**
      * @return whether the user is currently typing on an email address field
      */
-    public boolean onEmailAddress() { return mOnEmailAddress; }
+    public boolean onEmailAddress() {
+        return mOnEmailAddress;
+    }
+
 
     /**
      * @return whether the user is currently typing on a URI
@@ -377,12 +205,14 @@ public class InputState {
         return mOnURI;
     }
 
+
     /**
      * @return whether it should use autocorrect and composing text
      */
     public boolean shouldAutoCorrect() {
-        return onPassword() && onEmailAddress() && onURI();
+        return !onPassword() && !onEmailAddress() && !onURI();
     }
+
 
     /**
      * @return the current user's type class
@@ -391,10 +221,59 @@ public class InputState {
         return mType;
     }
 
+
     public enum Type {
         TEXT,
         NUMBER,
         PHONE,
         DATETIME
+    }
+
+
+    /**
+     * @return previous start of selection
+     */
+    public int getOldSelelectionStart() {
+        return mOldSelelectionStart;
+    }
+
+
+    /**
+     * @return previous end of selection
+     */
+    public int getOldSelectionEnd() {
+        return mOldSelectionEnd;
+    }
+
+
+    /**
+     * @return current start of selection
+     */
+    public int getSelectionStart() {
+        return mSelectionStart;
+    }
+
+
+    /**
+     * @return curret end of selection
+     */
+    public int getSelectionEnd() {
+        return mSelectionEnd;
+    }
+
+
+    /**
+     * @return start of composing text or -1 if no composing
+     */
+    public int getCandidatesStart() {
+        return mCandidatesStart;
+    }
+
+
+    /**
+     * @return end of composing text or -1 if no composing
+     */
+    public int getCandidatesEnd() {
+        return mCandidatesEnd;
     }
 }

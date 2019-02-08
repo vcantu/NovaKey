@@ -21,8 +21,6 @@
 package viviano.cantu.novakey.model;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 
@@ -30,13 +28,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import viviano.cantu.novakey.controller.BasicCorrections;
-import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.controller.Corrections;
 import viviano.cantu.novakey.elements.Element;
 import viviano.cantu.novakey.elements.MainElement;
-import viviano.cantu.novakey.elements.keyboards.overlays.OverlayElement;
 import viviano.cantu.novakey.elements.keyboards.Keyboard;
 import viviano.cantu.novakey.elements.keyboards.Keyboards;
+import viviano.cantu.novakey.elements.keyboards.overlays.OverlayElement;
 import viviano.cantu.novakey.model.loaders.ElementsLoader;
 import viviano.cantu.novakey.model.loaders.KeyboardsLoader;
 import viviano.cantu.novakey.model.loaders.Loader;
@@ -46,11 +43,10 @@ import viviano.cantu.novakey.view.themes.MasterTheme;
 
 /**
  * Created by Viviano on 6/10/2016.
- *
+ * <p>
  * Model that stores all of it's data internally.
  * Upon creation it will load all of its data from the TrueModel,
  * which gets its data from user preferences.
- *
  */
 public class MainModel implements Model {
     //Loaders
@@ -77,6 +73,9 @@ public class MainModel implements Model {
     private MainElement mMain;
     private final List<Element> mElements;
 
+    //Corrections
+    private Corrections mCorrections;
+
 
     public MainModel(Context context) {
         //loaders
@@ -89,9 +88,8 @@ public class MainModel implements Model {
 
         //Input State determined during start
         mInputState = new InputState();
-        Corrections corrections = new BasicCorrections();
-        corrections.initialize(context);
-        mInputState.setCorrections(corrections);
+        mCorrections = new BasicCorrections();
+        mCorrections.initialize(context);
 
         mShiftState = ShiftState.UPPERCASE;
 
@@ -104,6 +102,7 @@ public class MainModel implements Model {
         }
     }
 
+
     /**
      * Syncs the models with the user preferences
      */
@@ -113,6 +112,7 @@ public class MainModel implements Model {
         mTheme = mThemeLoader.load();
         mKeyboards = mKeyboardsLoader.load();
     }
+
 
     @Override
     public List<Element> getElements() {
@@ -127,20 +127,24 @@ public class MainModel implements Model {
         mMain.setOverlay(element);
     }
 
+
     @Override
     public MainDimensions getMainDimensions() {
         return mDimensions;
     }
+
 
     @Override
     public MasterTheme getTheme() {
         return mTheme;
     }
 
+
     @Override
     public void setTheme(MasterTheme theme) {
         mTheme = theme;
     }
+
 
     /**
      * @return the current input state
@@ -150,15 +154,16 @@ public class MainModel implements Model {
         return mInputState;
     }
 
+
     /**
      * Uses the given editor info to update the input state
      *
-     * @param editorInfo info used to generate input state
+     * @param editorInfo      info used to generate input state
      * @param inputConnection connection used to input
      */
     @Override
     public void onStart(EditorInfo editorInfo, InputConnection inputConnection) {
-        mInputState.updateConnection(editorInfo, inputConnection);
+        mInputState.updateEditorInfo(editorInfo);
         syncWithPrefs();
 
         //reads theme from preferences & colors according to the app
@@ -184,6 +189,7 @@ public class MainModel implements Model {
         //TODO: update shiftstate
     }
 
+
     /**
      * @return the key layout that should be drawn
      */
@@ -192,6 +198,7 @@ public class MainModel implements Model {
         return mKeyboards.get(getKeyboardCode());
     }
 
+
     /**
      * @return the code/index of the current keyboard
      */
@@ -199,6 +206,7 @@ public class MainModel implements Model {
     public int getKeyboardCode() {
         return mKeyboardCode;
     }
+
 
     /**
      * @param code key layout code
@@ -209,6 +217,7 @@ public class MainModel implements Model {
         setOverlayElement(getKeyboard());
     }
 
+
     /**
      * @return the current shift state of the keyboard
      */
@@ -217,6 +226,7 @@ public class MainModel implements Model {
         return mShiftState;
     }
 
+
     /**
      * @param shiftState the shiftState to set the keyboard to
      */
@@ -224,6 +234,7 @@ public class MainModel implements Model {
     public void setShiftState(ShiftState shiftState) {
         this.mShiftState = shiftState;
     }
+
 
     /**
      * if cursor mode is 0 both the left and the right are moving,
@@ -236,6 +247,7 @@ public class MainModel implements Model {
     public int getCursorMode() {
         return mCursorMode;
     }
+
 
     /**
      * if cursor mode is 0 both the left and the right are moving,
@@ -250,5 +262,16 @@ public class MainModel implements Model {
         if (cursorMode < -1 || cursorMode > 1)
             throw new IllegalArgumentException(cursorMode + " is outside the range [-1, 1]");
         mCursorMode = cursorMode;
+    }
+
+
+    /**
+     * Gets the current corrections logic of the model
+     *
+     * @return current correction method
+     */
+    @Override
+    public Corrections getCorrections() {
+        return mCorrections;
     }
 }

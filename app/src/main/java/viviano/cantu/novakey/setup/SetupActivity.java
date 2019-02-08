@@ -30,16 +30,16 @@ import viviano.cantu.novakey.NovaKey;
 
 public class SetupActivity extends Activity {
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		 requestWindowFeature(Window.FEATURE_NO_TITLE);//gets rid of title bar
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);//gets rid of title bar
 
-		SharedPreferences pref = getApplicationContext().getSharedPreferences(NovaKey.MY_PREFERENCES, MODE_PRIVATE);
-		Editor editor = pref.edit();
-		editor.putBoolean("has_setup", false);
-		editor.commit();
+        SharedPreferences pref = getApplicationContext().getSharedPreferences(NovaKey.MY_PREFERENCES, MODE_PRIVATE);
+        Editor editor = pref.edit();
+        editor.putBoolean("has_setup", false);
+        editor.commit();
 
-		setContentView(new SetupView(this));
-	}
+        setContentView(new SetupView(this));
+    }
 }

@@ -37,6 +37,7 @@ public class MulticolorDonutTheme extends BaseTheme {
     private int[] colors;
     private boolean autoColor = true;
 
+
     public void setColors() {
         if (autoColor) {
             //automatic colors here
@@ -53,11 +54,13 @@ public class MulticolorDonutTheme extends BaseTheme {
         }
     }
 
+
     //allows speical themes to override the colors
     public void setColors(int[] colors) {
         this.colors = colors;
         autoColor = false;
     }
+
 
     @Override
     public void drawBoardBack(float x, float y, float r, float sr, Canvas canvas) {
@@ -68,7 +71,7 @@ public class MulticolorDonutTheme extends BaseTheme {
             pB.setStrokeWidth(r - sr);
             pB.setStyle(Paint.Style.STROKE);
             pB.setColor(0);
-            canvas.drawCircle(x, y, sr + (r-sr) / 2, pB);
+            canvas.drawCircle(x, y, sr + (r - sr) / 2, pB);
             //reset
             pB.setStrokeWidth(0);
             pB.clearShadowLayer();
@@ -77,18 +80,18 @@ public class MulticolorDonutTheme extends BaseTheme {
         pB.setStyle(Paint.Style.FILL);
 
         Path path = new Path();
-        for (int i=0; i<5; i++) {
+        for (int i = 0; i < 5; i++) {
 //            if (is3D())
 //                y -= (r * .01f);
             pB.setColor(colors[i]);
-            double angle =  Math.PI / 2 + (i * 2 * Math.PI) / 5;
+            double angle = Math.PI / 2 + (i * 2 * Math.PI) / 5;
             angle = (angle > Math.PI * 2 ? angle - Math.PI * 2 : angle);
             angle = -angle;
 
-            path.arcTo(new RectF(x -  r, y - r, x + r, y + r),
-                    (float)Math.toDegrees(angle), -360 / 5);
+            path.arcTo(new RectF(x - r, y - r, x + r, y + r),
+                    (float) Math.toDegrees(angle), -360 / 5);
             path.arcTo(new RectF(x - sr, y - sr, x + sr, y + sr),
-                    (float)Math.toDegrees(angle) -360 / 5, 360 / 5);
+                    (float) Math.toDegrees(angle) - 360 / 5, 360 / 5);
             path.close();
 
             canvas.drawPath(path, pB);
@@ -96,10 +99,12 @@ public class MulticolorDonutTheme extends BaseTheme {
         }
     }
 
+
     @Override
     public void drawLines(float x, float y, float r, float sr, float w, Canvas canvas) {
         //do nothing
     }
+
 
     @Override
     public void drawItem(Drawable drawable, float x, float y, float size, Canvas canvas) {
@@ -121,6 +126,7 @@ public class MulticolorDonutTheme extends BaseTheme {
         //TODO: multi color for donut themes
         super.drawItem(drawable, x, y, size, canvas);
     }
+
 
     protected int outerColor() {
         return Util.bestColor(

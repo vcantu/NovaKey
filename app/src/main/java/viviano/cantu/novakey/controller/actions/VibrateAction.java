@@ -31,6 +31,7 @@ public class VibrateAction implements Action<Void> {
 
     private final long mTime;
 
+
     public VibrateAction(int vibrateLevel) {
         mTime = vibrateLevel;
     }

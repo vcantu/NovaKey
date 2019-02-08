@@ -30,18 +30,22 @@ public class CombineAnimator<T> implements Animator<T> {
 
     private final List<Animator<T>> mList;
 
+
     public CombineAnimator(List<Animator<T>> list) {
         mList = list;
     }
+
 
     public CombineAnimator() {
         mList = new ArrayList<>();
     }
 
+
     CombineAnimator<T> add(Animator<T> animator) {
         mList.add(animator);
         return this;
     }
+
 
     /**
      * Takes in a T and a fraction and updates the T according

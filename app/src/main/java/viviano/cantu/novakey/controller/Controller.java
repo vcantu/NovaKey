@@ -22,25 +22,19 @@ package viviano.cantu.novakey.controller;
 
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputConnection;
 
 import java.util.List;
 
 import viviano.cantu.novakey.NovaKey;
-import viviano.cantu.novakey.animations.CharAnimation;
-import viviano.cantu.novakey.animations.CharGrow;
 import viviano.cantu.novakey.controller.actions.Action;
 import viviano.cantu.novakey.controller.actions.SetEditingAction;
-import viviano.cantu.novakey.elements.Element;
 import viviano.cantu.novakey.controller.touch.TouchHandler;
-import viviano.cantu.novakey.elements.keyboards.Keyboards;
+import viviano.cantu.novakey.elements.Element;
 import viviano.cantu.novakey.model.MainModel;
 import viviano.cantu.novakey.model.Model;
-import viviano.cantu.novakey.model.Settings;
 import viviano.cantu.novakey.utils.CustomTimer;
-import viviano.cantu.novakey.view.NovaKeyView;
 import viviano.cantu.novakey.view.MainView;
+import viviano.cantu.novakey.view.NovaKeyView;
 
 /**
  * Created by Viviano on 7/10/2015.
@@ -55,6 +49,7 @@ public class Controller implements Gun, View.OnTouchListener {
     //touch
     private TouchHandler mHandler;//current handler
     private CustomTimer mDoublePress;
+
 
     /**
      * Controller initializes models and creates private references to
@@ -77,12 +72,14 @@ public class Controller implements Gun, View.OnTouchListener {
         mDoublePress = new CustomTimer(1000, () -> fire(new SetEditingAction(true)));
     }
 
+
     /**
      * @return returns the main view
      */
     public NovaKeyView getView() {
         return mView;
     }
+
 
     /**
      * @return returns the draw model
@@ -91,6 +88,7 @@ public class Controller implements Gun, View.OnTouchListener {
         return mModel;
     }
 
+
     /**
      * Redraws the view
      */
@@ -98,23 +96,22 @@ public class Controller implements Gun, View.OnTouchListener {
         mView.invalidate();
     }
 
+
     /**
-     * Triggers action
+     * Triggers action and update the view
      *
      * @param action action to fire
      * @return returns the result of the action
      */
     @Override
     public <T> T fire(Action<T> action) {
+        T t = null;
         if (action != null)
-            return action.trigger(mIME, this, mModel);
-        return null;
+            t = action.trigger(mIME, this, mModel);
+        invalidate();
+        return t;
     }
 
-    public void onStart(EditorInfo editorInfo, InputConnection inputConnection) {
-        mModel.onStart(editorInfo, inputConnection);
-        invalidate();
-    }
 
     @Override
     public boolean onTouch(View view, MotionEvent event) {
@@ -136,8 +133,7 @@ public class Controller implements Gun, View.OnTouchListener {
             boolean result = mHandler.handle(event, this);
             if (!result)
                 mHandler = null;
-        }
-        else {
+        } else {
             //instantiate new handlers until one returns true
             List<Element> elems = mModel.getElements();
             for (int i = elems.size() - 1; i >= 0; i--) {

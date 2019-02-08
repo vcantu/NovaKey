@@ -42,6 +42,7 @@ public class IconView extends View implements View.OnTouchListener {
 
     private OnClickListener listener;
 
+
     public IconView(Context context, AttributeSet attrs) {
         super(context, attrs);
         setLayerType(View.LAYER_TYPE_SOFTWARE, null);
@@ -50,17 +51,21 @@ public class IconView extends View implements View.OnTouchListener {
         p.setAntiAlias(true);
     }
 
+
     public void setIcon(Drawable icon) {
         this.icon = icon;
     }
+
 
     public void setSize(float size) {
         this.size = size;
     }
 
+
     public void setColor(int color) {
         mColor = color;
     }
+
 
     @Override
     public void onDraw(Canvas canvas) {
@@ -68,6 +73,7 @@ public class IconView extends View implements View.OnTouchListener {
         p.setColor(touched ? mColor : mColor);//TODO: make color lighter
         icon.draw(w / 2, h / 2, w * size, p, canvas);
     }
+
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
@@ -85,6 +91,7 @@ public class IconView extends View implements View.OnTouchListener {
         }
         return true;
     }
+
 
     public void setClickListener(OnClickListener listener) {
         this.listener = listener;

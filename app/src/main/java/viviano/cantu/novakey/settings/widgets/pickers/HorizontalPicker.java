@@ -57,6 +57,7 @@ public abstract class HorizontalPicker extends View implements View.OnTouchListe
 
     protected ReleasePicker mReleasePicker;
 
+
     /**
      * Constructor used by XML layout.
      *
@@ -79,6 +80,7 @@ public abstract class HorizontalPicker extends View implements View.OnTouchListe
 
         setOnTouchListener(this);
     }
+
 
     /**
      * Will set the size of the picker accordingly
@@ -105,9 +107,10 @@ public abstract class HorizontalPicker extends View implements View.OnTouchListe
             setMeasuredDimension((int) dimen * mItems.length, (int) dimen);
     }
 
+
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        ScrollView sView = ((ScrollView)getParent().getParent().getParent());
+        ScrollView sView = ((ScrollView) getParent().getParent().getParent());
         pickerX = event.getX() - mScrollView.getScrollX();
         pickerY = event.getY() + mScrollView.getY()
                 + sView.getY() - sView.getScrollY();
@@ -115,7 +118,7 @@ public abstract class HorizontalPicker extends View implements View.OnTouchListe
             case MotionEvent.ACTION_DOWN:
                 startClickTimer();
                 if (mReleasePicker != null) {
-                    startLongPressTimer((int)(event.getX() / dimen));
+                    startLongPressTimer((int) (event.getX() / dimen));
                 }
                 invalidate();
                 break;
@@ -123,8 +126,7 @@ public abstract class HorizontalPicker extends View implements View.OnTouchListe
                 if (mReleasePicker != null && mOnReleasePicker) {
                     event.setLocation(pickerX, pickerY);
                     return mReleasePicker.onTouchEvent(event);
-                }
-                else {
+                } else {
                     if (event.getY() < 0 || event.getY() > getHeight())
                         cancelLongPressTimer();
                 }
@@ -149,6 +151,7 @@ public abstract class HorizontalPicker extends View implements View.OnTouchListe
         return true;
     }
 
+
     /**
      * Starts click timer to determine whether user clicked
      */
@@ -156,13 +159,17 @@ public abstract class HorizontalPicker extends View implements View.OnTouchListe
         isClick = true;
         new CountDownTimer(200, 200) {
             @Override
-            public void onTick(long millisUntilFinished) {}
+            public void onTick(long millisUntilFinished) {
+            }
+
+
             @Override
             public void onFinish() {
                 isClick = false;
             }
         }.start();
     }
+
 
     /**
      * Starts a CountDownTimer, that will call the onItemLongPress method
@@ -171,7 +178,10 @@ public abstract class HorizontalPicker extends View implements View.OnTouchListe
     private void startLongPressTimer(final int currIndex) {
         mLongPressTimer = new CountDownTimer(400, 400) {
             @Override
-            public void onTick(long millisUntilFinished) {}
+            public void onTick(long millisUntilFinished) {
+            }
+
+
             @Override
             public void onFinish() {
                 mTempIndex = currIndex;
@@ -182,6 +192,7 @@ public abstract class HorizontalPicker extends View implements View.OnTouchListe
         }.start();
     }
 
+
     /**
      * Will cancel the mLongPressTimer if its not null
      */
@@ -191,13 +202,15 @@ public abstract class HorizontalPicker extends View implements View.OnTouchListe
         }
     }
 
+
     @Override
     public void onDraw(Canvas canvas) {
-        for (int i=0; i< mItems.length; i++) {
+        for (int i = 0; i < mItems.length; i++) {
             mItems[i].drawPickerItem(i * dimen + dimen / 2, dimen / 2, dimen, mIndex == i,
                     mSubIndexes[i], p, canvas);
         }
     }
+
 
     private void setItemListener() {
         mReleasePicker.setOnItemListener(new ReleasePicker.OnItemListener() {
@@ -208,6 +221,7 @@ public abstract class HorizontalPicker extends View implements View.OnTouchListe
                 invalidate();
             }
 
+
             @Override
             public void onItemSelected(int index) {
                 if (mListener != null)
@@ -215,6 +229,7 @@ public abstract class HorizontalPicker extends View implements View.OnTouchListe
                 mIndex = mTempIndex;
                 invalidate();
             }
+
 
             @Override
             public void onCancel() {
@@ -225,20 +240,23 @@ public abstract class HorizontalPicker extends View implements View.OnTouchListe
         });
     }
 
+
     public void setReleasePicker(ReleasePicker releasePicker) {
         mReleasePicker = releasePicker;
     }
 
+
     public void setItem(final int index) {
         mIndex = index;
         invalidate();
-        final HorizontalScrollView parent = (HorizontalScrollView)getParent();
+        final HorizontalScrollView parent = (HorizontalScrollView) getParent();
         parent.post(new Runnable() {
             public void run() {
                 parent.smoothScrollTo(getDesiredX(index, parent.getWidth()), 0);
             }
         });
     }
+
 
     /**
      * Takes the desired index & the width of the view and returns the
@@ -249,14 +267,15 @@ public abstract class HorizontalPicker extends View implements View.OnTouchListe
      * @return x position at the given index
      */
     private int getDesiredX(int index, float width) {
-        float indexX = index * dimen + dimen/2;
+        float indexX = index * dimen + dimen / 2;
         indexX -= width / 2;
         if (indexX < 0)
             return 0;
-        if (indexX > getWidth()-width)
-            return (int)(getWidth()-width);
-        return (int)indexX;
+        if (indexX > getWidth() - width)
+            return (int) (getWidth() - width);
+        return (int) indexX;
     }
+
 
     /**
      * Will be called during the constructor to start the picker items
@@ -265,16 +284,18 @@ public abstract class HorizontalPicker extends View implements View.OnTouchListe
      */
     protected abstract PickerItem[] initializeItems();
 
+
     /**
      * Will be called when the given item is long pressed. Used to communicate,
      * with the ReleasePicker. This must set mOnReleasePicker to true for the
      * release picker to be activated
      *
-     * @param index index of item which has been long pressed
+     * @param index  index of item which has been long pressed
      * @param startX corrected finger X position
      * @param startY corrected finger Y position
      */
     protected abstract void onItemLongPress(int index, float startX, float startY);
+
 
     /**
      * Sets the on item selected listener
@@ -285,6 +306,7 @@ public abstract class HorizontalPicker extends View implements View.OnTouchListe
         mListener = listener;
     }
 
+
     /**
      * Listener that is called when an item is selected
      */
@@ -292,7 +314,7 @@ public abstract class HorizontalPicker extends View implements View.OnTouchListe
         /**
          * Callback method that will be called when an item is selected
          *
-         * @param item item which has been selected
+         * @param item     item which has been selected
          * @param subIndex subIndex of the item
          */
         void onItemSelected(PickerItem item, int subIndex);

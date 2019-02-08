@@ -43,15 +43,16 @@ public class MultiValueAnimator<K> extends ValueAnimator {
         return anim;
     }
 
+
     private Map<K, InterpolatorData> mInterpolatorData;//builder map
 
     private Map<K, DelayableInterpolator> mInterpolators;//filled with delayable interpolators
     private MultiUpdateListener mUpdateListener;
 
+
     /**
      * Constructor initializes data and adds an update listener which calls the
      * MultiUpdateListener methods onValueUpdate() & onAllUpdate()
-     *
      */
     public MultiValueAnimator() {
         super();
@@ -72,6 +73,7 @@ public class MultiValueAnimator<K> extends ValueAnimator {
             }
         });
     }
+
 
     /**
      * Determines total duration of animation & sets DelayInterpolators
@@ -100,22 +102,25 @@ public class MultiValueAnimator<K> extends ValueAnimator {
         super.start();
     }
 
+
     /**
      * Adds a new interpolator which will be used to create its corresponding DelayInterpolator
      *
-     * @param key key corresponding to this interpolator
+     * @param key              key corresponding to this interpolator
      * @param timeInterpolator interpolator for DelayInterpolator
-     * @param delay delay of specific value animation
-     * @param duration duration of specific value animation
+     * @param delay            delay of specific value animation
+     * @param duration         duration of specific value animation
      */
     public void addInterpolator(K key, TimeInterpolator timeInterpolator, long delay, long duration) {
         mInterpolatorData.put(key, new InterpolatorData(timeInterpolator, delay, duration));
     }
 
+
     // holds interpolator data until start
     private class InterpolatorData {
         TimeInterpolator interpolator;
         long delay, duration;
+
 
         public InterpolatorData(TimeInterpolator interpolator, long delay, long duration) {
             this.interpolator = interpolator;
@@ -123,6 +128,7 @@ public class MultiValueAnimator<K> extends ValueAnimator {
             this.duration = duration;
         }
     }
+
 
     /**
      * @return all the objects being acted on
@@ -141,6 +147,7 @@ public class MultiValueAnimator<K> extends ValueAnimator {
         mUpdateListener = updateListener;
     }
 
+
     /**
      * Update Listener that contains callback methods which users of MultiValueAnimator
      * will use to specify values
@@ -150,19 +157,20 @@ public class MultiValueAnimator<K> extends ValueAnimator {
          * Callback method that will be called for each different value which is being animated.
          *
          * @param animator this animator
-         * @param value If a specific value is given a delay, the value will be 0 until the delay
-         *              is reached. If a specific value is done animating, the value will be 1
-         *              until the whole animation is finished
-         * @param key key of the specific value animatios
+         * @param value    If a specific value is given a delay, the value will be 0 until the delay
+         *                 is reached. If a specific value is done animating, the value will be 1
+         *                 until the whole animation is finished
+         * @param key      key of the specific value animatios
          */
         void onValueUpdate(ValueAnimator animator, float value, K key);
+
 
         /**
          * Callback method that will be called at the end of each update.
          * Will be called after all the onValueUpdate() methods are called
          *
          * @param animator this animator
-         * @param value current animated value from 0 - 1 depending on given interpolator
+         * @param value    current animated value from 0 - 1 depending on given interpolator
          */
         void onAllUpdate(ValueAnimator animator, float value);
     }

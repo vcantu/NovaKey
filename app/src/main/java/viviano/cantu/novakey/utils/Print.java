@@ -21,7 +21,6 @@
 package viviano.cantu.novakey.utils;
 
 import android.content.SharedPreferences;
-import android.util.Log;
 import android.view.inputmethod.ExtractedText;
 
 import java.util.ArrayList;
@@ -33,33 +32,42 @@ import java.util.Map;
 public class Print {
 
     public static void ln(Object o) {
-        System.out.println(o);
+        try {
+            System.out.println(o);
+        } catch (Exception e) {
+            System.out.println("print failed!");
+        }
     }
+
 
     public static void angle(double a) {
-        System.out.println(Math.toDegrees(a));
+        ln(Math.toDegrees(a));
     }
 
+
     public static void hex(int i) {
-        System.out.println("0x" + Integer.toHexString(i));
+        ln("0x" + Integer.toHexString(i));
     }
+
 
     public static void intList(ArrayList<Integer> l) {
         String s = "";
         for (int i : l) {
             s += i + " ";
         }
-        System.out.println(s);
+        ln(s);
     }
 
+
     public static void sharedPref(SharedPreferences pref) {
-        Map<String,?> keys = pref.getAll();
-        System.out.println("-----Shared Pref-----");
-        for(Map.Entry<String,?> entry : keys.entrySet()){
-            System.out.println(entry.getKey() + ": " +
+        Map<String, ?> keys = pref.getAll();
+        ln("-----Shared Pref-----");
+        for (Map.Entry<String, ?> entry : keys.entrySet()) {
+            ln(entry.getKey() + ": " +
                     entry.getValue().toString());
         }
     }
+
 
     public static void stringArr(String[] arr) {
         for (String s : arr) {
@@ -67,19 +75,15 @@ public class Print {
         }
     }
 
-    public static void tryln(Object o) {
-        try {
-            ln(o);
-        } catch (Exception e) {
-            ln("try print failed!");
-        }
-    }
 
-    public static void extText(ExtractedText et) {
-        ln('"' +
-                et.text.toString().substring(0, et.selectionStart) +
-                "|" + (et.selectionEnd == et.selectionEnd ? "" :
-                et.text.toString().substring(et.selectionStart, et.selectionEnd) + "|") +
-                et.text.toString().substring(et.selectionEnd));
+    public static void et(ExtractedText et) {
+        if (et == null)
+            ln("null");
+        else
+            ln('"' +
+                    et.text.toString().substring(0, et.selectionStart) +
+                    "|" + (et.selectionEnd == et.selectionStart ? "" :
+                    et.text.toString().substring(et.selectionStart, et.selectionEnd) + "|") +
+                    et.text.toString().substring(et.selectionEnd));
     }
 }

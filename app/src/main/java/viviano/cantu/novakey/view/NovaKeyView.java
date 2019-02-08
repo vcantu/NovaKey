@@ -38,13 +38,16 @@ public abstract class NovaKeyView extends View implements Themeable {
     protected Model mModel;
     protected MasterTheme mTheme;
 
+
     public NovaKeyView(Context context) {
         this(context, null);
     }
 
+
     public NovaKeyView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
+
 
     public NovaKeyView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -55,10 +58,12 @@ public abstract class NovaKeyView extends View implements Themeable {
         mModel = model;
     }
 
+
     @Override
     public void setTheme(MasterTheme theme) {
         mTheme = theme;
     }
+
 
     @Override
     public void onDraw(Canvas canvas) {

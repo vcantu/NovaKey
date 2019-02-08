@@ -26,18 +26,18 @@ import android.view.MotionEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.controller.actions.SetOverlayAction;
 import viviano.cantu.novakey.controller.actions.input.KeyAction;
+import viviano.cantu.novakey.controller.touch.RotatingHandler;
+import viviano.cantu.novakey.controller.touch.TouchHandler;
 import viviano.cantu.novakey.elements.keyboards.overlays.OverlayElement;
 import viviano.cantu.novakey.model.MainDimensions;
 import viviano.cantu.novakey.model.Model;
-import viviano.cantu.novakey.controller.Controller;
-import viviano.cantu.novakey.controller.touch.RotatingHandler;
-import viviano.cantu.novakey.controller.touch.TouchHandler;
+import viviano.cantu.novakey.utils.Util;
 import viviano.cantu.novakey.view.drawing.drawables.Drawable;
 import viviano.cantu.novakey.view.drawing.drawables.TextDrawable;
 import viviano.cantu.novakey.view.themes.MasterTheme;
-import viviano.cantu.novakey.utils.Util;
 import viviano.cantu.novakey.view.themes.board.BoardTheme;
 
 /**
@@ -53,6 +53,7 @@ public class InfiniteMenu implements OverlayElement, Menu {
     private float fingX, fingY;
     private int mIndex = 0;//current entry
 
+
     public InfiniteMenu(List<Menu.Entry> entries) {
         mEntries = entries;
         mHandler = new Handler();
@@ -63,7 +64,8 @@ public class InfiniteMenu implements OverlayElement, Menu {
      * This draw method will be called if this is not a
      * stand alone View, otherwise this method will never be called
      * by outside sources
-     * @param model for context
+     *
+     * @param model  for context
      * @param theme  used to determine the color
      * @param canvas canvas to draw on
      */
@@ -82,13 +84,13 @@ public class InfiniteMenu implements OverlayElement, Menu {
         double angle = Util.getAngle(fingX - x, y - fingY);
 
         angle = (angle < Math.PI / 2 ? Math.PI * 2 + angle : angle);//sets angle to [90, 450]
-        for (int i=0; i < 5; i++) {
-            double angle1 = (i * 2 * Math.PI) / 5  + Math.PI / 2;
-            double angle2 = ((i+1) * 2 * Math.PI) / 5  + Math.PI / 2;
+        for (int i = 0; i < 5; i++) {
+            double angle1 = (i * 2 * Math.PI) / 5 + Math.PI / 2;
+            double angle2 = ((i + 1) * 2 * Math.PI) / 5 + Math.PI / 2;
             if (angle >= angle1 && angle < angle2) {
-                distanceFromMiddle = (float)(Math.PI/5 - (angle - angle1));//gets the difference
-                                                                            // in angle
-                distanceFromMiddle = distanceFromMiddle/(float)(Math.PI/5);//gets the percentage
+                distanceFromMiddle = (float) (Math.PI / 5 - (angle - angle1));//gets the difference
+                // in angle
+                distanceFromMiddle = distanceFromMiddle / (float) (Math.PI / 5);//gets the percentage
                 break;
             }
         }
@@ -96,33 +98,32 @@ public class InfiniteMenu implements OverlayElement, Menu {
         //draw letters
         //center
         if (mEntries.size() > 0) {
-            for (int i=0; i<4; i++) {
+            for (int i = 0; i < 4; i++) {
                 //----------------------------------DRAW MIDDLE------------------------------------
-                if (i==0) {
-                    float factor = (float) (distanceFromMiddle / Math.pow(2, i+1));
+                if (i == 0) {
+                    float factor = (float) (distanceFromMiddle / Math.pow(2, i + 1));
                     if (Math.abs(distanceFromMiddle) < .25)//TODO: infinite menu pretty snap
                         draw(mIndex, x, y, size, bt, canvas);
                     else
                         draw(mIndex, x + r * factor, y + r * (factor * factor / 2),
                                 size * (1 - Math.abs(factor)), bt, canvas);
-                }
-                else {
+                } else {
                     //----------------------------------DRAW RIGHT---------------------------------
                     float addTo = 0;
-                    for (int j=1; j<i+1; j++) {
+                    for (int j = 1; j < i + 1; j++) {
                         addTo += 1 / Math.pow(2, j);
                     }
-                    float factor = (float)(addTo + (distanceFromMiddle < 0 ? 0 :
-                            distanceFromMiddle / Math.pow(2, i+1)));
-                    draw(indexInBounds(mIndex + i),x + r * factor, y + r * (factor * factor / 2),
+                    float factor = (float) (addTo + (distanceFromMiddle < 0 ? 0 :
+                            distanceFromMiddle / Math.pow(2, i + 1)));
+                    draw(indexInBounds(mIndex + i), x + r * factor, y + r * (factor * factor / 2),
                             size * (1 - Math.abs(factor)), bt, canvas);
                     //----------------------------------DRAW LEFT----------------------------------
                     addTo = 0;
-                    for (int j=1; j<i+1; j++) {
+                    for (int j = 1; j < i + 1; j++) {
                         addTo -= 1 / Math.pow(2, j);
                     }
-                    factor = (float)(addTo + (distanceFromMiddle >= 0 ? 0 :
-                            distanceFromMiddle / Math.pow(2, i+1)));
+                    factor = (float) (addTo + (distanceFromMiddle >= 0 ? 0 :
+                            distanceFromMiddle / Math.pow(2, i + 1)));
                     draw(indexInBounds(mIndex - i), x + r * factor, y + r * (factor * factor / 2),
                             size * (1 - Math.abs(factor)), bt, canvas);
                 }
@@ -130,12 +131,14 @@ public class InfiniteMenu implements OverlayElement, Menu {
         }
     }
 
+
     private int indexInBounds(int i) {
         while (i < 0) {//add length until positive
             i += mEntries.size();
         }
         return i % mEntries.size();
     }
+
 
     /*
      * Draws specific Entry based on it's index
@@ -146,17 +149,17 @@ public class InfiniteMenu implements OverlayElement, Menu {
             return;
         if (o instanceof Drawable) {
             theme.drawItem((Drawable) o, x, y, size, canvas);
-        }
-        else {
+        } else {
             String s = "";
             if (o instanceof Character)
-                s = Character.toString((Character)o);
+                s = Character.toString((Character) o);
             if (o instanceof String)
-                s = (String)o;
+                s = (String) o;
             else
                 try {
                     s = s.toString();
-                } catch (Exception ex) {}
+                } catch (Exception ex) {
+                }
 
             int MAX = 12;
             if (s.length() > 4) {
@@ -166,12 +169,13 @@ public class InfiniteMenu implements OverlayElement, Menu {
                     int last = Util.nthIndexOf(s, 5, '\n');
                     if (last < 3)//Prevents a negative length in the substring method
                         last = 3;
-                    s = s.substring(0, last-3) + "...";
+                    s = s.substring(0, last - 3) + "...";
                 }
             }
             theme.drawItem(new TextDrawable(s), x, y, size, canvas);
         }
     }
+
 
     @Override
     public boolean handle(MotionEvent event, Controller control) {
@@ -187,8 +191,9 @@ public class InfiniteMenu implements OverlayElement, Menu {
         /**
          * Called when the user enters or exits the inner circle.
          * Call unrelated to onMove()
-         * @param entered true if event was triggered by entering the
-         *                inner circle, false if was triggered by exit
+         *
+         * @param entered    true if event was triggered by entering the
+         *                   inner circle, false if was triggered by exit
          * @param controller
          */
         @Override
@@ -197,11 +202,13 @@ public class InfiniteMenu implements OverlayElement, Menu {
             return true;
         }
 
+
         /**
          * Called for every move event so that the handler can update
          * display properly. Called before onRotate()
-         * @param x current fing x position
-         * @param y current fing y position
+         *
+         * @param x          current fing x position
+         * @param y          current fing y position
          * @param controller
          */
         @Override
@@ -212,11 +219,13 @@ public class InfiniteMenu implements OverlayElement, Menu {
             return true;
         }
 
+
         /**
          * Called when the touch listener detects that there
          * has been a cross, either in sector or range
-         * @param clockwise true if rotation is clockwise, false otherwise
-         * @param inCenter  if fing position is currently in the center
+         *
+         * @param clockwise  true if rotation is clockwise, false otherwise
+         * @param inCenter   if fing position is currently in the center
          * @param controller
          */
         @Override
@@ -225,8 +234,7 @@ public class InfiniteMenu implements OverlayElement, Menu {
                 mIndex--;
                 if (mIndex < 0)
                     mIndex = mEntries.size() - 1;
-            }
-            else {
+            } else {
                 mIndex++;
                 if (mIndex >= mEntries.size())
                     mIndex = 0;
@@ -235,12 +243,13 @@ public class InfiniteMenu implements OverlayElement, Menu {
             return true;
         }
 
+
         /**
          * Called when the user lifts fing, typically this
          * method expects a finalized action to be triggered
          * like typing a character
-         * @param controller
          *
+         * @param controller
          */
         @Override
         protected boolean onUp(Controller controller) {
@@ -262,7 +271,7 @@ public class InfiniteMenu implements OverlayElement, Menu {
         for (String s : arr) {
             if (s.length() > 0) {
                 List<Entry> entries = new ArrayList<>();
-                for (int i=0; i<s.length(); i++) {
+                for (int i = 0; i < s.length(); i++) {
                     entries.add(new Entry(
                             s.charAt(i),
                             new KeyAction(s.charAt(i))));
@@ -273,6 +282,7 @@ public class InfiniteMenu implements OverlayElement, Menu {
         }
     }
 
+
     /**
      * Returns the hidden keys menu based
      *
@@ -281,7 +291,7 @@ public class InfiniteMenu implements OverlayElement, Menu {
      */
     public static InfiniteMenu getHiddenKeys(char parent) {
         for (InfiniteMenu menu : HIDDEN_KEYS) {
-            if (((Character)menu.mEntries.get(0).data).charValue() == parent) {
+            if (((Character) menu.mEntries.get(0).data).charValue() == parent) {
                 return menu;
             }
         }

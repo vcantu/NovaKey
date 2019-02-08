@@ -35,8 +35,8 @@ public class Circle implements Shape {
      *
      * @param fingX x coordinate to test
      * @param fingY y coordinate to test
-     * @param x x coordinate to test
-     * @param y y coordinate to test
+     * @param x     x coordinate to test
+     * @param y     y coordinate to test
      * @param size
      * @return true if inside the shape
      */
@@ -44,6 +44,7 @@ public class Circle implements Shape {
     public boolean isInside(float fingX, float fingY, float x, float y, float size) {
         return Util.distance(fingX, fingY, x, y) <= size / 2;
     }
+
 
     /**
      * DO NOT CALL THIS call Icons.draw() instead as it does null checks before

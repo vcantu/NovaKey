@@ -29,7 +29,6 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import viviano.cantu.novakey.R;
-import viviano.cantu.novakey.view.drawing.Icons;
 
 /**
  * Created by Viviano on 12/6/2015.
@@ -43,6 +42,7 @@ public class ThrowAwayView extends View implements View.OnTouchListener {
     public onClickListener listener;
     private Paint p;
 
+
     public ThrowAwayView(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.setOnTouchListener(this);
@@ -51,10 +51,12 @@ public class ThrowAwayView extends View implements View.OnTouchListener {
         p.setAntiAlias(true);
     }
 
+
     @Override
     public void onMeasure(int w, int h) {
         super.onMeasure(w, h);
     }
+
 
     @Override
     public void onDraw(Canvas canvas) {
@@ -66,7 +68,7 @@ public class ThrowAwayView extends View implements View.OnTouchListener {
         int y = 0;
 
 
-        for (int i=0; i<5*maxLine; i++) {
+        for (int i = 0; i < 5 * maxLine; i++) {
             if (index + i >= Emoji.emojis.size())
                 break;
             Emoji e = Emoji.emojis.get(index + i);
@@ -83,6 +85,7 @@ public class ThrowAwayView extends View implements View.OnTouchListener {
 
     private boolean isClick = false;
 
+
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         switch (event.getAction()) {
@@ -92,16 +95,15 @@ public class ThrowAwayView extends View implements View.OnTouchListener {
                 break;
             case MotionEvent.ACTION_UP:
                 if (isClick) {
-                    int x = (int)(event.getX() / getWidth() * maxLine);
-                    int y = (int)(event.getY() / emojiSize);
+                    int x = (int) (event.getX() / getWidth() * maxLine);
+                    int y = (int) (event.getY() / emojiSize);
 
                     if (y >= 5) {
                         if (x < 3)
                             back();
                         else
                             forward();
-                    }
-                    else if (listener != null) {
+                    } else if (listener != null) {
                         int i = index + y * maxLine + x;
                         if (i < Emoji.emojis.size())
                             listener.onClik(Emoji.emojis.get(i));
@@ -113,11 +115,15 @@ public class ThrowAwayView extends View implements View.OnTouchListener {
         return true;
     }
 
+
     private void startClickTimer() {
         isClick = true;
         new CountDownTimer(200, 200) {
             @Override
-            public void onTick(long millisUntilFinished) {}
+            public void onTick(long millisUntilFinished) {
+            }
+
+
             @Override
             public void onFinish() {
                 isClick = false;
@@ -125,13 +131,16 @@ public class ThrowAwayView extends View implements View.OnTouchListener {
         }.start();
     }
 
+
     public void setListener(onClickListener list) {
         listener = list;
     }
 
+
     public interface onClickListener {
         void onClik(Emoji e);
     }
+
 
     private void back() {
         index -= 6 * maxLine;
@@ -139,6 +148,8 @@ public class ThrowAwayView extends View implements View.OnTouchListener {
             index = 0;
         invalidate();
     }
+
+
     private void forward() {
         index += 6 * maxLine;
         if (index >= Emoji.emojis.size()) {

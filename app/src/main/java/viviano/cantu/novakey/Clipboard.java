@@ -26,15 +26,15 @@ import java.util.List;
 
 import viviano.cantu.novakey.controller.actions.Action;
 import viviano.cantu.novakey.controller.actions.Actions;
-import viviano.cantu.novakey.controller.actions.SetOverlayAction;
 import viviano.cantu.novakey.controller.actions.ClipboardAction;
 import viviano.cantu.novakey.controller.actions.NoAction;
+import viviano.cantu.novakey.controller.actions.SetOverlayAction;
 import viviano.cantu.novakey.controller.actions.input.DeleteAction;
 import viviano.cantu.novakey.controller.actions.input.InputAction;
-import viviano.cantu.novakey.view.drawing.Icons;
 import viviano.cantu.novakey.elements.keyboards.overlays.menus.InfiniteMenu;
 import viviano.cantu.novakey.elements.keyboards.overlays.menus.Menu;
 import viviano.cantu.novakey.elements.keyboards.overlays.menus.OnUpMenu;
+import viviano.cantu.novakey.view.drawing.Icons;
 
 /**
  * Created by Viviano on 8/2/2015.
@@ -46,17 +46,20 @@ public class Clipboard {
 
     public static int COPY = 1, SELECT_ALL = 2, PASTE = 3, DESELECT_ALL = 4, CUT = 5;
 
+
     public static void add(String text) {
         clips.add(0, text);
         if (clips.size() > MAX_CLIP_SIZE)
             clips.remove(MAX_CLIP_SIZE);
     }
 
+
     public static String get(int index) {
         if (clips.size() > index)
             return clips.get(index);
         return null;
     }
+
 
     public static int clipCount() {
         return clips.size();
@@ -66,6 +69,7 @@ public class Clipboard {
     ///------------------------------------------On up menu--------------------------------
     public static OnUpMenu MENU;
 
+
     /**
      * Loads the clipboard and creates a menu
      *
@@ -73,7 +77,7 @@ public class Clipboard {
      */
     private static InfiniteMenu createClipboard() {
         List<Menu.Entry> entries = new ArrayList<>();
-        for (int i=0; i<Clipboard.clipCount(); i++) {
+        for (int i = 0; i < Clipboard.clipCount(); i++) {
             try {
                 String text = Clipboard.get(i);
                 if (text != null)
@@ -86,6 +90,7 @@ public class Clipboard {
 
         return new InfiniteMenu(entries);
     }
+
 
     public static void createMenu() {
         Action copy = new ClipboardAction(COPY);
@@ -113,7 +118,6 @@ public class Clipboard {
         InfiniteMenu selectAll = new InfiniteMenu(select);
 
 
-
         //Main list
         List<Menu.Entry> main = Arrays.asList(
                 new OnUpMenu.Entry(Icons.get("content_copy"),
@@ -124,10 +128,10 @@ public class Clipboard {
 
                 new OnUpMenu.Entry(Icons.get("content_paste"),
                         paste, (ime, control, model) -> {
-                            InfiniteMenu clipboard = createClipboard();
-                            control.fire(new SetOverlayAction(clipboard));
-                            return null;
-                        }),
+                    InfiniteMenu clipboard = createClipboard();
+                    control.fire(new SetOverlayAction(clipboard));
+                    return null;
+                }),
 
                 new OnUpMenu.Entry(Icons.get("deselect_all"),
                         deselect_all, new NoAction()),

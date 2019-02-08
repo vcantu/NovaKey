@@ -45,7 +45,7 @@ public class UpdateShiftAction implements Action<Void> {
             switch (model.getShiftState()) {
                 case LOWERCASE:
                 case UPPERCASE:
-                    if (model.getInputState().getCurrentCapsMode(ime.getCurrentInputEditorInfo()) != 0)
+                    if (ime.getCurrentCapsMode() != 0)
                         control.fire(new SetShiftStateAction(ShiftState.UPPERCASE));
                     else
                         control.fire(new SetShiftStateAction(ShiftState.LOWERCASE));

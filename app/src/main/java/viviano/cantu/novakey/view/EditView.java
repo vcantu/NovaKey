@@ -50,6 +50,7 @@ public class EditView extends RelativeLayout implements Themeable {
     private final int MIN = 20, MAX = 35, DEFAULT = 3;
     private final Gun mGun;
 
+
     public EditView(Context context, Gun gun) {
         super(context);
         mGun = gun;
@@ -58,18 +59,18 @@ public class EditView extends RelativeLayout implements Themeable {
         LayoutInflater inflater = LayoutInflater.from(context);
         inflater.inflate(R.layout.edit_view_layout, this, true);
 
-        mResizeView = (NovaKeyEditView)findViewById(R.id.resize_view);
+        mResizeView = (NovaKeyEditView) findViewById(R.id.resize_view);
 
-        mCancel = (FloatingButton)findViewById(R.id.cancel);
+        mCancel = (FloatingButton) findViewById(R.id.cancel);
         mCancel.setIcon(Icons.get("clear"));
 
-        mRefresh = (FloatingButton)findViewById(R.id.refresh);
+        mRefresh = (FloatingButton) findViewById(R.id.refresh);
         mRefresh.setIcon(Icons.get("refresh"));
 
-        mAccept = (FloatingButton)findViewById(R.id.accept);
+        mAccept = (FloatingButton) findViewById(R.id.accept);
         mAccept.setIcon(Icons.get("check"));
 
-        mSeekBar = (SeekBar)findViewById(R.id.seek_bar);
+        mSeekBar = (SeekBar) findViewById(R.id.seek_bar);
         mSeekBar.setMax(MAX - MIN);
 
         float sr = mResizeView.getRadius() / mResizeView.getSmallRadius();
@@ -83,16 +84,18 @@ public class EditView extends RelativeLayout implements Themeable {
                 mResizeView.invalidate();
             }
 
+
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
             }
+
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
 
-        mResetSr = (IconView)findViewById(R.id.reset_sr);
+        mResetSr = (IconView) findViewById(R.id.reset_sr);
         mResetSr.setIcon(Icons.get("refresh"));
         mResetSr.setSize(.8f);
         mResetSr.setClickListener(() -> mSeekBar.setProgress(srToProgress(DEFAULT)));
@@ -101,6 +104,7 @@ public class EditView extends RelativeLayout implements Themeable {
         mRefresh.setOnClickListener(v -> onRefresh());
         mAccept.setOnClickListener(v -> onSave());
     }
+
 
     /**
      * Will set this view's theme with the given one
@@ -129,22 +133,26 @@ public class EditView extends RelativeLayout implements Themeable {
         }
     }
 
+
     private void onCancel() {
         mGun.fire(new SetEditingAction(false));
     }
+
 
     private void onRefresh() {
         mResizeView.resetDimens();
         mSeekBar.setProgress(srToProgress(DEFAULT));
     }
 
+
     private void onSave() {
         mResizeView.saveDimens();
         mGun.fire(new SetEditingAction(false));
     }
 
+
     private int srToProgress(float sr) {
         sr *= 10;
-        return (int)(MAX - sr);
+        return (int) (MAX - sr);
     }
 }

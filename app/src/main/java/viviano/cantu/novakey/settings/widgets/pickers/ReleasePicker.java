@@ -31,8 +31,8 @@ import android.view.View;
 import android.view.animation.OvershootInterpolator;
 
 import viviano.cantu.novakey.R;
-import viviano.cantu.novakey.utils.Util;
 import viviano.cantu.novakey.animations.utils.MultiValueAnimator;
+import viviano.cantu.novakey.utils.Util;
 
 /**
  * Created by Viviano on 1/8/2016.
@@ -52,6 +52,7 @@ public class ReleasePicker extends View {
 
     private OnItemListener mListener;
 
+
     public ReleasePicker(Context context, AttributeSet attrs) {
         super(context, attrs);
         p = new Paint();
@@ -60,6 +61,7 @@ public class ReleasePicker extends View {
         dimen = context.getResources().getDimension(R.dimen.picker_dimen);
         setLayerType(View.LAYER_TYPE_SOFTWARE, null);//allows svgs
     }
+
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -83,6 +85,7 @@ public class ReleasePicker extends View {
         return super.onTouchEvent(event);
     }
 
+
     @Override
     public void onDraw(Canvas canvas) {
         for (int i = 0; i < mSubIndexes.length; i++) {
@@ -94,6 +97,7 @@ public class ReleasePicker extends View {
         }
     }
 
+
     private void drawItem(int i, Canvas canvas) {
         mItems.drawPickerItem(
                 Util.xFromAngle(mCenterX, mData[i].distance, mData[i].angle),
@@ -101,6 +105,7 @@ public class ReleasePicker extends View {
                 dimen * mData[i].scale * mData[i].scaleMultiplier,
                 mIndex == i, mSubIndexes[i], p, canvas);
     }
+
 
     /**
      * Updates the size of all of the PickerItems according to the current Finger position
@@ -114,7 +119,7 @@ public class ReleasePicker extends View {
 
             float dist = Util.distance(x, y, mCenterX, mCenterY);
 
-            float size = (float) Math.pow(dist / Util.distance(x, y, mFingX, mFingY), 1.0/3);
+            float size = (float) Math.pow(dist / Util.distance(x, y, mFingX, mFingY), 1.0 / 3);
             if (size >= 1.5f) {
                 if (i != mPrevIndex) {
                     mPrevIndex = i;
@@ -129,9 +134,12 @@ public class ReleasePicker extends View {
         invalidate();
     }
 
+
     public void onStart(float startX, float startY, PickerItem items, int[] subIndexes) {
-        mCenterX = startX; mCenterY = startY;
-        mFingX = startX; mFingY = startY;
+        mCenterX = startX;
+        mCenterY = startY;
+        mFingX = startX;
+        mFingY = startY;
         mItems = items;
         mSubIndexes = subIndexes;
         mRadius = dimen * 2;
@@ -147,6 +155,7 @@ public class ReleasePicker extends View {
         //animate
         animateItems();
     }
+
 
     private double getFixedAngle(float startX, float startY) {
         boolean clockwise = startX < getWidth() / 2;
@@ -164,6 +173,7 @@ public class ReleasePicker extends View {
         return Math.PI / 2 * (clockwise ? -1 : 1);
     }
 
+
     /**
      * @param x x position
      * @param y y position
@@ -172,6 +182,7 @@ public class ReleasePicker extends View {
     private boolean inside(float x, float y) {
         return x >= 0 && x <= getWidth() && y >= 0 && y <= getHeight();
     }
+
 
     //optimal
     private void animateItems() {
@@ -190,6 +201,7 @@ public class ReleasePicker extends View {
                 mData[index].distance = Util.fromFrac(0, mRadius, value);
             }
 
+
             @Override
             public void onAllUpdate(ValueAnimator animator, float value) {
                 invalidate();
@@ -201,6 +213,7 @@ public class ReleasePicker extends View {
             public void onAnimationStart(Animator animation) {
             }
 
+
             @Override
             public void onAnimationEnd(Animator animation) {
                 for (int i = 0; i < mData.length; i++) {
@@ -208,9 +221,11 @@ public class ReleasePicker extends View {
                 }
             }
 
+
             @Override
             public void onAnimationCancel(Animator animation) {
             }
+
 
             @Override
             public void onAnimationRepeat(Animator animation) {
@@ -218,6 +233,7 @@ public class ReleasePicker extends View {
         });
         anim.start();
     }
+
 
     //all grow at the same time
     private void animateBoringItems() {
@@ -238,12 +254,14 @@ public class ReleasePicker extends View {
         anim.start();
     }
 
+
     /**
      * Simple data class that will hold information for each picker
      */
     private class ItemData {
         float scaleMultiplier, distance, scale;
         double angle;
+
 
         public ItemData(float scale, float distance, double angle) {
             this.scaleMultiplier = 1;
@@ -253,13 +271,19 @@ public class ReleasePicker extends View {
         }
     }
 
+
     public void setOnItemListener(OnItemListener listener) {
         mListener = listener;
     }
 
+
     public interface OnItemListener {
         void onItemUpdated(int index);
+
+
         void onItemSelected(int index);
+
+
         void onCancel();
     }
 }

@@ -36,18 +36,22 @@ public class ChainAnimation implements Animation {
 
     private final List<Animation> mAnimations;
 
+
     public ChainAnimation() {
         mAnimations = new ArrayList<>();
     }
+
 
     public ChainAnimation(List<Animation> animations) {
         mAnimations = animations;
     }
 
+
     public ChainAnimation add(Animation animation) {
         mAnimations.add(animation);
         return this;
     }
+
 
     /**
      * Should start the animation
@@ -68,12 +72,14 @@ public class ChainAnimation implements Animation {
         mAnimations.get(0).start(model);
     }
 
+
     @Override
     public void cancel() {
         for (Animation a : mAnimations) {
             a.cancel();
         }
     }
+
 
     /**
      * Set the start delay of this animation
@@ -87,6 +93,7 @@ public class ChainAnimation implements Animation {
         return this;
     }
 
+
     /**
      * @param listener set this animation's on end listener
      */
@@ -95,6 +102,8 @@ public class ChainAnimation implements Animation {
         mOnEnd = listener;
         return this;
     }
+
+
     /**
      * @param listener set this animation's on end listener
      */

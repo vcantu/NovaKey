@@ -39,7 +39,7 @@ public abstract class RotatingHandler implements TouchHandler {
      * Handles the logic given a touch event and
      * a view
      *
-     * @param event current touch event
+     * @param event   current touch event
      * @param control
      * @return true to continue action, false otherwise
      */
@@ -79,42 +79,50 @@ public abstract class RotatingHandler implements TouchHandler {
         return result;
     }
 
+
     /**
      * Override this to specify onDown behaviour
-     * @param x current x position
-     * @param y current y position
-     * @param area current area
+     *
+     * @param x          current x position
+     * @param y          current y position
+     * @param area       current area
      * @param controller controller used for context
      */
     protected boolean onDown(float x, float y, int area, Controller controller) {
         return true;
     }
 
+
     /**
      * Called when the user enters or exits the inner circle.
      * Call unrelated to onMove()
-     * @param entered true if event was triggered by entering the
-     *                inner circle, false if was triggered by exit
+     *
+     * @param entered    true if event was triggered by entering the
+     *                   inner circle, false if was triggered by exit
      * @param controller provides context
      */
     protected abstract boolean onCenterCross(boolean entered, Controller controller);
 
+
     /**
      * Called for every move event so that the handler can update
      * display properly. Called before onRotate()
-     * @param x current finger x position
-     * @param y current finger y position
+     *
+     * @param x          current finger x position
+     * @param y          current finger y position
      * @param controller provides context
      */
     protected boolean onMove(float x, float y, Controller controller) {
         return true;
     }
 
+
     /**
      * Called when the touch listener detects that there
      * has been a cross, either in sector or range
-     * @param clockwise true if rotation is clockwise, false otherwise
-     * @param inCenter if finger position is currently in the center
+     *
+     * @param clockwise  true if rotation is clockwise, false otherwise
+     * @param inCenter   if finger position is currently in the center
      * @param controller provides context
      */
     protected abstract boolean onRotate(boolean clockwise, boolean inCenter, Controller controller);
@@ -124,8 +132,8 @@ public abstract class RotatingHandler implements TouchHandler {
      * Called when the user lifts finger, typically this
      * method expects a finalized action to be triggered
      * like typing a character
-     * @param controller provides context
      *
+     * @param controller provides context
      */
     protected abstract boolean onUp(Controller controller);
 }

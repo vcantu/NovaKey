@@ -26,7 +26,6 @@ import android.view.MotionEvent;
 
 import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.controller.actions.Action;
-import viviano.cantu.novakey.controller.touch.TouchHandler;
 import viviano.cantu.novakey.elements.Element;
 import viviano.cantu.novakey.model.MainDimensions;
 import viviano.cantu.novakey.model.Model;
@@ -49,9 +48,11 @@ public abstract class Button implements Element {
 
     private ButtonData mData;
 
+
     public Button(ButtonData data) {
         mData = data;
     }
+
 
     /**
      * Must be called by children of this class in order to
@@ -63,20 +64,24 @@ public abstract class Button implements Element {
         mIcon = icon;
     }
 
+
     /**
      * @return action to fire, or null if no action is needed
      */
     protected abstract Action onClickAction();
+
 
     /**
      * @return action to fire, or null if no action is needed
      */
     protected abstract Action onLongPressAction();
 
+
     /**
      * Draws the button. Button must handle it's own paint.
      * Never call this method directly unless inside of a
      * View's onDraw() method
+     *
      * @param theme  theme for drawing properties
      * @param canvas canvas to draw on
      */
@@ -95,12 +100,13 @@ public abstract class Button implements Element {
             buttonTheme.drawIcon(mIcon, posn.getX(d), posn.getY(d), size * .7f, canvas);
     }
 
+
     /**
      * Handles the logic given a touch event and
      * a view
      *
-     * @param event current touch event
-     * @param control  view being acted on
+     * @param event   current touch event
+     * @param control view being acted on
      * @return true to continue action, false otherwise
      */
     @Override
@@ -138,12 +144,14 @@ public abstract class Button implements Element {
         return false;
     }
 
+
     private void startLongPress(Controller control) {
         mShouldClick = true;
         mLongPress = new CountDownTimer(Settings.longPressTime, Settings.longPressTime) {
             @Override
             public void onTick(long millisUntilFinished) {
             }
+
 
             @Override
             public void onFinish() {
@@ -155,6 +163,7 @@ public abstract class Button implements Element {
         };
         mLongPress.start();
     }
+
 
     private void cancelLongPress() {
         if (mLongPress != null)

@@ -40,12 +40,13 @@ import viviano.cantu.novakey.view.themes.board.SeparateSectionsTheme;
 
 /**
  * Created by Viviano on 2/4/2016.
- *
+ * <p>
  * Static Methods for generating Themes
  */
 public class ThemeFactory {
 
     public static Boards BOARDS = new Boards();
+
 
     /*
         Creates a theme from the following the JSON string format format:
@@ -92,6 +93,7 @@ public class ThemeFactory {
         }
         return theme;
     }
+
 
     /*
         Creates a JSON string of the theme following the format:
@@ -142,6 +144,7 @@ public class ThemeFactory {
         return Settings.DEFAULT;
     }
 
+
     /*
      * Builds a theme from the sharedPref string
      *
@@ -177,13 +180,16 @@ public class ThemeFactory {
         return theme;
     }
 
+
     public static int getBoardNum(BoardTheme theme) {
         return BOARDS.getKey(theme.getClass());
     }
 
+
     public static BoardTheme getBoard(int num) {
         return BOARDS.getValue(num);
     }
+
 
     public static class Boards extends InstanceList<BoardTheme> {
 

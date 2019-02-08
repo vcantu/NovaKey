@@ -23,8 +23,8 @@ package viviano.cantu.novakey.view.themes.board;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
-import viviano.cantu.novakey.view.drawing.Draw;
 import viviano.cantu.novakey.utils.Util;
+import viviano.cantu.novakey.view.drawing.Draw;
 import viviano.cantu.novakey.view.drawing.drawables.Drawable;
 
 /**
@@ -44,6 +44,7 @@ public class SeparateSectionsTheme extends BaseTheme {
         pB.clearShadowLayer();
     }
 
+
     @Override
     public void drawLines(float x, float y, float r, float sr, float w, Canvas canvas) {
         //draw lines and circle
@@ -54,6 +55,7 @@ public class SeparateSectionsTheme extends BaseTheme {
         canvas.drawCircle(x, y, sr, pB);
         Draw.lines(x, y, r, sr, -1, mParent.getPrimaryColor(), pB, canvas);
     }
+
 
     @Override
     public void drawItem(Drawable drawable, float x, float y, float size, Canvas canvas) {
@@ -75,6 +77,7 @@ public class SeparateSectionsTheme extends BaseTheme {
         //TODO: multi color for donut themes
         super.drawItem(drawable, x, y, size, canvas);
     }
+
 
     protected int outerColor() {
         return Util.bestColor(

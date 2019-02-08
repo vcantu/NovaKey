@@ -39,9 +39,11 @@ public class CursorOverlay implements OverlayElement {
 
     private final TouchHandler mHandler;
 
+
     public CursorOverlay() {
         mHandler = new SelectingHandler();
     }
+
 
     @Override
     public void draw(Model model, MasterTheme theme, Canvas canvas) {
@@ -58,6 +60,7 @@ public class CursorOverlay implements OverlayElement {
             board.drawItem(Icons.cursorRight, d.getX(), d.getY(),
                     d.getSmallRadius(), canvas);
     }
+
 
     @Override
     public boolean handle(MotionEvent event, Controller control) {

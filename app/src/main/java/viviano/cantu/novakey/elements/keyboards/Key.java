@@ -24,8 +24,8 @@ import viviano.cantu.novakey.NovaKey;
 import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.controller.actions.Action;
 import viviano.cantu.novakey.controller.actions.input.KeyAction;
-import viviano.cantu.novakey.model.Model;
 import viviano.cantu.novakey.elements.keyboards.overlays.menus.InfiniteMenu;
+import viviano.cantu.novakey.model.Model;
 import viviano.cantu.novakey.model.ShiftState;
 import viviano.cantu.novakey.view.drawing.Font;
 import viviano.cantu.novakey.view.drawing.drawables.TextDrawable;
@@ -48,9 +48,11 @@ public class Key implements Action<Void> {
     private float mSize = 1;
     private final TextDrawable mDrawable;
 
+
     public Key(Character c, int group, int loc) {
         this(c, group, loc, false);
     }
+
 
     public Key(Character c, int group, int loc, boolean altLayout) {
         mChar = c;
@@ -62,12 +64,14 @@ public class Key implements Action<Void> {
         mDrawable = new TextDrawable(mChar.toString(), Font.SANS_SERIF_LIGHT);
     }
 
+
     /**
      * @return this key's character in uppercase
      */
     public Character getUppercase() {
         return Character.toUpperCase(mChar);
     }
+
 
     /**
      * @return this key's character in lowercase
@@ -76,6 +80,7 @@ public class Key implements Action<Void> {
         return Character.toLowerCase(mChar);
     }
 
+
     /**
      * @return this key's relative position
      */
@@ -83,13 +88,16 @@ public class Key implements Action<Void> {
         return mPosn;
     }
 
+
     /**
      * set this key's relative position to this
+     *
      * @param posn
      */
     public void setPosn(RelativePosn posn) {
         mPosn = posn;
     }
+
 
     /**
      * @return this key's size factor from 0-1
@@ -100,15 +108,18 @@ public class Key implements Action<Void> {
         return mSize;
     }
 
+
     /**
      * sets this key's size factor
+     *
      * @param size from 0-1
-     * 0 being as small as possible, 1 being the default size
-     * 2 being twice the default size. And so forth
+     *             0 being as small as possible, 1 being the default size
+     *             2 being twice the default size. And so forth
      */
     public void setSize(float size) {
         mSize = size;
     }
+
 
     /**
      * returns this key properties drawable based on the shift state
@@ -126,12 +137,14 @@ public class Key implements Action<Void> {
         return mDrawable;
     }
 
+
     /**
      * @return this key's character code
      */
     public char getChar() {
         return mChar;
     }
+
 
     private RelativePosn getDesiredPosn() {
         if (group == 0) {
@@ -140,17 +153,17 @@ public class Key implements Action<Void> {
             else {
                 return new SmallRadiusPosn(2f / 3f, getAngle());
             }
-        }
-        else {
+        } else {
             if (loc == 2)
                 return new RadiiPosn(1f / 6f, getAngle());
             if (loc == (mAltLayout ? 0 : 4))
-                return new RadiiPosn(1f + 1f/6f, getAngle());
+                return new RadiiPosn(1f + 1f / 6f, getAngle());
             if (loc == 0)
-                return new RadiiPosn(1f - 1f/6f, getAngle());
+                return new RadiiPosn(1f - 1f / 6f, getAngle());
             return new RadiiPosn(.5f, getAngle());
         }
     }
+
 
     private double getAngle() {
         if (group == 0)
@@ -163,9 +176,11 @@ public class Key implements Action<Void> {
         return angleAt(group);
     }
 
+
     private double angleAt(int i) {
-        return ((i-1) * 2 * Math.PI) / 5 + Math.PI / 2 + Math.PI / 5;
+        return ((i - 1) * 2 * Math.PI) / 5 + Math.PI / 2 + Math.PI / 5;
     }
+
 
     /**
      * Returns the hidden keys menu based on this key
@@ -183,6 +198,7 @@ public class Key implements Action<Void> {
                 return InfiniteMenu.getHiddenKeys(getUppercase());
         }
     }
+
 
     /**
      * Called when the action is triggered

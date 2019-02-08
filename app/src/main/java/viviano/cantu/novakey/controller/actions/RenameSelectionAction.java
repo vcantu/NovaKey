@@ -27,17 +27,20 @@ import viviano.cantu.novakey.model.Model;
 /**
  * Created by Viviano on 6/15/2016.
  */
-public class UpdateSelectionAction implements Action<Void> {
+public class RenameSelectionAction implements Action<Void> {
 
     private boolean mMoveRight;
 
-    public UpdateSelectionAction(boolean moveRight) {
+
+    public RenameSelectionAction(boolean moveRight) {
         mMoveRight = moveRight;
     }
+
 
     /**
      * Called when the action is triggered
      * Actual logic for the action goes here
+     *
      * @param ime
      * @param control
      * @param model
@@ -49,7 +52,8 @@ public class UpdateSelectionAction implements Action<Void> {
             ds = mMoveRight ? 1 : -1;
         if (model.getCursorMode() >= 0)
             de = mMoveRight ? 1 : -1;
-        model.getInputState().moveSelection(ds, de);
+        ime.moveSelection(ds, de);
+
         return null;
     }
 }

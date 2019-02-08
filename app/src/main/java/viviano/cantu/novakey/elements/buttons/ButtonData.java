@@ -32,12 +32,14 @@ public class ButtonData {
     private float mSize;
     private Shape mShape;
 
+
     /**
      * @return this properties' posn
      */
     public RelativePosn getPosn() {
         return mPosn;
     }
+
 
     /**
      * @param posn sets this posn to these properties
@@ -47,12 +49,14 @@ public class ButtonData {
         return this;
     }
 
+
     /**
      * @return this properties' current size
      */
     public float getSize() {
         return mSize;
     }
+
 
     /**
      * @param size sets the size of these properties
@@ -62,6 +66,7 @@ public class ButtonData {
         return this;
     }
 
+
     /**
      * @param shape sets the shape of these properties
      */
@@ -69,6 +74,7 @@ public class ButtonData {
         mShape = shape;
         return this;
     }
+
 
     /**
      * @return the shape of these properties

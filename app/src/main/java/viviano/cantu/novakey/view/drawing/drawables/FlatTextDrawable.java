@@ -24,7 +24,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 
 import viviano.cantu.novakey.view.drawing.Draw;
-import viviano.cantu.novakey.view.drawing.drawables.Drawable;
 
 /**
  * Created by Viviano on 6/21/2016.
@@ -33,9 +32,11 @@ public class FlatTextDrawable implements Drawable {
 
     private final String mText;
 
+
     public FlatTextDrawable(String text) {
         mText = text;
     }
+
 
     /**
      * Interface for any kind of drawable

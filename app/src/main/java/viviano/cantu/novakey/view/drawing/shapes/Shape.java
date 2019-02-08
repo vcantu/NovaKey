@@ -32,9 +32,9 @@ public interface Shape extends Drawable {
      *
      * @param fingX x coordinate to test
      * @param fingY y coordinate to test
-     * @param x x coordinate of shape
-     * @param y y coordinate of shape
-     * @param size size of shape
+     * @param x     x coordinate of shape
+     * @param y     y coordinate of shape
+     * @param size  size of shape
      * @return true if inside the shape
      */
     boolean isInside(float fingX, float fingY, float x, float y, float size);

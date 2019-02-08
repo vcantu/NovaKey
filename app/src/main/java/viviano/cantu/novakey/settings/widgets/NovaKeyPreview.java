@@ -35,9 +35,11 @@ public class NovaKeyPreview extends NovaKeyView {
         super(context);
     }
 
+
     public NovaKeyPreview(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
+
 
     @Override
     public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -52,8 +54,8 @@ public class NovaKeyPreview extends NovaKeyView {
         float sr = r / 3;
 
         MainDimensions dimens = mModel.getMainDimensions();
-        dimens.setWidth((int)w);
-        dimens.setHeight((int)h);
+        dimens.setWidth((int) w);
+        dimens.setHeight((int) h);
         dimens.setRadius(r);
         dimens.setSmallRadius(sr);
         dimens.setPadding(getPaddingTop());

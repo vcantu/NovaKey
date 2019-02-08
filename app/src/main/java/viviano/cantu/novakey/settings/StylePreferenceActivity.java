@@ -40,7 +40,7 @@ import viviano.cantu.novakey.view.themes.board.BoardTheme;
 
 /**
  * Created by Viviano on 1/5/2016.
- *
+ * <p>
  * TODO: once model can properly update the view(even when the theme updates)
  * remove any invalidate calls
  */
@@ -50,21 +50,22 @@ public class StylePreferenceActivity extends AbstractPreferenceActivity {
     private NovaKeyPreview mPreview;
     private Model mModel;
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final ReleasePicker releasePicker = (ReleasePicker)findViewById(R.id.releasePick);
+        final ReleasePicker releasePicker = (ReleasePicker) findViewById(R.id.releasePick);
 
         mPreview = (NovaKeyPreview) findViewById(R.id.preview);
         mModel = new MainModel(this);
         mPreview.setModel(mModel);
 
-        final CheckBox autoCheck = (CheckBox)findViewById(R.id.autoColor);
+        final CheckBox autoCheck = (CheckBox) findViewById(R.id.autoColor);
         autoCheck.setChecked(mIsAuto);
         autoCheck.setOnCheckedChangeListener((buttonView, isChecked) -> mIsAuto = isChecked);
 
-        final CheckBox _3dCheck = (CheckBox)findViewById(R.id.threeDee);
+        final CheckBox _3dCheck = (CheckBox) findViewById(R.id.threeDee);
         _3dCheck.setChecked(mModel.getTheme().is3D());
         _3dCheck.setOnCheckedChangeListener((buttonView, isChecked) -> {
             System.out.println("3d triggered");
@@ -72,42 +73,44 @@ public class StylePreferenceActivity extends AbstractPreferenceActivity {
             mPreview.invalidate();
         });
 
-        final ThemePicker themePicker = (ThemePicker)findViewById(R.id.themePicker);
+        final ThemePicker themePicker = (ThemePicker) findViewById(R.id.themePicker);
         themePicker.setItem(ThemeFactory.getBoardNum(mModel.getTheme().getBoardTheme()));
         themePicker.setOnItemSelectedListener((item, subIndex) -> {
-            mModel.getTheme().setBoardTheme((BoardTheme)item);
+            mModel.getTheme().setBoardTheme((BoardTheme) item);
             mPreview.invalidate();
         });
 
-        final ColorPicker primaryColor = (ColorPicker)findViewById(R.id.primaryColor);
+        final ColorPicker primaryColor = (ColorPicker) findViewById(R.id.primaryColor);
         primaryColor.setReleasePicker(releasePicker);
         primaryColor.setItem(Colors.path(mModel.getTheme().getPrimaryColor())[0]);
         primaryColor.setOnItemSelectedListener((item, subIndex) -> {
-            mModel.getTheme().setPrimaryColor(((Colors)item).shade(subIndex));
+            mModel.getTheme().setPrimaryColor(((Colors) item).shade(subIndex));
             mPreview.invalidate();
         });
 
-        final ColorPicker secondaryColor = (ColorPicker)findViewById(R.id.secondaryColor);
+        final ColorPicker secondaryColor = (ColorPicker) findViewById(R.id.secondaryColor);
         secondaryColor.setReleasePicker(releasePicker);
         secondaryColor.setItem(Colors.path(mModel.getTheme().getAccentColor())[0]);
         secondaryColor.setOnItemSelectedListener((item, subIndex) -> {
-            mModel.getTheme().setAccentColor(((Colors)item).shade(subIndex));
+            mModel.getTheme().setAccentColor(((Colors) item).shade(subIndex));
             mPreview.invalidate();
         });
 
-        final ColorPicker ternaryPicker = (ColorPicker)findViewById(R.id.ternaryColor);
+        final ColorPicker ternaryPicker = (ColorPicker) findViewById(R.id.ternaryColor);
         ternaryPicker.setReleasePicker(releasePicker);
         ternaryPicker.setItem(Colors.path(mModel.getTheme().getContrastColor())[0]);
         ternaryPicker.setOnItemSelectedListener((item, subIndex) -> {
-            mModel.getTheme().setContrastColor(((Colors)item).shade(subIndex));
+            mModel.getTheme().setContrastColor(((Colors) item).shade(subIndex));
             mPreview.invalidate();
         });
     }
+
 
     @Override
     int getLayoutId() {
         return R.layout.style_preference_layout;
     }
+
 
     /**
      * Will save the preference pref_theme, as a String so that the keyboard can

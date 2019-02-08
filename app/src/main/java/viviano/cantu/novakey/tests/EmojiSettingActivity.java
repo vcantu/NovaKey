@@ -23,15 +23,16 @@ package viviano.cantu.novakey.tests;
 import android.app.Activity;
 import android.os.Bundle;
 
+import viviano.cantu.novakey.HexGridView;
 import viviano.cantu.novakey.R;
 import viviano.cantu.novakey.view.drawing.drawables.Drawable;
 import viviano.cantu.novakey.view.drawing.emoji.Emoji;
 import viviano.cantu.novakey.view.drawing.emoji.ThrowAwayView;
-import viviano.cantu.novakey.HexGridView;
 
 public class EmojiSettingActivity extends Activity {
 
     int x = 0, y = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

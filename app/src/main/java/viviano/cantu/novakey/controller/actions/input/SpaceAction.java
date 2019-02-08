@@ -24,9 +24,10 @@ import viviano.cantu.novakey.NovaKey;
 import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.controller.actions.Action;
 import viviano.cantu.novakey.controller.actions.SetKeyboardAction;
-import viviano.cantu.novakey.model.Model;
 import viviano.cantu.novakey.elements.keyboards.Keyboards;
 import viviano.cantu.novakey.model.InputState;
+import viviano.cantu.novakey.model.Model;
+import viviano.cantu.novakey.model.Settings;
 
 /**
  * Created by vcantu on 9/18/16.
@@ -45,8 +46,13 @@ public class SpaceAction implements Action<Void> {
     public Void trigger(NovaKey ime, Controller control, Model model) {
         InputState state = model.getInputState();
 
-//        state.commitCorrection();
-        state.inputText(" ", 1);
+        //AutoCorrect
+        if (Settings.autoCorrect && !state.shouldAutoCorrect()) {
+            ime.commitCorrection();
+        } else {
+            ime.commitComposingText();
+        }
+        ime.inputText(" ", 1);
         if (state.returnAfterSpace())
             control.fire(new SetKeyboardAction(Keyboards.DEFAULT));
         state.setReturnAfterSpace(false);

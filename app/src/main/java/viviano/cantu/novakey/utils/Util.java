@@ -22,16 +22,13 @@ package viviano.cantu.novakey.utils;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
-import android.inputmethodservice.Keyboard;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import viviano.cantu.novakey.R;
 import viviano.cantu.novakey.controller.actions.Action;
 import viviano.cantu.novakey.controller.actions.input.DeleteAction;
 import viviano.cantu.novakey.controller.actions.input.EnterAction;
@@ -46,28 +43,34 @@ public class Util {
     //----------------------------------------Trig Utils---------------------------------------
     //returns distance between two points
     public static float distance(float x1, float y1, float x2, float y2) {
-        return (float) Math.sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1));
+        return (float) Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
     }
+
 
     public static RectF square(float x, float y, float r) {
         return new RectF(x - r, y - r, x + r, y + r);
     }
 
+
     public static double angle(float cx, float cy, float x, float y) {
         return Math.atan2(y - cy, x - cx);
     }
+
+
     //Gets angle from 0, 0
     public static float getAngle(float x, float y) {
         double angle = Math.atan2(y, x);
         return (float) (angle < 0 ? Math.PI * 2 + angle : angle);
     }
 
+
     public static float xFromAngle(float cx, float r, double a) {
-        return cx + (float)(Math.cos(a) * r);
+        return cx + (float) (Math.cos(a) * r);
     }
 
+
     public static float yFromAngle(float cy, float r, double a) {
-        return cy - (float)(Math.sin(a) * r);
+        return cy - (float) (Math.sin(a) * r);
     }
 
 
@@ -84,6 +87,7 @@ public class Util {
         }
     }
 
+
     public static String uppercaseFirst(String text) {
         String res = "";
         for (int i = 0; i < text.length(); i++) {
@@ -95,6 +99,7 @@ public class Util {
         return res;
     }
 
+
     public static int nthIndexOf(String s, int n, char c) {
         if (n <= 1)
             return s.indexOf(c);
@@ -103,6 +108,7 @@ public class Util {
             return (s.length() - sub.length()) + nthIndexOf(sub, n - 1, c);
         }
     }
+
 
     public static String toMultiline(String str, Paint p, float max) {
         if (max > 0) {
@@ -115,11 +121,11 @@ public class Util {
                 if (len >= max) {
                     if (lastSpace <= s) {//cut long word
                         str = newLineAt(str, i);
-                        s = i+1;
+                        s = i + 1;
                         i--;
                     } else {
                         str = newLineAt(str, lastSpace);
-                        s = lastSpace+1;
+                        s = lastSpace + 1;
                     }
                 }
             }
@@ -127,11 +133,12 @@ public class Util {
         return str;
     }
 
+
     public static String newLineAt(String str, int index) {
-        if (index < str.length()-1) {
+        if (index < str.length() - 1) {
 //            "01234 6789";
-            String prev = str.substring(0, index+1),
-                    next = str.substring(index+1);
+            String prev = str.substring(0, index + 1),
+                    next = str.substring(index + 1);
             if (next.length() > 0 && next.charAt(0) == ' ')
                 return prev + '\n' + next.substring(1);
             return prev + '\n' + next;
@@ -139,14 +146,15 @@ public class Util {
         return str;
     }
 
+
     public static String toMultiline(String s, int lineMax) {
         String[] S = s.split(" ");
         String res = "";
-        for (int i=0; i<S.length; i++) {
-            String[] divStr = new String[S[i].length()/lineMax+1];
-            for (int j=0; j<divStr.length; j++) {
-                int start = lineMax*j, end = lineMax*(j+1);
-                String add = S[i].substring(start, end>S[i].length()?S[i].length():end);
+        for (int i = 0; i < S.length; i++) {
+            String[] divStr = new String[S[i].length() / lineMax + 1];
+            for (int j = 0; j < divStr.length; j++) {
+                int start = lineMax * j, end = lineMax * (j + 1);
+                String add = S[i].substring(start, end > S[i].length() ? S[i].length() : end);
 
                 String[] lines = res.split("\n");
                 String currLine = lines[lines.length - 1];
@@ -160,16 +168,18 @@ public class Util {
         return res;
     }
 
+
     public static int webToColor(String webColor) {
-        String s = webColor.substring(webColor.length()-6, webColor.length());
+        String s = webColor.substring(webColor.length() - 6, webColor.length());
         return Integer.valueOf(s, 16) + 0xFF000000;
     }
+
 
     public static int countMatches(String str, String match) {
         int count = 0;
         if (match.length() < str.length()) {
-            for (int i=0; i<str.length() - (match.length()-1); i++) {
-                if (str.substring(i, i+match.length()).equals(match))
+            for (int i = 0; i < str.length() - (match.length() - 1); i++) {
+                if (str.substring(i, i + match.length()).equals(match))
                     count++;
             }
         }
@@ -178,10 +188,11 @@ public class Util {
         return count;
     }
 
+
     public static String[] splitEmoji(String str) {
         ArrayList<String> list = new ArrayList<>();
         int s = 0;
-        for (int e=0; e<str.length(); e++) {
+        for (int e = 0; e < str.length(); e++) {
             if (isEmoji(str.codePointAt(e))) {
                 if (s == e) {
                     //TODO
@@ -189,20 +200,23 @@ public class Util {
             }
             String curr = str.substring(s, e);
         }
-        return (String[])list.toArray();
+        return (String[]) list.toArray();
     }
 
     //-------------------------------------Character Utils---------------------------------------
 
+
     public static boolean isNumber(int keyCode) {
         return keyCode >= '0' && keyCode <= '9';
     }
+
 
     public static boolean isEmoji(int codePoint) {
         return false;
     }
 
     //--------------------------------------Color Utils-------------------------------------------
+
 
     public static int colorShade(int c, int f) {
         if (c == Color.BLACK)
@@ -212,9 +226,11 @@ public class Util {
                 (int) (Color.blue(c) * mult));
     }
 
+
     private static int clampRGB(int r, int g, int b) {
         return Color.argb(255, Math.min(r, 255), Math.min(g, 255), Math.min(b, 255));
     }
+
 
     private static int redestributeRGB(int r, int g, int b) {
         int m = Math.max(r, Math.max(g, b));
@@ -228,10 +244,12 @@ public class Util {
         return Color.argb(255, gray + x * r, gray + x * g, gray + x * b);
     }
 
+
     private static boolean whiteDoesContrast(int color) {
         float yiq = relativeLuminance(color);
         return yiq < 128;
     }
+
 
     /**
      * @param color background color
@@ -241,13 +259,15 @@ public class Util {
         return whiteDoesContrast(color) ? Color.WHITE : Color.BLACK;
     }
 
+
     /**
      * @param color color to check
      * @return the relative luminance of the given color
      */
     public static float relativeLuminance(int color) {
-        return (299*Color.red(color) + 587*Color.green(color) + 114*Color.blue(color)) / 1000;
+        return (299 * Color.red(color) + 587 * Color.green(color) + 114 * Color.blue(color)) / 1000;
     }
+
 
     /**
      * @param color1 first color
@@ -256,15 +276,16 @@ public class Util {
      */
     public static float contrastRatio(int color1, int color2) {
         float l1 = relativeLuminance(color1),
-              l2 = relativeLuminance(color2);
-        return Math.max(l1/l2, l2/l1);
+                l2 = relativeLuminance(color2);
+        return Math.max(l1 / l2, l2 / l1);
     }
+
 
     /**
      * Get the best color to fit against a given background
      *
-     * @param preferred first choice of color
-     * @param secondary second choice of color
+     * @param preferred  first choice of color
+     * @param secondary  second choice of color
      * @param background background to check
      * @return first choice it it has a good contrast otherwise it returns the one with the best contrast
      */
@@ -278,10 +299,12 @@ public class Util {
         }
     }
 
+
     // -----------------------------------BaseAnimation Util----------------------------------------
     public static AnimatorSet sequence(Animator[] anims, long delay) {
         return sequence(anims, delay, null);
     }
+
 
     public static AnimatorSet sequence(Animator[] anims, long delay, int[] skipDelayAt) {
         AnimatorSet set = new AnimatorSet();
@@ -291,20 +314,21 @@ public class Util {
         }
         int skipMax = skipDelayAt.length;
         int skip = 0;
-        for (int i=0; i<anims.length-1; i++) {
+        for (int i = 0; i < anims.length - 1; i++) {
             if (skip < skipMax && skipDelayAt[skip] == i) {
+            } else {
+                anims[i + 1].setStartDelay(delay);
             }
-            else {
-                anims[i+1].setStartDelay(delay);
-            }
-            set.play(anims[i]).before(anims[i+1]);
+            set.play(anims[i]).before(anims[i + 1]);
         }
         return set;
     }
 
+
     public static float fromFrac(float beg, float end, float frac) {
         return beg + (end - beg) * frac;
     }
+
 
     //----------------------------------Area Util---------------------------------------
     public static Action getGesture(List<Integer> areasCrossed) {
@@ -312,7 +336,7 @@ public class Util {
         if (size < 3 || size > 5)
             return null;
 
-        int first = areasCrossed.get(0), last = areasCrossed.get(size-1);
+        int first = areasCrossed.get(0), last = areasCrossed.get(size - 1);
         boolean hasZero = areasCrossed.contains(0),
                 hasThree = areasCrossed.contains(3);
         if (first == 2 && (hasZero || hasThree) && (last == 4 || last == 5))//swipe right

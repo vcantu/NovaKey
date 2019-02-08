@@ -20,10 +20,10 @@
 
 package viviano.cantu.novakey.controller.actions;
 
-import viviano.cantu.novakey.view.EditView;
 import viviano.cantu.novakey.NovaKey;
 import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.model.Model;
+import viviano.cantu.novakey.view.EditView;
 
 /**
  * Created by Viviano on 6/15/2016.
@@ -31,6 +31,7 @@ import viviano.cantu.novakey.model.Model;
 public class SetEditingAction implements Action<Void> {
 
     private final boolean mEditing;
+
 
     /**
      * Constructs the action
@@ -41,9 +42,11 @@ public class SetEditingAction implements Action<Void> {
         mEditing = editing;
     }
 
+
     /**
      * Called when the action is triggered
      * Actual logic for the action goes here
+     *
      * @param ime
      * @param control
      * @param model
@@ -58,8 +61,7 @@ public class SetEditingAction implements Action<Void> {
             //main.setInputView(new ControlView(main));
             //main.addWindow(editView, true);
             //TODO: floating view support with settings
-        }
-        else {
+        } else {
             //updates the main model
             model.syncWithPrefs();
             ime.clearWindows();

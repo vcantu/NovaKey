@@ -22,10 +22,9 @@ package viviano.cantu.novakey.view.themes.board;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Path;
 
-import viviano.cantu.novakey.view.drawing.Draw;
 import viviano.cantu.novakey.utils.Util;
+import viviano.cantu.novakey.view.drawing.Draw;
 import viviano.cantu.novakey.view.drawing.drawables.Drawable;
 
 /**
@@ -41,11 +40,12 @@ public class DonutTheme extends BaseTheme {
         pB.setColor(mParent.getAccentColor());
         pB.setStyle(Paint.Style.STROKE);
         float mem = pB.getStrokeWidth();
-        pB.setStrokeWidth(r-sr);
-        canvas.drawCircle(x, y, sr + (r-sr) / 2, pB);//main circle
+        pB.setStrokeWidth(r - sr);
+        canvas.drawCircle(x, y, sr + (r - sr) / 2, pB);//main circle
         pB.setStrokeWidth(mem);
         pB.clearShadowLayer();
     }
+
 
     @Override
     public void drawLines(float x, float y, float r, float sr, float w, Canvas canvas) {
@@ -56,6 +56,7 @@ public class DonutTheme extends BaseTheme {
         //draw circles & lines
         Draw.lines(x, y, r, sr, (r - sr) / 10, mParent.getPrimaryColor(), pB, canvas);
     }
+
 
     @Override
     public void drawItem(Drawable drawable, float x, float y, float size, Canvas canvas) {
@@ -77,6 +78,7 @@ public class DonutTheme extends BaseTheme {
         //TODO: multi color for donut themes
         super.drawItem(drawable, x, y, size, canvas);
     }
+
 
     protected int outerColor() {
         return Util.bestColor(

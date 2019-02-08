@@ -38,27 +38,28 @@ public class Settings {
             pref_hide_password = "pref_hide_password",
             pref_vibrate = "pref_vibrate",
             pref_quick_insert = "pref_quick_insert",
-            //pref_color = "pref_color",(REMOVED)
-            //NovaKey 0.2
-            pref_auto_correct = "pref_auto_correct",
+    //pref_color = "pref_color",(REMOVED)
+    //NovaKey 0.2
+    pref_auto_correct = "pref_auto_correct",
             pref_quick_close = "pref_quick_close",
-            //NovaKey 0.3
-            pref_theme_legacy = "pref_theme",//(DEPRECATED)
-            //pref_btns = "pref_btns",//(REMOVED)
-            pref_rate = "pref_rate",//INTENT
+    //NovaKey 0.3
+    pref_theme_legacy = "pref_theme",//(DEPRECATED)
+    //pref_btns = "pref_btns",//(REMOVED)
+    pref_rate = "pref_rate",//INTENT
             pref_tut = "pref_tut",//INTENT
             pref_style = "pref_style",//INTENT
             pref_space_bar = "pref_space_bar",//(DEPRECATED)
             pref_start_version = "pref_start_version",
-            //NovaKey 0.3.4
-            pref_beta_test = "pref_beta_test",//INTENT
-            //NovaKey 0.3.5
-            pref_long_press_time = "pref_long_press_time",
-            //Novakey 0.3.7
-            pref_vibrate_level = "pref_vibrate_level",
-            //NovaKey 1.0
-            pref_auto_color = "pref_auto_color",
-            pref_theme = "pref_master_theme";
+    //NovaKey 0.3.4
+    pref_beta_test = "pref_beta_test",//INTENT
+    //NovaKey 0.3.5
+    pref_long_press_time = "pref_long_press_time",
+    //Novakey 0.3.7
+    pref_vibrate_level = "pref_vibrate_level",
+    //NovaKey 1.0
+    pref_auto_color = "pref_auto_color",
+            pref_theme = "pref_master_theme",
+            pref_subreddit = "pref_subreddit";//INTENT
 
     //Global Settings
     public static String DEFAULT = "DEFAULT";
@@ -76,11 +77,13 @@ public class Settings {
     private static SharedPreferences prefs;
     private static SharedPreferences.Editor edit;
 
+
     public static void setPrefs(SharedPreferences pref) {
         prefs = pref;
         edit = prefs.edit();
         prefs.registerOnSharedPreferenceChangeListener((sharedPreferences, s) -> update());
     }
+
 
     /**
      * Pulls all values from the shared preferences & updates the static fields
@@ -112,9 +115,11 @@ public class Settings {
         edit.commit();
     }
 
+
     private static void fixLegacyPrefs() {
         fixLegacyThemeing();
     }
+
 
     private static void fixLegacyThemeing() {
         String str = prefs.getString(pref_theme_legacy, DEFAULT);

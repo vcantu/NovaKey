@@ -23,8 +23,6 @@ package viviano.cantu.novakey.view.themes.board;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
-import viviano.cantu.novakey.utils.Util;
-
 /**
  * Created by Viviano on 6/14/2015.
  */

@@ -18,4 +18,4 @@
  * Any questions about the program or source may be directed to <strellastudios@gmail.com>
  */
 
-include ':app'
+include ':app', ':wear', ':core'

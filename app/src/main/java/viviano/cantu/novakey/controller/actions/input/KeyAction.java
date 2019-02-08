@@ -21,14 +21,16 @@
 package viviano.cantu.novakey.controller.actions.input;
 
 
+import android.view.inputmethod.InputConnection;
+
 import viviano.cantu.novakey.NovaKey;
 import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.controller.actions.Action;
 import viviano.cantu.novakey.controller.actions.SetKeyboardAction;
-import viviano.cantu.novakey.model.Model;
-import viviano.cantu.novakey.model.Settings;
 import viviano.cantu.novakey.elements.keyboards.Keyboards;
 import viviano.cantu.novakey.model.InputState;
+import viviano.cantu.novakey.model.Model;
+import viviano.cantu.novakey.model.Settings;
 import viviano.cantu.novakey.model.ShiftState;
 import viviano.cantu.novakey.utils.Util;
 
@@ -39,7 +41,9 @@ public class KeyAction implements Action<Void> {
 
     //return after space
     private final Character[] returnAfterSpace = new Character[]
-            { '.', ',', ';', '&', '!', '?' };
+            {'.', ',', ';', '&', '!', '?'};
+
+
     public boolean shouldReturnAfterSpace(Character c) {
         for (Character C : returnAfterSpace) {
             if (C == c)
@@ -48,8 +52,10 @@ public class KeyAction implements Action<Void> {
         return false;
     }
 
-    private static char[] openers = new char[] { '¿', '¡', '⌊', '⌈' },
-                         closers = new char[] { '?', '!', '⌋', '⌉' };
+
+    private static char[] openers = new char[]{'¿', '¡', '⌊', '⌈'},
+            closers = new char[]{'?', '!', '⌋', '⌉'};
+
 
     private static char getCloser(int c) {
         for (int i = 0; i < openers.length; i++) {
@@ -58,6 +64,8 @@ public class KeyAction implements Action<Void> {
         }
         return 0;
     }
+
+
     private static boolean isOpener(int c) {
         for (int i : openers) {
             if (i == c)
@@ -66,15 +74,20 @@ public class KeyAction implements Action<Void> {
         return false;
     }
 
-    private static char[] quickOpeners = new char[] { '(', '[', '{', '<', '>', '|', '\"' },// the | is used for absolute
-                         quickClosers = new char[] { ')', ']', '}', '>', '<', '|', '\"' };//  value so its in
+
+    private static char[] quickOpeners = new char[]{'(', '[', '{', '<', '>', '|', '\"'},// the | is used for absolute
+            quickClosers = new char[]{')', ']', '}', '>', '<', '|', '\"'};//  value so its in
+
+
     private static char getQuickCloser(int c) {
         for (int i = 0; i < quickOpeners.length; i++) {
             if (quickOpeners[i] == c)
                 return quickClosers[i];
         }
-        return (char)0;
+        return (char) 0;
     }
+
+
     private static boolean isQuickOpener(int c) {
         for (int i : quickOpeners) {
             if (i == c)
@@ -83,12 +96,14 @@ public class KeyAction implements Action<Void> {
         return false;
     }
 
+
     private final Character mChar;
 
 
     public KeyAction(Character character) {
         mChar = character;
     }
+
 
     /**
      * Called when the action is triggered
@@ -100,6 +115,7 @@ public class KeyAction implements Action<Void> {
      */
     @Override
     public Void trigger(NovaKey ime, Controller control, Model model) {
+        InputConnection ic = ime.getCurrentInputConnection();
         InputState state = model.getInputState();
         boolean regText = state.shouldAutoCorrect();
 
@@ -112,31 +128,30 @@ public class KeyAction implements Action<Void> {
             } else {
                 c = Character.toUpperCase(mChar);
             }
-            state.inputText(Character.toString(c), 1);
+            ime.inputText(Character.toString(c), 1);
         }
         // Quick Insert
         else if (!regText && Settings.quickInsert && isOpener(mChar)) {
-            state.inputText(mChar.toString(), 1);
-            state.inputText(String.valueOf(getCloser(mChar)), -1);
+            ime.inputText(mChar.toString(), 1);
+            ime.inputText(String.valueOf(getCloser(mChar)), -1);
         }
         // Quick Close
         else if (!regText && Settings.quickClose && isQuickOpener(mChar)) {
             switch (state.getRepeatCount()) {
                 default:
                 case 0:
-                    state.inputText(mChar.toString(), 1);
+                    ime.inputText(mChar.toString(), 1);
                     break;
                 case 1:
-                    state.inputText(getQuickCloser(mChar) + "", 0);
-                    state.moveSelection(-1, -1);
+                    ime.inputText(getQuickCloser(mChar) + "", 0);
+                    ime.moveSelection(-1, -1);
                     break;
                 case 2:
-                    state.deleteSurroundingText(0, 1);
-                    state.inputText(mChar.toString() + mChar.toString(), 1);
+                    ic.deleteSurroundingText(0, 1);
+                    ime.inputText(mChar.toString() + mChar.toString(), 1);
                     break;
             }
-        }
-        else {
+        } else {
             //TODO if regular keys but not auto correcting(MAKE PRETTIER)
             char c;
             if (model.getShiftState() == ShiftState.LOWERCASE) {
@@ -144,7 +159,7 @@ public class KeyAction implements Action<Void> {
             } else {
                 c = Character.toUpperCase(mChar);
             }
-            state.inputText(Character.toString(c), 1);
+            ime.inputText(Character.toString(c), 1);
         }
 
         //side effects

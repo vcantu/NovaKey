@@ -26,7 +26,7 @@ import viviano.cantu.novakey.model.Model;
 
 /**
  * Toggles the cursor mode state accordingly
- *
+ * <p>
  * Created by Viviano on 6/15/2016.
  */
 public class ToggleCursorModeAction implements Action<Void> {
@@ -35,6 +35,7 @@ public class ToggleCursorModeAction implements Action<Void> {
     /**
      * Called when the action is triggered
      * Actual logic for the action goes here
+     *
      * @param ime
      * @param control
      * @param model

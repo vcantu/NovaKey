@@ -35,13 +35,16 @@ public class CharGrow extends CharAnimation {
     private final TimeInterpolator mInterpolator = new OvershootInterpolator();
     private final Animator<Key> mAnimator = new KeySizeAnimator(0, 1);
 
+
     public CharGrow(int style, long duration) {
         super(style, duration);
     }
 
+
     public CharGrow(int style) {
         super(style);
     }
+
 
     /**
      * Will be called when building the animation to set this particular key's
@@ -54,6 +57,7 @@ public class CharGrow extends CharAnimation {
     protected TimeInterpolator getInterpolatorFor(Key k) {
         return mInterpolator;
     }
+
 
     /**
      * Called when building the animation to determine which animator to assign

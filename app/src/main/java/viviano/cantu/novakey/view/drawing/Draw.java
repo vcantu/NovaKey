@@ -39,13 +39,13 @@ public class Draw {
      */
     public static void lines(float x, float y, float r, float sr, float gap, int color,
                              Paint p, Canvas canvas) {
-        for (int i = 0; i < 5; i++)
-        {
+        for (int i = 0; i < 5; i++) {
             double angle = (i * 2 * Math.PI) / 5 + Math.PI / 2;
             angle = (angle > Math.PI * 2 ? angle - Math.PI * 2 : angle);
             line(x, y, sr + gap, r - gap, angle, color, p, canvas);
         }
     }
+
 
     /*
     Draws shaded line with origin x, y at an angle from start to end
@@ -59,19 +59,20 @@ public class Draw {
                 y - (float) Math.sin(angle) * end, p);
     }
 
+
     /*
      Helper method - draws all shaded lines with given information
      */
     public static void shadedLines(float x, float y, float r, float sr,
                                    int color, Paint p, Canvas canvas) {
         float gap = (r - sr) / 10;// gap that will separate the line from the center circle
-        for (int i = 0; i < 5; i++)
-        {
+        for (int i = 0; i < 5; i++) {
             double angle = (i * 2 * Math.PI) / 5 + Math.PI / 2;
             angle = (angle > Math.PI * 2 ? angle - Math.PI * 2 : angle);
             shadedLine(x, y, sr + gap, r - gap, angle, color, p, canvas);
         }
     }
+
 
     /*
      Draws shaded line with origin x, y at an angle from start to end
@@ -90,6 +91,7 @@ public class Draw {
         p.setShader(null);
     }
 
+
     //Draw text with size
     public static void textFlat(String s, float x, float y, float size, Paint p, Canvas canvas) {
         float temp = p.getTextSize();
@@ -98,9 +100,11 @@ public class Draw {
         p.setTextSize(temp);
     }
 
+
     public static void textFlat(String s, float x, float y, Paint p, Canvas canvas) {
         canvas.drawText(s, x - p.measureText(s) / 2, y, p);
     }
+
 
     //Draws text centered
     public static void text(String s, float x, float y, Paint p, Canvas canvas) {
@@ -109,25 +113,29 @@ public class Draw {
             canvas.drawText(s, x - p.measureText(s) / 2, y - (p.ascent() + p.descent()) / 2, p);
         } else {
             float l = p.getTextSize() * (10 / 8);//line size
-            for (int i=0; i<S.length; i++) {
-                text(S[i], x, ((y - (S.length / 2 * l)) + i * l) - (S.length % 2 != 0 ? l/2 : 0) + l/2,
+            for (int i = 0; i < S.length; i++) {
+                text(S[i], x, ((y - (S.length / 2 * l)) + i * l) - (S.length % 2 != 0 ? l / 2 : 0) + l / 2,
                         p, canvas);
             }
         }
     }
 
+
     //Draw text with size
-   public static void text(String s, float x, float y, float size, Paint p, Canvas canvas) {
+    public static void text(String s, float x, float y, float size, Paint p, Canvas canvas) {
         float temp = p.getTextSize();
         p.setTextSize(size);
         text(s, x, y, p, canvas);
         p.setTextSize(temp);
     }
 
+
     public static void colorItem(int color, float x, float y, float radius, Paint p, Canvas canvas) {
         p.setColor(color);
         canvas.drawCircle(x, y, radius, p);
     }
+
+
     //draws white checkmark if selected
     public static void colorItem(int color, float x, float y, float radius, boolean selected,
                                  Paint p, Canvas canvas) {
@@ -141,8 +149,9 @@ public class Draw {
         }
     }
 
+
     public static void floatingButton(float x, float y, float radius, Bitmap icon, int back, int front,
-                                   float height, Paint p, Canvas canvas) {
+                                      float height, Paint p, Canvas canvas) {
         //Circle
         p.setShadowLayer(height + 2, 0, height, 0x60000000);
         p.setColor(back);
@@ -154,6 +163,7 @@ public class Draw {
         bitmap(icon, x, y - height, 1, p, canvas);
         p.setColorFilter(null);
     }
+
 
     //centers bitmap and scales it to scale
     public static void bitmap(Bitmap bmp, float x, float y, float scale, Paint p, Canvas canvas) {

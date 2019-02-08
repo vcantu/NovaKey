@@ -31,13 +31,16 @@ public class SetKeyboardAction implements Action<Void> {
 
     private final int mKeyboardCode;
 
+
     public SetKeyboardAction(int keyboardCode) {
         mKeyboardCode = keyboardCode;
     }
 
+
     /**
      * Called when the action is triggered
      * Actual logic for the action goes here
+     *
      * @param ime
      * @param control
      * @param model
@@ -45,7 +48,6 @@ public class SetKeyboardAction implements Action<Void> {
     @Override
     public Void trigger(NovaKey ime, Controller control, Model model) {
         //TODO: Animations
-        System.out.printf("Keyboard set");
         model.setKeyboard(mKeyboardCode);
         control.invalidate();
         return null;

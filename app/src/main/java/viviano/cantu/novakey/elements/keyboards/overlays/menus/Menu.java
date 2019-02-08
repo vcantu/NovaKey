@@ -20,8 +20,8 @@
 
 package viviano.cantu.novakey.elements.keyboards.overlays.menus;
 
-import viviano.cantu.novakey.controller.actions.NoAction;
 import viviano.cantu.novakey.controller.actions.Action;
+import viviano.cantu.novakey.controller.actions.NoAction;
 import viviano.cantu.novakey.view.drawing.Icons;
 
 /**
@@ -36,6 +36,7 @@ public interface Menu {
     class Entry {
         public final Object data;
         public final Action action;
+
 
         public Entry(Object data, Action action) {
             this.data = data;

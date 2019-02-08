@@ -25,17 +25,19 @@ import viviano.cantu.novakey.utils.Util;
 
 /**
  * Created by Viviano on 9/2/2016.
- *
+ * <p>
  * Will change the size of the key from the given factors
  */
 public class KeySizeAnimator implements Animator<Key> {
 
     private final float mStart, mEnd;
 
+
     public KeySizeAnimator(float start, float end) {
         mStart = start;
         mEnd = end;
     }
+
 
     /**
      * Takes in a T and a fraction and updates the T according

@@ -32,15 +32,19 @@ public class CustomTimer {
     private Runnable mEvent;
     private long mTime;
 
+
     public CustomTimer(long milliseconds, final Runnable event) {
         mEvent = event;
         mTime = milliseconds;
     }
 
+
     public void begin() {
         mTimer = new CountDownTimer(mTime, mTime) {
             @Override
-            public void onTick(long millisUntilFinished) {}
+            public void onTick(long millisUntilFinished) {
+            }
+
 
             @Override
             public void onFinish() {
@@ -49,10 +53,12 @@ public class CustomTimer {
         }.start();
     }
 
+
     public void cancel() {
         if (mTimer != null)
             mTimer.cancel();
     }
+
 
     public void reset() {
         cancel();

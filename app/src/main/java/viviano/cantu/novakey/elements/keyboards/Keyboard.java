@@ -46,11 +46,13 @@ public class Keyboard implements OverlayElement, Iterator<Key>, Iterable<Key> {
 
     private int currG = 0, currL = 0;
 
+
     public Keyboard(String name, Key[][] keys) {
         this.keys = keys;
         this.name = name;
         mHandler = new TypingHandler(this);
     }
+
 
     @Override
     public Iterator<Key> iterator() {
@@ -59,10 +61,12 @@ public class Keyboard implements OverlayElement, Iterator<Key>, Iterable<Key> {
         return this;
     }
 
+
     @Override
     public boolean hasNext() {
         return currG < keys.length && currL < keys[currG].length;
     }
+
 
     @Override
     public Key next() {
@@ -72,21 +76,24 @@ public class Keyboard implements OverlayElement, Iterator<Key>, Iterable<Key> {
         currL++;
         if (currL >= keys[currG].length) {
             currG++;
-            currL=0;
+            currL = 0;
         }
         return k;
     }
+
 
     @Override
     public void remove() {
         throw new UnsupportedOperationException();
     }
 
+
     private Key getKey(int group, int loc) {
         if (loc > keys[group].length)//for alt layouts
             return keys[group][0];
         return keys[group][loc];
     }
+
 
     /**
      * Draws the element.
@@ -114,10 +121,12 @@ public class Keyboard implements OverlayElement, Iterator<Key>, Iterable<Key> {
         }
     }
 
+
     @Override
     public boolean handle(MotionEvent event, Controller control) {
         return mHandler.handle(event, control);
     }
+
 
     /**
      * will return the keyCode for the actions done
@@ -142,6 +151,7 @@ public class Keyboard implements OverlayElement, Iterator<Key>, Iterable<Key> {
         return null;
     }
 
+
     private Location getLoc(List<Integer> areasCrossed) {
         if (areasCrossed.size() <= 0)
             return null;
@@ -157,17 +167,17 @@ public class Keyboard implements OverlayElement, Iterator<Key>, Iterable<Key> {
         if (firstArea >= 0) {
             //loops twice checks first and last area first, then checks first and second area
             int check = lastArea;
-            for (int i=0; i<2; i++) {
+            for (int i = 0; i < 2; i++) {
                 if (firstArea == 0 && check >= 0)//center
                     return new Location(0, check);
                 else {
                     if (firstArea == check)
                         return new Location(firstArea, 0);
-                    else if (check == firstArea+1 || (firstArea == 5 && check == 1))
+                    else if (check == firstArea + 1 || (firstArea == 5 && check == 1))
                         return new Location(firstArea, 1);
                     else if (check == 0)
                         return new Location(firstArea, 2);
-                    else if (check == firstArea-1 || (firstArea == 1 && check == 5))
+                    else if (check == firstArea - 1 || (firstArea == 1 && check == 5))
                         return new Location(firstArea, 3);
                     else if (check == -1 && areasCrossed.size() == 2)
                         return new Location(firstArea, 4);
@@ -178,8 +188,10 @@ public class Keyboard implements OverlayElement, Iterator<Key>, Iterable<Key> {
         return null;
     }
 
+
     public static class Location {
         final int x, y;
+
 
         Location(int x, int y) {
             this.x = x;

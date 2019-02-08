@@ -22,7 +22,6 @@ package viviano.cantu.novakey.view.themes.background;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.support.text.emoji.EmojiCompat;
 
 import viviano.cantu.novakey.view.themes.MasterTheme;
 
@@ -34,10 +33,12 @@ public class FlatBackgroundTheme implements BackgroundTheme {
     private final Paint p;
     private MasterTheme mParent;
 
+
     public FlatBackgroundTheme() {
         p = new Paint();
         p.setFlags(Paint.ANTI_ALIAS_FLAG);//smooth edges and Never changes
     }
+
 
     /**
      * Draw background of keyboard
@@ -59,6 +60,7 @@ public class FlatBackgroundTheme implements BackgroundTheme {
         p.setColor(mParent.getPrimaryColor());
         canvas.drawRect(l, t, rt, b, p);
     }
+
 
     /**
      * Sets this child's master theme for reference

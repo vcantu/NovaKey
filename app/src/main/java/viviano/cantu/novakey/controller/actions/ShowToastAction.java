@@ -36,10 +36,12 @@ public class ShowToastAction implements Action<Void> {
     private final String mMessage;
     private final int mLength;
 
+
     public ShowToastAction(String message, int length) {
         mMessage = message;
         mLength = length;
     }
+
 
     /**
      * Called when the action is triggered

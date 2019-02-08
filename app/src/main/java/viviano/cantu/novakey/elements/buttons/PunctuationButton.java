@@ -36,6 +36,7 @@ public class PunctuationButton extends Button {
         setIcon(new FlatTextDrawable("."));
     }
 
+
     /**
      * @return action to fire, or null if no action is needed
      */
@@ -43,6 +44,7 @@ public class PunctuationButton extends Button {
     protected Action onClickAction() {
         return new KeyAction('.');
     }
+
 
     /**
      * @return action to fire, or null if no action is needed

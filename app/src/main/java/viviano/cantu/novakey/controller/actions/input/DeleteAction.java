@@ -20,56 +20,81 @@
 
 package viviano.cantu.novakey.controller.actions.input;
 
+import android.view.KeyEvent;
 import android.view.inputmethod.ExtractedText;
 import android.view.inputmethod.InputConnection;
 
 import viviano.cantu.novakey.NovaKey;
 import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.controller.actions.Action;
+import viviano.cantu.novakey.model.InputState;
 import viviano.cantu.novakey.model.Model;
 import viviano.cantu.novakey.utils.Pred;
 
 /**
  * Created by Viviano on 6/15/2016.
+ * <p>
+ * Action performs a delete action
+ * Returns the text that is deleted as a String
  */
 public class DeleteAction implements Action<String> {
 
     private final boolean mForward, mFast;
 
+
     public DeleteAction() {
         this(false);
     }
 
+
     public DeleteAction(boolean forwards) {
         this(forwards, false);
     }
+
 
     public DeleteAction(boolean forwards, boolean fast) {
         mForward = forwards;
         mFast = fast;
     }
 
+
     /**
      * Called when the action is triggered
      * Actual logic for the action goes here
+     *
      * @param ime
      * @param control
      * @param model
      */
     @Override
     public String trigger(NovaKey ime, Controller control, Model model) {
-        Pred<Character> slow = character -> true,
-                fast = character -> character.charValue() == ' ';
-        return handleDelete(ime, control, model,
-                !mForward, mFast ? fast : slow, true);
+        InputState is = model.getInputState();
+        // If not a single cursor then perform a delete key action
+        if (is.getSelectionStart() != is.getSelectionEnd()) {
+            String selected = ime.getSelectedText();
+            ime.commitComposingText();
+
+            if (mForward)
+                ime.sendDownUpKeyEvents(KeyEvent.KEYCODE_FORWARD_DEL);
+            else
+                ime.sendDownUpKeyEvents(KeyEvent.KEYCODE_DEL);
+            return selected;
+        }
+        // Otherwise handle a delete fast or slow
+        else {
+            Pred<Character> slow = character -> true,
+                    fast = character -> character.charValue() == ' ';
+            return handleDelete(ime, control, model, !mForward, mFast ? fast : slow, true);
+        }
     }
+
 
     /**
      * Call this to delete until a predicate is reached
      *
      * @param backspace true if deleting to left, false if deleting to right
-     * @param until will delete until this predicate is reached
-     * @param included true if it should delete the character which made it stop
+     * @param until     will delete until this predicate is reached
+     * @param included  true if it should delete the character which made it stop
      * @return the deleted string
      */
     public String handleDelete(NovaKey ime, Controller control, Model model,
@@ -81,7 +106,7 @@ public class DeleteAction implements Action<String> {
             return "";
 
         StringBuilder sb = new StringBuilder();
-        ExtractedText et = model.getInputState().getExtractedText();
+        ExtractedText et = ime.getExtractedText();
         String text = (String) et.text;
         String left = text.substring(0, et.selectionStart);
         String right = text.substring(et.selectionEnd);
@@ -120,7 +145,8 @@ public class DeleteAction implements Action<String> {
                 sb.append(curr);
         }
 
-        model.getInputState().commitComposing();
+        ic.finishComposingText();
+        model.getInputState().clearComposingText();
         if (sb.length() >= 1) {
             if (backspace)
                 ic.deleteSurroundingText(sb.length(), 0);

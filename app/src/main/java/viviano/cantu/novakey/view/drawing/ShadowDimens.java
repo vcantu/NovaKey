@@ -33,13 +33,16 @@ public class ShadowDimens {
         return new ShadowDimens(r, Util.xFromAngle(0, d, a), Util.yFromAngle(0, d, a));
     }
 
+
     public final float x, y, r;
+
 
     private ShadowDimens(float r, float x, float y) {
         this.r = r;
         this.x = x;
         this.y = y;
     }
+
 
     public ShadowDimens fromAngle(float degrees) {
         return fromAngle(degrees, this.r);

@@ -32,7 +32,7 @@ import viviano.cantu.novakey.view.themes.MasterTheme;
 
 /**
  * Created by Viviano on 7/9/2015.
- *
+ * <p>
  * changed from onClicked() to onDown()
  */
 public class ButtonToggleModeChange extends Button {
@@ -69,6 +69,7 @@ public class ButtonToggleModeChange extends Button {
     protected Action onClickAction() {
         return new ToggleKeyboardAction();
     }
+
 
     /**
      * @return action to fire, or null if no action is needed

@@ -45,6 +45,7 @@ public class Icons {
     public static Bitmap cancel, accept, refresh;
     private static ArrayList<Drawable> icons;
 
+
     public static void load(Context context) {
         Resources res = context.getResources();
         icons = new ArrayList<>();
@@ -61,6 +62,7 @@ public class Icons {
         setMaterialIcons(res);
         setCustomIcons(res);
     }
+
 
     /**
      * gets the material icons from the material icons font and the codepoints.txt
@@ -79,19 +81,17 @@ public class Icons {
                         sb.appendCodePoint(Integer.parseInt(params[1], 16)).toString(),
                         Font.MATERIAL_ICONS));
             }
-        }
-        catch (IOException ex) {
+        } catch (IOException ex) {
             throw new RuntimeException("Error in reading TXT file: " + ex);
-        }
-        finally {
+        } finally {
             try {
                 is.close();
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 throw new RuntimeException("Error while closing input stream: " + e);
             }
         }
     }
+
 
     /**
      * Gets the custom icons from the custom icon font and the codepoints_custom txt
@@ -110,19 +110,17 @@ public class Icons {
                         sb.appendCodePoint(Integer.parseInt(params[1], 16)).toString(),
                         Font.CUSTOM_ICONS));
             }
-        }
-        catch (IOException ex) {
+        } catch (IOException ex) {
             throw new RuntimeException("Error in reading TXT file: " + ex);
-        }
-        finally {
+        } finally {
             try {
                 is.close();
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 throw new RuntimeException("Error while closing input stream: " + e);
             }
         }
     }
+
 
     /**
      * gets an icon from the global list of icons

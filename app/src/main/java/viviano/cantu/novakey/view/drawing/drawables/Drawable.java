@@ -25,7 +25,7 @@ import android.graphics.Paint;
 
 /**
  * Created by Viviano on 6/21/2016.
- *
+ * <p>
  * Simple interface for drawable items
  */
 public interface Drawable {

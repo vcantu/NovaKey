@@ -32,6 +32,7 @@ public abstract class AbstractPreferenceActivity extends AppCompatActivity {
 
     private boolean mDone = false;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +40,7 @@ public abstract class AbstractPreferenceActivity extends AppCompatActivity {
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setBackgroundTintList(ColorStateList.valueOf(
-                getResources().getColor(R.color.colorAccent)));
+                getResources().getColor(R.color.novakey_blue)));
         fab.setColorFilter(0xFFffffff);//icon color
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,18 +52,22 @@ public abstract class AbstractPreferenceActivity extends AppCompatActivity {
         });
     }
 
+
     /**
      * @return must return the layout ID any activity inheriting from this will want
      * to display
      */
     abstract int getLayoutId();
 
+
     /**
      * Will be called when the activity is closed
+     *
      * @param positiveResult true if the FAB is clicked to exit, false if activity was
      *                       exited another way
      */
     abstract void onActivityClosed(boolean positiveResult);
+
 
     @Override
     public void onDestroy() {

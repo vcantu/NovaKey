@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ NovaKey - An alternative touchscreen input method
   ~ Copyright (C) 2019  Viviano Cantu
   ~
@@ -21,8 +20,15 @@
 
 <resources>
 
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="android:statusBarColor">#414141</item>
-        <item name="android:colorPrimary">#616161</item>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/novakey_dark_blue</item>
+        <item name="android:colorPrimary">#177dc1</item>
+        <item name="colorPrimary">@color/novakey_blue</item>
+        <item name="colorPrimaryDark">@color/novakey_dark_blue</item>
+        <item name="colorAccent">@color/novakey_blue</item>
+        <item name="android:colorBackground">@color/novakey_white</item>
+        <item name="android:colorForeground">@color/novakey_black</item>
+        <item name="android:navigationBarColor">@color/novakey_dark_blue</item>
+        <item name="android:windowBackground">@color/novakey_white</item>
     </style>
 </resources>

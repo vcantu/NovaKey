@@ -34,10 +34,12 @@ public interface Animation {
      */
     void start(Model model);
 
+
     /**
      * Cancels the animation
      */
     void cancel();
+
 
     /**
      * Set the start delay of this animation
@@ -47,11 +49,13 @@ public interface Animation {
      */
     Animation setDelay(long delay);
 
+
     /**
      * @param listener set this animation's on end listener
      * @return this Animation
      */
     Animation setOnEndListener(OnEndListener listener);
+
 
     interface OnEndListener {
         /**
@@ -60,11 +64,13 @@ public interface Animation {
         void onEnd();
     }
 
+
     /**
      * @param listener set this animation's on end listener
      * @return this Animation
      */
     Animation setOnUpdateListener(OnUpdateListener listener);
+
 
     interface OnUpdateListener {
         /**

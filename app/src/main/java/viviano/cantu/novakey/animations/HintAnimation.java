@@ -35,14 +35,17 @@ public class HintAnimation extends CharAnimation {
     private final TimeInterpolator mInterpolator = new AccelerateInterpolator();
     private final int mArea;
 
+
     public HintAnimation(int area, long duration) {
         super(-1, duration);
         mArea = area;
     }
 
+
     public HintAnimation(int area) {
         this(area, 100);
     }
+
 
     /**
      * Will be called when building the animation to set this particular key's
@@ -55,6 +58,7 @@ public class HintAnimation extends CharAnimation {
     protected TimeInterpolator getInterpolatorFor(Key k) {
         return mInterpolator;
     }
+
 
     /**
      * Called when building the animation to determine which animator to assign
@@ -87,6 +91,7 @@ public class HintAnimation extends CharAnimation {
 //        this.values.get("desty").put(k,
 //                k.group == mArea ? view.getAreaY(lastArea(k.group, k.loc)) : k.y);
 //    }
+
 
     private static int lastArea(int group, int loc) {
         if (loc == 0)

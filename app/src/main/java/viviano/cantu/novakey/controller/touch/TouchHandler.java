@@ -33,7 +33,7 @@ public interface TouchHandler {
      * Handles the logic given a touch event and
      * a view
      *
-     * @param event current touch event
+     * @param event   current touch event
      * @param control controller used for context
      * @return true to continue action, false otherwise
      */

@@ -33,10 +33,10 @@ import android.view.animation.OvershootInterpolator;
 
 import java.util.ArrayList;
 
-import viviano.cantu.novakey.view.drawing.Draw;
-import viviano.cantu.novakey.view.drawing.Font;
 import viviano.cantu.novakey.R;
 import viviano.cantu.novakey.utils.Util;
+import viviano.cantu.novakey.view.drawing.Draw;
+import viviano.cantu.novakey.view.drawing.Font;
 
 /**
  * Created by Viviano on 7/31/2015.
@@ -61,43 +61,43 @@ public class TaskView extends View {
      * Constructor also sets touch listener
      *
      * @param context application context
-     * @param attrs XML attributes
+     * @param attrs   XML attributes
      */
     public TaskView(Context context, AttributeSet attrs) {
         super(context, attrs);
         dimen = getResources().getDimension(R.dimen.tut_text_size);
 
         float dp = getResources().getDimension(R.dimen.tut_btn_dimen);
-        back = new TextButton("Back", dp, dimen/2);
-        forward = new TextButton("Next", getWidth() - dp, dimen/2);
+        back = new TextButton("Back", dp, dimen / 2);
+        forward = new TextButton("Next", getWidth() - dp, dimen / 2);
         updateButtonStates();
 
         setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() ==  MotionEvent.ACTION_DOWN) {
-                        if (event.getY() <= dimen * 1.5f) {
-                            if (event.getX() <= getWidth() / 2) {
-                                if (back.state != DISABLED && back.state != INVISIBLE)//back pressed
-                                    back();
-                            }
-                            else {
-                                if (forward.state != DISABLED && forward.state != INVISIBLE) {//forward pressed
-                                    if (index < tasks.size() - 1)
-                                        forward();
-                                    else {
-                                        if (mOnFinishList != null)
-                                            mOnFinishList.onFinish();
-                                    }
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    if (event.getY() <= dimen * 1.5f) {
+                        if (event.getX() <= getWidth() / 2) {
+                            if (back.state != DISABLED && back.state != INVISIBLE)//back pressed
+                                back();
+                        } else {
+                            if (forward.state != DISABLED && forward.state != INVISIBLE) {//forward pressed
+                                if (index < tasks.size() - 1)
+                                    forward();
+                                else {
+                                    if (mOnFinishList != null)
+                                        mOnFinishList.onFinish();
                                 }
                             }
                         }
-                        invalidate();
+                    }
+                    invalidate();
                 }
                 return true;
             }
         });
     }
+
 
     /**
      * Sets the forward button to DISABLED
@@ -109,6 +109,7 @@ public class TaskView extends View {
         }
     }
 
+
     /**
      * Sets the forward button to ENABLED
      */
@@ -119,8 +120,10 @@ public class TaskView extends View {
         }
     }
 
+
     /**
      * Calls the isComplete() on the current task
+     *
      * @param test String to test
      * @return returns the result of the isComplete() method
      */
@@ -131,13 +134,16 @@ public class TaskView extends View {
         return false;
     }
 
+
     /**
      * Sets the list of tasks
+     *
      * @param tasks
      */
     public void setTasks(ArrayList<Task> tasks) {
         this.tasks = tasks;
     }
+
 
     /**
      * @return returns current index
@@ -145,6 +151,7 @@ public class TaskView extends View {
     public int getIndex() {
         return index;
     }
+
 
     /**
      * Sets the size of the view & creates the buttons
@@ -164,8 +171,10 @@ public class TaskView extends View {
         updateButtonStates();
     }
 
+
     /**
      * Draws view on given canvas
+     *
      * @param canvas canvas given
      */
     @Override
@@ -173,7 +182,7 @@ public class TaskView extends View {
         p.setFlags(Paint.ANTI_ALIAS_FLAG);
         p.setTypeface(Font.SANS_SERIF_LIGHT);
         p.setTextSize(dimen * .8f);
-        for (int i=0; i< tasks.size(); i++) {
+        for (int i = 0; i < tasks.size(); i++) {
             drawTask(i, currX + getWidth() * i, canvas);
         }
         drawMap(canvas);
@@ -181,11 +190,12 @@ public class TaskView extends View {
         forward.draw(canvas);
     }
 
+
     /**
      * Draws task at the given index, at the given x, on the vigen canvas
      *
-     * @param index index of task to draw
-     * @param x Left position of task
+     * @param index  index of task to draw
+     * @param x      Left position of task
      * @param canvas canvas to draw on
      */
     private void drawTask(int index, float x, Canvas canvas) {
@@ -195,6 +205,7 @@ public class TaskView extends View {
         p.setColor(0xFFF0F0F0);
         Draw.text(str, x + getWidth() / 2, getHeight() - dimen * 2.5f, p, canvas);
     }
+
 
     /**
      * Draws progress map on the top
@@ -209,29 +220,33 @@ public class TaskView extends View {
         mapX *= -1;
         p.setColor(0x50ffffff);
 
-        for (int i=0; i<count; i++) {
+        for (int i = 0; i < count; i++) {
             canvas.drawCircle(getWidth() / 2 - length / 2 + (i * mapHeight + mapHeight / 2),
-                    dimen /2, mapHeight / 4, p);
+                    dimen / 2, mapHeight / 4, p);
         }
         p.setColor(0xFFffffff);
         canvas.drawCircle((getWidth() / 2 - length / 2 + (mapHeight / 2)) + mapX,
                 dimen / 2, mapHeight / 4, p);
     }
 
+
     /**
      * Private Text button class for the BACK & NEXT buttons
      */
     private final static int ENABLED = 0, DISABLED = 1, INVISIBLE = 2;
+
     private class TextButton {
         public String text;
         private float x, y;
         public int state = ENABLED;
+
 
         TextButton(String text, float x, float y) {
             this.x = x;
             this.y = y;
             this.text = text;
         }
+
 
         void draw(Canvas canvas) {
             p.setColor(0xFFF0F0F0);
@@ -243,13 +258,15 @@ public class TaskView extends View {
         }
     }
 
+
     /**
      * Animates task to the given index
-     * @param i index to animate to
+     *
+     * @param i        index to animate to
      * @param complete whether the animation is being completed or starting from 0
      */
     private void beginAnimation(final int i, boolean complete) {
-        final ValueAnimator anim = ValueAnimator.ofFloat(currX, -i*getWidth())
+        final ValueAnimator anim = ValueAnimator.ofFloat(currX, -i * getWidth())
                 .setDuration(400);
         anim.setInterpolator(!complete ? new AnticipateOvershootInterpolator(.5f) :
                 new OvershootInterpolator(.5f));
@@ -265,6 +282,7 @@ public class TaskView extends View {
             public void onAnimationStart(Animator animation) {
             }
 
+
             @Override
             public void onAnimationEnd(Animator animation) {
                 int prev = index;
@@ -275,9 +293,11 @@ public class TaskView extends View {
                 invalidate();
             }
 
+
             @Override
             public void onAnimationCancel(Animator animation) {
             }
+
 
             @Override
             public void onAnimationRepeat(Animator animation) {
@@ -285,6 +305,7 @@ public class TaskView extends View {
         });
         anim.start();
     }
+
 
     /**
      * Animates backward according to the current index
@@ -296,6 +317,7 @@ public class TaskView extends View {
             reset();
     }
 
+
     /**
      * Animates forward according to the current index
      */
@@ -304,12 +326,14 @@ public class TaskView extends View {
             beginAnimation(index + 1, false);
     }
 
+
     /**
      * Animates to the first task
      */
     private void reset() {
         beginAnimation(0, false);
     }
+
 
     /**
      * update button states to work correctly.
@@ -322,7 +346,7 @@ public class TaskView extends View {
         else
             back.state = ENABLED;
 
-        if (tasks != null && index == tasks.size()-1) {
+        if (tasks != null && index == tasks.size() - 1) {
             forward.text = "Done";
             forward.state = ENABLED;
         } else
@@ -332,11 +356,13 @@ public class TaskView extends View {
 
     /**
      * Sets the on index change listener
+     *
      * @param listener
      */
     public void setOnIndexChangeListener(OnIndexChangeListener listener) {
         this.listener = listener;
     }
+
 
     /**
      * Interface listener that will call onNewIndex(int, int)
@@ -346,18 +372,21 @@ public class TaskView extends View {
          * Callback method that is called when the used changes to new task
          *
          * @param index index it was changed to
-         * @param prev index it was changed from
+         * @param prev  index it was changed from
          */
         void onNewIndex(int index, int prev);
     }
 
+
     /**
      * Sets the onFinishListener
+     *
      * @param listener
      */
     public void setOnFinishListener(OnFinishListener listener) {
         this.mOnFinishList = listener;
     }
+
 
     /**
      * Interface listener that will call onFinish()

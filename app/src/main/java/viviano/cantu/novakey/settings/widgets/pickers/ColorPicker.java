@@ -41,10 +41,11 @@ public class ColorPicker extends HorizontalPicker {
         super(context, attrs);
 
         mSubIndexes = new int[Colors.ALL.length];
-        for (int i=0; i<mSubIndexes.length; i++) {
+        for (int i = 0; i < mSubIndexes.length; i++) {
             mSubIndexes[i] = Colors.ALL[i].mainIndex();
         }
     }
+
 
     /**
      * Will be called during the constructor to start the picker items
@@ -56,18 +57,19 @@ public class ColorPicker extends HorizontalPicker {
         return Colors.ALL;
     }
 
+
     /**
      * Will start the release picker if the selected island has more than one shade
      * it will do nothing
      *
-     * @param index index of item which has been long pressed
+     * @param index  index of item which has been long pressed
      * @param startX corrected finger X position
      * @param startY corrected finger Y position
      */
     @Override
     protected void onItemLongPress(int index, float startX, float startY) {
         if (mReleasePicker != null) {
-            Colors color = (Colors)mItems[index];
+            Colors color = (Colors) mItems[index];
 
             if (color.size() > 1) {
                 mOnReleasePicker = true;

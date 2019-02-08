@@ -25,34 +25,36 @@ import android.inputmethodservice.Keyboard;
 import android.view.MotionEvent;
 
 import viviano.cantu.novakey.controller.Controller;
+import viviano.cantu.novakey.elements.keyboards.overlays.OverlayElement;
 import viviano.cantu.novakey.model.MainDimensions;
 import viviano.cantu.novakey.model.Model;
-import viviano.cantu.novakey.elements.keyboards.overlays.OverlayElement;
 import viviano.cantu.novakey.utils.Util;
 import viviano.cantu.novakey.view.themes.MasterTheme;
-import viviano.cantu.novakey.view.themes.board.BoardTheme;
 
 /**
  * Created by Viviano on 6/20/2016.
- *
+ * <p>
  * Main keyboard element, must have an overlay
  */
 public class MainElement implements Element {
 
     private OverlayElement mOverlay;
 
+
     public MainElement(OverlayElement overlay) {
         mOverlay = overlay;
     }
+
 
     public void setOverlay(OverlayElement overlay) {
         mOverlay = overlay;
     }
 
+
     @Override
     public void draw(Model model, MasterTheme theme, Canvas canvas) {
         MainDimensions d = model.getMainDimensions();
-        
+
         theme.getBackgroundTheme().drawBackground(0, 0, d.getWidth(), d.getHeight(),
                 d.getX(), d.getY(), d.getRadius(), d.getSmallRadius(), canvas);
 
@@ -62,6 +64,7 @@ public class MainElement implements Element {
         if (mOverlay != null)
             mOverlay.draw(model, theme, canvas);
     }
+
 
     /**
      * Handles the logic given a touch event and
@@ -79,6 +82,7 @@ public class MainElement implements Element {
 
     //------------------------------------Static Helper Methods--------------------------------------
 
+
     /**
      * @param x x position
      * @param y y position
@@ -93,6 +97,7 @@ public class MainElement implements Element {
         return -1;//outside area
     }
 
+
     /**
      * @param x x position
      * @param y y position
@@ -103,21 +108,22 @@ public class MainElement implements Element {
         return getSectorFromCenter(x, y, d.getX(), d.getY());
     }
 
+
     /*
-    * Will return a number [1, 5]
-    * representing which sector, the x and y is in
-    * returns Keyboard.KEYCODE_CANCEL if invalid
-    */
+     * Will return a number [1, 5]
+     * representing which sector, the x and y is in
+     * returns Keyboard.KEYCODE_CANCEL if invalid
+     */
     private static int getSectorFromCenter(float x, float y, float centX, float centY) {
         x -= centX;
         y = centY - y;
         double angle = Util.getAngle(x, y);
         angle = (angle < Math.PI / 2 ? Math.PI * 2 + angle : angle);//sets angle to [90, 450]
-        for (int i=0; i < 5; i++) {
-            double angle1 = (i * 2 * Math.PI) / 5  + Math.PI / 2;
-            double angle2 = ((i+1) * 2 * Math.PI) / 5  + Math.PI / 2;
+        for (int i = 0; i < 5; i++) {
+            double angle1 = (i * 2 * Math.PI) / 5 + Math.PI / 2;
+            double angle2 = ((i + 1) * 2 * Math.PI) / 5 + Math.PI / 2;
             if (angle >= angle1 && angle < angle2)
-                return i+1;
+                return i + 1;
         }
         return Keyboard.KEYCODE_CANCEL;
     }

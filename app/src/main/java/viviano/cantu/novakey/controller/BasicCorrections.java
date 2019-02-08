@@ -34,6 +34,7 @@ public class BasicCorrections implements Corrections {
 
     String[] mContractions;
 
+
     /**
      * This is where all data should be loaded
      *
@@ -43,6 +44,7 @@ public class BasicCorrections implements Corrections {
     public void initialize(Context context) {
         mContractions = context.getResources().getStringArray(R.array.contractions);
     }
+
 
     /**
      * TODO: this corrections method will change drastically this is just a place holder
@@ -65,6 +67,7 @@ public class BasicCorrections implements Corrections {
         }
         return composing;
     }
+
 
     private int contractionIndex(String text) {
         for (int i = 0; i < mContractions.length; i++) {

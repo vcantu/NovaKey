@@ -33,11 +33,12 @@ public abstract class AreaCrossedHandler implements TouchHandler {
     private float currX, currY;
     private int currArea, prevArea;
 
+
     /**
      * Handles the logic given a touch event and
      * a view
      *
-     * @param event current touch event
+     * @param event   current touch event
      * @param control view being acted on
      * @return true to continue action, false otherwise
      */
@@ -67,31 +68,37 @@ public abstract class AreaCrossedHandler implements TouchHandler {
         return result;
     }
 
+
     /**
      * Override this to specify onDown behaviour
-     * @param x current x position
-     * @param y current y position
-     * @param area current area
+     *
+     * @param x          current x position
+     * @param y          current y position
+     * @param area       current area
      * @param controller controller used for context
      */
     protected boolean onDown(float x, float y, int area, Controller controller) {
         return true;
     }
 
+
     /**
      * Override this to specify onMove behaviour
-     * @param x current x position
-     * @param y current y position
+     *
+     * @param x          current x position
+     * @param y          current y position
      * @param controller controller used for context
      */
     protected boolean onMove(float x, float y, Controller controller) {
         return true;
     }
 
+
     /**
      * Called when the touch listener detects that there
      * has been a cross, either in sector or range
-     * @param event describes the event
+     *
+     * @param event      describes the event
      * @param controller controller used for context
      */
     protected abstract boolean onCross(CrossEvent event, Controller controller);
@@ -101,8 +108,8 @@ public abstract class AreaCrossedHandler implements TouchHandler {
      * Called when the user lifts finger, typically this
      * method expects a finalized action to be triggered
      * like typing a character
-     * @param controller controller used for context
      *
+     * @param controller controller used for context
      */
     protected abstract boolean onUp(Controller controller);
 

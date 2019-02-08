@@ -29,8 +29,8 @@ public class Font {
     //Icons typefaces
     public static Typeface EMOJI, EMOJI_REGULAR, MATERIAL_ICONS, CUSTOM_ICONS;
     public static Typeface
-                    SANS_SERIF_LIGHT,
-                    SANS_SERIF_CONDENSED;
+            SANS_SERIF_LIGHT,
+            SANS_SERIF_CONDENSED;
 
 
     public static void create(Context context) {
@@ -42,7 +42,8 @@ public class Font {
         // Icons Type faces
         try {
             EMOJI = Typeface.createFromAsset(context.getAssets(), "NotoColorEmoji.ttf");
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
         EMOJI_REGULAR = Typeface.createFromAsset(context.getAssets(), "NotoEmoji-Regular.ttf");
         MATERIAL_ICONS = Typeface.createFromAsset(context.getAssets(), "MaterialIcons-Regular.ttf");
         CUSTOM_ICONS = Typeface.createFromAsset(context.getAssets(), "CustomIcons.ttf");

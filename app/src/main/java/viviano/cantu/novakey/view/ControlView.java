@@ -21,7 +21,6 @@
 package viviano.cantu.novakey.view;
 
 import android.content.Context;
-import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.View;
 
@@ -33,6 +32,7 @@ public class ControlView extends View {
     public ControlView(Context context) {
         super(context);
     }
+
 
     @Override
     public void onMeasure(int widthSpec, int heightSpec) {

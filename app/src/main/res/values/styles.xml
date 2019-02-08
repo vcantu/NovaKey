@@ -20,28 +20,20 @@
 
 <resources>
 
-    <!--
-        Base application theme, dependent on API level. This theme is replaced
-        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
-    -->
-    <style name="AppBaseTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!--
-            BaseTheme customizations available in newer API levels can go in
-            res/values-vXX/styles.xml, while customizations related to
-            backward-compatibility can go here.
-        -->
-    </style>
 
     <!-- Application theme. -->
-    <style name="AppTheme" parent="AppBaseTheme">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
 
-        <item name="colorAccent">#616161</item>
-        <item name="colorPrimary">#616161</item>
-        <item name="colorPrimaryDark">#616161</item>
+        <!-- #616161 -->
+        <item name="colorAccent">@color/novakey_blue</item>
+        <item name="colorPrimary">@color/novakey_blue</item>
+        <item name="colorPrimaryDark">@color/novakey_dark_blue</item>
         <item name="android:editTextStyle">@style/Widget.AppCompat.EditText</item>
         <item name="android:editTextColor">#FFFFFF</item>
-        <item name="android:windowBackground">@color/colorBackground</item>
+        <item name="android:windowBackground">@color/novakey_blue</item>
+        <item name="android:colorBackground">@color/novakey_white</item>
+        <item name="android:colorForeground">@color/novakey_black</item>
     </style>
 
     <style name="TutorialTheme" parent="AppTheme">

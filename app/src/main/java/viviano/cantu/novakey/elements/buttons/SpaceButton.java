@@ -34,6 +34,7 @@ public class SpaceButton extends Button {
         setIcon(Icons.get("space_bar"));
     }
 
+
     /**
      * @return action to fire, or null if no action is needed
      */
@@ -41,6 +42,7 @@ public class SpaceButton extends Button {
     protected Action onClickAction() {
         return new SpaceAction();
     }
+
 
     /**
      * @return action to fire, or null if no action is needed

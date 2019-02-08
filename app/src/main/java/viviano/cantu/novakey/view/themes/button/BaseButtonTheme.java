@@ -21,7 +21,6 @@
 package viviano.cantu.novakey.view.themes.button;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 
 import viviano.cantu.novakey.view.drawing.Font;
@@ -37,11 +36,13 @@ public class BaseButtonTheme implements ButtonTheme {
     private MasterTheme mParent;
     private final Paint p;
 
+
     public BaseButtonTheme() {
         p = new Paint();
         p.setFlags(Paint.ANTI_ALIAS_FLAG);//smooth edges and Never changes
         p.setTypeface(Font.SANS_SERIF_LIGHT);
     }
+
 
     /**
      * Draws an object, ensuring contrast, on top of the board.
@@ -57,6 +58,7 @@ public class BaseButtonTheme implements ButtonTheme {
     public void drawBack(Shape shape, float x, float y, float size, Canvas canvas) {
         //no back for base theme
     }
+
 
     /**
      * Draws an object, ensuring contrast, on top of the board.
@@ -77,6 +79,7 @@ public class BaseButtonTheme implements ButtonTheme {
         drawable.draw(x, y, size, p, canvas);
         p.clearShadowLayer();
     }
+
 
     /**
      * Sets this child's master theme for reference

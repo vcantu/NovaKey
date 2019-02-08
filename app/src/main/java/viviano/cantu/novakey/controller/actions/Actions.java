@@ -28,20 +28,23 @@ import viviano.cantu.novakey.model.Model;
  * Triggers an Array of actions consecutively
  * if any of it's child actions return anything it will be
  * ignored
- *
+ * <p>
  * Created by Viviano on 6/16/2016.
  */
 public class Actions implements Action<Void> {
 
     private final Action[] mActions;
 
-    public Actions(Action ... actions) {
+
+    public Actions(Action... actions) {
         mActions = actions;
     }
+
 
     /**
      * Called when the action is triggered
      * Actual logic for the action goes here
+     *
      * @param ime
      * @param control
      * @param model

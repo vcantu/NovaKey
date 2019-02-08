@@ -34,9 +34,10 @@ public abstract class BaseAnimation implements Animation {
     private OnEndListener mOnEnd;
     private OnUpdateListener mOnUpdate;
 
+
     /**
      * Should start the animation
-     *
+     * <p>
      * Initialize the necessary data here
      *
      * @param model
@@ -53,7 +54,9 @@ public abstract class BaseAnimation implements Animation {
 
         mAnim.addListener(new android.animation.Animator.AnimatorListener() {
             @Override
-            public void onAnimationStart(android.animation.Animator animation) { }
+            public void onAnimationStart(android.animation.Animator animation) {
+            }
+
 
             @Override
             public void onAnimationEnd(android.animation.Animator animation) {
@@ -61,11 +64,15 @@ public abstract class BaseAnimation implements Animation {
                     mOnEnd.onEnd();
             }
 
-            @Override
-            public void onAnimationCancel(android.animation.Animator animation) { }
 
             @Override
-            public void onAnimationRepeat(android.animation.Animator animation) { }
+            public void onAnimationCancel(android.animation.Animator animation) {
+            }
+
+
+            @Override
+            public void onAnimationRepeat(android.animation.Animator animation) {
+            }
         });
         mAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -77,6 +84,7 @@ public abstract class BaseAnimation implements Animation {
         mAnim.start();
     }
 
+
     /**
      * Will cancel the animation if it's running
      */
@@ -86,12 +94,14 @@ public abstract class BaseAnimation implements Animation {
             mAnim.cancel();
     }
 
+
     /**
      * @param model given to reference. Also should call
      *              model.update() to invalidate the view
      * @return ValueAnimator which will be called
      */
     protected abstract ValueAnimator animator(Model model);
+
 
     /**
      * Set the start delay of this animation
@@ -105,6 +115,7 @@ public abstract class BaseAnimation implements Animation {
         return this;
     }
 
+
     /**
      * @param listener set this animation's on end listener
      */
@@ -113,6 +124,7 @@ public abstract class BaseAnimation implements Animation {
         mOnEnd = listener;
         return this;
     }
+
 
     /**
      * @param listener set this animation's on end listener

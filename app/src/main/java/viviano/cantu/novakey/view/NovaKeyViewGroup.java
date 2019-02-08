@@ -30,6 +30,7 @@ public class NovaKeyViewGroup extends ViewGroup {
 
     private MainView mView;
 
+
     /**
      * Initializes the view group
      *
@@ -40,6 +41,7 @@ public class NovaKeyViewGroup extends ViewGroup {
         this.mView = new MainView(context);
         this.addView(mView);
     }
+
 
     /**
      * {@inheritDoc}

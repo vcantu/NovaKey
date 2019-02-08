@@ -38,15 +38,18 @@ public class MainDimensionsLoader implements Loader<MainDimensions> {
     private final SharedPreferences mSharedPref;
     private final Context mContext;
 
+
     public MainDimensionsLoader(Context context) {
         this.mContext = context;
         this.mSharedPref = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
+
     private boolean isLandscape() {
         return mContext.getResources().getConfiguration().orientation
                 == Configuration.ORIENTATION_LANDSCAPE;
     }
+
 
     @Override
     public MainDimensions load() {
@@ -57,14 +60,15 @@ public class MainDimensionsLoader implements Loader<MainDimensions> {
                 mContext.getResources().getDimension(R.dimen.default_padding));
 
         int w = mContext.getResources().getDisplayMetrics().widthPixels;
-        int h = (int)(mSharedPref.getFloat("height" + (isLandscape() ? "_land" : ""), r * 2 + p));
+        int h = (int) (mSharedPref.getFloat("height" + (isLandscape() ? "_land" : ""), r * 2 + p));
 
-        float x = mSharedPref.getFloat("x" + (isLandscape() ? "_land" : ""),w / 2);
+        float x = mSharedPref.getFloat("x" + (isLandscape() ? "_land" : ""), w / 2);
         //TODO: if legacy Y
-        float y = mSharedPref.getFloat("y" + (isLandscape() ? "_land" : ""),r + p);
+        float y = mSharedPref.getFloat("y" + (isLandscape() ? "_land" : ""), r + p);
 
         return new MainDimensions(x, y, r, sr, p, w, h);
     }
+
 
     @Override
     public void save(MainDimensions md) {

@@ -27,13 +27,14 @@ import viviano.cantu.novakey.model.Model;
 /**
  * Does nothing, used as a filler for classes that require
  * non-null actions but no action is wanted
- *
+ * <p>
  * Created by Viviano on 6/16/2016.
  */
 public class NoAction implements Action<Void> {
     /**
      * Called when the action is triggered
      * Actual logic for the action goes here
+     *
      * @param ime
      * @param control
      * @param model

@@ -25,10 +25,11 @@ import android.util.AttributeSet;
 
 public class MainView extends NovaKeyView {
 
-	public MainView(Context context) {
-		this(context, null);
+    public MainView(Context context) {
+        this(context, null);
 
-	}
+    }
+
 
     public MainView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -36,11 +37,11 @@ public class MainView extends NovaKeyView {
     }
 
 
-	@Override
-	public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-		setMeasuredDimension(
-				mModel.getMainDimensions().getWidth(),
-				mModel.getMainDimensions().getHeight());
+    @Override
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        setMeasuredDimension(
+                mModel.getMainDimensions().getWidth(),
+                mModel.getMainDimensions().getHeight());
     }
 
 }

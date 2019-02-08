@@ -29,7 +29,6 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
-import viviano.cantu.novakey.R;
 import viviano.cantu.novakey.view.drawing.drawables.Drawable;
 
 /**
@@ -45,13 +44,16 @@ public class HexGridView extends View implements GestureDetector.OnGestureListen
     private float offX = 0, offY = 0;
     private Paint p;
 
+
     public HexGridView(Context context) {
         this(context, null);
     }
 
+
     public HexGridView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
+
 
     public HexGridView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -65,9 +67,11 @@ public class HexGridView extends View implements GestureDetector.OnGestureListen
         mDetector = new GestureDetectorCompat(context, this);
     }
 
+
     public void setGrid(Drawable[][] grid) {
         this.mGrid = grid;
     }
+
 
     /**
      * Implement this to do your drawing.
@@ -100,6 +104,7 @@ public class HexGridView extends View implements GestureDetector.OnGestureListen
         }
     }
 
+
     private void addScrollDist(float deltaX, float deltaY) {
         offX += deltaX;
         while (offX >= dimen) {
@@ -121,6 +126,7 @@ public class HexGridView extends View implements GestureDetector.OnGestureListen
             offY += dimen;
         }
     }
+
 
     /**
      * Implement this method to handle touch screen motion events.
@@ -157,6 +163,7 @@ public class HexGridView extends View implements GestureDetector.OnGestureListen
         return true;
     }
 
+
     /**
      * The user has performed a down {@link MotionEvent} and not performed
      * a move or up yet. This event is commonly used to provide visual
@@ -170,6 +177,7 @@ public class HexGridView extends View implements GestureDetector.OnGestureListen
 
     }
 
+
     /**
      * Notified when a tap occurs with the up {@link MotionEvent}
      * that triggered it.
@@ -181,6 +189,7 @@ public class HexGridView extends View implements GestureDetector.OnGestureListen
     public boolean onSingleTapUp(MotionEvent e) {
         return false;
     }
+
 
     /**
      * Notified when a scroll occurs with the initial on down {@link MotionEvent} and the
@@ -204,6 +213,7 @@ public class HexGridView extends View implements GestureDetector.OnGestureListen
         return true;
     }
 
+
     /**
      * Notified when a long press occurs with the initial on down {@link MotionEvent}
      * that trigged it.
@@ -214,6 +224,7 @@ public class HexGridView extends View implements GestureDetector.OnGestureListen
     public void onLongPress(MotionEvent e) {
 
     }
+
 
     /**
      * Notified of a fling event when it occurs with the initial on down {@link MotionEvent}

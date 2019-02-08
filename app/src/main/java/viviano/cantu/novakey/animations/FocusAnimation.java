@@ -29,7 +29,7 @@ import viviano.cantu.novakey.elements.keyboards.KeySizeAnimator;
 
 /**
  * Created by Viviano on 10/25/2015.
- *
+ * <p>
  * This animator will hide all keys not in mLocs
  */
 public class FocusAnimation extends CharAnimation {
@@ -38,10 +38,12 @@ public class FocusAnimation extends CharAnimation {
     private final Animator<Key> mAnimator = new KeySizeAnimator(1, 0);
     private Character[] mChars;
 
+
     public FocusAnimation(Character[] chars) {
         super(1);
         mChars = chars;
     }
+
 
     /**
      * Will be called when building the animation to set this particular key's
@@ -54,6 +56,7 @@ public class FocusAnimation extends CharAnimation {
     protected TimeInterpolator getInterpolatorFor(Key k) {
         return mInterpolator;
     }
+
 
     /**
      * Called when building the animation to determine which animator to assign

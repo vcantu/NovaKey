@@ -40,8 +40,8 @@ import java.util.List;
 
 import viviano.cantu.novakey.R;
 import viviano.cantu.novakey.view.drawing.Draw;
-import viviano.cantu.novakey.view.drawing.drawables.Drawable;
 import viviano.cantu.novakey.view.drawing.Font;
+import viviano.cantu.novakey.view.drawing.drawables.Drawable;
 
 /**
  * Created by Viviano on 11/16/2015.
@@ -49,6 +49,7 @@ import viviano.cantu.novakey.view.drawing.Font;
 public class Emoji implements Drawable {
 
     public static List<Emoji> emojis;
+
 
     public static void load(Context context) {
         Resources res = context.getResources();
@@ -60,7 +61,7 @@ public class Emoji implements Drawable {
             JSONObject jObject = new JSONObject(new String(b));
             JSONArray arr = jObject.getJSONArray("emojis");
 
-            for (int i=0; i<arr.length(); i++) {
+            for (int i = 0; i < arr.length(); i++) {
                 JSONObject curr = arr.getJSONObject(i);
 
                 if (curr.getBoolean("has_img_google")) {
@@ -78,14 +79,14 @@ public class Emoji implements Drawable {
                     String image = curr.getString("image");
                     Bitmap bmp = BitmapFactory.decodeResource(res, res.getIdentifier(
                             "e_" + image.replace('-', '_').substring(0, image.length() - 4),
-                                    "drawable", context.getPackageName()));
+                            "drawable", context.getPackageName()));
 
-                    emojis.add( new Emoji(name, sb.toString(), bmp));
+                    emojis.add(new Emoji(name, sb.toString(), bmp));
                 }
             }
         } catch (JSONException e) {
             Log.e("Exception", e.toString());
-        } catch (IOException e){
+        } catch (IOException e) {
             Log.e("Exception", e.toString());
         }
     }
@@ -109,26 +110,31 @@ public class Emoji implements Drawable {
     private final String name, value;
     private final Bitmap bmp;
 
+
     public Emoji(String name, String value, Bitmap bmp) {
         this.name = name;
         this.value = value;
         this.bmp = bmp;
     }
 
+
     @Override
     public String toString() {
         return value;
     }
 
+
     public String getName() {
         return name;
     }
 
+
     @Override
     public void draw(float x, float y, float size, Paint p, Canvas canvas) {
         canvas.drawBitmap(bmp, //Bitmap.createScaledBitmap(bmp, (int)size, (int)size, false),
-                x - size/2, y - size/2, p);
+                x - size / 2, y - size / 2, p);
     }
+
 
     private void drawFromTTF(float x, float y, float size, Paint p, Canvas canvas) {
         Typeface tempTTF = p.getTypeface();
@@ -141,7 +147,6 @@ public class Emoji implements Drawable {
         p.setTypeface(tempTTF);
         p.setTextSize(tempSize);
     }
-
 
 
 }

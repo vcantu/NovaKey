@@ -21,24 +21,6 @@
 package viviano.cantu.novakey.setup;
 
 import android.app.Activity;
-import android.content.res.Configuration;
-import android.graphics.PorterDuff;
-import android.os.Bundle;
-import android.support.design.widget.TextInputLayout;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.View;
-import android.view.Window;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-import android.widget.Toast;
-
-import java.util.ArrayList;
-
-import viviano.cantu.novakey.animations.FocusAnimation;
-import viviano.cantu.novakey.controller.Controller;
-import viviano.cantu.novakey.view.drawing.Icons;
-import viviano.cantu.novakey.R;
 
 public class TutorialActivity extends Activity {
 

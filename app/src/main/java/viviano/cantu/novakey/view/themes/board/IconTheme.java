@@ -26,8 +26,8 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 
-import viviano.cantu.novakey.view.drawing.ShadowDimens;
 import viviano.cantu.novakey.utils.Util;
+import viviano.cantu.novakey.view.drawing.ShadowDimens;
 
 /**
  * Created by Viviano on 3/11/2016.
@@ -60,6 +60,7 @@ public class IconTheme extends BaseTheme {
         canvas.drawPath(p, pB);
     }
 
+
     @Override
     public void drawLines(float x, float y, float r, float sr, float w, Canvas canvas) {
         float sw = r * w * 4;
@@ -81,7 +82,7 @@ public class IconTheme extends BaseTheme {
         //draw lines
         Path p = new Path();
         RectF rect = new RectF(x - sw / 4, y - r + (r - sr) / 6f,
-                               x + sw / 4, y - sr - (r - sr) / 6f);
+                x + sw / 4, y - sr - (r - sr) / 6f);
         p.addOval(rect, Path.Direction.CW);
 
         pB.setStyle(Paint.Style.FILL_AND_STROKE);

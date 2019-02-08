@@ -28,6 +28,7 @@ public class CrossEvent {
 
     public final int newArea, prevArea;
 
+
     public CrossEvent(int newArea, int prevArea) {
         this.newArea = newArea;
         this.prevArea = prevArea;
@@ -38,7 +39,7 @@ public class CrossEvent {
     public boolean equals(Object o) {
         if (!(o instanceof CrossEvent))
             return false;
-        CrossEvent that = (CrossEvent)o;
+        CrossEvent that = (CrossEvent) o;
         return this.newArea == that.newArea &&
                 this.prevArea == that.prevArea;
     }

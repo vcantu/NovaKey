@@ -20,9 +20,6 @@
 
 package viviano.cantu.novakey.controller.actions.input;
 
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputConnection;
-
 import viviano.cantu.novakey.NovaKey;
 import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.controller.actions.Action;
@@ -42,17 +39,17 @@ public class EnterAction implements Action<Void> {
      */
     @Override
     public Void trigger(NovaKey ime, Controller control, Model model) {
-        InputConnection ic = ime.getCurrentInputConnection();
-        if (ic == null)
-            return null;
-        EditorInfo ei = ime.getCurrentInputEditorInfo();
-        int imeAction = ei.imeOptions & EditorInfo.IME_MASK_ACTION;
-
-        if (imeAction == EditorInfo.IME_ACTION_NONE ||
-                imeAction == EditorInfo.IME_ACTION_UNSPECIFIED)
-            model.getInputState().inputText("\n", 1);
-        else
-            ic.performEditorAction(imeAction);
+//        InputConnection ic = ime.getCurrentInputConnection();
+//        InputState state = model.getInputState();
+//        EditorInfo ei = state.getEditorInfo();
+//        int imeAction = ei.imeOptions & EditorInfo.IME_MASK_ACTION;
+//
+//        if (imeAction == EditorInfo.IME_ACTION_NONE ||
+//                imeAction == EditorInfo.IME_ACTION_UNSPECIFIED)
+//            model.getInputState().inputText("\n", 1);
+//        else
+//            ic.performEditorAction(imeAction);
+        ime.sendDefaultEditorAction(true);
 
         control.fire(new UpdateShiftAction());
         return null;
