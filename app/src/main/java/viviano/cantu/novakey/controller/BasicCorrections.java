@@ -25,7 +25,7 @@ import android.content.Context;
 import java.util.Locale;
 
 import viviano.cantu.novakey.R;
-import viviano.cantu.novakey.utils.Util;
+import viviano.cantu.novakey.core.utils.Util;
 
 /**
  * Created by vcantu on 9/18/16.

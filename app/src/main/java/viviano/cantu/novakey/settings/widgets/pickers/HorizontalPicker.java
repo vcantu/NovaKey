@@ -31,6 +31,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.ScrollView;
 
 import viviano.cantu.novakey.R;
+import viviano.cantu.novakey.core.utils.PickerItem;
 import viviano.cantu.novakey.settings.widgets.ObservableHorizontalScrollView;
 
 /**

@@ -23,8 +23,8 @@ package viviano.cantu.novakey.settings;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
-import viviano.cantu.novakey.settings.widgets.pickers.PickerItem;
-import viviano.cantu.novakey.view.drawing.Draw;
+import viviano.cantu.novakey.core.utils.PickerItem;
+import viviano.cantu.novakey.core.utils.drawing.Draw;
 
 /**
  * Created by Viviano on 7/9/2015.
@@ -75,36 +75,6 @@ public class Colors implements PickerItem {
         p.setShadowLayer(dimen * .1f / 2, 0, dimen * .1f / 2, 0x80000000);
         Draw.colorItem(shade(index), x, y, dimen / 2 * .8f, selected, p, canvas);
     }
-
-//    public static void load(Resources res) {
-//        colors = new int
-//
-//        InputStream is = res.openRawResource(R.raw.app_colors);
-//        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-//        try {
-//            String line;
-//            while ((line = reader.readLine()) != null) {
-//                String[] params = line.split(",");
-//                themes.add(new AppTheme(params));
-//            }
-//        }
-//        catch (IOException ex) {
-//            throw new RuntimeException("Error in reading CSV file: "+ex);
-//        }
-//        finally {
-//            try {
-//                is.close();
-//            }
-//            catch (IOException e) {
-//                throw new RuntimeException("Error while closing input stream: "+e);
-//            }
-//        }
-//    }
-
-//    public static Colors[] ALL;
-//    public static Colors REDS, PINKS, PURPLES, DEEP_PURPLES, INDIGOS, BLUES, LIGHT_BLUES,
-//                         CYANS, TEALS, GREENS, LIGHT_GREENS, LIMES, YELLOWS, AMBERS,
-//                         ORANGES, DEEP_ORANGES, BROWNS, GREYS, BLUE_GREYS, BLACK, WHITE,
 
 
     //TODO: maybe read off file

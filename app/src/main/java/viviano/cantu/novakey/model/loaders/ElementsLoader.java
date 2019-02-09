@@ -28,7 +28,7 @@ import viviano.cantu.novakey.elements.buttons.Button;
 import viviano.cantu.novakey.elements.buttons.ButtonData;
 import viviano.cantu.novakey.elements.buttons.ButtonToggleModeChange;
 import viviano.cantu.novakey.elements.buttons.PunctuationButton;
-import viviano.cantu.novakey.view.drawing.shapes.Circle;
+import viviano.cantu.novakey.core.utils.drawing.shapes.Circle;
 import viviano.cantu.novakey.view.posns.DeltaRadiusPosn;
 
 /**

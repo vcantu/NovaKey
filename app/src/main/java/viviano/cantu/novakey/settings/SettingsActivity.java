@@ -29,8 +29,8 @@ import android.preference.PreferenceManager;
 import viviano.cantu.novakey.NovaKey;
 import viviano.cantu.novakey.model.Settings;
 import viviano.cantu.novakey.setup.SetupActivity;
-import viviano.cantu.novakey.view.drawing.Font;
-import viviano.cantu.novakey.view.drawing.Icons;
+import viviano.cantu.novakey.core.utils.drawing.Font;
+import viviano.cantu.novakey.core.utils.drawing.Icons;
 import viviano.cantu.novakey.view.themes.AppTheme;
 
 public class SettingsActivity extends PreferenceActivity {

@@ -34,7 +34,7 @@ import viviano.cantu.novakey.controller.Gun;
 import viviano.cantu.novakey.controller.actions.SetEditingAction;
 import viviano.cantu.novakey.settings.widgets.FloatingButton;
 import viviano.cantu.novakey.setup.IconView;
-import viviano.cantu.novakey.view.drawing.Icons;
+import viviano.cantu.novakey.core.utils.drawing.Icons;
 import viviano.cantu.novakey.view.themes.MasterTheme;
 import viviano.cantu.novakey.view.themes.Themeable;
 

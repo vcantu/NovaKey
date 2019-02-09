@@ -32,7 +32,7 @@ import viviano.cantu.novakey.R;
 import viviano.cantu.novakey.model.MainDimensions;
 import viviano.cantu.novakey.model.loaders.Loader;
 import viviano.cantu.novakey.model.loaders.MainDimensionsLoader;
-import viviano.cantu.novakey.utils.Util;
+import viviano.cantu.novakey.core.utils.Util;
 import viviano.cantu.novakey.view.themes.MasterTheme;
 import viviano.cantu.novakey.view.themes.Themeable;
 

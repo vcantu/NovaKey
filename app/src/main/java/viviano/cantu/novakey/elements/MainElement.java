@@ -28,7 +28,7 @@ import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.elements.keyboards.overlays.OverlayElement;
 import viviano.cantu.novakey.model.MainDimensions;
 import viviano.cantu.novakey.model.Model;
-import viviano.cantu.novakey.utils.Util;
+import viviano.cantu.novakey.core.utils.Util;
 import viviano.cantu.novakey.view.themes.MasterTheme;
 
 /**

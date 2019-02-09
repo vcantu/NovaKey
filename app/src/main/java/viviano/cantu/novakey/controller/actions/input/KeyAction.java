@@ -23,16 +23,16 @@ package viviano.cantu.novakey.controller.actions.input;
 
 import android.view.inputmethod.InputConnection;
 
-import viviano.cantu.novakey.NovaKey;
 import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.controller.actions.Action;
 import viviano.cantu.novakey.controller.actions.SetKeyboardAction;
+import viviano.cantu.novakey.core.NovaKeyService;
 import viviano.cantu.novakey.elements.keyboards.Keyboards;
 import viviano.cantu.novakey.model.InputState;
 import viviano.cantu.novakey.model.Model;
 import viviano.cantu.novakey.model.Settings;
 import viviano.cantu.novakey.model.ShiftState;
-import viviano.cantu.novakey.utils.Util;
+import viviano.cantu.novakey.core.utils.Util;
 
 /**
  * Created by Viviano on 9/15/2016.
@@ -108,13 +108,12 @@ public class KeyAction implements Action<Void> {
     /**
      * Called when the action is triggered
      * Actual logic for the action goes here
-     *
-     * @param ime
+     *  @param ime
      * @param control
      * @param model
      */
     @Override
-    public Void trigger(NovaKey ime, Controller control, Model model) {
+    public Void trigger(NovaKeyService ime, Controller control, Model model) {
         InputConnection ic = ime.getCurrentInputConnection();
         InputState state = model.getInputState();
         boolean regText = state.shouldAutoCorrect();

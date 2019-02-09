@@ -20,7 +20,7 @@
 
 package viviano.cantu.novakey.elements.buttons;
 
-import viviano.cantu.novakey.view.drawing.shapes.Shape;
+import viviano.cantu.novakey.core.utils.drawing.shapes.Shape;
 import viviano.cantu.novakey.view.posns.RelativePosn;
 
 /**

@@ -20,9 +20,9 @@
 
 package viviano.cantu.novakey.controller.actions.input;
 
-import viviano.cantu.novakey.NovaKey;
 import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.controller.actions.Action;
+import viviano.cantu.novakey.core.NovaKeyService;
 import viviano.cantu.novakey.model.Model;
 
 /**
@@ -52,13 +52,12 @@ public class InputAction implements Action<Void> {
     /**
      * Called when the action is triggered
      * Actual logic for the action goes here
-     *
-     * @param ime
+     *  @param ime
      * @param control
      * @param model
      */
     @Override
-    public Void trigger(NovaKey ime, Controller control, Model model) {
+    public Void trigger(NovaKeyService ime, Controller control, Model model) {
         if (mText != null) {
             ime.getCurrentInputConnection().finishComposingText();
             model.getInputState().clearComposingText();

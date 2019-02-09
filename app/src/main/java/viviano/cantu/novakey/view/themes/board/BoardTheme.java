@@ -22,8 +22,8 @@ package viviano.cantu.novakey.view.themes.board;
 
 import android.graphics.Canvas;
 
-import viviano.cantu.novakey.settings.widgets.pickers.PickerItem;
-import viviano.cantu.novakey.view.drawing.drawables.Drawable;
+import viviano.cantu.novakey.core.utils.PickerItem;
+import viviano.cantu.novakey.core.utils.drawing.drawables.Drawable;
 import viviano.cantu.novakey.view.themes.ChildTheme;
 
 /**

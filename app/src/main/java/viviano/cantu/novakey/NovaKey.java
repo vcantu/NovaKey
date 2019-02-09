@@ -23,9 +23,7 @@ package viviano.cantu.novakey;
 import android.content.ClipboardManager;
 import android.content.SharedPreferences.Editor;
 import android.graphics.PixelFormat;
-import android.inputmethodservice.InputMethodService;
 import android.os.Vibrator;
-import android.preference.PreferenceManager;
 import android.text.InputType;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -43,17 +41,14 @@ import java.util.List;
 
 import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.controller.Corrections;
-import viviano.cantu.novakey.elements.keyboards.overlays.menus.InfiniteMenu;
+import viviano.cantu.novakey.core.NovaKeyService;
 import viviano.cantu.novakey.model.InputState;
 import viviano.cantu.novakey.model.Settings;
-import viviano.cantu.novakey.settings.Colors;
-import viviano.cantu.novakey.utils.Print;
-import viviano.cantu.novakey.utils.Util;
-import viviano.cantu.novakey.view.drawing.Font;
-import viviano.cantu.novakey.view.drawing.Icons;
+import viviano.cantu.novakey.core.utils.Print;
+import viviano.cantu.novakey.core.utils.Util;
 import viviano.cantu.novakey.view.themes.AppTheme;
 
-public class NovaKey extends InputMethodService {
+public class NovaKey extends NovaKeyService {
 
     //Statics
     public static String MY_PREFERENCES = "MyPreferences";
@@ -89,24 +84,6 @@ public class NovaKey extends InputMethodService {
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         mWindows = new ArrayList<>();
-
-        //create colors
-        Colors.initialize();
-        //load app themes
-        AppTheme.load(this, getResources());
-        //create fonts
-        Font.create(this);
-        //load icons
-        Icons.load(this);
-        //load emojis
-//		Emoji.load(this);
-        //Create Hidden Keys
-        InfiniteMenu.setHiddenKeys(getResources().getStringArray(R.array.hidden_keys));
-        //Create Clipboard Menu
-        Clipboard.createMenu();
-        //Initialize setting
-        Settings.setPrefs(PreferenceManager.getDefaultSharedPreferences(this));
-        Settings.update();
 
         //Controller creation
         mController = new Controller(this);

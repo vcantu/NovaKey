@@ -23,9 +23,9 @@ package viviano.cantu.novakey.view.themes.board;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
-import viviano.cantu.novakey.utils.Util;
-import viviano.cantu.novakey.view.drawing.Draw;
-import viviano.cantu.novakey.view.drawing.drawables.Drawable;
+import viviano.cantu.novakey.core.utils.Util;
+import viviano.cantu.novakey.core.utils.drawing.Draw;
+import viviano.cantu.novakey.core.utils.drawing.drawables.Drawable;
 
 /**
  * Created by Viviano on 6/7/2015.

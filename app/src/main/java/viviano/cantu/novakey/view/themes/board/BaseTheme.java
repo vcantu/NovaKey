@@ -23,8 +23,8 @@ package viviano.cantu.novakey.view.themes.board;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
-import viviano.cantu.novakey.view.drawing.Draw;
-import viviano.cantu.novakey.view.drawing.drawables.Drawable;
+import viviano.cantu.novakey.core.utils.drawing.Draw;
+import viviano.cantu.novakey.core.utils.drawing.drawables.Drawable;
 import viviano.cantu.novakey.view.themes.MasterTheme;
 
 /**

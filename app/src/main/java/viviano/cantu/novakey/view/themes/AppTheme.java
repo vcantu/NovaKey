@@ -43,7 +43,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import viviano.cantu.novakey.R;
-import viviano.cantu.novakey.utils.Util;
+import viviano.cantu.novakey.core.utils.Util;
 
 /**
  * Created by Viviano on 8/18/2015.

@@ -26,8 +26,8 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 
-import viviano.cantu.novakey.utils.Util;
-import viviano.cantu.novakey.view.drawing.drawables.Drawable;
+import viviano.cantu.novakey.core.utils.Util;
+import viviano.cantu.novakey.core.utils.drawing.drawables.Drawable;
 
 /**
  * Created by Viviano on 6/14/2015.

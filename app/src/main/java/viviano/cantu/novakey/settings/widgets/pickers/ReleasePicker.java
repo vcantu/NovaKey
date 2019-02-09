@@ -32,7 +32,8 @@ import android.view.animation.OvershootInterpolator;
 
 import viviano.cantu.novakey.R;
 import viviano.cantu.novakey.animations.utils.MultiValueAnimator;
-import viviano.cantu.novakey.utils.Util;
+import viviano.cantu.novakey.core.utils.PickerItem;
+import viviano.cantu.novakey.core.utils.Util;
 
 /**
  * Created by Viviano on 1/8/2016.

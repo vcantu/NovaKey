@@ -20,8 +20,8 @@
 
 package viviano.cantu.novakey.controller.actions;
 
-import viviano.cantu.novakey.NovaKey;
 import viviano.cantu.novakey.controller.Controller;
+import viviano.cantu.novakey.core.NovaKeyService;
 import viviano.cantu.novakey.model.Model;
 import viviano.cantu.novakey.view.EditView;
 
@@ -46,13 +46,12 @@ public class SetEditingAction implements Action<Void> {
     /**
      * Called when the action is triggered
      * Actual logic for the action goes here
-     *
-     * @param ime
+     *  @param ime
      * @param control
      * @param model
      */
     @Override
-    public Void trigger(NovaKey ime, Controller control, Model model) {
+    public Void trigger(NovaKeyService ime, Controller control, Model model) {
         if (mEditing) {
             //TODO: haptic feedback
             EditView editView = new EditView(ime, control);
@@ -64,7 +63,7 @@ public class SetEditingAction implements Action<Void> {
         } else {
             //updates the main model
             model.syncWithPrefs();
-            ime.clearWindows();
+            //ime.clearWindows(); NOTE: this code was for a floating windows test
             ime.setInputView(control.getView());
         }
         return null;

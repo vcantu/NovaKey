@@ -21,7 +21,7 @@
 package viviano.cantu.novakey.elements.keyboards;
 
 import viviano.cantu.novakey.animations.utils.Animator;
-import viviano.cantu.novakey.utils.Util;
+import viviano.cantu.novakey.core.utils.Util;
 
 /**
  * Created by Viviano on 9/2/2016.

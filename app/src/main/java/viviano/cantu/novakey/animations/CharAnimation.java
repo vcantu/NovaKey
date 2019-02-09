@@ -32,7 +32,7 @@ import viviano.cantu.novakey.animations.utils.MultiValueAnimator;
 import viviano.cantu.novakey.elements.keyboards.Key;
 import viviano.cantu.novakey.model.MainDimensions;
 import viviano.cantu.novakey.model.Model;
-import viviano.cantu.novakey.utils.Util;
+import viviano.cantu.novakey.core.utils.Util;
 
 /**
  * Created by Viviano on 10/27/2015.

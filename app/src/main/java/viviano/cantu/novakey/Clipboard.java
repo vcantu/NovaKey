@@ -34,7 +34,7 @@ import viviano.cantu.novakey.controller.actions.input.InputAction;
 import viviano.cantu.novakey.elements.keyboards.overlays.menus.InfiniteMenu;
 import viviano.cantu.novakey.elements.keyboards.overlays.menus.Menu;
 import viviano.cantu.novakey.elements.keyboards.overlays.menus.OnUpMenu;
-import viviano.cantu.novakey.view.drawing.Icons;
+import viviano.cantu.novakey.core.utils.drawing.Icons;
 
 /**
  * Created by Viviano on 8/2/2015.

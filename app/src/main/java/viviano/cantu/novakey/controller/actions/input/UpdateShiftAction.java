@@ -20,10 +20,10 @@
 
 package viviano.cantu.novakey.controller.actions.input;
 
-import viviano.cantu.novakey.NovaKey;
 import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.controller.actions.Action;
 import viviano.cantu.novakey.controller.actions.SetShiftStateAction;
+import viviano.cantu.novakey.core.NovaKeyService;
 import viviano.cantu.novakey.model.Model;
 import viviano.cantu.novakey.model.ShiftState;
 
@@ -34,13 +34,12 @@ public class UpdateShiftAction implements Action<Void> {
     /**
      * Called when the action is triggered
      * Actual logic for the action goes here
-     *
-     * @param ime
+     *  @param ime
      * @param control
      * @param model
      */
     @Override
-    public Void trigger(NovaKey ime, Controller control, Model model) {
+    public Void trigger(NovaKeyService ime, Controller control, Model model) {
         if (model.getKeyboardCode() >= 0) {
             switch (model.getShiftState()) {
                 case LOWERCASE:

@@ -20,21 +20,30 @@
 
 package viviano.cantu.novakey.controller;
 
+import android.preference.PreferenceManager;
 import android.view.MotionEvent;
 import android.view.View;
 
 import java.util.List;
 
-import viviano.cantu.novakey.NovaKey;
+import viviano.cantu.novakey.Clipboard;
+import viviano.cantu.novakey.R;
 import viviano.cantu.novakey.controller.actions.Action;
 import viviano.cantu.novakey.controller.actions.SetEditingAction;
 import viviano.cantu.novakey.controller.touch.TouchHandler;
+import viviano.cantu.novakey.core.NovaKeyService;
 import viviano.cantu.novakey.elements.Element;
+import viviano.cantu.novakey.elements.keyboards.overlays.menus.InfiniteMenu;
 import viviano.cantu.novakey.model.MainModel;
 import viviano.cantu.novakey.model.Model;
-import viviano.cantu.novakey.utils.CustomTimer;
+import viviano.cantu.novakey.model.Settings;
+import viviano.cantu.novakey.settings.Colors;
+import viviano.cantu.novakey.core.utils.CustomTimer;
 import viviano.cantu.novakey.view.MainView;
 import viviano.cantu.novakey.view.NovaKeyView;
+import viviano.cantu.novakey.core.utils.drawing.Font;
+import viviano.cantu.novakey.core.utils.drawing.Icons;
+import viviano.cantu.novakey.view.themes.AppTheme;
 
 /**
  * Created by Viviano on 7/10/2015.
@@ -42,7 +51,7 @@ import viviano.cantu.novakey.view.NovaKeyView;
 public class Controller implements Gun, View.OnTouchListener {
 
     //main stuff
-    private final NovaKey mIME;
+    private final NovaKeyService mIME;
     private final Model mModel;
     private final NovaKeyView mView;
 
@@ -57,9 +66,30 @@ public class Controller implements Gun, View.OnTouchListener {
      *
      * @param ime the input method service
      */
-    public Controller(NovaKey ime) {
+    public Controller(NovaKeyService ime) {
         // context
         mIME = ime;
+
+
+        //create colors
+        Colors.initialize();
+        //load app themes
+        AppTheme.load(ime, ime.getResources());
+        //create fonts
+        Font.create(ime);
+        //load icons
+        Icons.load(ime);
+        //load emojis
+//		Emoji.load(this);
+        //Create Hidden Keys
+        InfiniteMenu.setHiddenKeys(ime.getResources().getStringArray(R.array.hidden_keys));
+        //Create Clipboard Menu
+        Clipboard.createMenu();
+        //Initialize setting
+        Settings.setPrefs(PreferenceManager.getDefaultSharedPreferences(ime));
+        Settings.update();
+
+
         // model
         mModel = new MainModel(mIME);
         // view

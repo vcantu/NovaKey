@@ -22,7 +22,7 @@ package viviano.cantu.novakey.elements.buttons;
 
 import viviano.cantu.novakey.controller.actions.Action;
 import viviano.cantu.novakey.controller.actions.input.SpaceAction;
-import viviano.cantu.novakey.view.drawing.Icons;
+import viviano.cantu.novakey.core.utils.drawing.Icons;
 
 /**
  * Created by Viviano on 8/16/2015.

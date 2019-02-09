@@ -28,7 +28,7 @@ import viviano.cantu.novakey.controller.touch.SelectingHandler;
 import viviano.cantu.novakey.controller.touch.TouchHandler;
 import viviano.cantu.novakey.model.MainDimensions;
 import viviano.cantu.novakey.model.Model;
-import viviano.cantu.novakey.view.drawing.Icons;
+import viviano.cantu.novakey.core.utils.drawing.Icons;
 import viviano.cantu.novakey.view.themes.MasterTheme;
 import viviano.cantu.novakey.view.themes.board.BoardTheme;
 

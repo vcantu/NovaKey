@@ -28,8 +28,8 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import viviano.cantu.novakey.R;
-import viviano.cantu.novakey.view.drawing.Icons;
-import viviano.cantu.novakey.view.drawing.drawables.Drawable;
+import viviano.cantu.novakey.core.utils.drawing.Icons;
+import viviano.cantu.novakey.core.utils.drawing.drawables.Drawable;
 import viviano.cantu.novakey.view.themes.MasterTheme;
 import viviano.cantu.novakey.view.themes.Themeable;
 

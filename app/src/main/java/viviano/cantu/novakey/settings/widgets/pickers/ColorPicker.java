@@ -23,6 +23,7 @@ package viviano.cantu.novakey.settings.widgets.pickers;
 import android.content.Context;
 import android.util.AttributeSet;
 
+import viviano.cantu.novakey.core.utils.PickerItem;
 import viviano.cantu.novakey.settings.Colors;
 
 /**

@@ -35,7 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="200dp" />
 
-        <viviano.cantu.novakey.view.drawing.emoji.ThrowAwayView
+        <viviano.cantu.novakey.core.utils.drawing.emoji.ThrowAwayView
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:id="@+id/throaway" />

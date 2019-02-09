@@ -26,8 +26,8 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 
-import viviano.cantu.novakey.utils.Util;
-import viviano.cantu.novakey.view.drawing.ShadowDimens;
+import viviano.cantu.novakey.core.utils.Util;
+import viviano.cantu.novakey.core.utils.drawing.ShadowDimens;
 
 /**
  * Created by Viviano on 3/11/2016.

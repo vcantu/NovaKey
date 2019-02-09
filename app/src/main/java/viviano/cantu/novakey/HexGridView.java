@@ -29,7 +29,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
-import viviano.cantu.novakey.view.drawing.drawables.Drawable;
+import viviano.cantu.novakey.core.utils.drawing.drawables.Drawable;
 
 /**
  * Created by Viviano on 3/30/2016.

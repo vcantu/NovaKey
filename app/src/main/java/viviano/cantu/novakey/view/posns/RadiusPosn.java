@@ -21,7 +21,7 @@
 package viviano.cantu.novakey.view.posns;
 
 import viviano.cantu.novakey.model.MainDimensions;
-import viviano.cantu.novakey.utils.Util;
+import viviano.cantu.novakey.core.utils.Util;
 
 /**
  * RelativePosn in which the angle is exactly the angle given

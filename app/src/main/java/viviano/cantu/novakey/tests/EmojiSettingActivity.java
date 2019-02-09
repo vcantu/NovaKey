@@ -25,9 +25,9 @@ import android.os.Bundle;
 
 import viviano.cantu.novakey.HexGridView;
 import viviano.cantu.novakey.R;
-import viviano.cantu.novakey.view.drawing.drawables.Drawable;
-import viviano.cantu.novakey.view.drawing.emoji.Emoji;
-import viviano.cantu.novakey.view.drawing.emoji.ThrowAwayView;
+import viviano.cantu.novakey.core.utils.drawing.drawables.Drawable;
+import viviano.cantu.novakey.core.utils.drawing.emoji.Emoji;
+import viviano.cantu.novakey.core.utils.drawing.emoji.ThrowAwayView;
 
 public class EmojiSettingActivity extends Activity {
 

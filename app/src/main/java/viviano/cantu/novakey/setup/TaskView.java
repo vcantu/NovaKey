@@ -34,9 +34,9 @@ import android.view.animation.OvershootInterpolator;
 import java.util.ArrayList;
 
 import viviano.cantu.novakey.R;
-import viviano.cantu.novakey.utils.Util;
-import viviano.cantu.novakey.view.drawing.Draw;
-import viviano.cantu.novakey.view.drawing.Font;
+import viviano.cantu.novakey.core.utils.Util;
+import viviano.cantu.novakey.core.utils.drawing.Draw;
+import viviano.cantu.novakey.core.utils.drawing.Font;
 
 /**
  * Created by Viviano on 7/31/2015.

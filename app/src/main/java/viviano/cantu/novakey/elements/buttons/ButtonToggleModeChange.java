@@ -27,7 +27,7 @@ import viviano.cantu.novakey.controller.actions.SetKeyboardAction;
 import viviano.cantu.novakey.controller.actions.ToggleKeyboardAction;
 import viviano.cantu.novakey.elements.keyboards.Keyboards;
 import viviano.cantu.novakey.model.Model;
-import viviano.cantu.novakey.view.drawing.drawables.TextDrawable;
+import viviano.cantu.novakey.core.utils.drawing.drawables.TextDrawable;
 import viviano.cantu.novakey.view.themes.MasterTheme;
 
 /**

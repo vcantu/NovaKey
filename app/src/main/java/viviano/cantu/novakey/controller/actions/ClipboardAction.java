@@ -25,9 +25,9 @@ import android.view.inputmethod.ExtractedText;
 import android.widget.Toast;
 
 import viviano.cantu.novakey.Clipboard;
-import viviano.cantu.novakey.NovaKey;
 import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.controller.actions.input.InputAction;
+import viviano.cantu.novakey.core.NovaKeyService;
 import viviano.cantu.novakey.model.InputState;
 import viviano.cantu.novakey.model.Model;
 
@@ -47,13 +47,12 @@ public class ClipboardAction implements Action<String> {
     /**
      * Called when the action is triggered
      * Actual logic for the action goes here
-     *
-     * @param ime
+     *  @param ime
      * @param control
      * @param model
      */
     @Override
-    public String trigger(NovaKey ime, Controller control, Model model) {
+    public String trigger(NovaKeyService ime, Controller control, Model model) {
         ExtractedText eText = ime.getExtractedText();
         InputState state = model.getInputState();
 
@@ -92,7 +91,7 @@ public class ClipboardAction implements Action<String> {
 
 
     //Returns true if copy was successful
-    public boolean copy(String text, NovaKey ime) {
+    public boolean copy(String text, NovaKeyService ime) {
         if (text.length() > 0) {
             ClipData cd = ClipData.newPlainText("text", text);
             ime.getClipboard().setPrimaryClip(cd);

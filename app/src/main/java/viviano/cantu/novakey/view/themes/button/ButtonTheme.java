@@ -22,8 +22,8 @@ package viviano.cantu.novakey.view.themes.button;
 
 import android.graphics.Canvas;
 
-import viviano.cantu.novakey.view.drawing.drawables.Drawable;
-import viviano.cantu.novakey.view.drawing.shapes.Shape;
+import viviano.cantu.novakey.core.utils.drawing.drawables.Drawable;
+import viviano.cantu.novakey.core.utils.drawing.shapes.Shape;
 import viviano.cantu.novakey.view.themes.ChildTheme;
 
 /**

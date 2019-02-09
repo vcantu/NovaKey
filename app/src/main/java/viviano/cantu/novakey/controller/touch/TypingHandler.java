@@ -38,7 +38,6 @@ import viviano.cantu.novakey.elements.keyboards.overlays.CursorOverlay;
 import viviano.cantu.novakey.elements.keyboards.overlays.DeleteOverlay;
 import viviano.cantu.novakey.elements.keyboards.overlays.menus.InfiniteMenu;
 import viviano.cantu.novakey.model.Settings;
-import viviano.cantu.novakey.utils.Util;
 
 /**
  * Created by Viviano on 6/14/2016.
@@ -163,7 +162,7 @@ public class TypingHandler extends AreaCrossedHandler {
                 }
                 return true;
             }
-            if (Util.getGesture(mAreas) instanceof DeleteAction) {
+            if (Keyboard.getGesture(mAreas) instanceof DeleteAction) {
                 //switch to delete handler
                 // First rotating event must be fired initially
                 controller.fire(new DeleteAction());

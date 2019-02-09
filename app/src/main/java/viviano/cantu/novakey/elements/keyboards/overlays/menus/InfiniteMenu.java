@@ -34,9 +34,9 @@ import viviano.cantu.novakey.controller.touch.TouchHandler;
 import viviano.cantu.novakey.elements.keyboards.overlays.OverlayElement;
 import viviano.cantu.novakey.model.MainDimensions;
 import viviano.cantu.novakey.model.Model;
-import viviano.cantu.novakey.utils.Util;
-import viviano.cantu.novakey.view.drawing.drawables.Drawable;
-import viviano.cantu.novakey.view.drawing.drawables.TextDrawable;
+import viviano.cantu.novakey.core.utils.Util;
+import viviano.cantu.novakey.core.utils.drawing.drawables.Drawable;
+import viviano.cantu.novakey.core.utils.drawing.drawables.TextDrawable;
 import viviano.cantu.novakey.view.themes.MasterTheme;
 import viviano.cantu.novakey.view.themes.board.BoardTheme;
 

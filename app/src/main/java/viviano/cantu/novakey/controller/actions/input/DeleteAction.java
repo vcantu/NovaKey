@@ -24,12 +24,12 @@ import android.view.KeyEvent;
 import android.view.inputmethod.ExtractedText;
 import android.view.inputmethod.InputConnection;
 
-import viviano.cantu.novakey.NovaKey;
 import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.controller.actions.Action;
+import viviano.cantu.novakey.core.NovaKeyService;
 import viviano.cantu.novakey.model.InputState;
 import viviano.cantu.novakey.model.Model;
-import viviano.cantu.novakey.utils.Pred;
+import viviano.cantu.novakey.core.utils.Predicate;
 
 /**
  * Created by Viviano on 6/15/2016.
@@ -61,13 +61,12 @@ public class DeleteAction implements Action<String> {
     /**
      * Called when the action is triggered
      * Actual logic for the action goes here
-     *
-     * @param ime
+     *  @param ime
      * @param control
      * @param model
      */
     @Override
-    public String trigger(NovaKey ime, Controller control, Model model) {
+    public String trigger(NovaKeyService ime, Controller control, Model model) {
         InputState is = model.getInputState();
         // If not a single cursor then perform a delete key action
         if (is.getSelectionStart() != is.getSelectionEnd()) {
@@ -82,7 +81,7 @@ public class DeleteAction implements Action<String> {
         }
         // Otherwise handle a delete fast or slow
         else {
-            Pred<Character> slow = character -> true,
+            Predicate<Character> slow = character -> true,
                     fast = character -> character.charValue() == ' ';
             return handleDelete(ime, control, model, !mForward, mFast ? fast : slow, true);
         }
@@ -92,13 +91,15 @@ public class DeleteAction implements Action<String> {
     /**
      * Call this to delete until a predicate is reached
      *
+     *
+     * @param ime
      * @param backspace true if deleting to left, false if deleting to right
      * @param until     will delete until this predicate is reached
      * @param included  true if it should delete the character which made it stop
      * @return the deleted string
      */
-    public String handleDelete(NovaKey ime, Controller control, Model model,
-                               boolean backspace, Pred<Character> until, boolean included) {
+    public String handleDelete(NovaKeyService ime, Controller control, Model model,
+                               boolean backspace, Predicate<Character> until, boolean included) {
         // add deleted character to temporary memory so it can be added
 
         InputConnection ic = ime.getCurrentInputConnection();
@@ -122,7 +123,7 @@ public class DeleteAction implements Action<String> {
 
         int soFar = 1;
 
-        while (!until.apply(curr) && curr != 0) {
+        while (!until.test(curr) && curr != 0) {
             if (backspace)
                 sb.insert(0, curr);
             else

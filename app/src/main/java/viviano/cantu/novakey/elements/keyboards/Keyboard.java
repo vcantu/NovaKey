@@ -29,13 +29,16 @@ import java.util.NoSuchElementException;
 
 import viviano.cantu.novakey.controller.Controller;
 import viviano.cantu.novakey.controller.actions.Action;
+import viviano.cantu.novakey.controller.actions.input.DeleteAction;
+import viviano.cantu.novakey.controller.actions.input.EnterAction;
+import viviano.cantu.novakey.controller.actions.input.ShiftAction;
+import viviano.cantu.novakey.controller.actions.input.SpaceAction;
 import viviano.cantu.novakey.controller.touch.TouchHandler;
 import viviano.cantu.novakey.controller.touch.TypingHandler;
 import viviano.cantu.novakey.elements.keyboards.overlays.OverlayElement;
 import viviano.cantu.novakey.model.MainDimensions;
 import viviano.cantu.novakey.model.Model;
 import viviano.cantu.novakey.model.Settings;
-import viviano.cantu.novakey.utils.Util;
 import viviano.cantu.novakey.view.themes.MasterTheme;
 
 public class Keyboard implements OverlayElement, Iterator<Key>, Iterable<Key> {
@@ -140,7 +143,7 @@ public class Keyboard implements OverlayElement, Iterator<Key>, Iterable<Key> {
         int firstArea = areasCrossed.get(0);
         //Inside circle
         if (firstArea >= 0) {
-            Action act = Util.getGesture(areasCrossed);
+            Action act = getGesture(areasCrossed);
             if (act != null) {
                 return act;
             }
@@ -197,5 +200,31 @@ public class Keyboard implements OverlayElement, Iterator<Key>, Iterable<Key> {
             this.x = x;
             this.y = y;
         }
+    }
+
+
+    /**
+     * Takes list of areas crossed and returns an action based on it
+     *
+     * @param areasCrossed list of areas crossed by the user
+     * @return gesture made as an action
+     */
+    public static Action getGesture(List<Integer> areasCrossed) {
+        int size = areasCrossed.size();
+        if (size < 3 || size > 5)
+            return null;
+
+        int first = areasCrossed.get(0), last = areasCrossed.get(size - 1);
+        boolean hasZero = areasCrossed.contains(0),
+                hasThree = areasCrossed.contains(3);
+        if (first == 2 && (hasZero || hasThree) && (last == 4 || last == 5))//swipe right
+            return new SpaceAction();
+        if (first == 4 && (hasZero || hasThree) && last == 2)//swipe left
+            return new DeleteAction();
+        if ((first == 1 || first == 5) && hasZero && last == 3)//swipe down
+            return new EnterAction();
+        if (first == 3 && hasZero && (last == 1 || last == 5))//swipe up
+            return new ShiftAction();
+        return null;
     }
 }
