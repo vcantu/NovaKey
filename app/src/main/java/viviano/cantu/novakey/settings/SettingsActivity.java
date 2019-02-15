@@ -26,12 +26,13 @@ import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 
-import viviano.cantu.novakey.NovaKey;
-import viviano.cantu.novakey.model.Settings;
+import viviano.cantu.novakey.MainNovaKeyService;
+import viviano.cantu.novakey.core.utils.Colors;
+import viviano.cantu.novakey.core.model.Settings;
 import viviano.cantu.novakey.setup.SetupActivity;
 import viviano.cantu.novakey.core.utils.drawing.Font;
 import viviano.cantu.novakey.core.utils.drawing.Icons;
-import viviano.cantu.novakey.view.themes.AppTheme;
+import viviano.cantu.novakey.core.view.themes.AppTheme;
 
 public class SettingsActivity extends PreferenceActivity {
 
@@ -40,7 +41,7 @@ public class SettingsActivity extends PreferenceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SharedPreferences pref = getApplicationContext().getSharedPreferences(NovaKey.MY_PREFERENCES, MODE_PRIVATE);
+        SharedPreferences pref = getApplicationContext().getSharedPreferences(MainNovaKeyService.MY_PREFERENCES, MODE_PRIVATE);
 
         // LoadStuff
         Colors.initialize();

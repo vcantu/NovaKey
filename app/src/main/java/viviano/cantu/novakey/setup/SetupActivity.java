@@ -26,7 +26,7 @@ import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.view.Window;
 
-import viviano.cantu.novakey.NovaKey;
+import viviano.cantu.novakey.MainNovaKeyService;
 
 public class SetupActivity extends Activity {
 
@@ -35,7 +35,7 @@ public class SetupActivity extends Activity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);//gets rid of title bar
 
-        SharedPreferences pref = getApplicationContext().getSharedPreferences(NovaKey.MY_PREFERENCES, MODE_PRIVATE);
+        SharedPreferences pref = getApplicationContext().getSharedPreferences(MainNovaKeyService.MY_PREFERENCES, MODE_PRIVATE);
         Editor editor = pref.edit();
         editor.putBoolean("has_setup", false);
         editor.commit();

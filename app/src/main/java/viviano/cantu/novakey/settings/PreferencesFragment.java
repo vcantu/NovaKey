@@ -26,10 +26,10 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 
+import viviano.cantu.novakey.EmojiSettingActivity;
 import viviano.cantu.novakey.R;
-import viviano.cantu.novakey.model.Settings;
-import viviano.cantu.novakey.setup.TutorialActivity;
-import viviano.cantu.novakey.tests.EmojiSettingActivity;
+import viviano.cantu.novakey.core.model.Settings;
+import viviano.cantu.novakey.tutorial.TutorialActivity;
 
 public class PreferencesFragment extends PreferenceFragment {
     @Override

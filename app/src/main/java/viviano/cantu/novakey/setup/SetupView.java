@@ -35,7 +35,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
-import viviano.cantu.novakey.NovaKey;
+import viviano.cantu.novakey.MainNovaKeyService;
+import viviano.cantu.novakey.tutorial.TutorialActivity;
 
 public class SetupView extends View {
 
@@ -55,7 +56,7 @@ public class SetupView extends View {
         screenHeight = metrics.heightPixels;
         deviceDensity = metrics.densityDpi;
 
-        SharedPreferences pref = parent.getApplicationContext().getSharedPreferences(NovaKey.MY_PREFERENCES, parent.MODE_PRIVATE);
+        SharedPreferences pref = parent.getApplicationContext().getSharedPreferences(MainNovaKeyService.MY_PREFERENCES, parent.MODE_PRIVATE);
         final Editor editor = pref.edit();
         editor.commit();
         progress = pref.getInt("progress", 0);

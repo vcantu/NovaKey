@@ -23,7 +23,7 @@
     android:layout_height="match_parent"
     android:background="#616161">
 
-    <viviano.cantu.novakey.setup.TaskView
+    <viviano.cantu.novakey.tutorial.TaskView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -42,7 +42,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp">
 
-        <viviano.cantu.novakey.setup.IconView
+        <viviano.cantu.novakey.core.IconView
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_alignParentLeft="true"
@@ -68,7 +68,7 @@
                 android:textColorHint="#f0f0f0" />
         </android.support.design.widget.TextInputLayout>
 
-        <viviano.cantu.novakey.setup.IconView
+        <viviano.cantu.novakey.core.IconView
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_alignParentRight="true"

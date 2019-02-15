@@ -27,16 +27,17 @@ import android.widget.CheckBox;
 import android.widget.Toast;
 
 import viviano.cantu.novakey.R;
-import viviano.cantu.novakey.model.MainModel;
-import viviano.cantu.novakey.model.Model;
-import viviano.cantu.novakey.model.Settings;
-import viviano.cantu.novakey.model.factories.ThemeFactory;
-import viviano.cantu.novakey.model.loaders.ThemeLoader;
-import viviano.cantu.novakey.settings.widgets.NovaKeyPreview;
-import viviano.cantu.novakey.settings.widgets.pickers.ColorPicker;
-import viviano.cantu.novakey.settings.widgets.pickers.ReleasePicker;
-import viviano.cantu.novakey.settings.widgets.pickers.ThemePicker;
-import viviano.cantu.novakey.view.themes.board.BoardTheme;
+import viviano.cantu.novakey.core.utils.Colors;
+import viviano.cantu.novakey.core.model.MainModel;
+import viviano.cantu.novakey.core.model.Model;
+import viviano.cantu.novakey.core.model.Settings;
+import viviano.cantu.novakey.core.model.factories.ThemeFactory;
+import viviano.cantu.novakey.core.model.loaders.ThemeLoader;
+import viviano.cantu.novakey.widgets.NovaKeyPreview;
+import viviano.cantu.novakey.widgets.pickers.ColorPicker;
+import viviano.cantu.novakey.widgets.pickers.ReleasePicker;
+import viviano.cantu.novakey.widgets.pickers.ThemePicker;
+import viviano.cantu.novakey.core.view.themes.board.BoardTheme;
 
 /**
  * Created by Viviano on 1/5/2016.

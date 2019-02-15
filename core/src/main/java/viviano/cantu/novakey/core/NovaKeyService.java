@@ -39,7 +39,7 @@ public abstract class NovaKeyService extends InputMethodService {
     /**
      * Vibrates the device given an amount of milliseconds
      *
-     * @param milliseconds
+     * @param milliseconds amount to activate vibrator for
      */
     public abstract void vibrate(long milliseconds);
 
