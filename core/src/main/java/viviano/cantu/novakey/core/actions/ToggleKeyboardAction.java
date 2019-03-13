@@ -28,17 +28,17 @@ import viviano.cantu.novakey.core.model.Model;
 /**
  * Created by Viviano on 6/21/2016.
  */
-public class ToggleKeyboardAction implements Action<Void> {
+public class ToggleKeyboardAction implements Action {
 
     /**
      * Called when the action is triggered
      * Actual logic for the action goes here
-     *  @param ime
+     * @param ime
      * @param control
      * @param model
      */
     @Override
-    public Void trigger(NovaKeyService ime, Controller control, Model model) {
+    public void trigger(NovaKeyService ime, Controller control, Model model) {
         switch (model.getKeyboardCode()) {
             case Keyboards.DEFAULT:
                 control.fire(new SetKeyboardAction(Keyboards.PUNCTUATION));
@@ -48,6 +48,5 @@ public class ToggleKeyboardAction implements Action<Void> {
             case Keyboards.SYMBOLS:
                 control.fire(new SetKeyboardAction(Keyboards.DEFAULT));
         }
-        return null;
     }
 }

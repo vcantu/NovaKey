@@ -26,6 +26,8 @@ import android.view.inputmethod.ExtractedText;
 import java.util.ArrayList;
 import java.util.Map;
 
+import viviano.cantu.novakey.core.model.InputState;
+
 /**
  * Created by Viviano on 7/15/2015.
  */

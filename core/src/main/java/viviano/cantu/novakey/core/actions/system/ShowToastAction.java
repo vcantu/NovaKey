@@ -18,12 +18,13 @@
  * Any questions about the program or source may be directed to <strellastudios@gmail.com>
  */
 
-package viviano.cantu.novakey.core.actions;
+package viviano.cantu.novakey.core.actions.system;
 
 
 import android.os.Handler;
 import android.widget.Toast;
 
+import viviano.cantu.novakey.core.actions.Action;
 import viviano.cantu.novakey.core.controller.Controller;
 import viviano.cantu.novakey.core.NovaKeyService;
 import viviano.cantu.novakey.core.model.Model;
@@ -31,7 +32,7 @@ import viviano.cantu.novakey.core.model.Model;
 /**
  * Created by vcantu on 9/18/16.
  */
-public class ShowToastAction implements Action<Void> {
+public class ShowToastAction implements Action {
 
     private final String mMessage;
     private final int mLength;
@@ -46,14 +47,13 @@ public class ShowToastAction implements Action<Void> {
     /**
      * Called when the action is triggered
      * Actual logic for the action goes here
-     *  @param ime
+     * @param ime
      * @param control
      * @param model
      */
     @Override
-    public Void trigger(NovaKeyService ime, Controller control, Model model) {
+    public void trigger(NovaKeyService ime, Controller control, Model model) {
         Handler h = new Handler(ime.getMainLooper());
         h.post(() -> Toast.makeText(ime, mMessage, mLength).show());
-        return null;
     }
 }

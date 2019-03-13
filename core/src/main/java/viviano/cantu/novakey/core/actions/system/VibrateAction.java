@@ -18,8 +18,9 @@
  * Any questions about the program or source may be directed to <strellastudios@gmail.com>
  */
 
-package viviano.cantu.novakey.core.actions;
+package viviano.cantu.novakey.core.actions.system;
 
+import viviano.cantu.novakey.core.actions.Action;
 import viviano.cantu.novakey.core.controller.Controller;
 import viviano.cantu.novakey.core.NovaKeyService;
 import viviano.cantu.novakey.core.model.Model;
@@ -27,7 +28,7 @@ import viviano.cantu.novakey.core.model.Model;
 /**
  * Created by vcantu on 9/22/16.
  */
-public class VibrateAction implements Action<Void> {
+public class VibrateAction implements Action {
 
     private final long mTime;
 
@@ -40,13 +41,12 @@ public class VibrateAction implements Action<Void> {
     /**
      * Called when the action is triggered
      * Actual logic for the action goes here
-     *  @param ime
+     * @param ime
      * @param control
      * @param model
      */
     @Override
-    public Void trigger(NovaKeyService ime, Controller control, Model model) {
+    public void trigger(NovaKeyService ime, Controller control, Model model) {
         ime.vibrate(mTime);
-        return null;
     }
 }

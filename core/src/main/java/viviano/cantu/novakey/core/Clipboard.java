@@ -26,7 +26,7 @@ import java.util.List;
 
 import viviano.cantu.novakey.core.actions.Action;
 import viviano.cantu.novakey.core.actions.Actions;
-import viviano.cantu.novakey.core.actions.ClipboardAction;
+import viviano.cantu.novakey.core.actions.system.ClipboardAction;
 import viviano.cantu.novakey.core.actions.NoAction;
 import viviano.cantu.novakey.core.actions.SetOverlayAction;
 import viviano.cantu.novakey.core.actions.input.DeleteAction;
@@ -130,7 +130,6 @@ public class Clipboard {
                         paste, (ime, control, model) -> {
                     InfiniteMenu clipboard = createClipboard();
                     control.fire(new SetOverlayAction(clipboard));
-                    return null;
                 }),
 
                 new OnUpMenu.Entry(Icons.get("deselect_all"),

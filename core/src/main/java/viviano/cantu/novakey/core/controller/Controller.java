@@ -134,12 +134,11 @@ public class Controller implements Gun, View.OnTouchListener {
      * @return returns the result of the action
      */
     @Override
-    public <T> T fire(Action<T> action) {
-        T t = null;
-        if (action != null)
-            t = action.trigger(mIME, this, mModel);
+    public void fire(Action action) {
+        if (action != null) {
+            action.trigger(mIME, this, mModel);
+        }
         invalidate();
-        return t;
     }
 
 

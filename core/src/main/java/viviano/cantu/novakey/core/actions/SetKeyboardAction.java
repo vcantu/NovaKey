@@ -27,7 +27,7 @@ import viviano.cantu.novakey.core.model.Model;
 /**
  * Created by Viviano on 6/15/2016.
  */
-public class SetKeyboardAction implements Action<Void> {
+public class SetKeyboardAction implements Action {
 
     private final int mKeyboardCode;
 
@@ -40,15 +40,13 @@ public class SetKeyboardAction implements Action<Void> {
     /**
      * Called when the action is triggered
      * Actual logic for the action goes here
-     *  @param ime
+     * @param ime
      * @param control
      * @param model
      */
     @Override
-    public Void trigger(NovaKeyService ime, Controller control, Model model) {
+    public void trigger(NovaKeyService ime, Controller control, Model model) {
         //TODO: Animations
         model.setKeyboard(mKeyboardCode);
-        control.invalidate();
-        return null;
     }
 }

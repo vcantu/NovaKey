@@ -18,13 +18,15 @@
  * Any questions about the program or source may be directed to <strellastudios@gmail.com>
  */
 
-package viviano.cantu.novakey.core.actions;
+package viviano.cantu.novakey.core.actions.system;
 
 import android.content.ClipData;
 import android.view.inputmethod.ExtractedText;
 import android.widget.Toast;
 
 import viviano.cantu.novakey.core.Clipboard;
+import viviano.cantu.novakey.core.actions.Action;
+import viviano.cantu.novakey.core.actions.system.ShowToastAction;
 import viviano.cantu.novakey.core.controller.Controller;
 import viviano.cantu.novakey.core.actions.input.InputAction;
 import viviano.cantu.novakey.core.NovaKeyService;
@@ -34,7 +36,7 @@ import viviano.cantu.novakey.core.model.Model;
 /**
  * Created by Viviano on 6/16/2016.
  */
-public class ClipboardAction implements Action<String> {
+public class ClipboardAction implements Action {
 
     private final int mAction;
 
@@ -47,12 +49,12 @@ public class ClipboardAction implements Action<String> {
     /**
      * Called when the action is triggered
      * Actual logic for the action goes here
-     *  @param ime
+     * @param ime
      * @param control
      * @param model
      */
     @Override
-    public String trigger(NovaKeyService ime, Controller control, Model model) {
+    public void trigger(NovaKeyService ime, Controller control, Model model) {
         ExtractedText eText = ime.getExtractedText();
         InputState state = model.getInputState();
 
@@ -86,7 +88,6 @@ public class ClipboardAction implements Action<String> {
                     ? eText.selectionEnd : eText.selectionStart;
             ime.setSelection(i, i);
         }
-        return null;
     }
 
 

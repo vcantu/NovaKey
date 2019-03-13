@@ -28,7 +28,7 @@ import viviano.cantu.novakey.core.model.ShiftState;
 /**
  * Created by Viviano on 6/15/2016.
  */
-public class SetShiftStateAction implements Action<Void> {
+public class SetShiftStateAction implements Action {
 
     private final ShiftState mSetTo;
 
@@ -41,15 +41,13 @@ public class SetShiftStateAction implements Action<Void> {
     /**
      * Called when the action is triggered
      * Actual logic for the action goes here
-     *  @param ime
+     * @param ime
      * @param control
      * @param model
      */
     @Override
-    public Void trigger(NovaKeyService ime, Controller control, Model model) {
+    public void trigger(NovaKeyService ime, Controller control, Model model) {
         //TODO: ANIMATIONS
         model.setShiftState(mSetTo);
-        control.invalidate();
-        return null;
     }
 }

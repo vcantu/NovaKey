@@ -33,6 +33,11 @@ import java.util.ArrayList;
  */
 public class Util {
 
+    //----------------------------------------Number Utils---------------------------------------
+    public static int bounded(int value, int min, int max) {
+        return Math.min(max, Math.max(min, value));
+    }
+
     //----------------------------------------Trig Utils---------------------------------------
     //returns distance between two points
     public static float distance(float x1, float y1, float x2, float y2) {

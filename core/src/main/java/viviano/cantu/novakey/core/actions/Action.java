@@ -27,14 +27,14 @@ import viviano.cantu.novakey.core.model.Model;
 /**
  * Created by Viviano on 6/10/2016.
  */
-public interface Action<T> {
+public interface Action {
 
     /**
      * Called when the action is triggered
      * Actual logic for the action goes here
-     *  @param ime
+     * @param ime
      * @param control
      * @param model
      */
-    T trigger(NovaKeyService ime, Controller control, Model model);
+    void trigger(NovaKeyService ime, Controller control, Model model);
 }

@@ -28,6 +28,8 @@ import android.view.inputmethod.ExtractedText;
 import android.view.inputmethod.ExtractedTextRequest;
 import android.view.inputmethod.InputConnection;
 
+import viviano.cantu.novakey.core.utils.Predicate;
+
 public abstract class NovaKeyService extends InputMethodService {
 
     /**
@@ -51,6 +53,15 @@ public abstract class NovaKeyService extends InputMethodService {
      * @param newCursorPos were the cursor should end
      */
     public abstract void inputText(String text, int newCursorPos);
+
+    /**
+     * Deletes the characters until a given predicate in the given direction
+     *
+     * @param until determines if the character should be deleted
+     * @param backwards direction of the delete (true acts like a backspace, false like a forward delete)
+     * @return the text that was deleted
+     */
+    public abstract String deleteText(Predicate<Character> until, boolean backwards);
 
 
     /**

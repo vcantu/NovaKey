@@ -40,11 +40,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import viviano.cantu.novakey.core.Clipboard;
+import viviano.cantu.novakey.core.actions.input.UpdateShiftAction;
 import viviano.cantu.novakey.core.controller.Controller;
 import viviano.cantu.novakey.core.controller.Corrections;
 import viviano.cantu.novakey.core.NovaKeyService;
 import viviano.cantu.novakey.core.model.InputState;
 import viviano.cantu.novakey.core.model.Settings;
+import viviano.cantu.novakey.core.utils.Predicate;
 import viviano.cantu.novakey.core.utils.Print;
 import viviano.cantu.novakey.core.utils.Util;
 import viviano.cantu.novakey.core.view.themes.AppTheme;
@@ -63,11 +65,21 @@ public class MainNovaKeyService extends NovaKeyService {
 
     private Controller mController;
 
+    private final Predicate<Character> mComposingChar =
+            c -> Character.isLetter(c) || Util.isNumber(c) || c == '\'';
+    private final Predicate<String> mComposingString = s -> {
+        for (int i = 0; i < s.length(); i++) {
+            if (!mComposingChar.test(s.charAt(i)))
+                return false;
+        }
+        return true;
+    };
 
     /*
-        X : non-necessary
-        ? : conditionally necessary
-        S : slow
+     Items initialized on create:
+      X : non-necessary
+      ? : conditionally necessary
+      S : slow
 
         External:
         - ? Vibrator
@@ -106,8 +118,7 @@ public class MainNovaKeyService extends NovaKeyService {
         clipboard.addPrimaryClipChangedListener(() -> {
             try {
                 Clipboard.add(clipboard.getPrimaryClip().getItemAt(0).getText().toString());
-            } catch (NullPointerException e) {
-            }
+            } catch (NullPointerException ignored) { }
         });
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
@@ -174,37 +185,31 @@ public class MainNovaKeyService extends NovaKeyService {
                 newSelStart, newSelEnd,
                 candidatesStart, candidatesEnd);
 
-        InputState is = mController.getModel().getInputState();
-
+        InputState state = mController.getModel().getInputState();
         // Update input state
-        is.updateSelection(
-                oldSelStart, oldSelEnd,
-                newSelStart, newSelEnd,
-                candidatesStart, candidatesEnd);
+        state.updateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd, candidatesStart, candidatesEnd);
 
-        if (!Settings.autoCorrect || !is.shouldAutoCorrect())
+        if (!Settings.autoCorrect || !state.shouldAutoCorrect()) {
+            // clear composing text just in case
+            state.clearComposingText();
             return;
-        //set composing region
-        //if single cursor AND oldEnd is not newStart?
-        if (newSelStart == newSelEnd) {
-            ExtractedText et = getExtractedText();
-            if (et == null) {
-                is.clearComposingText();
-                return;
-            }
-            String text = et.text.toString();
-            if (text.length() == 0) {
-                is.clearComposingText();
-                return;
-            }
+        }
 
+        ExtractedText et = getExtractedText();
+        // if not a single cursor get rid of composing text
+        if (newSelStart != newSelEnd || et == null || et.text.length() == 0) {
+            commitComposingText();
+        }
+        //if single cursor and text > 1 char
+        else {
+            String text = et.text.toString();
             int e, s;//start of end of composing
 
             //loop from start of cursor to the left
             //if not a letter, number or ' adjust s and stop loop
             for (s = Math.min(text.length(), newSelStart); s > 0; s--) {
                 char c = text.charAt(s - 1);
-                if (!Character.isLetter(c) && !Util.isNumber(c) && c != '\'')
+                if (!mComposingChar.test(c))
                     break;
             }
 
@@ -212,22 +217,18 @@ public class MainNovaKeyService extends NovaKeyService {
             //if not a letter, number or ' stop loop
             for (e = Math.min(text.length(), newSelEnd); e < text.length(); e++) {
                 char c = text.charAt(e);
-                if (!Character.isLetter(c) && !Util.isNumber(c) && c != '\'')
+                if (!mComposingChar.test(c))
                     break;
             }
 
-            // finally update ICs composing region
-            // match composing region to our composing StringBuilder
-            // update composing index
-            getCurrentInputConnection().setComposingRegion(s, e);
-            is.setComposingText(text.substring(s, e));
-        } else {
-            getCurrentInputConnection().finishComposingText();
-            is.clearComposingText();
+            // finally update ICs composing region if needed
+            if (candidatesStart != s || candidatesEnd != e) {
+                // match composing region to our composing StringBuilder
+                // update composing index
+                getCurrentInputConnection().setComposingRegion(s, e);
+                state.setComposingText(text.substring(s, e));
+            }
         }
-
-
-        Print.et(getExtractedText());
     }
 
 
@@ -265,6 +266,7 @@ public class MainNovaKeyService extends NovaKeyService {
      */
     @Override
     public void onDestroy() {
+        super.onDestroy();
     }
 
 
@@ -308,9 +310,104 @@ public class MainNovaKeyService extends NovaKeyService {
      * @param newCursorPos were the cursor should end
      */
     public void inputText(String text, int newCursorPos) {
-        commitComposingText();
+        InputState state = mController.getModel().getInputState();
 
+        // if we can just append or insert to the composing text then do that
+        if (Settings.autoCorrect && state.shouldAutoCorrect() && mComposingString.test(text)) {
+            // if at end of composing
+            if (newCursorPos == 1 && state.cursorAtComposingEnd()) {
+                state.appendComposingText(text);
+                getCurrentInputConnection().setComposingText(state.getComposingText(), newCursorPos);
+                return;
+            }
+            // if at start of composing
+            else if (newCursorPos == 0 && state.cursorAtComposingStart()) {
+                state.insertComposingText(text);
+                getCurrentInputConnection().setComposingText(state.getComposingText(), newCursorPos);
+                return;
+            }
+
+        }
+
+        commitComposingText();
         getCurrentInputConnection().commitText(text, newCursorPos);
+    }
+
+    /**
+     * Deletes the characters until a given predicate in the given direction
+     *
+     * @param until determines if the character should be deleted
+     * @param backwards direction of the delete (true acts like a backspace, false like a forward delete)
+     * @return the text that was deleted
+     */
+    @Override
+    public String deleteText(Predicate<Character> until, boolean backwards) {
+        InputConnection ic = getCurrentInputConnection();
+        InputState is = mController.getModel().getInputState();
+        if (ic == null)
+            return null;
+
+        StringBuilder sb = new StringBuilder();
+        ExtractedText et = getExtractedText();
+        String text = (String) et.text;
+        String left = text.substring(0, et.selectionStart);
+        String right = text.substring(et.selectionEnd);
+
+        // set the first character
+        char currChar = 0;
+        if (backwards) {
+            if (left.length() > 0)
+                currChar = left.charAt(left.length() - 1);
+        } else {
+            if (right.length() > 0)
+                currChar = right.charAt(0);
+        }
+
+        // start loop
+        int i = 1;
+        while (!until.test(currChar) && currChar != 0) {
+            if (backwards)
+                sb.insert(0, currChar);
+            else
+                sb.append(currChar);
+
+            currChar = 0;
+            if (backwards) {
+                if (left.length() - i > 0)
+                    currChar = left.charAt(left.length() - 1 - i);
+            } else {
+                if (right.length() - i > 0)
+                    currChar = right.charAt(i);
+            }
+            i++;
+        }
+        // include the last character
+        if (currChar != 0) {
+            if (backwards)
+                sb.insert(0, currChar);
+            else
+                sb.append(currChar);
+        }
+
+
+        System.out.println("finish composing");
+        ic.finishComposingText();
+        is.clearComposingText();
+        if (sb.length() >= 1) {
+            System.out.println("deleting surrounding");
+            if (backwards)
+                ic.deleteSurroundingText(sb.length(), 0);
+            else
+                ic.deleteSurroundingText(0, sb.length());
+        }
+
+        // add to delete stack in input text
+        if (backwards)
+            is.deleteBackwards(sb.toString());
+        else
+            is.deleteForwards(sb.toString());
+
+        return sb.toString();
     }
 
 
@@ -361,10 +458,9 @@ public class MainNovaKeyService extends NovaKeyService {
      * @param deltaEnd   difference of end cursor
      */
     public void moveSelection(int deltaStart, int deltaEnd) {
-        ExtractedText et = getExtractedText();
-        int s = et.selectionStart + deltaStart, e = et.selectionEnd + deltaEnd;
-        s = s < 0 ? 0 : s;
-        e = e < 0 ? 0 : e;
+        InputState state = mController.getModel().getInputState();
+        int s = Math.max(state.getSelectionStart() + deltaStart, 0),
+            e = Math.max(state.getSelectionEnd() + deltaEnd, 0);
         if (s <= e)
             getCurrentInputConnection().setSelection(s, e);
         else {
@@ -397,13 +493,12 @@ public class MainNovaKeyService extends NovaKeyService {
         String text = corrections.correction(is.getComposingText());
         // not calling commitReplacementText(text) in case the logic changes later
 
-        System.out.println("new text: " + text);
-
         // update is can ic
         is.setComposingText(text);
         ic.setComposingText(text, 1);
 
         // clear is and ic
+        // not calling this.commitComposingText() in case logic changes
         ic.finishComposingText();
         is.clearComposingText();
     }
@@ -423,6 +518,7 @@ public class MainNovaKeyService extends NovaKeyService {
         ic.setComposingText(text, 1);
 
         // clear is and ic
+        // not calling this.commitComposingText() in case logic changes
         ic.finishComposingText();
         is.clearComposingText();
     }

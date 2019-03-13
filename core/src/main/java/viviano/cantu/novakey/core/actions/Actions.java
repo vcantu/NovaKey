@@ -31,7 +31,7 @@ import viviano.cantu.novakey.core.model.Model;
  * <p>
  * Created by Viviano on 6/16/2016.
  */
-public class Actions implements Action<Void> {
+public class Actions implements Action {
 
     private final Action[] mActions;
 
@@ -44,15 +44,14 @@ public class Actions implements Action<Void> {
     /**
      * Called when the action is triggered
      * Actual logic for the action goes here
-     *  @param ime
+     * @param ime
      * @param control
      * @param model
      */
     @Override
-    public Void trigger(NovaKeyService ime, Controller control, Model model) {
+    public void trigger(NovaKeyService ime, Controller control, Model model) {
         for (Action a : mActions) {
             control.fire(a);
         }
-        return null;
     }
 }

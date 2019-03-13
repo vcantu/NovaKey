@@ -33,8 +33,7 @@ public interface Gun {
      * Triggers action
      *
      * @param action action to fire
-     * @param <T>    action return type
      * @return returns the result of the action
      */
-    <T> T fire(Action<T> action);
+    void fire(Action action);
 }

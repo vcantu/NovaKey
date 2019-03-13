@@ -23,10 +23,16 @@ package viviano.cantu.novakey.core.model;
 import android.text.InputType;
 import android.view.inputmethod.EditorInfo;
 
+import java.util.Stack;
+
+import viviano.cantu.novakey.core.utils.Util;
+
 /**
  * Created by Viviano on 6/16/2016.
  * <p>
- * Represents the state of a typing session
+ * Represents the state of a typing session.
+ * Various aspects of this state like Composing and cursor data
+ * are synced with the input connection.
  */
 public class InputState {
 
@@ -41,14 +47,22 @@ public class InputState {
     /**
      * Session data
      */
-    private int mRepeatCount = 0;//current count of closing chars
+    // Current text of the session
+    private StringBuilder mText = new StringBuilder();
+    // Current text being composed
     private StringBuilder mComposing = new StringBuilder();
+    private int mRepeatCount = 0;//current count of closing chars
     private boolean mReturnAfterSpace;
+    // Deleting
+    private Stack<String> mDeleteHistory = new Stack<>();
+    // Positive if deleting forward, negative if backward.
+    // Absolute value should always equal size of delete stack
+    private int mDeleteProgress = 0;
 
     /**
      * Cursor data
      */
-    private int mOldSelelectionStart;
+    private int mOldSelectionStart;
     private int mOldSelectionEnd;
     private int mSelectionStart;
     private int mSelectionEnd;
@@ -56,9 +70,12 @@ public class InputState {
     private int mCandidatesEnd;
 
 
+    /**
+     * Updates the input state's editor info so it can make the necessary
+     * Changes
+     * @param editorInfo info about the edit text
+     */
     public void updateEditorInfo(EditorInfo editorInfo) {
-        mComposing.setLength(0);
-
         int inputType = editorInfo.inputType;
 
         int var = inputType & InputType.TYPE_MASK_VARIATION,
@@ -98,15 +115,12 @@ public class InputState {
 
 
     /**
-     * The goal of this method in this class is to update the input state
+     * Updates the input state of an updated selection
      */
     public void updateSelection(int oldSelStart, int oldSelEnd,
                                 int newSelStart, int newSelEnd,
                                 int candidatesStart, int candidatesEnd) {
-        /**
-         * Update cursors
-         */
-        mOldSelelectionStart = oldSelStart;
+        mOldSelectionStart = oldSelStart;
         mOldSelectionEnd = oldSelEnd;
         mSelectionStart = newSelStart;
         mSelectionEnd = newSelEnd;
@@ -124,6 +138,35 @@ public class InputState {
 
 
     /**
+     * replaces the composing text
+     *
+     * @param text text to replace with
+     */
+    public void setComposingText(String text) {
+        mComposing.setLength(0);
+        mComposing.append(text);
+    }
+
+
+    /**
+     * Adds text to the start of the composing text
+     * @param text text to insert
+     */
+    public void insertComposingText(String text) {
+        mComposing.insert(0, text);
+    }
+
+
+    /**
+     * Adds text to end of the composing text
+     * @param text text to append
+     */
+    public void appendComposingText(String text) {
+        mComposing.append(text);
+    }
+
+
+    /**
      * Clears the composing text
      */
     public void clearComposingText() {
@@ -132,13 +175,29 @@ public class InputState {
 
 
     /**
-     * replaces the composing text
-     *
-     * @param text text to replace with
+     * Deletes the start of the composing text by the given amount of characters
+     * @param amount amount of characters
+     * @return the deleted text
      */
-    public void setComposingText(String text) {
-        mComposing.setLength(0);
-        mComposing.append(text);
+    public String trimComposingStart(int amount) {
+        int val =  Util.bounded(amount, 0, mComposing.length());
+        String res = mComposing.substring(0, val);
+        mComposing.delete(0, val);
+        return res;
+    }
+
+
+    /**
+     * Deletes the end of the composing text by the given amount of characters
+     * @param amount amount of characters
+     * @return the deleted text
+     */
+    public String trimComposingEnd(int amount) {
+        int len = mComposing.length();
+        int val =  Util.bounded(len - amount, 0, len);
+        String res = mComposing.substring(val);
+        mComposing.delete(val, len);
+        return res;
     }
 
 
@@ -169,7 +228,7 @@ public class InputState {
     /**
      * sets repeating character count to 0
      */
-    public void resetRepeat() {
+    public void resetRepeatCount() {
         mRepeatCount = 0;
     }
 
@@ -233,8 +292,8 @@ public class InputState {
     /**
      * @return previous start of selection
      */
-    public int getOldSelelectionStart() {
-        return mOldSelelectionStart;
+    public int getOldSelectionStart() {
+        return mOldSelectionStart;
     }
 
 
@@ -276,4 +335,101 @@ public class InputState {
     public int getCandidatesEnd() {
         return mCandidatesEnd;
     }
+
+
+    /**
+     * @return if only one cursor or two in selection mode
+     */
+    public boolean oneCursor() {
+        return mSelectionStart == mSelectionEnd;
+    }
+
+
+    /**
+     * @return whether the cursor is currently within the composing text (not start or end)
+     *  returns false if there is no composing text.
+     */
+    public boolean cursorWithinComposing() {
+        return oneCursor() && mCandidatesStart != -1 && mCandidatesEnd != -1 &&
+                mSelectionStart > mCandidatesStart && mSelectionStart < mCandidatesEnd;
+    }
+
+
+    /**
+     * @return whether the cursor is currently at the start of the composing text
+     *  returns false if there is no composing text.
+     */
+    public boolean cursorAtComposingStart() {
+        return oneCursor() && mCandidatesStart != -1 && mCandidatesEnd != -1 &&
+                mSelectionStart == mCandidatesStart;
+    }
+
+
+    /**
+     * @return whether the cursor is currently at the end of the composing text
+     *  returns false if there is no composing text.
+     */
+    public boolean cursorAtComposingEnd() {
+        return oneCursor() && mCandidatesStart != -1 && mCandidatesEnd != -1 &&
+                mSelectionStart == mCandidatesEnd;
+    }
+
+
+    /**
+     * clears the delete history
+     */
+    public void resetDeleteHistory() {
+        mDeleteHistory.clear();
+        mDeleteProgress = 0;
+    }
+
+
+    /**
+     * Notifies the state of a forwards delete action
+     * @param text deleted text to save
+     */
+    public void deleteForwards(String text) {
+        if (mDeleteProgress >= 0) {
+            mDeleteHistory.push(text);
+            mDeleteProgress++;
+        }
+    }
+
+
+    /**
+     * Notifies the state of a backwards delete action
+     * @param text deleted text to save
+     */
+    public void deleteBackwards(String text) {
+        if (mDeleteProgress <= 0) {
+            mDeleteHistory.push(text);
+            mDeleteProgress--;
+        }
+    }
+
+
+    /**
+     * Returns the last deleted text
+     * @return text that was deleted
+     */
+    public String undoDelete() {
+        if (mDeleteProgress > 0)
+            mDeleteProgress--;
+        else if (mDeleteProgress < 0)
+            mDeleteProgress++;
+        else
+            throw new IllegalStateException("There is no delete to undo");
+        return mDeleteHistory.pop();
+    }
+
+
+    /**
+     * @return the progress of the current delete session.
+     * Positive means forward deleting, negative is backwards deleting
+     */
+    public int getDeleteProgress() {
+        return mDeleteProgress;
+    }
+
+
 }

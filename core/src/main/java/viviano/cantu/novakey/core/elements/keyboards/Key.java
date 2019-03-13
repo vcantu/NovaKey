@@ -37,10 +37,10 @@ import viviano.cantu.novakey.core.view.posns.SmallRadiusPosn;
 /**
  * Created by Viviano on 10/12/2015.
  */
-public class Key implements Action<Void> {
+public class Key implements Action {
 
     private final Character mChar;
-    private final KeyAction mInput;//set just 1 to save memory during runtime
+    private final KeyAction mInput;//set just once to save memory during runtime
     public final int group, loc;
     private final boolean mAltLayout;
 
@@ -203,12 +203,12 @@ public class Key implements Action<Void> {
     /**
      * Called when the action is triggered
      * Actual logic for the action goes here
-     *  @param ime
+     * @param ime
      * @param control
      * @param model
      */
     @Override
-    public Void trigger(NovaKeyService ime, Controller control, Model model) {
-        return control.fire(mInput);
+    public void trigger(NovaKeyService ime, Controller control, Model model) {
+        control.fire(mInput);
     }
 }

@@ -32,30 +32,31 @@ import viviano.cantu.novakey.core.model.Settings;
 /**
  * Created by vcantu on 9/18/16.
  */
-public class SpaceAction implements Action<Void> {
+public class SpaceAction implements Action {
 
     /**
      * Called when the action is triggered
      * Actual logic for the action goes here
-     *  @param ime
+     * @param ime
      * @param control
      * @param model
      */
     @Override
-    public Void trigger(NovaKeyService ime, Controller control, Model model) {
+    public void trigger(NovaKeyService ime, Controller control, Model model) {
         InputState state = model.getInputState();
 
-        //AutoCorrect
-        if (Settings.autoCorrect && state.shouldAutoCorrect()) {
+        // If at the end of composing and should AutoCorrect
+        if (!state.cursorAtComposingEnd() &&
+                Settings.autoCorrect && state.shouldAutoCorrect()) {
             ime.commitCorrection();
         } else {
             ime.commitComposingText();
         }
         ime.inputText(" ", 1);
+
         if (state.returnAfterSpace())
             control.fire(new SetKeyboardAction(Keyboards.DEFAULT));
         state.setReturnAfterSpace(false);
         control.fire(new UpdateShiftAction());
-        return null;
     }
 }

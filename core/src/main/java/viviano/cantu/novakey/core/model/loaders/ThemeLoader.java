@@ -49,9 +49,6 @@ public class ThemeLoader implements Loader<MasterTheme> {
      */
     @Override
     public MasterTheme load() {
-        System.out.println("loading...");
-        System.out.println(mSharedPref.getString(
-                Settings.pref_theme, Settings.DEFAULT));
         return ThemeFactory.themeFromString(mSharedPref.getString(
                 Settings.pref_theme, Settings.DEFAULT));
     }

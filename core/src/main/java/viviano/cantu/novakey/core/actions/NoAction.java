@@ -30,16 +30,15 @@ import viviano.cantu.novakey.core.model.Model;
  * <p>
  * Created by Viviano on 6/16/2016.
  */
-public class NoAction implements Action<Void> {
+public class NoAction implements Action {
     /**
      * Called when the action is triggered
      * Actual logic for the action goes here
-     *  @param ime
+     * @param ime
      * @param control
      * @param model
      */
     @Override
-    public Void trigger(NovaKeyService ime, Controller control, Model model) {
-        return null;
+    public void trigger(NovaKeyService ime, Controller control, Model model) {
     }
 }

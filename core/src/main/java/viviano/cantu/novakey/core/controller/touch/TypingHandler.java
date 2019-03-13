@@ -28,9 +28,9 @@ import java.util.List;
 
 import viviano.cantu.novakey.core.controller.Controller;
 import viviano.cantu.novakey.core.actions.Action;
-import viviano.cantu.novakey.core.actions.RenameSelectionAction;
+import viviano.cantu.novakey.core.actions.MoveSelectionAction;
 import viviano.cantu.novakey.core.actions.SetOverlayAction;
-import viviano.cantu.novakey.core.actions.VibrateAction;
+import viviano.cantu.novakey.core.actions.system.VibrateAction;
 import viviano.cantu.novakey.core.actions.input.DeleteAction;
 import viviano.cantu.novakey.core.elements.keyboards.Key;
 import viviano.cantu.novakey.core.elements.keyboards.Keyboard;
@@ -154,7 +154,7 @@ public class TypingHandler extends AreaCrossedHandler {
                     mRepeatingKey = (Key) a;
                     mRepeating = true;
                     cancel();
-                    controller.getModel().getInputState().resetRepeat();
+                    controller.getModel().getInputState().resetRepeatCount();
                     controller.fire(mRepeatingKey);
                     controller.getModel().getInputState().incrementRepeat();
                     controller.fire(mRepeatingKey);
@@ -173,7 +173,7 @@ public class TypingHandler extends AreaCrossedHandler {
             int rotatingStatus = getRotatingStatus(mAreas);
             if (rotatingStatus != 0) {
                 // First rotating event must be fired initially
-                controller.fire(new RenameSelectionAction(rotatingStatus == -1));
+                controller.fire(new MoveSelectionAction(rotatingStatus == -1));
                 controller.fire(new SetOverlayAction(new CursorOverlay()));
                 cancel();
                 return false;

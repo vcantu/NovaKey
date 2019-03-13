@@ -22,7 +22,7 @@ package viviano.cantu.novakey.core.controller.touch;
 
 import viviano.cantu.novakey.core.controller.Controller;
 import viviano.cantu.novakey.core.actions.Action;
-import viviano.cantu.novakey.core.actions.RenameSelectionAction;
+import viviano.cantu.novakey.core.actions.MoveSelectionAction;
 import viviano.cantu.novakey.core.actions.SetOverlayAction;
 import viviano.cantu.novakey.core.actions.ToggleCursorModeAction;
 
@@ -35,8 +35,8 @@ public class SelectingHandler extends RotatingHandler {
 
 
     public SelectingHandler() {
-        mRight = new RenameSelectionAction(true);
-        mLeft = new RenameSelectionAction(false);
+        mRight = new MoveSelectionAction(true);
+        mLeft = new MoveSelectionAction(false);
     }
 
 

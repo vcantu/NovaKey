@@ -28,16 +28,16 @@ import viviano.cantu.novakey.core.model.Model;
 /**
  * Created by Viviano on 6/20/2016.
  */
-public class EnterAction implements Action<Void> {
+public class EnterAction implements Action {
     /**
      * Called when the action is triggered
      * Actual logic for the action goes here
-     *  @param ime
+     * @param ime
      * @param control
      * @param model
      */
     @Override
-    public Void trigger(NovaKeyService ime, Controller control, Model model) {
+    public void trigger(NovaKeyService ime, Controller control, Model model) {
 //        InputConnection ic = ime.getCurrentInputConnection();
 //        InputState state = model.getInputState();
 //        EditorInfo ei = state.getEditorInfo();
@@ -51,6 +51,5 @@ public class EnterAction implements Action<Void> {
         ime.sendDefaultEditorAction(true);
 
         control.fire(new UpdateShiftAction());
-        return null;
     }
 }

@@ -20,49 +20,22 @@
 
 package viviano.cantu.novakey.core.actions.input;
 
-import viviano.cantu.novakey.core.controller.Controller;
-import viviano.cantu.novakey.core.actions.Action;
 import viviano.cantu.novakey.core.NovaKeyService;
+import viviano.cantu.novakey.core.actions.Action;
+import viviano.cantu.novakey.core.controller.Controller;
 import viviano.cantu.novakey.core.model.Model;
 
-/**
- * Universal input action
- * Can be given '\n', Keyboard.KEYCODE_SHIFT
- * or similar inputs and will perform the desired actions
- * <p>
- * Created by Viviano on 6/14/2016.
- */
-public class InputAction implements Action {
-
-    private final String mText;
-    private final int mCursorPos;
+public class UndoDeleteAction implements Action {
 
 
-    public InputAction(String text) {
-        this(text, true);
-    }
-
-
-    public InputAction(String text, boolean beforeCursor) {
-        mCursorPos = beforeCursor ? 0 : 1;
-        mText = text;
-    }
-
-
-    /**
-     * Called when the action is triggered
-     * Actual logic for the action goes here
-     * @param ime
-     * @param control
-     * @param model
-     */
     @Override
     public void trigger(NovaKeyService ime, Controller control, Model model) {
-        if (mText != null) {
-            ime.getCurrentInputConnection().finishComposingText();
-            model.getInputState().clearComposingText();
-
-            ime.getCurrentInputConnection().commitText(mText, mCursorPos);
+        //TODO: adjust cursor for forward delete undo
+        try {
+            String text = model.getInputState().undoDelete();
+            ime.inputText(text, 1);
+        }
+        catch (IllegalStateException ignored) {
         }
     }
 }

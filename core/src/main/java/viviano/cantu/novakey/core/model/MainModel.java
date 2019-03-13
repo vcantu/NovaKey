@@ -160,7 +160,9 @@ public class MainModel implements Model {
      */
     @Override
     public void onStart(EditorInfo editorInfo) {
+        mInputState.clearComposingText();
         mInputState.updateEditorInfo(editorInfo);
+        mInputState.resetDeleteHistory();
         syncWithPrefs();
 
         //reads theme from preferences & colors according to the app

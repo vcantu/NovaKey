@@ -40,26 +40,25 @@ import viviano.cantu.novakey.core.utils.Util;
  * <p>
  * Created by Viviano on 6/15/2016.
  */
-public class ShiftAction implements Action<Void> {
+public class ShiftAction implements Action {
 
     /**
      * Called when the action is triggered
      * Actual logic for the action goes here
-     *  @param ime
+     * @param ime
      * @param control
      * @param model
      */
     @Override
-    public Void trigger(NovaKeyService ime, Controller control, Model model) {
+    public void trigger(NovaKeyService ime, Controller control, Model model) {
         InputState state = model.getInputState();
 
         String selectedText = ime.getSelectedText();
         boolean shiftText = selectedText.length() > 0;
         int s = 0, e = 0;
         if (shiftText) {
-            ExtractedText et = ime.getExtractedText();
-            s = et.selectionStart;
-            e = et.selectionEnd;
+            s = state.getSelectionStart();
+            e = state.getSelectionEnd();
         }
 
         switch (model.getKeyboardCode()) {
@@ -94,6 +93,5 @@ public class ShiftAction implements Action<Void> {
                         break;
                 }
         }
-        return null;
     }
 }

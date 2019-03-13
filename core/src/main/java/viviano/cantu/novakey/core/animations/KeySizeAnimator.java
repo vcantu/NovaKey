@@ -18,41 +18,37 @@
  * Any questions about the program or source may be directed to <strellastudios@gmail.com>
  */
 
-package viviano.cantu.novakey.core.actions;
+package viviano.cantu.novakey.core.animations;
 
-import viviano.cantu.novakey.core.controller.Controller;
-import viviano.cantu.novakey.core.NovaKeyService;
-import viviano.cantu.novakey.core.model.Model;
+import viviano.cantu.novakey.core.animations.utils.Animator;
+import viviano.cantu.novakey.core.elements.keyboards.Key;
+import viviano.cantu.novakey.core.utils.Util;
 
 /**
- * Created by Viviano on 6/15/2016.
+ * Created by Viviano on 9/2/2016.
+ * <p>
+ * Will change the size of the key from the given factors
  */
-public class RenameSelectionAction implements Action<Void> {
+public class KeySizeAnimator implements Animator<Key> {
 
-    private boolean mMoveRight;
+    private final float mStart, mEnd;
 
 
-    public RenameSelectionAction(boolean moveRight) {
-        mMoveRight = moveRight;
+    public KeySizeAnimator(float start, float end) {
+        mStart = start;
+        mEnd = end;
     }
 
 
     /**
-     * Called when the action is triggered
-     * Actual logic for the action goes here
-     *  @param ime
-     * @param control
-     * @param model
+     * Takes in a T and a fraction and updates the T according
+     * to the fraction
+     *
+     * @param key      object to update
+     * @param fraction percentage of animation where 0 is the start & 1 is the end
      */
     @Override
-    public Void trigger(NovaKeyService ime, Controller control, Model model) {
-        int ds = 0, de = 0;
-        if (model.getCursorMode() <= 0)
-            ds = mMoveRight ? 1 : -1;
-        if (model.getCursorMode() >= 0)
-            de = mMoveRight ? 1 : -1;
-        ime.moveSelection(ds, de);
-
-        return null;
+    public void update(Key key, float fraction) {
+        key.setSize(Util.fromFrac(mStart, mEnd, fraction));
     }
 }

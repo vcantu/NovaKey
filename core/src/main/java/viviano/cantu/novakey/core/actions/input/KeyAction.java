@@ -37,7 +37,7 @@ import viviano.cantu.novakey.core.utils.Util;
 /**
  * Created by Viviano on 9/15/2016.
  */
-public class KeyAction implements Action<Void> {
+public class KeyAction implements Action {
 
     //return after space
     private final Character[] returnAfterSpace = new Character[]
@@ -108,12 +108,12 @@ public class KeyAction implements Action<Void> {
     /**
      * Called when the action is triggered
      * Actual logic for the action goes here
-     *  @param ime
+     * @param ime
      * @param control
      * @param model
      */
     @Override
-    public Void trigger(NovaKeyService ime, Controller control, Model model) {
+    public void trigger(NovaKeyService ime, Controller control, Model model) {
         InputConnection ic = ime.getCurrentInputConnection();
         InputState state = model.getInputState();
         boolean regText = state.shouldAutoCorrect();
@@ -168,6 +168,5 @@ public class KeyAction implements Action<Void> {
             control.fire(new SetKeyboardAction(Keyboards.DEFAULT));
 
         control.fire(new UpdateShiftAction());
-        return null;
     }
 }

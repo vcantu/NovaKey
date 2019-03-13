@@ -37,7 +37,7 @@ import viviano.cantu.novakey.core.utils.Predicate;
  * Action performs a delete action
  * Returns the text that is deleted as a String
  */
-public class DeleteAction implements Action<String> {
+public class DeleteAction implements Action {
 
     private final boolean mForward, mFast;
 
@@ -61,15 +61,15 @@ public class DeleteAction implements Action<String> {
     /**
      * Called when the action is triggered
      * Actual logic for the action goes here
-     *  @param ime
+     * @param ime
      * @param control
      * @param model
      */
     @Override
-    public String trigger(NovaKeyService ime, Controller control, Model model) {
-        InputState is = model.getInputState();
+    public void trigger(NovaKeyService ime, Controller control, Model model) {
+        InputState state = model.getInputState();
         // If not a single cursor then perform a delete key action
-        if (is.getSelectionStart() != is.getSelectionEnd()) {
+        if (!state.oneCursor()) {
             String selected = ime.getSelectedText();
             ime.commitComposingText();
 
@@ -77,84 +77,13 @@ public class DeleteAction implements Action<String> {
                 ime.sendDownUpKeyEvents(KeyEvent.KEYCODE_FORWARD_DEL);
             else
                 ime.sendDownUpKeyEvents(KeyEvent.KEYCODE_DEL);
-            return selected;
         }
         // Otherwise handle a delete fast or slow
         else {
-            Predicate<Character> slow = character -> true,
-                    fast = character -> character.charValue() == ' ';
-            return handleDelete(ime, control, model, !mForward, mFast ? fast : slow, true);
+            Predicate<Character> until = mFast
+                    ? (character -> character == ' ') : (character -> true);
+            String deletedText = ime.deleteText(until, !mForward);
+            control.fire(new UpdateShiftAction());
         }
-    }
-
-
-    /**
-     * Call this to delete until a predicate is reached
-     *
-     *
-     * @param ime
-     * @param backspace true if deleting to left, false if deleting to right
-     * @param until     will delete until this predicate is reached
-     * @param included  true if it should delete the character which made it stop
-     * @return the deleted string
-     */
-    public String handleDelete(NovaKeyService ime, Controller control, Model model,
-                               boolean backspace, Predicate<Character> until, boolean included) {
-        // add deleted character to temporary memory so it can be added
-
-        InputConnection ic = ime.getCurrentInputConnection();
-        if (ic == null)
-            return "";
-
-        StringBuilder sb = new StringBuilder();
-        ExtractedText et = ime.getExtractedText();
-        String text = (String) et.text;
-        String left = text.substring(0, et.selectionStart);
-        String right = text.substring(et.selectionEnd);
-
-        char curr = 0;
-        if (backspace) {
-            if (left.length() > 0)
-                curr = left.charAt(left.length() - 1);
-        } else {
-            if (right.length() > 0)
-                curr = right.charAt(0);
-        }
-
-        int soFar = 1;
-
-        while (!until.test(curr) && curr != 0) {
-            if (backspace)
-                sb.insert(0, curr);
-            else
-                sb.append(curr);
-
-            curr = 0;
-            if (backspace) {
-                if (left.length() - soFar > 0)
-                    curr = left.charAt(left.length() - 1 - soFar);
-            } else {
-                if (right.length() - soFar > 0)
-                    curr = right.charAt(soFar);
-            }
-            soFar++;
-        }
-        if (included && curr != 0) {
-            if (backspace)
-                sb.insert(0, curr);
-            else
-                sb.append(curr);
-        }
-
-        ic.finishComposingText();
-        model.getInputState().clearComposingText();
-        if (sb.length() >= 1) {
-            if (backspace)
-                ic.deleteSurroundingText(sb.length(), 0);
-            else
-                ic.deleteSurroundingText(0, sb.length());
-        }
-        control.fire(new UpdateShiftAction());
-        return sb.toString();
     }
 }

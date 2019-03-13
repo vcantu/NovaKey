@@ -28,7 +28,7 @@ import viviano.cantu.novakey.core.model.Model;
 /**
  * Created by Viviano on 6/16/2016.
  */
-public class SetOverlayAction implements Action<Void> {
+public class SetOverlayAction implements Action {
 
     private final OverlayElement mElement;
 
@@ -41,15 +41,13 @@ public class SetOverlayAction implements Action<Void> {
     /**
      * Called when the action is triggered
      * Actual logic for the action goes here
-     *  @param ime
+     * @param ime
      * @param control
      * @param model
      */
     @Override
-    public Void trigger(NovaKeyService ime, Controller control, Model model) {
+    public void trigger(NovaKeyService ime, Controller control, Model model) {
         //TODO: animation
         model.setOverlayElement(mElement);
-        control.invalidate();
-        return null;
     }
 }

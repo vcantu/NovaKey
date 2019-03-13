@@ -25,7 +25,6 @@ import android.view.animation.AnticipateInterpolator;
 
 import viviano.cantu.novakey.core.animations.utils.Animator;
 import viviano.cantu.novakey.core.elements.keyboards.Key;
-import viviano.cantu.novakey.core.elements.keyboards.KeySizeAnimator;
 
 /**
  * Created by Viviano on 10/25/2015.
